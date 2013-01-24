@@ -1,0 +1,5 @@
+# Stupid Macs.
+.DS_Store
+
+# Object files
+*.o
