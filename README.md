@@ -3,7 +3,7 @@ Project
 
 Deadlines
 ---------
-* Design: Tuesday, Feb 5 (2 weeks from now)
+* Design: Tuesday, Feb 5
 * Testing: Mid-march (TBD)
 * Finished application: April 4
 * Demo Day: April 11
