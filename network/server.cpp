@@ -1,7 +1,7 @@
 #include <iostream>
 #include <netinet/in.h>
-#include <pthread>
-#include <sys/sockets.h>
+#include <pthread.h>
+#include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <vector>
@@ -14,14 +14,14 @@ vector <player_matchmaking_t> players;
 
 
 int server() {
-    struct sockaddr_in server_addr;
+    struct sockaddr_in serv_addr;
 
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock < 0)
         error("ERROR opening socket");
 
     serv_addr.sin_family = AF_INET;
-    serv_addr.sin_addr.s_saddr = INADDR_ANY;
+    serv_addr.sin_addr.s_addr = INADDR_ANY;
     serv_addr.sin_port = htons(4545);
 
     if (bind(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
@@ -51,5 +51,26 @@ void * handleclient(void* thing) {
     }
 
     cout << "Sent current players" << endl;
+}
+
+int main() {
+    socklen_t clilen;
+    struct sockaddr_in cli_addr;
+    vector<pthread_t> threads;
+
+    int sock = server();
+
+    int client;
+    cout << "Listening..." << endl;
+
+    while ((client = accept(sock, (struct sockaddr *)&cli_addr, &clilen))) {
+        cout << "New connection." << endl;
+        pthread_t thread;
+        pthread_create (&thread, NULL, handleclient, (void*)client);
+        threads.push_back(thread);
+    }
+
+    for (size_t i = 0; i < threads.size(); i++)
+        pthread_join(threads[i], NULL);
 }
 
