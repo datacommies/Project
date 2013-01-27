@@ -1,17 +1,16 @@
 CC=g++ -Wall
 CLIB=
 
-network: network.o server.o client.o
-	$(CC) -o network network.o server.o client.o
+all: server client
+
+server: server.cpp network.o
+	$(CC) server.cpp network.o -lpthread -o server
+
+client: client.cpp network.o
+	$(CC) client.cpp network.o -o client
 
 clean:
-	rm -f *.o network
+	rm -f client server *.o
 
-network.o:
+network.o: network.c
 	$(CC) -c network.c
-
-server.o:
-	$(CC) -c server.cpp
-
-client.o:
-	$(CC) -c client.cpp
