@@ -12,10 +12,6 @@ using namespace std;
 
 vector <player_matchmaking_t> players;
 
-void error(const char *msg) {
-    perror(msg);
-    exit(1);
-}
 
 int server() {
     struct sockaddr_in server_addr;

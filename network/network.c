@@ -6,6 +6,11 @@
 
 #include "types.h"
 
+void error (const char *msg) {
+    perror(msg);
+    exit(1);
+}
+
 int recv_complete (int sockfd, void *buf, size_t len, int flags) {
     int bytesRead = 0;
     int result;

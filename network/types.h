@@ -37,6 +37,7 @@ typedef struct {
 
 
 // FUNCTION PROTOTYPES
+void error (const char *msg);
 int recv_complete (int sockfd, void *buf, size_t len, int flags);
 
 #endif
