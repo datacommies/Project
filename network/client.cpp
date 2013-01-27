@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
     if (connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
         error("ERROR connecting");
 
-    player_matchmaking_t p = {0};
+    player_matchmaking_t p = {{0}};
     strcpy(p.name, argv[3]);
     p.team = 1;
     p.role = 2;

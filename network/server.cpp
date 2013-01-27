@@ -53,6 +53,7 @@ void * handleclient(void* thing) {
     cout << "Sent current players" << endl;
 }
 
+
 int main() {
     socklen_t clilen;
     struct sockaddr_in cli_addr;
