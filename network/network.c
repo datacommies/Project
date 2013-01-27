@@ -12,11 +12,11 @@ void error (const char *msg) {
 }
 
 int recv_complete (int sockfd, void *buf, size_t len, int flags) {
-    int bytesRead = 0;
+    size_t bytesRead = 0;
     int result;
 
     while (bytesRead < len) {
-        result = recv (sockfd, buf + bytesRead, len - bytesRead, flags);
+        result = recv (sockfd, (size_t*)buf + bytesRead, len - bytesRead, flags);
         if (result < 1)
             return -1;
         bytesRead += result;
