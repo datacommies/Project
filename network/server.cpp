@@ -1,6 +1,7 @@
 #include <iostream>
 #include <netinet/in.h>
 #include <pthread.h>
+#include <signal.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -11,26 +12,6 @@
 using namespace std;
 
 vector <player_matchmaking_t> players;
-
-
-int server() {
-    struct sockaddr_in serv_addr;
-
-    int sock = socket(AF_INET, SOCK_STREAM, 0);
-    if (sock < 0)
-        error("ERROR opening socket");
-
-    serv_addr.sin_family = AF_INET;
-    serv_addr.sin_addr.s_addr = INADDR_ANY;
-    serv_addr.sin_port = htons(4545);
-
-    if (bind(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
-        error("ERROR binding");
-
-    listen(sock, 5);
-
-    return sock;
-}
 
 
 void * handleclient(void* thing) {
@@ -51,27 +32,39 @@ void * handleclient(void* thing) {
     }
 
     cout << "Sent current players" << endl;
+    close(client);
+}
+
+
+int sock;
+void killsocket(int sign) {
+    cout << "Closing socket" << endl;
+    close(sock);
 }
 
 
 int main() {
+    long client;
     socklen_t clilen;
     struct sockaddr_in cli_addr;
     vector<pthread_t> threads;
 
-    int sock = server();
+    sock = server();
+    signal(SIGINT, killsocket);
 
-    int client;
-    cout << "Listening..." << endl;
+    cout << "Listening for connections..." << endl;
 
-    while ((client = accept(sock, (struct sockaddr *)&cli_addr, &clilen))) {
+    while ((client = accept(sock, (struct sockaddr *)&cli_addr, &clilen)) > 0) {
         cout << "New connection." << endl;
         pthread_t thread;
         pthread_create (&thread, NULL, handleclient, (void*)client);
         threads.push_back(thread);
     }
 
+    cout << "Closing down." << endl;
     for (size_t i = 0; i < threads.size(); i++)
         pthread_join(threads[i], NULL);
+
+    return 0;
 }
 

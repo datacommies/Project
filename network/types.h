@@ -38,6 +38,7 @@ typedef struct {
 
 // FUNCTION PROTOTYPES
 void error (const char *msg);
+int server (int port = 4545);
 int recv_complete (int sockfd, void *buf, size_t len, int flags);
 
 #endif

@@ -12,5 +12,5 @@ client: client.cpp network.o
 clean:
 	rm -f client server *.o
 
-network.o: network.c
-	$(CC) -c network.c
+network.o: network.cpp
+	$(CC) -c network.cpp
