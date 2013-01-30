@@ -6,7 +6,7 @@ client : client.cpp net.o
 	g++ client.cpp net.o -o client
 
 clean :
-	rm -f client server net.o
+	rm -f client server *.o
 
 net.o : net.cpp
 	g++ -c net.cpp
