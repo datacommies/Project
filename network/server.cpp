@@ -35,7 +35,7 @@ void * handle_client(void* thing) {
         send(client, &players[i], sizeof(player_matchmaking_t), 0);
     }
     cout << "Sent current players" << endl;
-    map_t m = {0};
+    map_t m = {{0, 0}, {0}};
     m.head.type = MSG_MAPNAME;
     strcpy(m.value, "FirstMap");
     send(client, &m, sizeof(map_t), 0);
@@ -57,11 +57,13 @@ void * handle_client(void* thing) {
     //close(client);
     cout << "server> ";
     cout.flush();
+    return NULL;
 }
 
 int sock;
-void killsocket(int sign){
-    cout << "Closing socket" << endl;
+void killsocket(int sign) {
+    cout << "Caught signal " << sign << " "
+         << "Closing socket" << endl;
     shutdown(sock, SHUT_RDWR);
     close(sock);
 }
@@ -76,7 +78,7 @@ void * handle_input (void *) {
             shutdown(sock, SHUT_RDWR);
             close(sock);
         } else if (s == "list") {
-            for (int i = 0; i < players.size(); ++i) {
+            for (size_t i = 0; i < players.size(); ++i) {
                 player_matchmaking_t& p = players[i];
                 printf("%s\t %d\t %d\t %s\n",p.name, p.team, p.role, (p.ready ? "yes" : "no"));
             }
@@ -85,11 +87,12 @@ void * handle_input (void *) {
             ss >> ws;
             getline(ss, rest);
             cout << "rest: " << rest << endl;
-            for (int i = 0; i < clients.size(); ++i) {
+            for (size_t i = 0; i < clients.size(); ++i) {
                 send_chat(clients[i], rest);
             }
         }
     }
+    return NULL;
 }
 
 int main () {
