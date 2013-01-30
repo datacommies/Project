@@ -5,6 +5,8 @@
 #include <netinet/in.h>
 #include "types.h"
 
+using namespace std;
+
 void error (const char *msg) {
     perror(msg);
     exit(1);
@@ -13,6 +15,17 @@ void error (const char *msg) {
 // Move me!
 bool operator == (const player_matchmaking_t& a, const player_matchmaking_t& b) {
     return strcmp(a.name, b.name) == 0;
+}
+
+/* Send a chat message. */
+int send_chat ( int client, const string & body ) {
+    header_t* msg = (header_t*) new char[sizeof(header_t) + body.size()];
+    msg->type = MSG_CHAT;
+    msg->size = body.size();
+    strcpy( ((char*)msg) + sizeof(header_t), body.c_str());
+    int n = send(client, msg, sizeof(header_t) + body.size(), 0);
+    delete msg;
+    return n;
 }
 
 /* Receive len amount of byte completely (no partial recv) */

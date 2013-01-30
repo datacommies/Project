@@ -1,3 +1,4 @@
+#include <string>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -41,4 +42,5 @@ bool operator == (const player_matchmaking_t& a, const player_matchmaking_t& b);
 void error (const char *msg);
 int server (int port = 4545);
 int recv_complete (int sockfd, void *buf, size_t len, int flags);
+int send_chat ( int client, const std::string & body );
 #endif

@@ -54,6 +54,8 @@ int main(int argc, char *argv[])
     if (n < 0) 
         error("ERROR writing to socket");
 
+    send_chat(sockfd, "Hello server!");
+
     while (1) {
         header_t head;
         n = recv_complete(sockfd, &head, sizeof(head), 0);

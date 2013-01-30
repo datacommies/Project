@@ -1,9 +1,7 @@
 #include <vector>
-#include <cstring>
 #include <sstream>
 #include <iostream>
 #include <algorithm>
-#include <unistd.h>
 #include <signal.h>
 #include <pthread.h>
 #include <sys/types.h> 
@@ -46,7 +44,16 @@ void * handle_client(void* thing) {
     // Sleep a bit and remove this player.
     //sleep(3);
     //players.erase(std::remove(players.begin(), players.end(), player), players.end());
-
+    while (1) {
+        header_t head;
+        int n = recv_complete(client, &head, sizeof(head), 0);
+        if (n < 0) break;
+        if (head.type == MSG_CHAT) {
+            char * buf = new char [head.size];
+            recv_complete(client, buf, head.size, 0);
+            cout << "Got message:" << buf << "from client" << endl;
+        }
+    }
     //close(client);
     cout << "server> ";
     cout.flush();
@@ -79,12 +86,7 @@ void * handle_input (void *) {
             getline(ss, rest);
             cout << "rest: " << rest << endl;
             for (int i = 0; i < clients.size(); ++i) {
-                header_t* msg = (header_t*) new char[sizeof(header_t) + rest.size()];
-                msg->type = MSG_CHAT;
-                msg->size = rest.size();
-                strcpy( ((char*)msg) + sizeof(header_t), rest.c_str());
-                send(clients[i], msg, sizeof(header_t) + rest.size(), 0);
-                cout << "send: " << (sizeof(header_t) + rest.size()) << "bytes" << endl;
+                send_chat(clients[i], rest);
             }
         }
     }
