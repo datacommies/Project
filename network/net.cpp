@@ -23,8 +23,10 @@ int send_chat ( int client, const string & body ) {
     msg->type = MSG_CHAT;
     msg->size = body.size();
     strcpy( ((char*)msg) + sizeof(header_t), body.c_str());
+
     int n = send(client, msg, sizeof(header_t) + body.size(), 0);
     delete msg;
+
     return n;
 }
 
@@ -32,6 +34,7 @@ int send_chat ( int client, const string & body ) {
 int recv_complete (int sockfd, void *buf, size_t len, int flags) {
     size_t bytesRead = 0;
     ssize_t result;
+
     while (bytesRead < len) {
         result = recv (sockfd, (char*)buf + bytesRead, len - bytesRead, flags);
         if (result < 1) {
@@ -39,13 +42,14 @@ int recv_complete (int sockfd, void *buf, size_t len, int flags) {
         }
         bytesRead += result;
     }
+
     return bytesRead;
 }
 
 /* Start server. By default port = 4545 */
 int server (int port) {
     struct sockaddr_in serv_addr;
-    
+
     int sock = socket(AF_INET, SOCK_STREAM, 0);;
     if (sock < 0) 
         error("ERROR opening socket");
@@ -56,8 +60,9 @@ int server (int port) {
 
     if (bind(sock, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
         error("ERROR on binding");
-    
+
     listen(sock, 5);
 
     return sock;
 }
+
