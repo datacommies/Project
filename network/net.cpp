@@ -14,12 +14,13 @@ void error (const char *msg) {
 
 // Move me!
 bool operator == (const player_matchmaking_t& a, const player_matchmaking_t& b) {
-    return strcmp(a.name, b.name) == 0;
+    return a.pid == b.pid;
 }
 
 /* Send a chat message. */
 int send_chat ( int client, const string & body ) {
     header_t* msg = (header_t*) new char[sizeof(header_t) + body.size()];
+    memset(msg, 0, sizeof(header_t) + body.size());
     msg->type = MSG_CHAT;
     msg->size = body.size();
     strcpy( ((char*)msg) + sizeof(header_t), body.c_str());
@@ -48,6 +49,7 @@ int recv_complete (int sockfd, void *buf, size_t len, int flags) {
 
 /* Start server. By default port = 4545 */
 int server (int port) {
+    int ov = 1;
     struct sockaddr_in serv_addr;
 
     int sock = socket(AF_INET, SOCK_STREAM, 0);;
@@ -62,6 +64,8 @@ int server (int port) {
         error("ERROR on binding");
 
     listen(sock, 5);
+
+    setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &ov, sizeof (ov));
 
     return sock;
 }

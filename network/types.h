@@ -12,7 +12,9 @@
 enum {
     MSG_MAPNAME,            // Update everyone's mapname
     MSG_START,              // It's time to start the game!
-    MSG_PLAYER_UPDATE_INFO, // Update a client's players container.
+    MSG_PLAYER_JOIN,
+    MSG_PLAYER_UPDATE, // Update a client's players container.
+    MSG_PLAYER_LEAVE,
     MSG_CHAT                // A chat message has been generated
 };
 
@@ -32,10 +34,10 @@ typedef struct {
 typedef struct {
     header_t head;
     char name[PLAYER_NAME_SIZE];
+    int pid;
     int team;
     int role;
     bool ready;
-    bool more_players;
 } player_matchmaking_t;
 
 bool operator == (const player_matchmaking_t& a, const player_matchmaking_t& b);

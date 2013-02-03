@@ -1,11 +1,12 @@
 #include <vector>
 #include <iostream>
+#include <algorithm>
 #include <unistd.h>
 #include <pthread.h>
 #include <sys/types.h> 
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <string.h>
+#include <cstring>
 #include <strings.h>
 #include <netdb.h>
 
@@ -13,9 +14,13 @@
 
 using namespace std;
 
+void * init (void * nothing);
+
+vector<player_matchmaking_t> players;
+
 int main(int argc, char *argv[])
 {
-    int sockfd, portno, n;
+    long sockfd, portno, n;
     struct sockaddr_in serv_addr;
     struct hostent *server;
 
@@ -49,17 +54,19 @@ int main(int argc, char *argv[])
         error("ERROR connecting");
     // connect.
 
-    player_matchmaking_t p = {0};
+    player_matchmaking_t p = {{0, 0}, {0}, 0, 0, false};
     strcpy(p.name, argv[3]);
     p.team = 1;
     p.role = 2;
-    p.ready = false;
+    p.ready = true;
 
     n = write(sockfd, &p, sizeof(p));
     if (n < 0) 
         error("ERROR writing to socket");
 
     send_chat(sockfd, "Hello server!");
+    pthread_t t;
+    pthread_create(&t, NULL, init, (void*) sockfd);
 
     while (1) {
         header_t head;
@@ -68,7 +75,7 @@ int main(int argc, char *argv[])
         if (n < 0)
             error("Disconnect");
 
-        if (head.type == MSG_PLAYER_UPDATE_INFO) {
+        if (head.type == MSG_PLAYER_UPDATE) {
             player_matchmaking_t p;
             p.head = head;
             n = recv_complete(sockfd, ((char*)&p) + sizeof(head), sizeof(p) - sizeof(head), 0);
@@ -82,8 +89,18 @@ int main(int argc, char *argv[])
                 "ready: %s\n",
                 p.name, p.team,
                 p.role, (p.ready ? "yes" : "no"));
-            //if (!p.more_players)
-            //    break;
+            players.push_back(p);
+
+        } else if (head.type == MSG_PLAYER_LEAVE) {
+            player_matchmaking_t p;
+            p.head = head;
+            n = recv_complete(sockfd, ((char*)&p) + sizeof(head), sizeof(p) - sizeof(head), 0);
+
+            if (n < 0)
+                error("ERROR reading from socket");
+            printf("Player Left: %s\n", p.name);
+            // Remove player from our list.
+            players.erase(std::remove(players.begin(), players.end(), p), players.end());
         } else if (head.type == MSG_MAPNAME) {
             //n = recv_complete(sockfd, ((char*)&m + sizeof(head)), sizeof(map_t) - sizeof(head), 0);
             char m[MAP_NAME_SIZE] = {0};
