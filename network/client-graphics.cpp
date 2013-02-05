@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <fontconfig/fontconfig.h>
 
 #include <SFML/Graphics.hpp>
 
@@ -20,7 +21,18 @@ void * init (void * nothing) {
     sf::Clock sclock;
     sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
 
-    if (!MyFont.loadFromFile("sansation.ttf")) {
+    FcChar8 * path;
+    FcResult result;
+    FcPattern* pat = FcPatternCreate();
+    //pat = FcNameParse ((FcChar8 *) "");
+    FcConfigSubstitute (0, pat, FcMatchPattern);
+    FcDefaultSubstitute (pat);
+    FcPattern * match =  FcFontMatch(NULL, pat, &result);
+    match = FcFontMatch (0, pat, &result);
+    if(FcPatternGetString(match, FC_FILE, 0, &path) == FcResultMatch)
+        printf("path to arial %s\n", path);
+
+    if (!MyFont.loadFromFile((char*)path)) {
         printf("error loading font\n");
     }
 

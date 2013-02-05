@@ -56,6 +56,8 @@ int server (int port) {
     if (sock < 0) 
         error("ERROR opening socket");
 
+    setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &ov, sizeof (ov));
+
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = INADDR_ANY;
     serv_addr.sin_port = htons(port);
@@ -64,9 +66,6 @@ int server (int port) {
         error("ERROR on binding");
 
     listen(sock, 5);
-
-    setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &ov, sizeof (ov));
-
     return sock;
 }
 
