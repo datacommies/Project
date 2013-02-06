@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
         error("ERROR connecting");
     // connect.
 
-    player_matchmaking_t p = {{0, 0}, {0}, 0, 0, false};
+    player_matchmaking_t p = {{0, 0}, {0}, 0, 0, 0, false};
     strcpy(p.name, argv[3]);
     p.team = 1;
     p.role = 2;
