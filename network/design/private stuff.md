@@ -17,7 +17,7 @@ send_tower_info()
 	 	-send the most up to date  data of that tower to all clients in the clients container
 	 	
 send_creep_info()
-	1. from the container containing all of the towers, find creep c that has(c.id == creep.id)
+	1. from the container containing all of the creeps, find creep c that has(c.id == creep.id)
 	2.if the tower status has changed since the last send then:
 	 	-send the most up to date  data of that creep to all clients in the clients container
 	
