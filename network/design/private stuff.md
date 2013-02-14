@@ -1,34 +1,50 @@
 sync_all_clients()
-- big update, makes sure that all clients have data they need
-	1. get all the current clients (clients_vector)
-	2. for each client in clients_vector:
-		send_player_info()
-		send_tower_info()
-		send_creep_info()
+- Global update; ensures all client data is synchronized.
+    1.) Retrieve all clients from the client vector.
+    2.) For each client in the client vector:
+            a.) send_player_info()
+            b.) send_tower_info()
+            c.) send_creep_info()
+
 
 send_player_info()
-	1. from the container containing all of the players, find player p that has (p.id == player.id)
-	2.if the player status has changed since the last send then:
-		-send the most up to date data of that player to the client controlled by that player
-	
+- Send all information pertaining to a particular player to the client
+    1.) From the vector of players, locate and select player p such that p's id is
+            equal to the requested player's id
+    2.) If the player status has changed since the previous update:
+            a.) Send the most up-to-date data pertaining to said player to the client
+                controlled by said player
+
+
 send_tower_info()
-	1. from the container containing all of the towers, find tower t that has(t.id == tower.id)
-	2.if the tower status has changed since the last send then:
-	 	-send the most up to date  data of that tower to all clients in the clients container
-	 	
+- Send all information pertaining to a particular tower to the client
+    1.) From the vector of towers, locate and select tower t such that t's id is
+            equal to the requested tower's id
+    2.) If the tower's status has changed since the previous update:
+            a.) Send the most up-to-date data pertaining to said tower to all
+                clients within the client vector
+
+
 send_creep_info()
-	1. from the container containing all of the creeps, find creep c that has(c.id == creep.id)
-	2.if the tower status has changed since the last send then:
-	 	-send the most up to date  data of that creep to all clients in the clients container
-	
-send_packet() 
-//not sure what this does, does it simply make a TCP packet and send it?
-	
+- Send all information pertaining to a particular creep to the client
+    1.) From the vector of creeps, locate and select creep c such that c's id is
+            equal to the requested creep's id
+    2.) If the creep's status has changed since the previous update:
+            a.) Send the most up-to-date data pertaining to said tower to all
+                clients within the client vector
+
+
+send_packet()
+???
+
+
 receive_packet()
-//same as above
+???
+
 
 initialize_session()
-	1. ensure that all of the players are connected
-	2. zero out all the resource/player/tower stats
-	3. send a packet to all clients to indicate the start of game
-	
+- Initialize all data/structures necessary for a valid session
+    1.) Ensure all players are in a connected state
+    2.) Reset all resource's statis (players/towers/creeps)
+    3.) Send a MSG_GAME_START packet to all clients, indicating start of game
+
