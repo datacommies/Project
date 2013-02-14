@@ -30,4 +30,5 @@ receive_packet()
 initialize_session()
 	1. ensure that all of the players are connected
 	2. zero out all the resource/player/tower stats
+	3. send a packet to all clients to indicate the start of game
 	
