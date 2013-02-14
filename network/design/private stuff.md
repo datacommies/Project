@@ -35,11 +35,11 @@ send_creep_info()
 
 
 send_packet()
-???
+- Packetize the particular structure being sent, and send it over the network
 
 
 receive_packet()
-???
+- Extract the appropriate structure from an incoming packet, and store it
 
 
 initialize_session()
