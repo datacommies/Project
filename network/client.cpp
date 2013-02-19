@@ -16,7 +16,9 @@ using namespace std;
 
 void * init (void * nothing);
 
-vector<player_matchmaking_t> players;
+player_matchmaking_t team_l[5];
+player_matchmaking_t team_r[5];
+vector<player_matchmaking_t> waiting;
 
 int main(int argc, char *argv[])
 {
@@ -24,9 +26,16 @@ int main(int argc, char *argv[])
     struct sockaddr_in serv_addr;
     struct hostent *server;
 
-    if (argc < 4) {
+    if (argc < 5) {
        fprintf(stderr,"usage %s hostname port clientname\n", argv[0]);
        exit(0);
+    }
+
+    player_matchmaking_t empty = {{0, 0}, "Empty", 0, 0, 0, false};
+    for (int i = 0; i < 5; ++i)
+    {
+        memcpy(team_l+i, &empty, sizeof(player_matchmaking_t));
+        memcpy(team_r+i, &empty, sizeof(player_matchmaking_t));
     }
 
     //// connect
@@ -52,13 +61,12 @@ int main(int argc, char *argv[])
 
     if (connect(sockfd,(struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0) 
         error("ERROR connecting");
-    // connect.
 
     player_matchmaking_t p = {{0, 0}, {0}, 0, 0, 0, false};
     strcpy(p.name, argv[3]);
-    p.team = 1;
-    p.role = 2;
-    p.ready = true;
+    p.team = atoi(argv[4]);
+    p.role = 0;
+    p.ready = false;
 
     n = write(sockfd, &p, sizeof(p));
     if (n < 0) 
@@ -89,7 +97,13 @@ int main(int argc, char *argv[])
                 "ready: %s\n",
                 p.name, p.team,
                 p.role, (p.ready ? "yes" : "no"));
-            players.push_back(p);
+
+            if (p.team == 1)
+                team_l[p.role] = p;
+            else if (p.team == 2)
+                team_r[p.role] = p;
+            else 
+                waiting.push_back(p);
 
         } else if (head.type == MSG_PLAYER_LEAVE) {
             player_matchmaking_t p;
@@ -99,8 +113,18 @@ int main(int argc, char *argv[])
             if (n < 0)
                 error("ERROR reading from socket");
             printf("Player Left: %s\n", p.name);
-            // Remove player from our list.
-            players.erase(std::remove(players.begin(), players.end(), p), players.end());
+            // Remove player from the waiting list.
+            if (p.team == 0) {
+                waiting.erase(std::remove(waiting.begin(), waiting.end(), p), waiting.end());
+            } else {
+                // Remove the player from the team arrays.
+                if (p.team == 1){
+                    memcpy(team_l+p.role, &empty, sizeof(player_matchmaking_t));
+                } else if (p.team == 2) {
+                    memcpy(team_r+p.role, &empty, sizeof(player_matchmaking_t));
+                }
+            }
+            
         } else if (head.type == MSG_MAPNAME) {
             //n = recv_complete(sockfd, ((char*)&m + sizeof(head)), sizeof(map_t) - sizeof(head), 0);
             char m[MAP_NAME_SIZE] = {0};
@@ -124,4 +148,5 @@ int main(int argc, char *argv[])
 
     return 0;
 }
+
 
