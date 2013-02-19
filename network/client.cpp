@@ -12,7 +12,6 @@
 
 #include "types.h"
 
-
 using namespace std;
 
 // Function Prototype(s)
@@ -21,6 +20,45 @@ void * init (void * nothing);
 player_matchmaking_t team_l[5];
 player_matchmaking_t team_r[5];
 vector<player_matchmaking_t> waiting;
+player_matchmaking_t empty = {{0, 0}, "Empty", 0, 0, 0, false};
+
+void player_update (player_matchmaking_t * p) {
+    printf("Player: %s\t" "Team: %d\t"
+        "Role: %d\t" "Ready: %s\n",
+        p->name, p->team,
+        p->role, (p->ready ? "yes" : "no"));
+
+    if (p->team == 1)
+        team_l[p->role] = *p;
+    else if (p->team == 2)
+        team_r[p->role] = *p;
+    else 
+        waiting.push_back(*p);
+}
+
+void player_leave (player_matchmaking_t * p) {
+    printf("Player Left: %s\n", p->name);
+
+    // Remove player from the waiting list.
+    if (p->team == 0) {
+        waiting.erase(std::remove(waiting.begin(), waiting.end(), *p), waiting.end());
+    } else {
+        // Remove the player from the team arrays.
+        if (p->team == 1){
+            memcpy(team_l+p->role, &empty, sizeof(player_matchmaking_t));
+        } else if (p->team == 2) {
+            memcpy(team_r+p->role, &empty, sizeof(player_matchmaking_t));
+        }
+    }
+}
+
+void msg_mapname (char * map) {
+    printf("Got map name: %s\n", map);
+}
+
+void msg_chat (char * text) {
+    printf("message: %s\n", text);
+}
 
 int main(int argc, char *argv[])
 {
@@ -33,7 +71,6 @@ int main(int argc, char *argv[])
        exit(0);
     }
 
-    player_matchmaking_t empty = {{0, 0}, "Empty", 0, 0, 0, false};
     for (int i = 0; i < 5; ++i)
     {
         memcpy(team_l+i, &empty, sizeof(player_matchmaking_t));
@@ -81,7 +118,6 @@ int main(int argc, char *argv[])
 
     while (1) {
         header_t head;
-
         if ((n = recv_complete(sockfd, &head, sizeof(head), 0)) < 0)
             error("Disconnect");
 
@@ -92,60 +128,26 @@ int main(int argc, char *argv[])
             p.head = head;
             n = recv_complete(sockfd, ((char*)&p) + sizeof(head), sizeof(p) - sizeof(head), 0);
 
-            if (n < 0)
-                error("ERROR reading from socket");
-
-            printf("Player: %s\t"
-                "Team: %d\t"
-                "Role: %d\t"
-                "Ready: %s\n",
-                p.name, p.team,
-                p.role, (p.ready ? "yes" : "no"));
-
-            if (p.team == 1)
-                team_l[p.role] = p;
-            else if (p.team == 2)
-                team_r[p.role] = p;
-            else 
-                waiting.push_back(p);
+            player_update(&p);
 
         } else if (head.type == MSG_PLAYER_LEAVE) {
             player_matchmaking_t p;
             p.head = head;
             n = recv_complete(sockfd, ((char*)&p) + sizeof(head), sizeof(p) - sizeof(head), 0);
 
-            if (n < 0)
-                error("ERROR reading from socket");
-
-            printf("Player Left: %s\n", p.name);
-
-            // Remove player from the waiting list.
-            if (p.team == 0) {
-                waiting.erase(std::remove(waiting.begin(), waiting.end(), p), waiting.end());
-            } else {
-                // Remove the player from the team arrays.
-                if (p.team == 1){
-                    memcpy(team_l+p.role, &empty, sizeof(player_matchmaking_t));
-                } else if (p.team == 2) {
-                    memcpy(team_r+p.role, &empty, sizeof(player_matchmaking_t));
-                }
-            }
+            player_leave(&p);
 
         } else if (head.type == MSG_MAPNAME) {
             //n = recv_complete(sockfd, ((char*)&m + sizeof(head)), sizeof(map_t) - sizeof(head), 0);
             char m[MAP_NAME_SIZE] = {0};
             if ((n = recv_complete(sockfd, m, MAP_NAME_SIZE, 0)) > 0)
-                printf("Got map name: %s\n", m);
+                msg_mapname(m);
         } else if (head.type == MSG_CHAT) {
-            printf("got msgchat size: %d\n", head.size);
-
-            char m[head.size];
-
+            char * m = (char *) malloc (head.size);
             n = recv_complete(sockfd, m, head.size, 0);
             m[n] = 0;
-
-            if (n > 0)
-                printf("message: %s\n", m);
+            msg_chat(m);
+            free(m);
         }
     }
 

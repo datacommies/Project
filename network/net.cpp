@@ -38,9 +38,10 @@ int recv_complete (int sockfd, void *buf, size_t len, int flags) {
 
     while (bytesRead < len) {
         result = recv (sockfd, (char*)buf + bytesRead, len - bytesRead, flags);
-        if (result < 1) {
-            return -1;
-        }
+        
+        if (result < 1)
+            error("recv");
+
         bytesRead += result;
     }
 

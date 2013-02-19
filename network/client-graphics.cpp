@@ -30,7 +30,6 @@ vector<sf::Text>  lables;
 void update (sf::RenderWindow& window, sf::Clock& sclock);
 
 void add_slot ( int column, int slot, player_matchmaking_t& pmt) {
-    sf::Text Text("", MyFont, 20);
     sf::RectangleShape shape(sf::Vector2f(200, 30));
     shape.setFillColor(pmt.ready ? sf::Color(0,255,0) : sf::Color(128,128,128, 0));
     shape.setOutlineColor(sf::Color::White);
@@ -45,9 +44,7 @@ void add_slot ( int column, int slot, player_matchmaking_t& pmt) {
         x = 800 - 200 - 10;
 
     shape.setPosition(x, 10 + (50 * slot));
-    Text.setPosition (x, 10 + (50 * slot));
     shapes.push_back(shape);
-    lables.push_back(Text);
 }
 
 void add_button () {
@@ -169,21 +166,24 @@ void update (sf::RenderWindow& window, sf::Clock& sclock) {
 
     window.clear();
 
-    
-    for (size_t i = 0; i < 5; ++i) {
+    size_t i;
+
+    // There can only be at most 5 players in a team, and we draw all of them even if the slot is empty.
+    for (i = 0; i < 5; ++i) {
         draw_slot(window, COLUMN_RIGHT, i, team_r[i]);
+        draw_slot(window, COLUMN_LEFT, i, team_l[i]);
     }
     
-    for (size_t i = 0; i < waiting.size(); ++i) {
+    // There is an unknown amount of players can that can be waiting, draw all of them.
+    for (i = 0; i < waiting.size(); ++i) {
         draw_slot(window, COLUMN_MIDDLE, i, waiting[i]);
     }
 
-    for (size_t i = 0; i < 5; ++i) {
-        draw_slot(window, COLUMN_LEFT, i, team_l[i]);
+    for (i = 0; i < shapes.size(); ++i) {
+        window.draw(shapes[i]);
     }
 
-    for (size_t i = 0; i < shapes.size(); ++i) {
-        window.draw(shapes[i]);
+    for (i = 0; i < lables.size(); ++i) {
         window.draw(lables[i]);
     }
 
