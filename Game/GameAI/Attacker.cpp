@@ -15,71 +15,91 @@ bool Attacker::inRange( Point p1, Point p2, int distance ) {
 	 return true;
 }
 
-bool Attacker::Attack() {
-	Point target = pTarget->getPos();
-	
-	if( inRange( pCurrPoint, target, iRange) ) {
-		std::cout << name << iTeam <<   " Attacking " << pTarget->name << pTarget->iTeam;
-		if( pTarget->iElement == iElement + 1 % 3 ) {
-			std::cout << " Very effective ";
-			pTarget->iHp -= iDamage * 1.75;
-		}
-		else
-			pTarget->iHp -= iDamage;
-
-		if( pTarget->iHp <= 0 ) {
-			
-		}
-		std::cout << " HP of Target ( " << pTarget->iHp << " )\n"; 
+/*
+* Used to check if the target has a weakness to the attacker's element.
+*/
+bool Attacker::hasWeakness( int iAttack, int iTarget ) {
+	if( iAttack == iTarget + 1 % ELEMENT_COUNT )
 		return true;
-	}
 	return false;
 }
 
-void Attacker::Update() {
-	if( pTarget != NULL ) { 
-		/* Target is DEAD. */
+/*
+* Attacks the current target. If it has a weakness, it will apply a 75% damage bonus.
+* QUESTION - If we attack a element we have a weakness against, do we do LESS damage? 
+*/
+void Attacker::Attack() {
+	Point target = pTarget->getPos();
 
-		if( pTarget->iHp <= 0 ) {
-			std::cout << "Target is dead.\n";
-			pTarget = NULL;
-		}
-		/* Or Target is out of range.  */
-		else if ( inRange( pCurrPoint, pTarget->getPos(), iPerception) == false ) {	
-			std::cout << "Target out of range." << std::endl;
-			pTarget = NULL;
+	std::cout << name << iTeam <<   " Attacking " << pTarget->name << pTarget->iTeam;
+	if( hasWeakness( iElement, pTarget->iElement ) )
+		pTarget->iHp -= iDamage * 1.75;
+	else
+		pTarget->iHp -= iDamage;
+
+	if( pTarget->iHp <= 0 ) {
+			/* KILL TARGET. */
+	}
+	std::cout << " HP of Target ( " << pTarget->iHp << " )\n"; 
+}
+
+/*
+* Finds the next target, will loop through all enemies until one target is found.
+* TODO - Add priority. ( Attack players over creeps )
+*/
+void Attacker::FindTarget( void ) {
+	std::vector<Attackable*>::iterator it = Game::getEnemiesBegin( iTeam );
+	std::vector<Attackable*>::iterator end = Game::getEnemiesEnd( iTeam );
+
+	for( ; it != end; ++it ) {
+		/* If in range and alive, set as target. */
+		if( inRange( pCurrPoint, (*it)->getPos(), iPerception ) && (*it)->iHp > 0 ) {
+			std::cout << "Found new Target." << std::endl;
+			pTarget = *it;
+			break;
 		}
 	}
+}
+
+/*
+* Check if the target is alive and in range. Set the pTarget to NULL if either are true.
+*/
+void Attacker::CheckTarget( void ) {
+	/* Target is DEAD. */
+	if( pTarget->iHp <= 0 ) {
+		std::cout << "Target is dead.\n";
+		pTarget = NULL;
+	}
+	/* Or Target is out of range.  */
+	else if ( inRange( pCurrPoint, pTarget->getPos(), iPerception) == false ) {	
+		std::cout << "Target out of range." << std::endl;
+		pTarget = NULL;
+	}
+}
+
+/*
+* If we have an attackable target, attack.
+*/
+void Attacker::Update() {
+
+	/* If we have a Target, check their status. */
+	if( pTarget != NULL )
+		CheckTarget();
 
 	/* Search for Target. */
-	if( pTarget == NULL ) {
+	if( pTarget == NULL )
+		FindTarget();
 
-		std::vector<Attackable*>::iterator it = Game::getEnemiesBegin( iTeam );
-		std::vector<Attackable*>::iterator end = Game::getEnemiesEnd( iTeam );
-		
-		for( ; it != end; ++it ) {
-
-			if( inRange( pCurrPoint, (*it)->getPos(), iPerception ) && (*it)->iHp > 0 ) {
-				std::cout << "Found new Target." << std::endl;
-				pTarget = *it;
-				break;
-			}
-			
-		}
-
-	}
-
-		/* If we found a new Target. */
-
+	/* If we found a new Target, and they are in range.. */
 	if( pTarget != NULL ) {
-		//std::cout << "Target Move." << std::endl;
-		if( Attack() == false ) /* Only move if unable to attack. */
-			std::cout << "Unable to Reach." << std::endl;
-	
+		Attack(); /* Only move if unable to attack. */	
 		Rotate( pTarget->getPos() );
 	}
 }
 
+/*
+* Rotate towards the target. Used for either a path, or a target. 
+*/
 float Attacker::Rotate( Point pt ) {
 	return atan2( (float)pCurrPoint.y - pt.y, (float)pCurrPoint.x - pt.x );
 }

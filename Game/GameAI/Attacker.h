@@ -6,13 +6,16 @@
 
 class Attacker: public Attackable {
 	public:
-		bool			Attack();
-		virtual void	Update();
+		void			Attack( void );
+		virtual void	Update( void );
 		void			setTarget( Attackable &newTarget ) { pTarget = &newTarget; }
 		float			Rotate( Point ); 
 		void			setDamage( int newDamage ) { iDamage = newDamage;  }
 		void			setRange( int newRange ) { iRange = newRange; }
 		bool			inRange( Point, Point, int );
+		void			CheckTarget( void );
+		void			FindTarget( void );
+		bool			hasWeakness( int, int );
 
 		int			iDamage;
 		int			iRange;

@@ -13,6 +13,7 @@ class Creep: public Attacker {
 		void	nextPoint( void )		{ pPath++; }
 		void	savePoint( Point &pt )	{ pSaved = &pt; }
 		void	Move( Point );
+		int		getDirection( int, int );
 
 		Point	*pPath;
 		Point	*pSaved;
