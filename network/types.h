@@ -18,7 +18,7 @@ enum {
     MSG_CHAT                // A chat message has been generated
 };
 
-// Common Message Header 
+// Common Message Header
 typedef struct {
     int type;
     int size;
@@ -39,6 +39,36 @@ typedef struct {
     int role;
     bool ready;
 } player_matchmaking_t;
+
+// Game session structs
+typedef struct {
+    int id;
+    float xpos;
+    float ypos;
+    int health;
+} player_game_t;
+
+typedef struct {
+    int id;
+    //int type;
+    float xpos;
+    float ypos;
+    int health;
+} tower_t;
+
+typedef struct {
+    int team;
+    int value;
+} resource_t;
+
+typedef struct {
+    int id;
+    int team;
+    int health;
+    float xpos;
+    float ypos;
+} creep_t;
+
 
 bool operator == (const player_matchmaking_t& a, const player_matchmaking_t& b);
 void error (const char *msg);
