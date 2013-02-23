@@ -127,10 +127,6 @@ int main(int argc, char *argv[])
         /*
             ^ Would this one do?
             
-            while (1) {
-            header_t head;
-            if ((n = recv_complete(sockfd, &head, sizeof(head), 0)) < 0)
-                error("Disconnect");
                 
             switch(head.type){
             case MSG_PLAYER_UPDATE:
@@ -169,7 +165,6 @@ int main(int argc, char *argv[])
             
             }
             
-        }
         */
         if (head.type == MSG_PLAYER_UPDATE) {
             player_matchmaking_t p;
