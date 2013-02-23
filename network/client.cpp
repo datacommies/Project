@@ -123,6 +123,54 @@ int main(int argc, char *argv[])
 
         // [Jesse]: I'm probably going to change this to a switch statement
         // at some point in time.  It displeases me in its current state.
+        
+        /*
+            ^ Would this one do?
+            
+            while (1) {
+            header_t head;
+            if ((n = recv_complete(sockfd, &head, sizeof(head), 0)) < 0)
+                error("Disconnect");
+                
+            switch(head.type){
+            case MSG_PLAYER_UPDATE:
+                player_matchmaking_t p;
+                p.head = head;
+                n = recv_complete(sockfd, ((char*)&p) + sizeof(head), sizeof(p) - sizeof(head), 0);
+    
+                player_update(&p);
+    			
+    			continue;
+                
+        	case MSG_PLAYER_LEAVE:
+            	player_matchmaking_t p;
+                p.head = head;
+                n = recv_complete(sockfd, ((char*)&p) + sizeof(head), sizeof(p) - sizeof(head), 0);
+    
+                player_leave(&p);
+                
+                continue;
+                
+            case MSG_MAPNAME:
+                //n = recv_complete(sockfd, ((char*)&m + sizeof(head)), sizeof(map_t) - sizeof(head), 0);
+                char m[MAP_NAME_SIZE] = {0};
+                if ((n = recv_complete(sockfd, m, MAP_NAME_SIZE, 0)) > 0)
+                    msg_mapname(m);
+                    
+                continue;
+                
+            case MSG_CHAT:
+                char * m = (char *) malloc (head.size);
+                n = recv_complete(sockfd, m, head.size, 0);
+                m[n] = 0;
+                msg_chat(m);
+                free(m);
+        
+            
+            }
+            
+        }
+        */
         if (head.type == MSG_PLAYER_UPDATE) {
             player_matchmaking_t p;
             p.head = head;
