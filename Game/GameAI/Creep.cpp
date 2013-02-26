@@ -4,6 +4,12 @@
 #include <vector>
 #include <math.h>
 
+/*Copy constructor. */
+	Creep::Creep( const Creep &c ) 
+		:Attacker( c ), pPath( c.pPath), iSpeed(c.iSpeed), pSaved(c.pSaved)
+	{}
+
+
 /*
 * Function to return the difference in two points. Used for movement. 
 */
@@ -20,9 +26,8 @@ int Creep::getDirection( int p1, int p2 ) {
 * Move the current point towards the target point based on Speed. 
 */
 void Creep::Move( Point pt ) {
-	std::cout << "Moving "<< name << " " << pCurrPoint.x << ", " << pCurrPoint.y << " -> " << pt.x << ", " << pt.y << ".\n";
-	pCurrPoint.x += getDirection( pCurrPoint.x, pTarget->pCurrPoint.x ) * iSpeed;
-	pCurrPoint.y += getDirection( pCurrPoint.y, pTarget->pCurrPoint.y )  * iSpeed;
+	pCurrPoint.x += getDirection( pCurrPoint.x, pt.x ) * iSpeed;
+	pCurrPoint.y += getDirection( pCurrPoint.y, pt.y )  * iSpeed;
 }
 
 /*
@@ -33,7 +38,6 @@ void Creep::Move( Point pt ) {
 void Creep::Update( void ) {
 	/* Check if we are at the next path point.  */
 	if( pPath->x == pCurrPoint.x && pPath->y == pCurrPoint.y ) {
-		std::cout << "At Path Point (" << pPath->x << " ," << pPath->y << " )\n";
 		nextPoint();
 	}
 
@@ -42,8 +46,12 @@ void Creep::Update( void ) {
 		CheckTarget();
 
 	/* Search for Target. */
-	if( pTarget == NULL )
+	if( pTarget == NULL ) {
 		FindTarget();
+		if( pTarget != NULL && pSaved == NULL )
+			pSaved = &pCurrPoint;
+
+	}
 
 	/* If we found a new Target. */
 	if( pTarget != NULL ) {
@@ -54,7 +62,10 @@ void Creep::Update( void ) {
 
 		Rotate( pTarget->getPos() );
 	} else { /*No target. Move along path. */
-		Move( *pPath );
+		if( pSaved == 0 )
+			Move( *pPath );
+		else
+			Move( *pSaved );
 		Rotate( *pPath );
 	}
 }
