@@ -28,19 +28,19 @@ bool Attacker::hasWeakness( int iAttack, int iTarget ) {
 * Attacks the current target. If it has a weakness, it will apply a 75% damage bonus.
 * QUESTION - If we attack a element we have a weakness against, do we do LESS damage? 
 */
-void Attacker::Attack() {
-	Point target = pTarget->getPos();
+void Attacker::Attack( void ) {
+	if( iAttackCount++ < iAttackSpeed )
+		return;
 
-	std::cout << name << iTeam <<   " Attacking " << pTarget->name << pTarget->iTeam;
+	iAttackSpeed = 0;
 	if( hasWeakness( iElement, pTarget->iElement ) )
 		pTarget->iHp -= iDamage * 1.75;
 	else
 		pTarget->iHp -= iDamage;
 
 	if( pTarget->iHp <= 0 ) {
-			/* KILL TARGET. */
+		Game::removeUnit( pTarget, pTarget->iTeam );
 	}
-	std::cout << " HP of Target ( " << pTarget->iHp << " )\n"; 
 }
 
 /*
@@ -54,7 +54,6 @@ void Attacker::FindTarget( void ) {
 	for( ; it != end; ++it ) {
 		/* If in range and alive, set as target. */
 		if( inRange( pCurrPoint, (*it)->getPos(), iPerception ) && (*it)->iHp > 0 ) {
-			std::cout << "Found new Target." << std::endl;
 			pTarget = *it;
 			break;
 		}
@@ -66,15 +65,12 @@ void Attacker::FindTarget( void ) {
 */
 void Attacker::CheckTarget( void ) {
 	/* Target is DEAD. */
-	if( pTarget->iHp <= 0 ) {
-		std::cout << "Target is dead.\n";
+	if( pTarget->iHp <= 0 )
 		pTarget = NULL;
-	}
 	/* Or Target is out of range.  */
-	else if ( inRange( pCurrPoint, pTarget->getPos(), iPerception) == false ) {	
-		std::cout << "Target out of range." << std::endl;
+	else if ( inRange( pCurrPoint, pTarget->getPos(), iPerception) == false )
 		pTarget = NULL;
-	}
+	
 }
 
 /*
@@ -92,7 +88,7 @@ void Attacker::Update() {
 
 	/* If we found a new Target, and they are in range.. */
 	if( pTarget != NULL ) {
-		Attack(); /* Only move if unable to attack. */	
+		Attack();
 		Rotate( pTarget->getPos() );
 	}
 }

@@ -8,6 +8,9 @@
 
 class Attackable {
 	public:
+		Attackable() {}
+		Attackable( const Attackable& a )
+			: iHp(a.iHp), pCurrPoint( a.pCurrPoint ), iElement( a.iElement ), iTeam( a.iTeam ), name( a.name ) {}
 		Point			getPos() { return pCurrPoint; }
 		void			setTeam( int t ) { iTeam = t; }
 		virtual void	Update() { }
