@@ -12,22 +12,26 @@
 using namespace std;
 
 enum {
-    COLUMN_LEFT,
-    COLUMN_MIDDLE,
-    COLUMN_RIGHT
+    COLUMN_MIDDLE=0,
+    COLUMN_LEFT=1,
+    COLUMN_RIGHT=2
 };
 
-void update (sf::RenderWindow& window, sf::Clock& sclock);
+// Later iterations should pass this via struct pointer to init()
+// Client networking will fill these values.
+extern player_matchmaking_t team_l[5];
+extern player_matchmaking_t team_r[5];
+extern vector<player_matchmaking_t> waiting;
 
 sf::Font MyFont;
-extern vector<player_matchmaking_t> players;
 vector<sf::RectangleShape> shapes;
 vector<sf::Text>  lables;
 
+void update (sf::RenderWindow& window, sf::Clock& sclock);
+
 void add_slot ( int column, int slot, player_matchmaking_t& pmt) {
-    sf::Text Text(pmt.name, MyFont, 20);
     sf::RectangleShape shape(sf::Vector2f(200, 30));
-    shape.setFillColor(pmt.ready ? sf::Color(0,255,0) : sf::Color(128,128,128));
+    shape.setFillColor(pmt.ready ? sf::Color(0,255,0) : sf::Color(128,128,128, 0));
     shape.setOutlineColor(sf::Color::White);
     shape.setOutlineThickness(2.0f);
 
@@ -40,9 +44,7 @@ void add_slot ( int column, int slot, player_matchmaking_t& pmt) {
         x = 800 - 200 - 10;
 
     shape.setPosition(x, 10 + (50 * slot));
-    Text.setPosition (x, 10 + (50 * slot));
     shapes.push_back(shape);
-    lables.push_back(Text);
 }
 
 void add_button () {
@@ -57,13 +59,8 @@ void add_button () {
     lables.push_back(readytext);
 }
 
-void * init (void * nothing) {
-    int sockfd = (long) nothing;
-    sf::Clock sclock;
-    sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
-
-    // Pick default system font with font config.
-    FcChar8 * path;
+// Pick default system font with font config.
+bool find_font (char ** path) {
     FcResult result;
     FcPattern* pat = FcPatternCreate();
     //pat = FcNameParse ((FcChar8 *) ""); //specify font family?
@@ -71,24 +68,35 @@ void * init (void * nothing) {
     FcDefaultSubstitute (pat);
     FcPattern * match =  FcFontMatch(NULL, pat, &result);
     match = FcFontMatch (0, pat, &result);
-    if(FcPatternGetString(match, FC_FILE, 0, &path) == FcResultMatch)
-        printf("path to arial %s\n", path);
+    return (FcPatternGetString(match, FC_FILE, 0, (FcChar8**)path) == FcResultMatch);
+}
 
-    if (!MyFont.loadFromFile((char*)path)) {
+void * init (void * nothing) {
+    int sockfd = (long) nothing;
+    sf::Clock sclock;
+    sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
+
+    char * font_path;
+    find_font( &font_path );
+
+    if (!MyFont.loadFromFile(font_path)) {
         printf("error loading font\n");
     }
 
     player_matchmaking_t empty = {{0, 0}, {0}, 0, 0, 0, 0};
     strcpy(empty.name, "Empty");
+
     for (int i = 0; i < 5; ++i) {
         add_slot(COLUMN_RIGHT, i, empty);
         add_slot(COLUMN_LEFT, i, empty);
     }
+
     add_button();
 
     while (window.isOpen()) {
         update(window, sclock);
     }
+
     shutdown(sockfd, SHUT_RDWR);
     close(sockfd);
     return NULL;
@@ -158,13 +166,25 @@ void update (sf::RenderWindow& window, sf::Clock& sclock) {
 
     window.clear();
 
-    for (size_t i = 0; i < shapes.size(); ++i) {
-        window.draw(shapes[i]);
-        window.draw(lables[i]);
+    size_t i;
+
+    // There can only be at most 5 players in a team, and we draw all of them even if the slot is empty.
+    for (i = 0; i < 5; ++i) {
+        draw_slot(window, COLUMN_RIGHT, i, team_r[i]);
+        draw_slot(window, COLUMN_LEFT, i, team_l[i]);
     }
     
-    for (size_t i = 0; i < players.size(); ++i) {
-        draw_slot(window, COLUMN_MIDDLE, i, players[i]);
+    // There is an unknown amount of players can that can be waiting, draw all of them.
+    for (i = 0; i < waiting.size(); ++i) {
+        draw_slot(window, COLUMN_MIDDLE, i, waiting[i]);
+    }
+
+    for (i = 0; i < shapes.size(); ++i) {
+        window.draw(shapes[i]);
+    }
+
+    for (i = 0; i < lables.size(); ++i) {
+        window.draw(lables[i]);
     }
 
     draw_chat(window);

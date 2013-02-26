@@ -1,6 +1,6 @@
 #include <unistd.h>
 #include <pthread.h>
-#include <sys/types.h> 
+#include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include "types.h"
@@ -38,9 +38,10 @@ int recv_complete (int sockfd, void *buf, size_t len, int flags) {
 
     while (bytesRead < len) {
         result = recv (sockfd, (char*)buf + bytesRead, len - bytesRead, flags);
-        if (result < 1) {
-            return -1;
-        }
+
+        if (result < 1)
+            error("recv");
+
         bytesRead += result;
     }
 
@@ -53,7 +54,7 @@ int server (int port) {
     struct sockaddr_in serv_addr;
 
     int sock = socket(AF_INET, SOCK_STREAM, 0);;
-    if (sock < 0) 
+    if (sock < 0)
         error("ERROR opening socket");
 
     setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &ov, sizeof (ov));
