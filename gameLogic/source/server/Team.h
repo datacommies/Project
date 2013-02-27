@@ -6,9 +6,10 @@
 #define NUM_PLAYERS_PER_TEAM 5
 
 // This differs slightly from the documentation..
+// This will use polymorphism...
 class Team {
   long _team_id;
-  Player _players[NUM_PLAYERS_PER_TEAM];
+  Player *_players[NUM_PLAYERS_PER_TEAM];
 };
 
 #endif
