@@ -3,8 +3,15 @@
 //base unit classes, all concrete unit types will inherit from this in some way
 class Unit{
 public:
-    Unit(const int& unitID, const int& teamID, const int& hp, const int& xPos, const int& yPos):
+    Unit(const int& teamID, const int& hp, const int& xPos, const int& yPos):
      unitID_(unitID), teamID_(teamID), healthPoints_(hp), xPos_(xPos), yPos_(yPos) {
+        //call function to generate unit id
+        //unitID_ = generated id
+
+        //set HP based on unit type, or maybe not
+        //should hp stuff even be in here?
+        //hp = unit hp type
+        
         //validation
 
         //check that unit id is unique
