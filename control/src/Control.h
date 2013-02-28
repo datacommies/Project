@@ -22,13 +22,16 @@
 ----------------------------------------------------------------------------------------------------------------------*/
 
 // Return Negative values to indicate close program
-#define BUILDER_MODE 20
-#define PLAYER_MODE 30
+#define MENU_CONTEXT 10
+#define BUILDER_CONTEXT 20
+#define PLAYER_CONTEXT 30
 
 #define DIRECTION_UP 0
 #define DIRECTION_RIGHT 1
 #define DIRECTION_DOWN 2
 #define DIRECTION_LEFT 3
+
+#include "InputManager.h"
 
 #endif
 

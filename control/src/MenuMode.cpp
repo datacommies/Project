@@ -35,10 +35,10 @@ int MenuInputMonitor()
 				}
 			} else if(PlayerModeButton.contains(position))
 			{
-				playerMode = PLAYER_MODE;
+				playerMode = PLAYER_CONTEXT;
 			} else if(BUilderModeButton.contains(position))
 			{
-				playerMode = BUILDER_MODE;
+				playerMode = BUILDER_CONTEXT;
 			} else if(Team1Button.contains(position))
 			{
 				isTeamOne = true;
