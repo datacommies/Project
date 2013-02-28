@@ -82,9 +82,15 @@ public:
         healthPoints_ += add;
     }
 
-    //virtual because attacks might be mitigated by armour?
+    //virtual because attacks might be mitigated by armour in other classes?
     virtual void subHP(const int& sub){
         healthPoints_ -= sub;
+    }
+
+    virtual void Run(){
+        //every 1/30 of a second
+        //check things like if there enemies to attack, am I moving?, etc.
+        //overridden in concrete each class
     }
 
     //pure virtual function for displaying info about the class
