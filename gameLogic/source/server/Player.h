@@ -3,6 +3,7 @@
 
 class Player {
 private:
+<<<<<<< HEAD
 	long _id;
 	int _hp;
 	string _class;
@@ -18,7 +19,5 @@ private:
 public:
 	long getID();
 	void setID(long);
-	
 };
-
 #endif
