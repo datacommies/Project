@@ -21,6 +21,7 @@
 class Player {
 private:
 	long _id;
+	int team;	//which team, attack/defend
 	int _hp;
 	string _class;
 	Point _currentCoordinates;

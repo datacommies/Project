@@ -39,10 +39,10 @@ public:
 	bool sendMsg(Packet);
 	bool receiveMsg();
 	void enterGameRoom();
-	bool ifRoomFull(Room);
-	void selectPositionInTeam();
-	bool ifPositionFree(Team);
-	void attack();
+	bool roomFull();
+	bool selectPositionInTeam();
+	bool positionFree(int position);
+	int attack();
 	void takeDamage(int);
 	void run();
 };
