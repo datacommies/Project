@@ -3,7 +3,6 @@
 
 class Player {
 private:
-<<<<<<< HEAD
 	long _id;
 	int _hp;
 	string _class;
@@ -19,5 +18,19 @@ private:
 public:
 	long getID();
 	void setID(long);
+	int getHP();
+	void setHP(int);
+	string getClass();
+	void setClass(string);
+	Point getCoord();
+	void setCoord(Point);
+	int getAtkPoint();
+	void setAtkPoint(int);
+	int getDefPoint();
+	void setDefPoint(int);
+	int getMoveSpeed();
+	void setMoveSpeed(int);
+	int getStatus();
+	void setStatus(int);
 };
 #endif
