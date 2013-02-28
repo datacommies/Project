@@ -1,3 +1,5 @@
+#ifndef CONTROL
+#define CONTROL
 /*--------------------------------------------------------------------------------------------------------------------
 -- PROGRAM: DTD-Control
 --
@@ -26,4 +28,6 @@
 #define DIRECTION_RIGHT 1
 #define DIRECTION_DOWN 2
 #define DIRECTION_LEFT 3
+
+#endif
 
