@@ -21,6 +21,7 @@
 -- 
 ----------------------------------------------------------------------------------------------------------------------*/
 
+// Return Negative values to indicate close program
 #define BUILDER_MODE 20
 #define PLAYER_MODE 30
 
