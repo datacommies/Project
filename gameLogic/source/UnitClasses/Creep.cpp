@@ -17,4 +17,6 @@ void setLane(const int& lane){
     lane_ = lane;
 }
 
-
+void setType(const int& type){
+    type_ = type;
+}
