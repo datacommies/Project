@@ -1,36 +1,41 @@
-/*
- * Modified from http://www.cim.mcgill.ca/~franco/OpSys-304-427/messages/node25.html
- *
- * 33333 is about 1/30th of a second
- */
-
-
-#include <sys/time.h>
-#include <signal.h>
 #include <stdio.h>
-#include <assert.h>
+#include <signal.h>
+#include <sys/time.h>
+#include <stdlib.h>
 
-volatile int cnt=100;
+#define INTERVAL 33333
 
-void sigalrm(int sig) {
-    extern volatile int cnt;
-    cnt--;
-    if (!(cnt % 10)) {
-      fprintf(stderr,"%d...", cnt);
-    }
+void set_alarm();
+
+void alarm_wakeup (int i)
+{
+   signal(SIGALRM,alarm_wakeup);
+
+   printf(".");
+   fflush(stdout);
+
+   set_alarm();
 }
 
-int main(int argc, char* argv[])
+void set_alarm ()
 {
-    struct sigaction sa = {sigalrm, 0, 0, 0};
-    struct itimerval iv = {{0, 33333}, {0, 33333}};
+  struct itimerval tout_val;
+  
+  tout_val.it_interval.tv_sec = 0;
+  tout_val.it_interval.tv_usec = 0;
+  tout_val.it_value.tv_sec = 0;
+  tout_val.it_value.tv_usec = INTERVAL; /* set time for interval (1/30th of a second) */
+  setitimer(ITIMER_REAL, &tout_val,0);
 
-    assert(-1 != sigaction(SIGALRM, &sa, NULL));
-    assert(-1 != setitimer(ITIMER_PROF, &iv, NULL));
-    
-    fprintf(stderr,"cnt=%d...", cnt);
-    
-    do /* nothing */; while (cnt);
-    fprintf(stderr,"done - exit\n");
-    return 0;
+  signal(SIGALRM,alarm_wakeup); /* set the Alarm signal capture */
+  
+}
+
+int main() {
+
+  set_alarm();
+  while (1) 
+    ;
+
+  return 0;
 }
