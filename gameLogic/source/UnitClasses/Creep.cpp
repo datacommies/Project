@@ -5,18 +5,22 @@ Creep::Creep(const int& teamID, const int& hp, const int& xPos, const int& yPos,
     //based on creep type, init attack/move related things
 }
 
-int getLane(){
+int Creep::getLane(){
     return lane_;
 }
 
-int getType(){
+int Creep::getType(){
     return type_;
 }
 
-void setLane(const int& lane){
+void Creep::setLane(const int& lane){
     lane_ = lane;
 }
 
-void setType(const int& type){
+void Creep::setType(const int& type){
     type_ = type;
+}
+
+void Creep::Run(){
+    //code to run the AI
 }

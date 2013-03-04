@@ -1,3 +1,5 @@
+#include "MobileUnit.h"
+
 class Creep: public MobileUnit{
 public:
     Creep(const int& teamID, const int& hp, const int& xPos, const int& yPos, const int& lane, const int& type);
@@ -15,4 +17,4 @@ private:
     int lane_;
     int type_;
     //others?
-}
+};

@@ -67,7 +67,7 @@ public:
     }
 
     //other useful functions
-    void setPos(x, y){
+    void setPos(int x, int y){
         xPos_ = x;
         yPos_ = y;
     }
@@ -103,4 +103,4 @@ private:
     int healthPoints_;//health points of the unit
     int xPos_;//x position of the unit
     int yPos_;//y position of the unit
-}
+};

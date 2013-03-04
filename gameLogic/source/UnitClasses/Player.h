@@ -1,6 +1,8 @@
+#include "Player.h"
+
 class Player: public MobileUnit{
 public:
-    Player(const int& teamID, const int& playerID, const int& hp, const int& xPos, const int& yPos, const int& type);
+    Player(const int& teamID, const int& playerID, const int& hp, const int& xPos, const int& yPos, const int& type)et;
 
     int getID();
 
@@ -12,5 +14,5 @@ public:
 
 private:
     int playerID_;
-    int player_type;
-}
+    int playerType_;
+};
