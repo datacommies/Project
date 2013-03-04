@@ -71,7 +71,7 @@ void Player::setStatus(int status){
 }
 
 /* To test to see if this class compiles type:
- * g++ -WALL -DTESTCOMPILE Player.cpp */
+ * g++ -Wall -DTESTCOMPILE Player.cpp */
 #ifdef TESTCOMPILE
 
 int main() {return 0;}
