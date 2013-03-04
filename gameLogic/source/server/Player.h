@@ -1,11 +1,13 @@
 #ifndef _PLAYER_H_
 #define _PLAYER_H_
 
+#include <string>
+
 class Player {
 private:
 	long _id;
 	int _hp;
-	string _class;
+	std::string _class;
 	Point _currentCoordinates;
 	int _attackPoint;
 	int _defendPoint;
