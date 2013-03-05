@@ -27,12 +27,12 @@ class Creep: public Attacker {
 class Tank: public Creep {
 	public:
 		Tank() {
-			iHp					= 2000;
-			iDamage			= 3;
+			iHp				= 2000;
+			iDamage				= 3;
 			iSpeed				= 5;
 			iRange				= 20;
-			iPerception		= 50;
-			iAttackSpeed		= 5;
+			iPerception			= 50;
+			iAttackSpeed			= 5;
 			iElement			= ELEMENT_WATER;
 			name				= "Tank";
 		}
@@ -41,12 +41,12 @@ class Tank: public Creep {
 class DPS: public Creep {
 	public:
 		DPS() {
-			iHp					= 250;
-			iDamage			= 12;
+			iHp				= 250;
+			iDamage				= 12;
 			iSpeed				= 4;
 			iRange				= 20;
-			iPerception		= 100;
-			iAttackSpeed		= 5;
+			iPerception			= 100;
+			iAttackSpeed			= 5;
 			iElement			= ELEMENT_FIRE;
 			name				= "DPS";
 		}
