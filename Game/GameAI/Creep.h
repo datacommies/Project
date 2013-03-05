@@ -14,14 +14,14 @@ class Creep: public Attacker {
 		void		Update( void );
 		void		setSpeed( int newSpeed) { iSpeed = newSpeed; }
 		void		setPath( Point *pt )	{ pPath = pt; }
-		void		nextPoint( void )		{ pPath++; }
+		void		nextPoint( void )	{ pPath++; }
 		void		savePoint( Point &pt )	{ pSaved = &pt; }
 		void		Move( Point );
-		int			getDirection( int, int );
+		int		getDirection( int, int );
 
 		Point	*	pPath;
 		Point	*	pSaved;
-		int			iSpeed;
+		int		iSpeed;
 };
 
 class Tank: public Creep {
