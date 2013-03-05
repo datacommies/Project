@@ -1,4 +1,4 @@
-#include "../gameClasses/Team.h"
+//#include "../gameClasses/Team.h"
 
 #include <stdio.h>
 #include <signal.h>
@@ -9,13 +9,13 @@
 
 #define INTERVAL 33333
 
-Team teams[NUM_OF_TEAMS];
+//Team teams[NUM_OF_TEAMS];
 
 void set_alarm();
 
 void main_proc() {
 
-  get_client_data();
+//  get_client_data();
 
 }
 
