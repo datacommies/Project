@@ -13,6 +13,16 @@ int Creep::getType(){
     return type_;
 }
 
+Point* Creep::getPath(){
+    return pPath;
+}
+
+Point* Creep::getNext(){
+    return pPath+1; 
+    //get the next point in the path but don't 
+    //increment that actual current value
+}
+
 void Creep::setLane(const int& lane){
     lane_ = lane;
 }
