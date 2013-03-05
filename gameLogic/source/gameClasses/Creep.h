@@ -18,7 +18,7 @@ public:
 
     void setPath(const Point *pt);
 
-    void setNext(const Point *pt);
+    void savePoint(Point &pt);
 
     virtual void Run();
 private:
