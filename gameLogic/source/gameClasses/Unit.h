@@ -89,7 +89,7 @@ public:
     }
 
     virtual void Run(){
-        //every 1/30 of a second
+        //every 1/30 of a second, use a timer to sync all units
         //check things like if there enemies to attack, am I moving?, etc.
         //overridden in concrete each class
     }
