@@ -7,9 +7,7 @@
 
 class Creep: public Attacker {
 public:
-	Creep()
-		: pPath( 0 ), pSaved( 0 ), iSpeed( 0 )
-	{}
+	Creep(): pPath( 0 ), pSaved( 0 ), iSpeed( 0 ) {}
 	Creep( const Creep& );
 	void		Update( void );
 	void		setSpeed( int newSpeed) { iSpeed = newSpeed; }
