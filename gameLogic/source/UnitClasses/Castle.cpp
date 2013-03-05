@@ -3,7 +3,10 @@ using namespace std;
 
 class Castle inherits from StaticUnit{
 
-	Castle(u_int id):playerID_(id){}	// constructor initializes playerID_
+	Castle(int uID, int pID): unitID(uID), playerID_(pID){	// constructor initializes playerID_
+		// set xPos and yPos
+		cout << "Castle created. "
+	}
 	
 	void run()
 	{
@@ -11,8 +14,9 @@ class Castle inherits from StaticUnit{
 		//		- how do we keep track of this?
 		
 		// 2) check castle's healthPoints, if zero then loses game
-		if(isDead){
+		if(isDead()){
 			//call an endGame() or surrender() function
+			cout << "End game." << endl;
 		}
 		
 		// 3) check for user input (from Commander role) 

@@ -57,6 +57,7 @@ public:
 		return attackDamage_;		// return unit's current attackDamage_
 	}
 
+
 private:
 	string typeTower_;		// type of tower (i.e. basic or some upgrade type)
 	int attackRadius_;		// radius of attack for tower
