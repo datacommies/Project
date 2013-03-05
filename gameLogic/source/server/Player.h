@@ -1,11 +1,14 @@
 #ifndef _PLAYER_H_
 #define _PLAYER_H_
 
+#include "Point.h"
+#include <string>
+
 class Player {
 private:
 	long _id;
 	int _hp;
-	string _class;
+	std::string _class;
 	Point _currentCoordinates;
 	int _attackPoint;
 	int _defendPoint;
@@ -16,12 +19,13 @@ private:
 	//etc...
   
 public:
+	Player(long id, int hp, std::string playClass, Point coord, int atkPtr, int defPtr, int mSpeed, int status);
 	long getID();
 	void setID(long);
 	int getHP();
 	void setHP(int);
-	string getClass();
-	void setClass(string);
+	std::string getClass();
+	void setClass(std::string);
 	Point getCoord();
 	void setCoord(Point);
 	int getAtkPoint();
@@ -32,5 +36,7 @@ public:
 	void setMoveSpeed(int);
 	int getStatus();
 	void setStatus(int);
+	std::string getPlayerClass();
+	void setPlayerClass(std::string playClass);
 };
 #endif
