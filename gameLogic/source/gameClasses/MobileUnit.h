@@ -1,3 +1,7 @@
+#ifndef MOBILEUNIT_H
+#define MOBILEUNIT_H
+
+
 #include "Unit.h"
 
 class MobileUnit: public Unit{
@@ -76,3 +80,5 @@ private:
     //int aggroRadius_;
     //int defense_;
 };
+
+#endif
