@@ -1,8 +1,10 @@
 #include "Player.h"
 
+using namespace std;
+
 Player::Player(long id, int hp, string playClass, Point coord, int atkPtr, int defPtr, int mSpeed, int status) :
 		_id(id), _hp(hp), _class(playClass), _currentCoordinates(coord), _attackPoint(atkPtr),
-		_defendPoint(defPtr), _movementSpeed(mSpeed), _status(status);
+		_defendPoint(defPtr), _movementSpeed(mSpeed), _status(status) {}
 
 long Player::getID(){
 	return _id;
@@ -20,7 +22,7 @@ void Player::setHP(int hp){
 	_hp = hp;
 }
 
-string Player::getPlayerClass(){
+std::string Player::getPlayerClass(){
 	return _class;
 }
 
@@ -67,3 +69,11 @@ int Player::getStatus(){
 void Player::setStatus(int status){
 	_status = status;
 }
+
+/* To test to see if this class compiles type:
+ * g++ -Wall -DTESTCOMPILE Player.cpp */
+#ifdef TESTCOMPILE
+
+int main() {return 0;}
+
+#endif

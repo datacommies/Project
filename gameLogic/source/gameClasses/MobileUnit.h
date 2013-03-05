@@ -1,4 +1,4 @@
-
+#include "Unit.h"
 
 class MobileUnit: public Unit{
 public:
@@ -70,4 +70,4 @@ private:
     int attackDmg_;
     //int aggroRadius_;
     //int defense_;
-}
+};

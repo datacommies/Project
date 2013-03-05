@@ -4,9 +4,10 @@
 class Unit{
 public:
     Unit(const int& teamID, const int& hp, const int& xPos, const int& yPos):
-     unitID_(unitID), teamID_(teamID), healthPoints_(hp), xPos_(xPos), yPos_(yPos) {
+     teamID_(teamID), healthPoints_(hp), xPos_(xPos), yPos_(yPos) {
         //call function to generate unit id
         //unitID_ = generated id
+        //need a mutex??
 
         //set HP based on unit type, or maybe not
         //should hp stuff even be in here?
@@ -66,7 +67,7 @@ public:
     }
 
     //other useful functions
-    void setPos(x, y){
+    void setPos(int x, int y){
         xPos_ = x;
         yPos_ = y;
     }
@@ -88,7 +89,7 @@ public:
     }
 
     virtual void Run(){
-        //every 1/30 of a second
+        //every 1/30 of a second, use a timer to sync all units
         //check things like if there enemies to attack, am I moving?, etc.
         //overridden in concrete each class
     }
@@ -102,4 +103,4 @@ private:
     int healthPoints_;//health points of the unit
     int xPos_;//x position of the unit
     int yPos_;//y position of the unit
-}
+};

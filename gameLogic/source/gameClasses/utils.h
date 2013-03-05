@@ -1,3 +1,4 @@
+//movement directions
 #define UP 1
 #define RIGHT 2
 #define DOWN 3

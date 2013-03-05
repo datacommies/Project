@@ -1,28 +1,19 @@
-#include "../gameClasses/Team.h"
-
 #include <stdio.h>
 #include <signal.h>
 #include <sys/time.h>
 #include <stdlib.h>
 
-#include <deque>
-
 #define INTERVAL 33333
 
-Team teams[NUM_OF_TEAMS];
-
 void set_alarm();
-
-void main_proc() {
-
-  get_client_data();
-
-}
 
 void alarm_wakeup (int i)
 {
    signal(SIGALRM,alarm_wakeup);
-   main_proc();
+
+   printf(".");
+   fflush(stdout);
+
    set_alarm();
 }
 
