@@ -2,7 +2,7 @@
 
 class Player: public MobileUnit{
 public:
-    Player(const int& teamID, const int& playerID, const int& hp, const int& xPos, const int& yPos, const int& type)et;
+    Player(const int& teamID, const int& playerID, const int& hp, const int& xPos, const int& yPos, const int& type);
 
     int getID();
 

@@ -1,4 +1,5 @@
 #include "MobileUnit.h"
+#include "Point.h"
 
 class Creep: public MobileUnit{
 public:
@@ -16,7 +17,7 @@ public:
     
     void setType(const int& type);
 
-    void setPath(const Point *pt);
+    void setPath(Point *pt);
 
     void savePoint(Point &pt);
 

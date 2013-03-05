@@ -30,7 +30,7 @@ void Creep::setLane(const int& lane){
 void Creep::setType(const int& type){
     type_ = type;
 }
-void Creep::SetPath(const Point *pt){
+void Creep::setPath(Point *pt){
     pPath = pt;
 }
 
@@ -41,4 +41,8 @@ void Creep::savePoint(Point &pt){
 void Creep::Run(){
     //code to run the AI
     //use a timer so that everything is synchronized
+}
+
+int main(){
+    return 0;
 }

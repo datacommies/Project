@@ -61,6 +61,11 @@ public:
         //damage the unit you've collided with base on attack dmg
     }
 
+    virtual void Run(){
+        //unit.run()
+        //do other things, like move, attack
+    }
+
 
 private:
     int moveSpeed_;
