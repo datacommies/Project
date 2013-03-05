@@ -18,11 +18,11 @@ void MultiShot::FindTarget( void ) {
 	for( ; it != end; ++it ) {
 		/* If in range and alive, set as target. */
 		if( inRange( pCurrPoint, (*it)->getPos(), iPerception ) && (*it)->iHp > 0 ) {
-			if( pTarget == NULL )
+			if( pTarget2 != *it && pTarget3 != *it && pTarget == NULL )
 				pTarget = *it;
-			else if ( pTarget2 == NULL )
+			else if ( pTarget != *it && pTarget3 != *it && pTarget2 == NULL )
 				pTarget2 = *it;
-			else if ( pTarget3 == NULL ) {
+			else if (pTarget != *it && pTarget2 != *it && pTarget3 == NULL ) {
 				pTarget3 = *it;
 			}
 			/* If we have 3 targets, break. */

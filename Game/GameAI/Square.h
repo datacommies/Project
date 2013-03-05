@@ -2,10 +2,10 @@
 #define SQUARE_H
 
 class Square {
-	public:
-		int x;
-		int y;
-		int id;
+public:
+	int x;
+	int y;
+	int id;
 };
 
 #endif

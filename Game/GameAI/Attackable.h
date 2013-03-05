@@ -16,7 +16,7 @@ class Attackable {
 		virtual void	Update() { }
 		
 		int		iHp;
-		Point	pCurrPoint;
+		Point		pCurrPoint;
 		int		iElement;
 		int		iTeam;
 		std::string	name;
