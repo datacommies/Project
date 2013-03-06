@@ -1,4 +1,5 @@
-
+#ifndef UNIT_H
+#define UNIT_H
 
 //base unit classes, all concrete unit types will inherit from this in some way
 class Unit{
@@ -90,13 +91,14 @@ public:
 
     virtual void Run(){
         //every 1/30 of a second, use a timer to sync all units
-        //check things like if there enemies to attack, am I moving?, etc.
+        //check things like if there are enemies to attack, am I moving?, etc.
         //overridden in concrete each class
     }
 
     //pure virtual function for displaying info about the class
     //makes the class abstract
     virtual void display() const = 0;
+	
 private:
     int unitID_;//unique ID for the unit
     int teamID_;//ID of the team that the unit is associated with
@@ -104,3 +106,5 @@ private:
     int xPos_;//x position of the unit
     int yPos_;//y position of the unit
 };
+
+#endif
