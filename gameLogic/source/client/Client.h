@@ -24,7 +24,7 @@
 #include <unistd.h>
 
 #include "Player.h"
-#include "Team.h"
+//#include "../gameClasses/Team.h"
 
 class Client {
 private:
@@ -32,13 +32,13 @@ private:
 	int _connectionStatus;
 	
 public:
-	Client();
+	Client(Player, int);
 	~Client() {}
 	
 	//Client's helper functions
-	bool sendMsg(Packet);
+	bool sendMsg();//Packet);
 	bool receiveMsg();
-	void enterGameRoom();
+	bool enterGameRoom();
 	bool roomFull();
 	bool selectPositionInTeam();
 	bool positionFree(int position);
