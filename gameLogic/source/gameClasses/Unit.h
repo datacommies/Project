@@ -1,4 +1,5 @@
-
+#ifndef UNIT_H
+#define UNIT_H
 
 //base unit classes, all concrete unit types will inherit from this in some way
 class Unit{
@@ -105,3 +106,5 @@ private:
     int xPos_;//x position of the unit
     int yPos_;//y position of the unit
 };
+
+#endif
