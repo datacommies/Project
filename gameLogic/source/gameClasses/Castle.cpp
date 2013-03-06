@@ -1,4 +1,7 @@
 #include "Castle.h"
+#include <iostream>
+using namespace std;
+
 
 Castle::Castle(const int& teamID, const int& hp, const int& xPos, const int& yPos, const int& playerID): StaticUnit(teamID, hp, xPos, yPos), playerID_(playerID){
 		cout << "Castle created for Team " << teamID << endl;
@@ -18,7 +21,7 @@ void Castle::Run()
 	// 3) check for user input (from Commander role) 
 	//if(there is input){
 		//handle input such as build a tower or creeps
-	}
+	//}
 	
 	// 4) call updateServer()
 	//updateStats(struct castleStruct);
@@ -71,20 +74,17 @@ bool Castle::upgradeCreep(int unitID, int typeCreep)		// future option
 	// NOTE: updated info sent to server on regular update
 }
 
-// another possible future option: upgradeCastle()
-//		could upgrade type &/or defenceStrength
-
-void Castle::setDefenceStrength(int ds)	// defence strength factor - future option
-{
-	defenceStrength_ *= ds;	 	// increase or decrease by factor or %
-}
-
-int Castle::getDefenceStrength()		// future option
-{
-	return defenceStrength_;	// return unit's current defenceStrength
-}
-
 int Castle::getPlayerID_()
 {
 	return playerID_;	// return unit's human player's playerID
 }
+
+/* To test to see if this class compiles type:
+ * g++ -Wall -DTESTCOMPILE Castle.cpp */
+#ifdef TESTCOMPILE
+
+int main() {
+    return 0;
+}
+
+#endif

@@ -14,6 +14,8 @@ public:
 	bool upgradeCreep(int unitID, int typeCreep);
 	int getPlayerID_();
 
+
+
 private:
 	int playerID_;			// id for human player in this Castle/Commander role
 };

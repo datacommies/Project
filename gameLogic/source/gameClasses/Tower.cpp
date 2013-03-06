@@ -1,4 +1,7 @@
 #include "Tower.h"
+#include <iostream>
+using namespace std;
+
 
 //written by Kevin T.
 Tower::Tower(const int& teamID, const int& hp, const int& xPos, const int& yPos, const int& typeTower, const int& attackRadius, const int& attackSpeed, const int& attackDamage): StaticUnit(teamID, hp, xPos, yPos), typeTower_(typeTower){
@@ -7,10 +10,12 @@ Tower::Tower(const int& teamID, const int& hp, const int& xPos, const int& yPos,
 
 void Tower::Run()
 {
+	int hp = getHP();
 	// 1) check for attacks from enemy units, adjust healthPoints if needed
 	
 	// 2) check tower's healthPoints, if zero then tower is destroyed
-	if(healthPoints == 0){
+	//if(healthPoints_ == 0){
+	if(hp == 0){
 		//call some kind of terminate() function for tower
 		cout << "Tower ID destroyed!" << endl;
 	}
@@ -61,3 +66,12 @@ int Tower::getAttackDamage()
 	return attackDamage_;		// return unit's current attackDamage_
 }
 
+/* To test to see if this class compiles type:
+ * g++ -Wall -DTESTCOMPILE Tower.cpp */
+#ifdef TESTCOMPILE
+
+int main() {
+    return 0;
+}
+
+#endif

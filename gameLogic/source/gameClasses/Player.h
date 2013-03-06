@@ -1,7 +1,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "Player.h"
+#include "MobileUnit.h"
 
 class Player: public MobileUnit{
 public:

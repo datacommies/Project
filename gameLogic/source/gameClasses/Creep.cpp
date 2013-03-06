@@ -47,6 +47,12 @@ void Creep::Run(){
     //use a timer so that everything is synchronized
 }
 
-int main(){
+/* To test to see if this class compiles type:
+ * g++ -Wall -DTESTCOMPILE Creep.cpp */
+#ifdef TESTCOMPILE
+
+int main() {
     return 0;
 }
+
+#endif

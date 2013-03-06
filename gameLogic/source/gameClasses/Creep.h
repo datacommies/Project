@@ -1,3 +1,6 @@
+#ifndef CREEP_H
+#define CREEP_H
+
 #include "MobileUnit.h"
 #include "Point.h"
 
@@ -22,7 +25,7 @@ public:
     void savePoint(Point &pt);
 
     virtual void Run();
-    
+
 private:
     Point *pPath;
     Point *pSaved;
@@ -30,3 +33,5 @@ private:
     int type_; //the type of the creep, so we can have aoe, etc.
     //others?
 };
+
+#endif

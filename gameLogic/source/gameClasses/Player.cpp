@@ -8,7 +8,7 @@ Player::Player(const int& teamID, const int& playerID, const int& hp, const int&
  }
 
 int Player::getID(){
-    return playerID_
+    return playerID_;
 }
 
 int Player::getType(){
@@ -22,3 +22,13 @@ void Player::setType(const int& type){
 void Player::Run(){
     //code to execute movement, attacks, etc.
 }
+
+/* To test to see if this class compiles type:
+ * g++ -Wall -DTESTCOMPILE Player.cpp */
+#ifdef TESTCOMPILE
+
+int main() {
+    return 0;
+}
+
+#endif
