@@ -1,3 +1,7 @@
+#ifndef MOBILEUNIT_H
+#define MOBILEUNIT_H
+
+
 #include "Unit.h"
 
 class MobileUnit: public Unit{
@@ -61,6 +65,11 @@ public:
         //damage the unit you've collided with base on attack dmg
     }
 
+    virtual void Run(){
+        //unit.run()
+        //do other things, like move, attack
+    }
+
 
 private:
     int moveSpeed_;
@@ -71,3 +80,5 @@ private:
     //int aggroRadius_;
     //int defense_;
 };
+
+#endif

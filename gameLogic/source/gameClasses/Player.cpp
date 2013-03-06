@@ -1,8 +1,10 @@
 #include "Player.h"
 
 Player::Player(const int& teamID, const int& playerID, const int& hp, const int& xPos, const int& yPos, const int& type):
- MobileUnit(teamID, hp, xPos, yPos){
+ MobileUnit(teamID, hp, xPos, yPos), playerID_(playerID){
     //init some things?
+
+    //init attack, movement, hp, etc. based on player type
  }
 
 int Player::getID(){

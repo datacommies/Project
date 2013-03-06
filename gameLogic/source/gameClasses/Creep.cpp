@@ -3,6 +3,10 @@
 Creep::Creep(const int& teamID, const int& hp, const int& xPos, const int& yPos, const int& lane, const int& type):
  MobileUnit(teamID, hp, xPos, yPos){
     //based on creep type, init attack/move related things
+	//if type == x
+		//call function to init type x parameters
+		
+	//etc.
 }
 
 int Creep::getLane(){
@@ -30,7 +34,7 @@ void Creep::setLane(const int& lane){
 void Creep::setType(const int& type){
     type_ = type;
 }
-void Creep::SetPath(const Point *pt){
+void Creep::setPath(Point *pt){
     pPath = pt;
 }
 
@@ -41,4 +45,8 @@ void Creep::savePoint(Point &pt){
 void Creep::Run(){
     //code to run the AI
     //use a timer so that everything is synchronized
+}
+
+int main(){
+    return 0;
 }
