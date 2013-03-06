@@ -1,28 +1,32 @@
 #include "Tower.h"
-using namespace std;
 
 //written by Kevin T.
-//this .cpp needs the constructor implementation
-void Tower::run()
+Tower::Tower(const int& teamID, const int& hp, const int& xPos, const int& yPos, const int& typeTower, const int& attackRadius, const int& attackSpeed, const int& attackDamage): StaticUnit(teamID, hp, xPos, yPos), typeTower_(typeTower){
+		cout << "Tower built at position " << xPos << ", " << xPos << endl;
+	}
+
+void Tower::Run()
 {
 	// 1) check for attacks from enemy units, adjust healthPoints if needed
 	
 	// 2) check tower's healthPoints, if zero then tower is destroyed
 	if(healthPoints == 0){
 		//call some kind of terminate() function for tower
+		cout << "Tower ID destroyed!" << endl;
 	}
 	
 	// 3) call AI functions to check for enemies in attack range, attack if needed 
-	if(enemy in attackRadius_){
-		attackEnemy(x, y);
-	}
+	//if(enemy in attackRadius_){
+	//	attackEnemy(x, y);
+	//}
 	
 	// 4) call updateStats()
-	updateStats(struct towerStruct);
+	//updateStats(struct towerStruct);
 }
 
 void Tower::attackEnemy(int x, int y)		
 {
+	cout << "Attacking enemy" << endl;
 	// attack enemy at position x,y on map
 	// use attack functions provided by AI team
 }
