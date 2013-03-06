@@ -43,7 +43,9 @@ using namespace std;
 -- NOTES:
 --	The constructor for the Client
 ----------------------------------------------------------------------------------------------------------------------*/
-Client::Client(Player player, int connection) : _player(player), _connectionStatus(connection);
+Client::Client(Player player, int connection) : _player(player), _connectionStatus(connection){
+	;
+}
 
 /*------------------------------------------------------------------------------------------------------------------
 -- FUNCTION: sendMsg
@@ -61,7 +63,7 @@ Client::Client(Player player, int connection) : _player(player), _connectionStat
 -- NOTES:
 --	Send a message to the server.
 ----------------------------------------------------------------------------------------------------------------------*/
-bool Client::sendMsg(Packet p) {
+bool Client::sendMsg() {//Packet p) {
 	//send message to the server when an event occurs
 	//	i.e. mouse click, send out mouse pointer coordinates and the object that's clicked on
 	//send out one message every 1/30 second
@@ -208,6 +210,7 @@ bool Client::positionFree(int position) {
 ----------------------------------------------------------------------------------------------------------------------*/
 int Client::attack() {
 	//return theDamage;
+	return 0;
 }
 
 /*------------------------------------------------------------------------------------------------------------------
@@ -251,4 +254,8 @@ void Client::run() {
 		//send message to the server every 1/30 second to update the player's
 		//status
 	}
+}
+
+int main(){
+	return 0;
 }
