@@ -22,6 +22,7 @@ public:
     void savePoint(Point &pt);
 
     virtual void Run();
+    
 private:
     Point *pPath;
     Point *pSaved;
