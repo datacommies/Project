@@ -11,13 +11,13 @@ class Tower: public Attacker {
 class SingleShot: public Tower {
 	public:
 		SingleShot() {
-			iHp					= 2000;
+			iHp			= 2000;
 			iDamage			= 12;
-			iRange				= 25;
+			iRange			= 25;
 			iPerception		= 25;
 			iAttackSpeed		= 5;
-			iElement			= ELEMENT_GRASS;
-			name				= "Single";
+			iElement		= ELEMENT_GRASS;
+			name			= "Single";
 		}
 };
 
@@ -31,15 +31,15 @@ class MultiShot: public Tower {
 		 virtual void CheckTarget( void );
 
 		MultiShot() {
-			iHp					= 500;
+			iHp			= 500;
 			iDamage			= 5;
-			iRange				= 15;
+			iRange			= 15;
 			iPerception		= 25;
 			iAttackSpeed		= 5;
-			iElement			= ELEMENT_GRASS;
-			name				= "Multi";
-			pTarget2			= 0;
-			pTarget3			= 0;
+			iElement		= ELEMENT_GRASS;
+			name			= "Multi";
+			pTarget2		= 0;
+			pTarget3		= 0;
 		}
 };
 
@@ -48,14 +48,14 @@ class AreaShot: public Tower {
 			int iSplash;
 
 		AreaShot() {
-			iHp					= 1750;
+			iHp			= 1750;
 			iDamage			= 10;
-			iRange				= 15;
+			iRange			= 15;
 			iPerception		= 25;
 			iAttackSpeed		= 5;
-			iElement			= ELEMENT_GRASS;
-			name				= "AOE";
-			iSplash				= 15;
+			iElement		= ELEMENT_GRASS;
+			name			= "AOE";
+			iSplash			= 15;
 		}
 };
 
