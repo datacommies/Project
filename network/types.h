@@ -12,16 +12,23 @@
 enum {
     MSG_MAPNAME,            // Update everyone's mapname
     MSG_START,              // It's time to start the game!
-    MSG_PLAYER_JOIN,
     MSG_PLAYER_UPDATE, // Update a client's players container.
+    MSG_PLAYER_JOIN,
     MSG_PLAYER_LEAVE,
-    MSG_CHAT                // A chat message has been generated
+    MSG_CHAT,                // A chat message has been generated
+    MSG_TOWER_CREATE,
+    MSG_TOWER_REMOVE,
+    MSG_TOWER_UPDATE,
+    MSG_CREEP_CREATE,
+    MSG_CREEP_REMOVE, //creeps dying
+    MSG_CREEP_UPDATE,
+    MSG_RESOURCE_UPDATE
 };
 
 // Common Message Header
 typedef struct {
-    int type;
-    int size;
+    int type; //MSG_PLAYER_UPDATE for e.g.
+    int size; //sizeof(player_matchmakcing_t) for eg.
 } header_t;
 
 // Map message: the map name.
@@ -42,13 +49,17 @@ typedef struct {
 
 // Game session structs
 typedef struct {
+    header_t head;
     int id;
+    int team;
+    int role;
     float xpos;
     float ypos;
     int health;
 } player_game_t;
 
 typedef struct {
+    header_t head;
     int id;
     //int type;
     float xpos;
@@ -57,11 +68,13 @@ typedef struct {
 } tower_t;
 
 typedef struct {
+    header_t head;
     int team;
     int value;
 } resource_t;
 
 typedef struct {
+    header_t head;
     int id;
     int team;
     int health;

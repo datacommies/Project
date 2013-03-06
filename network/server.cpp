@@ -20,8 +20,8 @@ vector <player_matchmaking_t> players;
 bool update_all_clients(int message) {
     for (size_t i = 0; i < clients.size(); i++) {
         for (size_t j = 0; j < players.size(); j++) {
-            players[i].head.type = message;
-            if (send(clients[i], &players[i], sizeof(player_matchmaking_t), 0) == -1)
+            players[j].head.type = message;
+            if (send(clients[i], &players[j], sizeof(player_matchmaking_t), 0) == -1)
                 return false;
         }
     }
