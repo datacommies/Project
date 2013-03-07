@@ -2,9 +2,9 @@
 #define POINT_H
 
 class Point {
-	public:
-		int x;
-		int y;
+public:
+	int x;
+	int y;
 };
 
 #endif
