@@ -1,7 +1,7 @@
 #ifndef UNIT_H
 #define UNIT_H
 
-#include "resource.h"
+#include "../resource.h"
 
 class Unit
 {
