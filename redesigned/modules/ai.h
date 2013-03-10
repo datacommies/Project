@@ -2,8 +2,7 @@
 #define AI_H
 
 #include "../resource.h"
-
-class ServerGameLogic;
+#include "server_game_logic.h"
 
 class Ai
 {

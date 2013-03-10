@@ -14,6 +14,8 @@
 #include "modules/graphics.h"
 #include "modules/server_game_logic.h"
 #include "modules/server_network.h"
+#include "modules/client.h"
+#include "modules/server.h"
 
 enum Role
 {
@@ -26,8 +28,8 @@ int main()
    Role role = CLIENT; // TODO: actually get role
  
    if (role == CLIENT)
-      ClientGameLogic();
+      Client();
    else
-      ServerGameLogic();
+      Server();
    return 0;
 }

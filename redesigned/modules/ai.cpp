@@ -19,7 +19,7 @@ void Ai::createUnit(int playerId, UnitType type, Point location)
  * NOTES:   Performs no validation. Validation is handled by game logic module. */
 void Ai::movePlayer(int playerId, Direction direction)
 {
-   serverGameLogicModule_.movePlayer(playerId, direction);
+   serverGameLogicModule_.receiveMovePlayerCommand(playerId, direction);
 }
 
 /* Handles an AI request to attack.
@@ -30,5 +30,5 @@ void Ai::movePlayer(int playerId, Direction direction)
  * NOTES:   Performs no validation. Validation is handled by game logic module. */
 void Ai::attack(int playerId, Direction direction)
 {
-   serverGameLogicModule_.attack(playerId, direction);
+   serverGameLogicModule_.receiveAttackCommand(playerId, direction);
 }

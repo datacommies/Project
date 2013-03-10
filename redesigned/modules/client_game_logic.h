@@ -5,8 +5,6 @@
 #include <vector>
 #include <map>
 #include "client_network.h"
-#include "control.h"
-#include "graphics.h"
 
 struct CLIENT_UNIT // This struct applies only to the client side
 {
@@ -21,7 +19,7 @@ class ClientGameLogic
 {
 public:
    // Constructor
-   ClientGameLogic() : clientNetwork_(), control_(*this), graphics_(*this), gameState_(LOBBY) { }
+   ClientGameLogic(ClientNetwork& clientNetwork) : clientNetwork_(clientNetwork), gameState_(LOBBY) { }
 
    // Fields
    std::vector<CLIENT_UNIT> units;
@@ -35,10 +33,8 @@ public:
    bool attack(Direction direction);
    void exit();
 private:   
-   // Modules
-   ClientNetwork clientNetwork_;   
-   Control control_;
-   Graphics graphics_;
+   // Module References
+   ClientNetwork& clientNetwork_;
 
    // Fields
    GameState gameState_;

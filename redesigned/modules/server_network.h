@@ -4,8 +4,6 @@
 #include "../resource.h"
 #include "server_game_logic.h"
 
-class ServerGameLogic; // forward declaration
-
 class ServerNetwork
 {
 public:

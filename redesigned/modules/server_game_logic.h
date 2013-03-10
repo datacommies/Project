@@ -5,14 +5,12 @@
 #include <string>
 #include <queue>
 #include "../team.h"
-#include "ai.h"
-#include "server_network.h"
 
 class ServerGameLogic
 {
 public:
    // Constructors
-   ServerGameLogic() : serverNetwork_(*this), ai_(*this), gameState_(LOBBY) { }
+   ServerGameLogic() : gameState_(LOBBY) { }
 
    // Fields
    Team teams[2];
@@ -26,10 +24,6 @@ public:
    void playerConnect();
 
 private:
-   // Modules
-   ServerNetwork serverNetwork_;
-   Ai ai_;   
-
    // Fields
    GameState gameState_;
 
