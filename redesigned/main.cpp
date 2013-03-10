@@ -21,7 +21,7 @@ enum Role
    SERVER
 };
 
-void main()
+int main()
 {   
    Role role = CLIENT; // TODO: actually get role
  
@@ -29,4 +29,5 @@ void main()
       ClientGameLogic();
    else
       ServerGameLogic();
+   return 0;
 }

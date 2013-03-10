@@ -4,12 +4,14 @@
 #include "../resource.h"
 #include <queue>
 #include "../team.h"
+#include "ai.h"
+#include "server_network.h"
 
 class ServerGameLogic
 {
 public:
    // Constructors
-   ServerGameLogic() : serverNetwork_(this), ai_(this) { }
+   ServerGameLogic() : serverNetwork_(*this), ai_(*this) { }
 
    // Fields
    Team teams[2];
@@ -22,8 +24,8 @@ public:
    void receiveAttackCommand(int playerId, Direction direction);   
 private:
    // Modules
-   ServerNetwork serverNetwork_;   
-   AI ai_;   
+   ServerNetwork serverNetwork_;
+   Ai ai_;   
 
    // Functions
    void update();

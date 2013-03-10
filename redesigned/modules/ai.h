@@ -2,16 +2,17 @@
 #define AI_H
 
 #include "../resource.h"
-#include "client_game_logic.h"
+
+class ServerGameLogic;
 
 class Ai
 {
 public:
    // Constructors
-   Ai(ClientGameLogic& clientGameLogicModule) : clientGameLogicModule_(clientGameLogicModule) { }
+   Ai(ServerGameLogic& clientGameLogicModule) : clientGameLogicModule_(clientGameLogicModule) { }
 private:
    // Module references
-   ClientGameLogic& clientGameLogicModule_;
+   ServerGameLogic& clientGameLogicModule_;
 
    // Functions
    void createUnit(UnitType type, Point location);

@@ -4,6 +4,8 @@
 #include "../resource.h"
 #include "client_game_logic.h"
 
+class ClientGameLogic;
+
 class Control
 {
 public:
