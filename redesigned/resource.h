@@ -28,6 +28,13 @@ enum UnitType
    CASTLE
 };
 
+
+enum GameState
+{
+   LOBBY,
+   IN_GAME
+};
+
 typedef std::vector<Point> PATH;
 
 #endif

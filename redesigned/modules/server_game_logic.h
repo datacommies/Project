@@ -2,6 +2,7 @@
 #define SERVERGAMELOGIC_H
 
 #include "../resource.h"
+#include <string>
 #include <queue>
 #include "../team.h"
 #include "ai.h"
@@ -11,7 +12,7 @@ class ServerGameLogic
 {
 public:
    // Constructors
-   ServerGameLogic() : serverNetwork_(*this), ai_(*this) { }
+   ServerGameLogic() : serverNetwork_(*this), ai_(*this), gameState_(LOBBY) { }
 
    // Fields
    Team teams[2];
@@ -21,11 +22,16 @@ public:
    void startGame();
    void receiveCreateUnitCommand(int playerId, UnitType type, Point location);
    void receiveMovePlayerCommand(int playerId, Direction direction);
-   void receiveAttackCommand(int playerId, Direction direction);   
+   void receiveAttackCommand(int playerId, Direction direction);
+   void playerConnect();
+
 private:
    // Modules
    ServerNetwork serverNetwork_;
    Ai ai_;   
+
+   // Fields
+   GameState gameState_;
 
    // Functions
    void update();

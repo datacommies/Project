@@ -21,7 +21,7 @@ class ClientGameLogic
 {
 public:
    // Constructor
-   ClientGameLogic() : clientNetwork_(), control_(*this), graphics_(*this) { }
+   ClientGameLogic() : clientNetwork_(), control_(*this), graphics_(*this), gameState_(LOBBY) { }
 
    // Fields
    std::vector<CLIENT_UNIT> units;
@@ -39,6 +39,9 @@ private:
    ClientNetwork clientNetwork_;   
    Control control_;
    Graphics graphics_;
+
+   // Fields
+   GameState gameState_;
 };
 
 #endif
