@@ -6,9 +6,9 @@
  * POST:    Request for game logic to create unit has been sent.
  * RETURNS: 
  * NOTES:   Performs no validation. Validation is handled by game logic module. */
-void Ai::createUnit(UnitType type, Point location)
+void Ai::createUnit(int playerId, UnitType type, Point location)
 {
-   clientGameLogicModule_.createUnit(type, location);
+   serverGameLogicModule_.receiveCreateUnitCommand(playerId, type, location);
 }
 
 /* Handles an AI request to move a player.
@@ -17,9 +17,9 @@ void Ai::createUnit(UnitType type, Point location)
  * POST:    Request for game logic to move player has been sent.
  * RETURNS: 
  * NOTES:   Performs no validation. Validation is handled by game logic module. */
-void Ai::movePlayer(Direction direction)
+void Ai::movePlayer(int playerId, Direction direction)
 {
-   clientGameLogicModule_.movePlayer(direction);
+   serverGameLogicModule_.movePlayer(playerId, direction);
 }
 
 /* Handles an AI request to attack.
@@ -28,7 +28,7 @@ void Ai::movePlayer(Direction direction)
  * POST:    Request for game logic to attack has been sent.
  * RETURNS: 
  * NOTES:   Performs no validation. Validation is handled by game logic module. */
-void Ai::attack(Direction direction)
+void Ai::attack(int playerId, Direction direction)
 {
-   clientGameLogicModule_.attack(direction);
+   serverGameLogicModule_.attack(playerId, direction);
 }

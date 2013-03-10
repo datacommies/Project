@@ -9,15 +9,15 @@ class Ai
 {
 public:
    // Constructors
-   Ai(ServerGameLogic& clientGameLogicModule) : clientGameLogicModule_(clientGameLogicModule) { }
+   Ai(ServerGameLogic& serverGameLogicModule_) : serverGameLogicModule_(serverGameLogicModule) { }
 private:
    // Module references
-   ServerGameLogic& clientGameLogicModule_;
+   ServerGameLogic& serverGameLogicModule_;
 
    // Functions
-   void createUnit(UnitType type, Point location);
-   void movePlayer(Direction direction);
-   void attack(Direction direction);
+   void createUnit(int playerId, UnitType type, Point location);
+   void movePlayer(int playerId, Direction direction);
+   void attack(int playerId, Direction direction);
 };
 
 #endif
