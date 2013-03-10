@@ -9,7 +9,7 @@ class Ai
 {
 public:
    // Constructors
-   Ai(ServerGameLogic& serverGameLogicModule_) : serverGameLogicModule_(serverGameLogicModule) { }
+   Ai(ServerGameLogic& serverGameLogicModule) : serverGameLogicModule_(serverGameLogicModule) { }
 private:
    // Module references
    ServerGameLogic& serverGameLogicModule_;
