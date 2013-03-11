@@ -18,6 +18,7 @@ private:
    void drawLobby();
    void drawUnits();
    void drawMap();
+   friend void * init (void *);
 };
 
 #endif
