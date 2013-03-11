@@ -1,0 +1,29 @@
+#ifndef CONTROL_STATE_H
+#define CONTROL_STATE_H
+
+#include "ControlPlaceHolder.h"
+#include "Controller.h"
+#include <vector>
+
+class ControlState
+{
+public:
+	ControlState(bool override, bool identifier);
+	
+	void LoadGUIs();
+	void UnloadGUIs();
+
+	void AddController(Controller control);
+
+	bool getOverride();
+	bool getIdentifier();
+
+private:
+	bool _Override;
+	bool _Identifier;
+
+	std::vector
+};
+
+#endif
+
