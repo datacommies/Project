@@ -78,7 +78,7 @@ void Creep::Update( void ) {
 */
 bool Creep::inRange( Point p1, Point p2, int distance ) {
 	 if( sqrt( (double)				/* Square Rooting the entire thing. */
-	     pow( (double)abs( p1.x - p2.x ), 2 )	/* a^2; the adj si\de. */
+	     pow( (double)abs( p1.x - p2.x ), 2 )	/* a^2; the adj side. */
 	     + pow( (double)abs( p1.y - p2.y ), 2 ) 	/* add b^2; the opp side.*/
 	     ) > distance ) 				/* And checking if it's larger than the distance.*/
 	     return false;
