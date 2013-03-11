@@ -39,7 +39,7 @@
 #define BUILDER_ID   40
 #define EXIT_MENU_ID 50
 
-int Control();
+int ControlRun();
 
 void AddStates(ControlManager &manager);
 ControlState MakeMenuState();
