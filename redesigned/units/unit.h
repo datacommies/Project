@@ -7,7 +7,7 @@
 class Unit
 {
 public:
-	int id;
+	int id; //unit id
 	Point position;
 	int health;
 	int attackDamage;//damage that the unit deals per hit
@@ -18,6 +18,9 @@ public:
 	bool isAlive() { return health == 0; }
 	std::string serializeUnit(const Unit& unit);
 	
+   Unit(const int& uid, const int& pos, const int& hp, const int& atkdmg, const int& atkrng,
+        const int& atkspd, const int& percep, const int& atkcnt);
+
 	virtual UnitTypes getType() const = 0;
 	virtual size_t getSize() const = 0;
 private:   
