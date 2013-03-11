@@ -7,6 +7,7 @@
 class Castle : public Tower
 {
 public:
+	void serializeCastle(const Castle& castle);
 private:   
 };
 
