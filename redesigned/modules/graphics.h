@@ -13,11 +13,14 @@ private:
    // Module references
    ClientGameLogic& clientGameLogic_;
 
+   // Graphics internals
+   sf::Font font;
+
    // Functions
-   void drawHud();
-   void drawLobby();
-   void drawUnits();
-   void drawMap();
+   void drawHud(sf::RenderWindow& window);
+   void drawLobby(sf::RenderWindow& window);
+   void drawUnits(sf::RenderWindow& window);
+   void drawMap(sf::RenderWindow& window);
    friend void * init (void *);
 };
 

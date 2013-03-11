@@ -15,40 +15,44 @@ using namespace std;
 void * init (void * in) {
    Graphics* g = (Graphics *)in;
    sf::RenderWindow window(sf::VideoMode(800, 600), "Client");
-	
-	sf::Font MyFont;
-	if (!MyFont.loadFromFile("/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf")) {
+
+	if (!g->font.loadFromFile("/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf")) {
 		cerr << ("error loading font") << endl ;
 	}
-
+	
 	Button a;
 	a.id = 1373;
 	a.rect.setPosition (sf::Vector2f(0,0));
-	a.rect.setSize (sf::Vector2f(10,10));
+	a.rect.setSize (sf::Vector2f(100,100));
+	g->clientGameLogic_.UIElements.insert(a);
+	
+	a.id = 100;
+	a.rect.setPosition (sf::Vector2f(200,0));
+	a.rect.setSize (sf::Vector2f(100,100));
 	g->clientGameLogic_.UIElements.insert(a);
 
 
-	while (true) {
+
+	while (window.isOpen()) {
 		sf::Event event;
 		while (window.pollEvent(event)) {
 			if (event.type == sf::Event::Closed)
 				window.close();
-			/*else if (event.type == sf::Event::MouseButtonPressed){
+			else if (event.type == sf::Event::MouseButtonPressed){
 				sf::Vector2f mouse = sf::Vector2f(sf::Mouse::getPosition(window));
-				for (size_t i = 0; i < shapes.size(); ++i) {
-					if (shapes[i].getGlobalBounds().contains(mouse)) {
-					win_proc(1, i);
+				for (std::set<Button>::iterator button = g->clientGameLogic_.UIElements.begin(); button != g->clientGameLogic_.UIElements.end(); ++button) {
+					if (button->rect.getGlobalBounds().contains(mouse)) {
+						cout << "Button ID:" << button->id << endl;
 					}
 				}
-			}*/
+			}
 		}
 		window.clear();
 
 		if (g->clientGameLogic_.getCurrentState() == LOBBY) {
-			sf::Text state("Lobby", MyFont, 20);
-			window.draw(state);
+			g->drawLobby(window);
 		} else if (g->clientGameLogic_.getCurrentState() == IN_GAME) {
-			sf::Text state("In Game", MyFont, 20);
+			sf::Text state("In Game", g->font, 20);
 			window.draw(state);
 		}
 
@@ -56,9 +60,15 @@ void * init (void * in) {
 		{
 			window.draw(button->rect);
 		}
+
+		/*for (std::vector<CLIENT_UNIT>::iterator unit = g->clientGameLogic_.units.begin(); unit != g->clientGameLogic_.units.end(); ++unit)
+		{
+			//window.draw(button->rect);
+		}*/
 		window.display();
 	}
 
+	return NULL;
 }
 
 /* Constructor
@@ -80,7 +90,7 @@ Graphics::Graphics(ClientGameLogic& clientGameLogic)
  * POST:    Current HUD is displayed
  * RETURNS: 
  * NOTES:    */
-void Graphics::drawHud()
+void Graphics::drawHud(sf::RenderWindow& window)
 {
 }
 
@@ -90,8 +100,10 @@ void Graphics::drawHud()
  * POST:    Current lobby is displayed
  * RETURNS: 
  * NOTES:    */
-void Graphics::drawLobby()
+void Graphics::drawLobby(sf::RenderWindow& window)
 {
+	sf::Text state("Lobby", font, 20);
+	window.draw(state);
 }
 
 /* Draws all current units.
@@ -100,7 +112,7 @@ void Graphics::drawLobby()
  * POST:    All current units are displayed
  * RETURNS: 
  * NOTES:    */
-void Graphics::drawUnits()
+void Graphics::drawUnits(sf::RenderWindow& window)
 {
 }
 
@@ -110,6 +122,6 @@ void Graphics::drawUnits()
  * POST:    The map is displayed
  * RETURNS: 
  * NOTES:    */
-void Graphics::drawMap()
+void Graphics::drawMap(sf::RenderWindow& window)
 {
 }
