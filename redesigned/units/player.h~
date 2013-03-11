@@ -13,7 +13,7 @@ public:
    std::string serializePlayer(const Player& player);
 
 	virtual UnitTypes getType() const { return TYPE_PLAYER; }
-	virtual size_t getSize() const { return sizeof(Player); }
+	virtual size_t getSize() const { return sizeof(Tower); }
 
 private:   
 };

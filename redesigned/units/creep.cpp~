@@ -1,8 +1,5 @@
 #include "creep.h"
 #include "unit.h"
-#include <string>
-
-using namespace std;
 
 string Creep::serializeCreep(const Creep& creep)
 {

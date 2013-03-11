@@ -4,7 +4,7 @@
 
 using namespace std;
 
-string MobileUnit::serializeMobileUnit(const MobileUnit& mobileUnit)
+void MobileUnit::serializeMobileUnit(const MobileUnit& mobileUnit)
 {
 
 }

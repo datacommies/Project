@@ -2,7 +2,6 @@
 #define UNIT_H
 
 #include "../resource.h"
-#include "../types.h"
 
 class Unit
 {

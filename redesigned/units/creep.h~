@@ -12,8 +12,8 @@ public:
    void spawn(const int& num);  //also creep type? when we have a type
    std::string serializeCreep(const Creep& creep);
 
-	virtual UnitTypes getType() const { return TYPE_CREEP; }
-	virtual size_t getSize() const { return sizeof(Creep); }
+	virtual UnitTypes getType() const { return TYPE_TOWER; }
+	virtual size_t getSize() const { return sizeof(Tower); }
 
 private:
 };
