@@ -1,10 +1,9 @@
-#include "../resource.h"
 #include "server.h"
 
 /* Default ctor
  *
  * PRE:     
- * POST:    
+ * POST:    All appropriate modules are created and server is started
  * RETURNS: 
  * NOTES:    */
 Server::Server() 

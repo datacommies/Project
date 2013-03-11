@@ -1,4 +1,3 @@
-#include "../resource.h"
 #include "client_game_logic.h"
 
 /* Sends a create unit request to network module.

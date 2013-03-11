@@ -1,10 +1,9 @@
-#include "../resource.h"
 #include "client.h"
 
 /* Default ctor
  *
  * PRE:     
- * POST:    
+ * POST:    All appropriate modules are created and client is started
  * RETURNS: 
  * NOTES:    */
 Client::Client()

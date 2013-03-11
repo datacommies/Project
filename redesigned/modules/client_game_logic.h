@@ -6,15 +6,6 @@
 #include <map>
 #include "client_network.h"
 
-struct CLIENT_UNIT // This struct applies only to the client side
-{
-   int id;
-   int position;
-   int health;
-   int team;
-   int type;
-};
-
 class ClientGameLogic
 {
 public:

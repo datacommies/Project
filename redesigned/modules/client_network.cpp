@@ -1,4 +1,3 @@
-#include "../resource.h"
 #include "client_network.h"
 
 /* Sends a create unit request to the server.
