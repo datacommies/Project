@@ -1,7 +1,0 @@
-#ifndef CONTROL_PLACEHOLDER_H
-#define CONTROL_PLACEHOLDER_H
-
-
-
-#endif
-
