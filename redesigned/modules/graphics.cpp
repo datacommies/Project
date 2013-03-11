@@ -23,12 +23,12 @@ void * init (void * in) {
 	
 	Button a;
 	a.id = 1373;
-	a.rect.setPosition (sf::Vector2f(0,0));
+	a.rect.setPosition (sf::Vector2f(0,300));
 	a.rect.setSize (sf::Vector2f(100,100));
 	g->clientGameLogic_.UIElements.insert(a);
 	
 	a.id = 100;
-	a.rect.setPosition (sf::Vector2f(200,0));
+	a.rect.setPosition (sf::Vector2f(200,300));
 	a.rect.setSize (sf::Vector2f(100,100));
 	g->clientGameLogic_.UIElements.insert(a);
 
@@ -60,7 +60,14 @@ void * init (void * in) {
 
 		for (std::set<Button>::iterator button = g->clientGameLogic_.UIElements.begin(); button != g->clientGameLogic_.UIElements.end(); ++button)
 		{
-			window.draw(button->rect);
+			sf::Vector2f mouse = sf::Vector2f(sf::Mouse::getPosition(window));
+			
+			sf::RectangleShape rs = button->rect;
+			rs.setOutlineThickness(2.0f);
+
+			if (rs.getGlobalBounds().contains(mouse))
+				rs.setOutlineColor(sf::Color(100, 100, 100));
+			window.draw(rs);
 		}
 
 		/*for (std::vector<CLIENT_UNIT>::iterator unit = g->clientGameLogic_.units.begin(); unit != g->clientGameLogic_.units.end(); ++unit)
