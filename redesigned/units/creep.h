@@ -7,7 +7,7 @@
 class Creep : public MobileUnit
 {
 public: 
-void spawn(int num);
+void spawn(const int& num);
 private:
 };
 
