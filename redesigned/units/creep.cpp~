@@ -1,7 +1,0 @@
-#include "creep.h"
-#include "unit.h"
-
-string Creep::serializeCreep(const Creep& creep)
-{
-
-}

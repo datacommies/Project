@@ -1,7 +1,0 @@
-#include "tower.h"
-#include "unit.h"
-
-string Tower::serializeTower(const Tower& tower){
-
-
-}

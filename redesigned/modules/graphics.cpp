@@ -15,6 +15,7 @@ using namespace std;
 void * init (void * in) {
    Graphics* g = (Graphics *)in;
    sf::RenderWindow window(sf::VideoMode(800, 600), "Client");
+   g->window = &window;
 
 	if (!g->font.loadFromFile("/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf")) {
 		cerr << ("error loading font") << endl ;
@@ -43,6 +44,7 @@ void * init (void * in) {
 				for (std::set<Button>::iterator button = g->clientGameLogic_.UIElements.begin(); button != g->clientGameLogic_.UIElements.end(); ++button) {
 					if (button->rect.getGlobalBounds().contains(mouse)) {
 						cout << "Button ID:" << button->id << endl;
+						//AddNewCalledButton(button->id);
 					}
 				}
 			}
@@ -78,7 +80,7 @@ void * init (void * in) {
  * RETURNS: 
  * NOTES:   Creates a thread and starts running the module */
 Graphics::Graphics(ClientGameLogic& clientGameLogic)
-   : clientGameLogic_(clientGameLogic) 
+   : clientGameLogic_(clientGameLogic), window(NULL)
 {
    pthread_t t;
    pthread_create(&t, NULL, init, (void*)this);

@@ -1,7 +1,0 @@
-#include "player.h"
-#include "mobile_unit.h"
-
-string Player::serializePlayer(const Player& player)
-{
-	
-}
