@@ -14,13 +14,13 @@ public:
 	Creep(): pPath( 0 ), pSaved( 0 ), moveSpeed( 0 ){}
 
 	Creep( const Creep& );
-	void		Update( void );
-	void		setSpeed( int newSpeed) { iSpeed = newSpeed; }
-	void		setPath( Point *pt )	{ pPath = pt; }
-	void		nextPoint( void )		{ pPath++; }
-	void		savePoint( Point &pt )	{ pSaved = &pt; }
-	void		Move( Point );
-	int		getDirection( int, int );
+	void	Update( void );
+	void	setSpeed( int newSpeed) { moveSpeed = newSpeed; }
+	void	setPath( Point *pt )	{ pPath = pt; }
+	void	nextPoint( void )	{ pPath++; }
+	void	savePoint( Point &pt )	{ pSaved = &pt; }
+	void	Move( Point );
+	int	getDirection( int, int );
 
 	Point	*	pPath;
 	Point	*	pSaved;
