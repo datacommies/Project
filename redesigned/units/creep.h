@@ -6,8 +6,9 @@
 
 class Creep : public MobileUnit
 {
-public:   
-private:   
+public: 
+spawn(int num);
+private:
 };
 
 #endif
