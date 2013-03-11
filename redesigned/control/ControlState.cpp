@@ -124,7 +124,7 @@ ControlState::CheckControllers()
 {
 	int returnValue = 0;
 	
-	for(vector<Controller>::size_t i = 0; i < Controllers.size(); ++i)
+	for(vector<Controller>::size_type i = 0; i < Controllers.size(); ++i)
 	{
 		returnValue = Controllers[i].CheckController();
 		if(returnValue > 0)
