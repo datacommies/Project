@@ -26,14 +26,14 @@
 -- 
 ----------------------------------------------------------------------------------------------------------------------*/
 
-#include "ControlPlaceHolder.h"
+//#include "ControlPlaceHolder.h"
 #include "Controller.h"
 #include <vector>
 
 class ControlState
 {
 public:
-	ControlState(bool override, bool identifier);
+	ControlState(bool override, int identifier);
 	
 	void LoadGUIs();
 	void UnloadGUIs();
@@ -43,7 +43,7 @@ public:
 	int CheckControllers();
 
 	bool getOverride();
-	int getIdentifier();
+	bool getIdentifier();
 
 private:
 	bool _Override;

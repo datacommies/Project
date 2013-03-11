@@ -1,7 +1,26 @@
 #ifndef CONTROL_MANAGER_H
 #define CONTROL_MANAGER_H
 
-#include "ControlPlaceHolder.h"
+/*--------------------------------------------------------------------------------------------------------------------
+-- CLASS: ControlManager
+--
+-- FUNCTIONS: ControlManager()
+--            void AddNewState(ControlState state)
+--            int CheckState()
+--            void SetNewActiveState(ControlState * state)
+--         
+-- DATE: 2013/03/11
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: Luke Tao
+--
+-- PROGRAMMER: Luke Tao
+--
+-- NOTES: Class is loaded when the program starts. It holds a collection of Control states, which 
+-- 
+----------------------------------------------------------------------------------------------------------------------*/
+
 #include "ControlState.h"
 #include "resource.h"
 #include <vector>
