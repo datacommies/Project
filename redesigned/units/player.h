@@ -8,6 +8,8 @@ class Player : public MobileUnit
 {
 public:
    int clientId;
+   
+   void serializePlayer(const Player& player);
 private:   
 };
 

@@ -9,6 +9,8 @@ class MobileUnit : public Unit
 public:
    int speed;
    Direction direction;
+   
+   void serializeMobileUnit(const MobileUnit& mobileUnit);
 private:   
 };
 
