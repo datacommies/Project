@@ -3,27 +3,21 @@
 
 #include "ControlPlaceHolder.h"
 #include "ControlState.h"
+#include "resource.h"
 #include <vector>
 
 class ControlManager {
 
-    public:
-            
-        ControlManager
+    public:    
+        ControlManager();
         
         void AddNewState(ControlState state);
         int CheckState();
-        void SetNewActiveState();
-        
+        void SetNewActiveState(ControlState state);
         
     private:
-        
         std::vector<ControlState> StateCollection;
-        ControlState 
-        
-            
-
-
+        ControlState * activeState;
 };
 
 #endif
