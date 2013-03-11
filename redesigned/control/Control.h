@@ -28,6 +28,7 @@
 -- 
 ----------------------------------------------------------------------------------------------------------------------*/
 
+#include "Resource.h"
 #include "Controller.h"
 #include "ControlState.h"
 #include "ControlManager.h"
