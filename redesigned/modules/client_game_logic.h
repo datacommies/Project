@@ -2,8 +2,9 @@
 #define CLIENT_GAME_LOGIC_H
 
 #include "../resource.h"
-#include <vector>
 #include <map>
+#include <set>
+#include <vector>
 #include "client_network.h"
 
 class ClientGameLogic
@@ -17,6 +18,7 @@ public:
    CLIENT_UNIT* map[MAPWIDTH][MAPHEIGHT];
    int playerId;
    int currency;
+   std::set<Button *> UIElements;
 
    // Functions
    GameState getCurrentState();
