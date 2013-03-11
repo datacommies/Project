@@ -1,5 +1,8 @@
 #include "unit.h"
+#include <string>
 
-void Unit::serializeUnit(const Unit& unit){
+using namespace std;
+
+string Unit::serializeUnit(const Unit& unit){
 
 }

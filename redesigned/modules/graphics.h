@@ -9,6 +9,7 @@ class Graphics
 public:
    // Constructors
    Graphics(ClientGameLogic& clientGameLogic);
+   sf::RenderWindow * window;
 private:
    // Module references
    ClientGameLogic& clientGameLogic_;

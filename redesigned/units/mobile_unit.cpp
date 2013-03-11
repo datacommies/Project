@@ -1,7 +1,10 @@
 #include "mobile_unit.h"
 #include "unit.h"
+#include <string>
 
-void MobileUnit::serializeMobileUnit(const MobileUnit& mobileUnit)
+using namespace std;
+
+string MobileUnit::serializeMobileUnit(const MobileUnit& mobileUnit)
 {
 
 }

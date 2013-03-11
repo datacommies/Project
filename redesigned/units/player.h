@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include "../resource.h"
+#include "../types.h"
 #include "mobile_unit.h"
 
 class Player : public MobileUnit
@@ -9,7 +10,11 @@ class Player : public MobileUnit
 public:
    int clientId;
    
-   void serializePlayer(const Player& player);
+   std::string serializePlayer(const Player& player);
+
+	virtual UnitTypes getType() const { return TYPE_PLAYER; }
+	virtual size_t getSize() const { return sizeof(Player); }
+
 private:   
 };
 

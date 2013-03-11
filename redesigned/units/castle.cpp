@@ -1,7 +1,10 @@
 #include "castle.h"
 #include "tower.h"
+#include <string>
 
-void Castle::serializeCastle(const Castle& castle)
+using namespace std;
+
+string Castle::serializeCastle(const Castle& castle)
 {
 
 

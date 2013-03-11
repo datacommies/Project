@@ -1,7 +1,10 @@
 #include "tower.h"
 #include "unit.h"
+#include <string>
 
-void Tower::serializeTower(const Tower& tower){
+using namespace std;
+
+string Tower::serializeTower(const Tower& tower){
 
 
 }
