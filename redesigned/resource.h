@@ -20,30 +20,12 @@ struct Point
 struct CLIENT_UNIT // This struct applies only to the client side - server side units are stored differently
 {
    int id;
-   int position;
+   Point position;
    int health;
    int team;
-   int type;
+   UnitType type;
 };
 
-struct Button {
-   Button()
-   {
-       static int idcounter = 1;
-       ++idcounter;
-
-       id = idcounter;
-   }
-   sf::RectangleShape rect;
-   int id;
-   bool operator== (Button & right) {
-      return (id == right.id);
-   }
-
-   bool operator< (const Button & right) const {
-      return (id - right.id);
-   }
-};
 
 // Enums ----------------------------------------------------------------------
 
