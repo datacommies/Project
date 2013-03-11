@@ -10,7 +10,7 @@ class ClientGameLogic
 {
 public:
    // Constructor
-   ClientGameLogic(ClientNetwork& clientNetwork) : clientNetwork_(clientNetwork), gameState_(LOBBY) { }
+   ClientGameLogic(ClientNetwork& clientNetwork);
 
    // Fields
    std::vector<CLIENT_UNIT> units;

@@ -8,7 +8,7 @@ class Graphics
 {
 public:
    // Constructors
-   Graphics(ClientGameLogic& clientGameLogic) : clientGameLogic_(clientGameLogic) { }
+   Graphics(ClientGameLogic& clientGameLogic);
 private:
    // Module references
    ClientGameLogic& clientGameLogic_;

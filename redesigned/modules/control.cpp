@@ -1,5 +1,17 @@
 #include "control.h"
 
+/* Constructor
+ *
+ * PRE:     
+ * POST:    
+ * RETURNS: 
+ * NOTES:   Creates a thread and starts running the module */
+Control::Control(ClientGameLogic& clientGameLogicModule)
+   : clientGameLogicModule_(clientGameLogicModule)
+{
+   // TODO: create a thread and begin processing
+}
+
 /* Handles a UI request to create a unit.
  *
  * PRE:     Create Unit UI element is available to user.

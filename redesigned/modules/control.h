@@ -10,7 +10,7 @@ class Control
 {
 public:
    // Constructors
-   Control(ClientGameLogic& clientGameLogicModule) : clientGameLogicModule_(clientGameLogicModule) { }
+   Control(ClientGameLogic& clientGameLogicModule);
 private:
    // Module references
    ClientGameLogic& clientGameLogicModule_;

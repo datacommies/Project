@@ -1,5 +1,17 @@
 #include "graphics.h"
 
+/* Constructor
+ *
+ * PRE:     
+ * POST:    
+ * RETURNS: 
+ * NOTES:   Creates a thread and starts running the module */
+Graphics::Graphics(ClientGameLogic& clientGameLogic)
+   : clientGameLogic_(clientGameLogic) 
+{
+   // TODO: create a thread and begin processing
+}
+
 /* Draws the HUD.
  *
  * PRE:     

@@ -1,5 +1,16 @@
 #include "client_network.h"
 
+/* Constructor
+ *
+ * PRE:     
+ * POST:    
+ * RETURNS: 
+ * NOTES:   Creates a thread and starts running the module */
+ClientNetwork::ClientNetwork()
+{
+   // TODO: create a thread and begin processing
+}
+
 /* Sends a create unit request to the server.
  *
  * PRE:     Client is connected

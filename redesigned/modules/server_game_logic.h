@@ -10,7 +10,7 @@ class ServerGameLogic
 {
 public:
    // Constructors
-   ServerGameLogic() : gameState_(LOBBY) { }
+   ServerGameLogic();
 
    // Fields
    Team teams[2];

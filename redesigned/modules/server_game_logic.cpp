@@ -1,5 +1,17 @@
 #include "server_game_logic.h"
 
+/* Constructor
+ *
+ * PRE:     
+ * POST:    
+ * RETURNS: 
+ * NOTES:   Creates a thread and starts running the module */
+ServerGameLogic::ServerGameLogic()
+   : gameState_(LOBBY) 
+{ 
+   // TODO: create a thread and begin processing
+}
+
 /* Starts the game.
  *
  * PRE:     Game is in the lobby and players are ready.

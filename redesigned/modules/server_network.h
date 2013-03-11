@@ -8,7 +8,7 @@ class ServerNetwork
 {
 public:
    // Constructors
-   ServerNetwork(ServerGameLogic& serverGameLogic) : serverGameLogic_(serverGameLogic) { }
+   ServerNetwork(ServerGameLogic& serverGameLogic);
 private:
    // Module references
    ServerGameLogic& serverGameLogic_;

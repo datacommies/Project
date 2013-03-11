@@ -6,6 +6,9 @@
 class ClientNetwork
 {
 public:
+   // Constructors
+   ClientNetwork();
+
    // Functions
    bool createUnit(int playerId, UnitType type, Point location);
    bool movePlayer(int playerId, Direction direction);

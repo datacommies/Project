@@ -1,5 +1,17 @@
 #include "ai.h"
 
+/* Constructor
+ *
+ * PRE:     
+ * POST:    
+ * RETURNS: 
+ * NOTES:   Creates a thread and starts running Ai module */
+Ai::Ai(ServerGameLogic& serverGameLogicModule)
+   : serverGameLogicModule_(serverGameLogicModule)
+{
+   // TODO: create a thread and begin processing
+}
+
 /* Handles an AI request to create a unit.
  *
  * PRE:     Create Unit UI element is available to user (AI).

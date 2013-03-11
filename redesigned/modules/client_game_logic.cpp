@@ -1,5 +1,17 @@
 #include "client_game_logic.h"
 
+/* Constructor
+ *
+ * PRE:     
+ * POST:    
+ * RETURNS: 
+ * NOTES:   Creates a thread and starts running the module */
+ClientGameLogic::ClientGameLogic(ClientNetwork& clientNetwork)
+   : clientNetwork_(clientNetwork)
+{
+   // TODO: create a thread and begin processing
+}
+
 /* Sends a create unit request to network module.
  *
  * PRE:     
