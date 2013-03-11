@@ -4,7 +4,7 @@
 #include "../resource.h"
 #include "unit.h"
 
-class Creep : public Unit
+class Creep : public MobileUnit
 {
 public:   
 private:   
