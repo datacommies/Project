@@ -18,7 +18,7 @@ using namespace std;
 --
 -- NOTES: Initiallizes the ControlState class, including the _Override and _Identifier variables.
 ----------------------------------------------------------------------------------------------------------------------*/
-ControlState::ControlState(bool override, bool identifier)
+ControlState::ControlState(bool override, int identifier)
 :_Override(override)
 ,_Identifier(identifier)
 {

@@ -18,7 +18,7 @@ public:
    CLIENT_UNIT* map[MAPWIDTH][MAPHEIGHT];
    int playerId;
    int currency;
-   std::set<Button *> UIElements;
+   std::set<Button> UIElements;
 
    // Functions
    GameState getCurrentState();

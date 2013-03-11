@@ -14,9 +14,9 @@ private:
    ServerGameLogic& serverGameLogicModule_;
 
    // Functions
-   void createUnit(int playerId, UnitType type, Point location);
-   void movePlayer(int playerId, Direction direction);
-   void attack(int playerId, Direction direction);
+   void createUnit(int unitId, UnitType type, Point location, Point destination);
+   void moveUnit(int unitId, Direction direction);
+   void attack(int unitId, Direction direction);
 };
 
 #endif

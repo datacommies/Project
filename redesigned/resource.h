@@ -27,11 +27,22 @@ struct CLIENT_UNIT // This struct applies only to the client side - server side 
 };
 
 struct Button {
+   Button():id(idcounter)
+   {
+       ++idcounter;
+   }
    sf::RectangleShape rect;
    int id;
    bool operator== (Button & right) {
       return (id == right.id);
    }
+
+   bool operator< (const Button & right) const {
+      return (id - right.id);
+   }
+
+private:
+   static int idcounter = 1;
 };
 
 // Enums ----------------------------------------------------------------------
