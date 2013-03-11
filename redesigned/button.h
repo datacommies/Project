@@ -1,4 +1,4 @@
-struct Button {
+typedef struct Button {
    Button()
    {
        static int idcounter = 1;
