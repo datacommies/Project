@@ -7,7 +7,7 @@
 class Creep : public MobileUnit
 {
 public: 
-void spawn(const int& num);  //also creep type? when we have a type
+   void spawn(const int& num);  //also creep type? when we have a type
 private:
 };
 
