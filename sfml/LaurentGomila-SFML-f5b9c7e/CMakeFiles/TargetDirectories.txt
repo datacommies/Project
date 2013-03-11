@@ -1,0 +1,5 @@
+/root/Documents/Project/LaurentGomila-SFML-f5b9c7e/src/SFML/Audio/CMakeFiles/sfml-audio.dir
+/root/Documents/Project/LaurentGomila-SFML-f5b9c7e/src/SFML/Graphics/CMakeFiles/sfml-graphics.dir
+/root/Documents/Project/LaurentGomila-SFML-f5b9c7e/src/SFML/Network/CMakeFiles/sfml-network.dir
+/root/Documents/Project/LaurentGomila-SFML-f5b9c7e/src/SFML/System/CMakeFiles/sfml-system.dir
+/root/Documents/Project/LaurentGomila-SFML-f5b9c7e/src/SFML/Window/CMakeFiles/sfml-window.dir
