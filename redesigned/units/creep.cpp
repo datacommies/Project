@@ -8,10 +8,11 @@
 using namespace std;
 
 /*Copy constructor. */
+/*
   Creep::Creep( const Creep &c ) 
 		:Attacker( c ), pPath( c.pPath), iSpeed(c.iSpeed), pSaved(c.pSaved)
 	{}
-
+*/
 /*
 * Function to return the difference in two points. Used for movement. 
 */
