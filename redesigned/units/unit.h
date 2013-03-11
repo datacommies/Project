@@ -14,6 +14,7 @@ public:
    int attackSpeed;
 
    bool isAlive() { return health == 0; }
+   void serializeUnit(const Unit& unit);
 private:   
 };
 

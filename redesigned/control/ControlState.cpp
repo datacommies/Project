@@ -18,7 +18,7 @@ using namespace std;
 --
 -- NOTES: Initiallizes the ControlState class, including the _Override and _Identifier variables.
 ----------------------------------------------------------------------------------------------------------------------*/
-ControlState::ControlState(bool override, bool identifier)
+ControlState::ControlState(bool override, int identifier)
 :_Override(override)
 ,_Identifier(identifier)
 {
@@ -124,7 +124,7 @@ ControlState::CheckControllers()
 {
 	int returnValue = 0;
 	
-	for(vector<Controller>::size_t i = 0; i < Controllers.size(); ++i)
+	for(vector<Controller>::size_type i = 0; i < Controllers.size(); ++i)
 	{
 		returnValue = Controllers[i].CheckController();
 		if(returnValue > 0)

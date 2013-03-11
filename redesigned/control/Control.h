@@ -28,9 +28,16 @@
 -- 
 ----------------------------------------------------------------------------------------------------------------------*/
 
+#include "Resource.h"
 #include "Controller.h"
 #include "ControlState.h"
 #include "ControlManager.h"
+
+#define MENU_ID      10 
+#define LOBBY_ID     20
+#define PLAYER_ID    30
+#define BUILDER_ID   40
+#define EXIT_MENU_ID 50
 
 int Control();
 

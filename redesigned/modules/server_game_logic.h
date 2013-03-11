@@ -20,6 +20,7 @@ public:
    void startGame();
    void receiveCreateUnitCommand(int playerId, UnitType type, Point location);
    void receiveMovePlayerCommand(int playerId, Direction direction);
+   void receiveMoveUnitCommand(int unitId, Direction direction);
    void receiveAttackCommand(int playerId, Direction direction);
    void playerConnect();
 

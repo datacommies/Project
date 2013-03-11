@@ -1,4 +1,5 @@
 #include "Control.h"
+#include "ControlEvents.h"
 
 /*-------------------------------------------------------------------------------------------------------------------- 
 -- FUNCTION: Control
@@ -21,7 +22,9 @@ int Control()
 {
 	ControlManager manager;
 	
-	while(manager.CheckState());
+	AddStates(manager);
+	
+	while(manager.CheckState() != 0);
 	
 	return 0;
 }
@@ -74,6 +77,12 @@ ControlState MakeMenuState()
 {
 	ControlState menuState(true, 10);
 	
+	Controller startLobby(startButton, startLobbyFunction);
+	menuState.AddController(startLobby);
+	
+	Controller exitGame(exitButton, exitGameFunction);
+	menuState.AddController(exitGame);
+	
 	return menuState;
 }
 
@@ -122,6 +131,41 @@ ControlState MakePlayerState()
 {
 	ControlState playerState(true, 30);
 	
+	Controller moveLeft(NULL, moveLeftFunction);
+	moveLeft.addKey(sf::Keyboard::Left);
+	playerState.AddController(moveLeft);
+	
+	Controller moveRight(NULL, moveRightFunction);
+	moveRight.addKey(sf::Keyboard::Right);
+	playerState.AddController(moveRight);
+	
+	Controller moveUp(NULL, moveUpFunction);
+	moveUp.addKey(sf::Keyboard::Up);
+	playerState.AddController(moveUp);
+	
+	Controller moveDown(NULL, moveDownFunction);
+	moveDown.addKey(sf::Keyboard::Down);
+	playerState.AddController(moveDown);
+	
+	Controller attackLeft(NULL, attackLeftFunction);
+	attackLeft.addKey(sf::Keyboard::Left);
+	playerState.AddController(attackLeft);
+	
+	Controller attackRight(NULL, attackRightFunction);
+	attackRight.addKey(sf::Keyboard::Right);
+	playerState.AddController(attackRight);
+	
+	Controller attackUp(NULL, attackUpFunction);
+	attackUp.addKey(sf::Keyboard::Up);
+	playerState.AddController(attackUp);
+	
+	Controller attackDown(NULL, attackDownFunction);
+	attackDown.addKey(sf::Keyboard::Down);
+	playerState.AddController(attackDown);
+	
+	Controller exitGame(exitButton, exitGameFunction);
+	playerState.AddController(exitGame);
+	
 	return playerState;
 }
 
@@ -146,6 +190,15 @@ ControlState MakeBuilderState()
 {
 	ControlState builderState(true, 40);
 	
+	Controller buildTower(buildTowerButton, BuildTowerFunction);
+	builderState.AddController(buildTower);
+	
+	Controller buildCreep(buildCreepButton, BuildCreepFunction);
+	builderState.AddController(buildCreep);
+	
+	Controller exitGame(exitButton, exitGameFunction);
+	builderState.AddController(exitGame);
+	
 	return builderState;
 }
 
@@ -168,7 +221,13 @@ ControlState MakeBuilderState()
 ----------------------------------------------------------------------------------------------------------------------*/
 ControlState MakeExitGameState()
 {
-	ControlState exitState(true, 50);
+	ControlState exitState(false, 50);
+	
+	Controller returnToPreviousState(returnButton, returnFunction);
+	exitState.AddController(returnToPreviousState);
+	
+	Controller exitGame(exitButton, exitGameFunction);
+	exitState.AddController(exitGame);
 	
 	return exitState;
 }

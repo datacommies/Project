@@ -9,6 +9,7 @@ class Tower : public Unit
 public:
    int getWallArmor() { return wallArmor_; }
    bool setWallArmor(const int& amount) { wallArmor_ = amount; }
+   void serializeTower(const Tower& tower);
 private: 
    int wallArmor_;
 };

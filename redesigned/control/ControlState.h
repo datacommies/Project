@@ -33,7 +33,7 @@
 class ControlState
 {
 public:
-	ControlState(bool override, bool identifier);
+	ControlState(bool override, int identifier);
 	
 	void LoadGUIs();
 	void UnloadGUIs();

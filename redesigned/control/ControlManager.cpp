@@ -9,6 +9,10 @@ ControlManager::ControlManager()
 void ControlManager::AddNewState(ControlState state)
 {
 	StateCollection.push_back(state);
+	if(StateCollection.size() == 1)
+	{
+		activeState = &state;
+	}
 }
 
 int ControlManager::CheckState()
@@ -19,7 +23,7 @@ int ControlManager::CheckState()
 		{
 			if(ControlState.getIdentifier() == StateCollection[i].getIdentifier())
 			{
-				SetNewActiveState(StateCollection[i]);
+				SetNewActiveState(&StateCollection[i]);
 			}
 		}	
 	}
@@ -28,9 +32,10 @@ int ControlManager::CheckState()
 
 void ControlManager::SetNewActiveState(ControlState * state)
 {
-	if(state.getOverride() || !activeState.getOverride())
+	if(state->getOverride() || !activeState.getOverride())
 	{
 		activeState.UnloadGUIs();
 	}
-	
+	activeState = &state;
+	activeState.LoadGUIs();
 }
