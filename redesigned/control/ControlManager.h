@@ -3,7 +3,7 @@
 
 #include "ControlPlaceHolder.h"
 #include "ControlState.h"
-#include "resource.h"
+#include "../resources.h"
 #include <vector>
 
 class ControlManager {
