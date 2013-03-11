@@ -15,7 +15,7 @@ public:
    int perception;  //distance that the unit can aquire a target
    int attackCount; //counter between unit attacks
 
-   bool isAlive() { return health == 0; }
+   bool isAlive() { return health != 0; }
    void serializeUnit(const Unit& unit);
 private:   
 };
