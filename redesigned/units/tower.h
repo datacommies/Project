@@ -7,7 +7,11 @@
 class Tower : public Unit
 {
 public:
-private:   
+int getWallArmor();
+bool setWallArmor(const int& amount);
+
+private: 
+int wallArmor_;
 };
 
 #endif
