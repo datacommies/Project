@@ -1,4 +1,5 @@
 #include "Control.h"
+#include "ControlEvents.h"
 
 /*-------------------------------------------------------------------------------------------------------------------- 
 -- FUNCTION: Control
@@ -23,7 +24,7 @@ int Control()
 	
 	AddStates(manager);
 	
-	while(manager.CheckState());
+	while(manager.CheckState() != 0);
 	
 	return 0;
 }
