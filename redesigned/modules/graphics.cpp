@@ -17,9 +17,16 @@ void * init (void * in) {
    sf::RenderWindow window(sf::VideoMode(800, 600), "Client");
 	
 	sf::Font MyFont;
-	if (!MyFont.loadFromFile("/usr/share/fonts/dejavu/DejaVuSans.ttf")) {
+	if (!MyFont.loadFromFile("/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf")) {
 		cerr << ("error loading font") << endl ;
 	}
+
+	Button a;
+	a.id = 1373;
+	a.rect.setPosition (sf::Vector2f(0,0));
+	a.rect.setSize (sf::Vector2f(10,10));
+	g->clientGameLogic_.UIElements.insert(a);
+
 
 	while (true) {
 		sf::Event event;
@@ -43,6 +50,11 @@ void * init (void * in) {
 		} else if (g->clientGameLogic_.getCurrentState() == IN_GAME) {
 			sf::Text state("In Game", MyFont, 20);
 			window.draw(state);
+		}
+
+		for (std::set<Button>::iterator button = g->clientGameLogic_.UIElements.begin(); button != g->clientGameLogic_.UIElements.end(); ++button)
+		{
+			window.draw(button->rect);
 		}
 		window.display();
 	}

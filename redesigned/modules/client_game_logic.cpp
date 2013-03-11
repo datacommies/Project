@@ -7,7 +7,7 @@
  * RETURNS: 
  * NOTES:   Creates a thread and starts running the module */
 ClientGameLogic::ClientGameLogic(ClientNetwork& clientNetwork)
-   : clientNetwork_(clientNetwork)
+   : clientNetwork_(clientNetwork), gameState_(LOBBY)
 {
    // TODO: create a thread and begin processing
 }

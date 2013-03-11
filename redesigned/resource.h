@@ -32,6 +32,10 @@ struct Button {
    bool operator== (Button & right) {
       return (id == right.id);
    }
+
+   bool operator< (const Button & right) const {
+      return (id - right.id);
+   }
 };
 
 // Enums ----------------------------------------------------------------------
