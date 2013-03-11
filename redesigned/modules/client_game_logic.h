@@ -19,6 +19,7 @@ public:
    int currency;
 
    // Functions
+   GameState getCurrentState();
    bool createUnit(UnitType type, Point location);
    bool movePlayer(Direction direction);
    bool attack(Direction direction);

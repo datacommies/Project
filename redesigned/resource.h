@@ -27,12 +27,6 @@ struct CLIENT_UNIT // This struct applies only to the client side - server side 
 
 // Enums ----------------------------------------------------------------------
 
-enum Role
-{
-   CLIENT,
-   SERVER
-};
-
 enum Direction
 {
    UP,

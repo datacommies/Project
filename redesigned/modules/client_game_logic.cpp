@@ -69,3 +69,7 @@ bool ClientGameLogic::attack(Direction direction)
 void ClientGameLogic::exit()
 {
 }
+
+GameState ClientGameLogic::getCurrentState() {
+   return gameState_;
+}
