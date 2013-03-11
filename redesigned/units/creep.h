@@ -25,6 +25,15 @@ public:
 	void	savePoint( Point &pt )	{ pSaved = &pt; }
 	void	Move( Point );
 	int	getDirection( int, int );
+	void	Attack( void );
+	//void	setTarget( Attackable &newTarget ) { pTarget = &newTarget; }
+	float	Rotate( Point ); 
+	void	setDamage( int newDamage ) { attackDamage = newDamage;  }
+	void	setRange( int newRange ) { attackRange = newRange; }
+	bool	inRange( Point, Point, int );
+	virtual void	CheckTarget( void );
+	virtual void	FindTarget( void );
+	//bool			hasWeakness( int, int );
 
 	Point	*	pPath;
 	Point	*	pSaved;
