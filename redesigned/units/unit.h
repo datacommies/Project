@@ -14,7 +14,6 @@ public:
    int attackSpeed; //the speed which the attack counter has to hit in order to initiate an attack
    int perception;  //distance that the unit can aquire a target
    int attackCount; //counter between unit attacks
-   int moveSpeed;   //the speed which a unit can move. ex. (it can move 1 square per 30 frames)
 
    bool isAlive() { return health != 0; }
    void serializeUnit(const Unit& unit);
