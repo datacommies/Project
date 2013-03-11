@@ -79,6 +79,7 @@ void * init (void * nothing) {
     char * font_path;
     find_font( &font_path );
 
+    cout << font_path << endl;
     if (!MyFont.loadFromFile(font_path)) {
         printf("error loading font\n");
     }

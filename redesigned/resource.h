@@ -2,6 +2,7 @@
 #define RESOURCE_H
 
 #include <vector>
+#include <SFML/Graphics.hpp>
 
 // Defines --------------------------------------------------------------------
 
@@ -23,6 +24,14 @@ struct CLIENT_UNIT // This struct applies only to the client side - server side 
    int health;
    int team;
    int type;
+};
+
+struct Button {
+   sf::RectangleShape rect;
+   int id;
+   bool operator== (Button & right) {
+      return (id == right.id);
+   }
 };
 
 // Enums ----------------------------------------------------------------------
