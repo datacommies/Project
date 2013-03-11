@@ -18,7 +18,7 @@ Ai::Ai(ServerGameLogic& serverGameLogicModule)
  * POST:    Request for game logic to create unit has been sent.
  * RETURNS: 
  * NOTES:   Performs no validation. Validation is handled by game logic module. */
-void Ai::createUnit(int unitId, UnitType type, Point location)
+void Ai::createUnit(int unitId, UnitType type, Point location, Point destination)
 {
    serverGameLogicModule_.receiveCreateUnitCommand(unitId, type, location);
 }
