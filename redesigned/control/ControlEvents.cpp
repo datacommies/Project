@@ -1,5 +1,6 @@
 
 #include "ControlEvents.h"
+using namespace std;
 
 /*-------------------------------------------------------------------------------------------------------------------- 
 -- FUNCTION: CallExitGameEvent
@@ -275,4 +276,23 @@ void CallBuildTowerEvent(void* value)
 void CallBuildCreepEvent(void* value)
 {
 	
+}
+
+void AddNewCalledButton(int id)
+{
+	pressedButtonIds.pushBack(id);
+}
+
+bool getCalledButton(int id)
+{
+	for(vector<int>::iterator i = pressedButtonIds.front(); i != pressedButtonIds.back(); ++i)
+	{
+		if(*i == id)
+		{
+			pressedButtonIds.erase(i);
+			return true;
+		}
+	}
+	
+	return false;
 }
