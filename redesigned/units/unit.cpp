@@ -17,7 +17,7 @@ Unit::Unit(const int& uid, Point pos, const int& hp, const int& atkdmg,
 /*
 * Using the a^2 + b^2 = c^2 formula to calculate if the target is within a circle.
 */
-bool Unit::inRange( Point p1, Point p2, int distance ) {
+bool Unit::inRange(Point p1, Point p2, int distance) {
      if( sqrt( (double) /* Square Rooting the entire thing. */
                 pow( (double)abs( p1.x - p2.x ), 2 )    /* a^2; the adj si\de. */
                 + pow( (double)abs( p1.y - p2.y ), 2 ) /* add b^2; the opp side.*/
@@ -29,26 +29,26 @@ bool Unit::inRange( Point p1, Point p2, int distance ) {
 /*
 * Used to check if the target has a weakness to the Unit's element.
 */
-bool Unit::hasWeakness( int iAttack, int iTarget ) {
-    if( iAttack == iTarget + 1 % ELEMENT_COUNT )
+bool Unit::hasWeakness(int iAttack, int iTarget) {
+    /*if(iAttack == iTarget + 1 % ELEMENT_COUNT)
         return true;
-    return false;
+    return false;*/
 }
 
 /*
 * Used to check if the target has a weakness to the Unit's element.
 */
-bool Unit::hasStrength( int iAttack, int iTarget ) {
-    if( iAttack == iTarget - 1 % ELEMENT_COUNT )
+bool Unit::hasStrength(int iAttack, int iTarget) {
+    /*if(iAttack == iTarget - 1 % ELEMENT_COUNT)
         return true;
-    return false;
+    return false;*/
 }
 
 /*
 * Attacks the current target. If it has a weakness, it will apply a 75% damage bonus.
 * QUESTION - If we attack a element we have a weakness against, do we do LESS damage? 
 */
-void Unit::Attack( void ) {
+void Unit::Attack(void) {
     if( attackCount++ < attackSpeed )
         return;
 
@@ -56,12 +56,13 @@ void Unit::Attack( void ) {
     if( hasWeakness( iElement, pTarget->iElement ) )
         pTarget->health -= attackDamage * 1.75;
     else if( hasStrength(iElement, pTarget->iElement) )
-        pTarget->health -= attackDamage * 0.25
+        pTarget->health -= attackDamage * 0.25;
     else
         pTarget->health -= attackDamage;
 
     if( pTarget->health <= 0 ) {
-        Game::removeUnit( pTarget, pTarget->iTeam );
+        //the game class does not exist, foos!
+        //Game::removeUnit( pTarget, pTarget->iTeam );
     }
 }
 
@@ -69,28 +70,29 @@ void Unit::Attack( void ) {
 * Finds the next target, will loop through all enemies until one target is found.
 * TODO - Add priority. ( Attack players over creeps )
 */
-void Unit::FindTarget( void ) {
-    std::vector<Unit*>::iterator it = Game::getEnemiesBegin( iTeam );
-    std::vector<Unit*>::iterator end = Game::getEnemiesEnd( iTeam );
+void Unit::FindTarget(void) {
+    //the game class does not exist, foos!
+    /*std::vector<Unit*>::iterator it = Game::getEnemiesBegin( iTeam );
+    std::vector<Unit*>::iterator end = Game::getEnemiesEnd( iTeam );*/
 
-    for( ; it != end; ++it ) {
+    //for( ; it != end; ++it ) {
         /* If in range and alive, set as target. */
-        if( inRange( pCurrPoint, (*it)->getPos(), perception ) && (*it)->health > 0 ) {
+        /*if( inRange( pCurrPoint, (*it)->getPos(), perception ) && (*it)->health > 0 ) {
             pTarget = *it;
             break;
         }
-    }
+    }*/
 }
 
 /*
 * Check if the target is alive and in range. Set the pTarget to NULL if either are true.
 */
-void Unit::CheckTarget( void ) {
+void Unit::CheckTarget(void) {
     /* Target is DEAD. */
     if( pTarget->health <= 0 )
         pTarget = NULL;
     /* Or Target is out of range.  */
-    else if ( inRange( pCurrPoint, pTarget->getPos(), perception) == false )
+    else if (inRange(position, pTarget->getPos(), perception) == false )
         pTarget = NULL;
     
 }
@@ -118,8 +120,8 @@ void Unit::Update() {
 /*
 * Rotate towards the target. Used for either a path, or a target. 
 */
-float Unit::Rotate( Point pt ) {
-    return atan2( (float)pCurrPoint.y - pt.y, (float)pCurrPoint.x - pt.x );
+float Unit::Rotate(Point pt) {
+    return atan2( (float)position.y - pt.y, (float)position.x - pt.x );
 }
 
 string Unit::serializeUnit(const Unit& unit){

@@ -19,22 +19,23 @@ public:
     int attackCount; //counter between unit attacks
     
     bool            isAlive() { return health > 0; } //incase creep get hits more than its remaining health
-    virtual void    Attack( void );
-    virtual void    Update( void );
-    void            setTarget( Unit &newTarget ) { pTarget = &newTarget; }
-    float           Rotate( Point ); 
-    void            setDamage( int newDamage ) { attackDamage = newDamage;  }
-    void            setRange( int newRange ) { attackRange = newRange; }
-    bool            inRange( Point, Point, int );
-    virtual void    CheckTarget( void );
-    virtual void    FindTarget( void );
-    bool            hasWeakness( int, int );
+    virtual void    Attack(void);
+    virtual void    Update(void);
+    void            setTarget(Unit &newTarget) { pTarget = &newTarget; }
+    float           Rotate(Point); 
+    void            setDamage(int newDamage) { attackDamage = newDamage;  }
+    void            setRange(int newRange) { attackRange = newRange; }
+    bool            inRange(Point, Point, int);
+    virtual void    CheckTarget(void);
+    virtual void    FindTarget(void);
+    bool            hasWeakness(int, int);
+    bool            hasStrength(int, int);
     Point           getPos() { return position; }
 
     std::string serializeUnit(const Unit& unit);
     
     Unit(const int& uid, Point pos, const int& hp, const int& atkdmg, const int& atkrng,
-        const int& atkspd, const int& percep, const int& atkcnt);
+         const int& atkspd, const int& percep, const int& atkcnt);
     
     virtual UnitTypes getType() const = 0;
     virtual size_t getSize() const = 0;

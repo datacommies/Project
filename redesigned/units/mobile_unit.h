@@ -15,11 +15,15 @@ public:
         	   const int& atkspd, const int& percep, const int& atkcnt, const int& spd, Direction direct);
 
     void	Move( Point );
-	void	setSpeed( int newSpeed) { moveSpeed = newSpeed; }
-    std::string serializeMobileUnit(const MobileUnit& mobileUnit);
 
-	virtual UnitTypes getType() const = 0;
-	virtual size_t getSize() const = 0;
+    void    setDirection(Direction newDirect) { direction = newDirect; }
+	void	setSpeed(int newSpeed) { moveSpeed = newSpeed; }
+    int     getSpeed(){ return moveSpeed; }
+    Direction getDirection(){ return direction; }
+    virtual UnitTypes getType() const = 0;
+    virtual size_t getSize() const = 0;
+
+    std::string serializeMobileUnit(const MobileUnit& mobileUnit);
 
 private:   
 };
