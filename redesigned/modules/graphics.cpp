@@ -3,13 +3,13 @@
 
 #include <unistd.h>
 #include <SFML/Graphics.hpp>
-#include <SFML/OpenGL.hpp>
 
 using namespace std;
 
 
 #define ID_START 123
 #define ID_QUIT 124
+
 
 /* Graphics Thread entry point
  *
