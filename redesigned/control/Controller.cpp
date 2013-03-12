@@ -2,6 +2,12 @@
 #include "Control.h"
 #include <SFML/Graphics.hpp>
 
+
+Controller::Controller(int returnValue, sf::Keyboard::Key key, Button buttonRect, void (*move_fp)(void)) 
+                        : _returnValue(returnValue), _key(key), _buttonRECT(buttonRect)
+{
+    
+}
 void Controller::LoadGui()
 {
 	// call Graphics function.
@@ -17,34 +23,19 @@ void Controller::RunCommand()
 	// stuff happens.
 }
 
-int Controller::CheckController(int buttonID, sf::Window *window)
+int Controller::CheckController()
 {
-	Point p;
-	switch(buttonID)
-	{
-		case BUILD_TOWER:
-			// monitor for field click
-			p = Controller::monitorMouseClick(window);
-		break;
-		case SPAWN_CREEP:
-			// call spawn creep function		
-		break;
-	}
-	// next next next
+    
+    if(sf::Mouse::isButtonPressed(sf::Mouse::Left) && _buttonRECT != NULL)
+    {
+        return _returnValue;
+    }
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key) && _key != NULL)
+    {
+        return _returnValue;
+    }
+      
+    
+	return 0;
 }
-Point Controller::monitorMouseClick(sf::Window *window)
-{
-	sf::Event event;
-	Point temp;
-	while(window->pollEvent(event))
-	{
-		if(event.type == sf::Event::MouseButtonPressed)
-		{
-			sf::Vector2f mouse = sf::Vector2f(sf::Mouse::getPosition(*window));
-			temp.x = mouse.x;
-			temp.y = mouse.y;
-			break;
-		}
-	}
-	return temp;
-}
+

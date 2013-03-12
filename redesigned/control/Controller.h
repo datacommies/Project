@@ -1,16 +1,27 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 #include "../resource.h"
+#include <vector>
+#include <SFML/Window.hpp>
 
 class Controller
 {
 
-private:
-	int CheckController(int buttonID, sf::Window *window);
-	void RunCommand();
-	void LoadGui();
+public:
+    
+    Controller(int returnValue, sf::Keyboard::Key key, Button buttonRect, void (*move_fp)(void)); 
+    int CheckController();
+    void LoadGui();
 	void UnloadGui();
-	Point monitorMouseClick(sf::Window *window);
+	
+private:
+	
+	void RunCommand();
+	int _returnValue;
+	sf::Keyboard::Key _key;
+	Button _buttonRECT;
+	
+	
 };
 
 #endif
