@@ -12,28 +12,13 @@
 -- DESIGNER: John Payment
 --
 -- PROGRAMMER: John Payment
---
-	
-	
-	 Luke Tao
+--             Luke Tao
 --
 -- INTERFACE: Controller(int returnValue, sf::Keyboard::Key key, Button buttonRect, void (*move_fp)(void))
---
-	
-	
-	int returnValue - The value that theCheckController() function returns on success
---
-	
-	
-	Key key - The Key that is being listen to for input
---
-	
-	
-	Button buttonRect - The Button that is being listen to for input
---
-	
-	
-	void (*move_fp)(void) - A function pointer to the function that should be called by RunCommand
+--            int returnValue - The value that theCheckController() function returns on success
+--            Key key - The Key that is being listen to for input
+--            Button buttonRect - The Button that is being listen to for input
+--            void (*move_fp)(void) - A function pointer to the function that should be called by RunCommand
 --
 -- RETURNS: N/A
 --
@@ -127,15 +112,12 @@ Controller::RunCommand()
 -- DESIGNER: John Payment
 --
 -- PROGRAMMER: John Payment
---
-	
-	
-	 Luke Tao
+--             Luke Tao
 --
 -- INTERFACE: CheckController()
---
+-- 
 -- RETURNS: N/A
---
+-- 
 -- NOTES: Checks if the Watched button or Key has ben pressed
 ----------------------------------------------------------------------------------------------------------------------*/
 int 
@@ -158,7 +140,6 @@ Controller::CheckController()
 	  
 	}
 
-	
 	return 0;
 }
 
