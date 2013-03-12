@@ -11,6 +11,6 @@ Control::Control(ClientGameLogic& clientGameLogicModule)
 	:clientGameLogicModule_(clientGameLogicModule)
 {
 	// TODO: create a thread
-	loadControlEvents(clientGameLogicModule);
+	loadControlEvents(&clientGameLogicModule);
 	ControlRun();
 }
