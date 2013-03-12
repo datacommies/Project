@@ -2,7 +2,8 @@
 #define CONTROL_EVENTS_H
 
 #include "../resources.h"
-#include "../modules/control.h"
+
+void loadControlEvents(ClientGameLogic* gameLogic);
 
 void CallExitGameEvent();
 
