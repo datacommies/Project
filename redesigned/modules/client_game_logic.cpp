@@ -12,6 +12,10 @@ ClientGameLogic::ClientGameLogic(ClientNetwork& clientNetwork)
    // TODO: create a thread and begin processing
 }
 
+void ClientGameLogic::start () {
+   gameState_ = IN_GAME;
+}
+
 /* Sends a create unit request to network module.
  *
  * PRE:     
