@@ -2,12 +2,6 @@
 
 using namespace std;
 
-/*
- TODO:
- Aaron (Mar 11) - added David's code. need to port code to fit design's team new modules tomorrow.
- 
- */
-
 // note: use of POSIX calls makes this platform-dependent
 
 
@@ -58,6 +52,11 @@ ServerNetwork::ServerNetwork(ServerGameLogic& serverGameLogic)
         pthread_join (threads[i], NULL);*/
 }
 
+// Move me!
+bool operator == (const player_matchmaking_t& a, const player_matchmaking_t& b) {
+    return a.pid == b.pid;
+}
+
 void ServerNetwork::initNetwork()
 {
     std::cout << "Listening for connections..." << std::endl;
@@ -68,7 +67,7 @@ void ServerNetwork::initNetwork()
     while (( client = accept(sock, (struct sockaddr *) &cli_addr, &clilen) ) > 0) {
         std::cout << std::endl << "new connection." << std::endl;
         pthread_t thread;
-        pthread_create (&thread, NULL, NULL/*serverNetwork_.acceptClient*/, (void*)client); // TODO: use struct as parameter
+        pthread_create (&thread, NULL, handleClient, this); // TODO: use struct as parameter
         threads.push_back(thread);
         clients.push_back(client);
     }
@@ -125,11 +124,14 @@ int ServerNetwork::initSock(int port)
 	// queue up to MAX connect requests
     listen(sock, MAX_CONNECTIONS);
     return sock;
-    
-    
-    //return 69;
 }
 
+/* Interactive CLI console
+ *
+ * PRE:     Server sockets started
+ * POST:    
+ * RETURNS: void*
+ * NOTES:   Current implementation is to refresh ALL data on each update. */
 void* ServerNetwork::handleInput(void* args)
 {
     ServerNetwork * thiz = (ServerNetwork*) args;
@@ -168,47 +170,51 @@ void* ServerNetwork::handleInput(void* args)
     return NULL;
 }
 
-void ServerNetwork::handleClient()
+void* ServerNetwork::handleClient(void* args)
 {
-    /*int client = (long)thing;
+    ServerNetwork* thiz = (ServerNetwork*) args;
+    //long client = (long)args;
     
     // Add this player first
     player_matchmaking_t player;
     
-    if (recv_complete(client, &player, sizeof(player), 0) > 0) {
-        player.pid = client; // cheap and easy way of assigning a unique player id.
+    // if client chooses to be a player, add them to player list
+    if (recv_complete(thiz->client, &player, sizeof(player), 0) > 0) {
+        player.pid = thiz->client; // cheap and easy way of assigning a unique player id.
         player.name[PLAYER_NAME_SIZE-1] = 0;
         cout << "Player: " << player.name << " Team: " << player.team << endl;
-        players.push_back(player);
+        thiz->players.push_back(player);
     }
     
     // Send all current players. probably need mutex here.
-    for (size_t i = 0; i < players.size(); i++) {
-        players[i].head.type = MSG_PLAYER_UPDATE;
+    for (size_t i = 0; i < thiz->players.size(); i++) {
+        thiz->players[i].head.type = MSG_PLAYER_UPDATE;
         
-        send(client, &players[i], sizeof(player_matchmaking_t), 0);
+        send(thiz->client, &thiz->players[i], sizeof(player_matchmaking_t), 0);
     }
     //update_all_clients(MSG_PLAYER_UPDATE);
     
     player.head.type = MSG_PLAYER_UPDATE;
     // Inform all other clients that this player has arrived.
-    for (size_t i = 0; i < clients.size(); ++i)
+    for (size_t i = 0; i < thiz->clients.size(); ++i)
     {
-        if (clients[i] != client)
-            send(clients[i], &player, sizeof(player_matchmaking_t), 0);
+        if (thiz->clients[i] != thiz->client)
+            send(thiz->clients[i], &player, sizeof(player_matchmaking_t), 0);
     }
-    cout << "Sent current players" << endl;
+    std::cout << "Sent current players" << std::endl;
     
+    // send map to new connected players
     map_t m = {{0, 0}, {0}};
     m.head.type = MSG_MAPNAME;
     strcpy(m.value, "FirstMap");
     
-    send(client, &m, sizeof(map_t), 0);
+    send(thiz->client, &m, sizeof(map_t), 0);
     cout << "Send map name" << endl;
     
+    // read commands
     while (1) {
         header_t head;
-        int n = recv_complete(client, &head, sizeof(head), 0);
+        int n = recv_complete(thiz->client, &head, sizeof(head), 0);
         
         if (n < 0)
             break;
@@ -216,26 +222,26 @@ void ServerNetwork::handleClient()
         if (head.type == MSG_CHAT) {
             char * buf = new char [head.size];
             memset(buf, 0, head.size);
-            recv_complete(client, buf, head.size, 0);
+            recv_complete(thiz->client, buf, head.size, 0);
             cout << "Got message:" << buf << "from client" << endl;
             delete buf;
         }
     }
     
-    close(client);
-    players.erase(std::remove(players.begin(), players.end(), player), players.end());
-    clients.erase(std::remove(clients.begin(), clients.end(), client), clients.end());
+    close(thiz->client);
+    thiz->players.erase(std::remove(thiz->players.begin(), thiz->players.end(), player), thiz->players.end());
+    thiz->clients.erase(std::remove(thiz->clients.begin(), thiz->clients.end(), thiz->client), thiz->clients.end());
     
     player.head.type = MSG_PLAYER_LEAVE;
-    for (size_t i = 0; i < clients.size(); ++i)
+    for (size_t i = 0; i < thiz->clients.size(); ++i)
     {
-        send(clients[i], &player, sizeof(player_matchmaking_t), 0);
+        send(thiz->clients[i], &player, sizeof(player_matchmaking_t), 0);
     }
     
     cout << endl << "Client disconnected." << endl << "server> ";
     cout.flush();
     
-    //return NULL;*/
+    return NULL;
 }
 
 void ServerNetwork::handleRequests()
@@ -254,7 +260,7 @@ int ServerNetwork::recv_complete (int sockfd, void *buf, size_t len, int flags) 
         result = recv (sockfd, (char*)buf + bytesRead, len - bytesRead, flags);
         
         if (result < 1)
-            error("recv");
+            cerr << "recv" << endl;//error("recv");
         
         bytesRead += result;
     }
