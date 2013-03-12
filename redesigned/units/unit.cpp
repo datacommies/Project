@@ -1,5 +1,7 @@
 #include "unit.h"
 #include <string>
+#include <vector>
+#include <math.h>
 
 using namespace std;
 
@@ -12,11 +14,6 @@ Unit::Unit(const int& uid, Point pos, const int& hp, const int& atkdmg,
 
 }
 
-string Unit::serializeUnit(const Unit& unit){
-    return 0;
-}
-
-#ifdef 1337
 /*
 * Using the a^2 + b^2 = c^2 formula to calculate if the target is within a circle.
 */
@@ -39,16 +36,27 @@ bool Unit::hasWeakness( int iAttack, int iTarget ) {
 }
 
 /*
+* Used to check if the target has a weakness to the Unit's element.
+*/
+bool Unit::hasStrength( int iAttack, int iTarget ) {
+    if( iAttack == iTarget - 1 % ELEMENT_COUNT )
+        return true;
+    return false;
+}
+
+/*
 * Attacks the current target. If it has a weakness, it will apply a 75% damage bonus.
 * QUESTION - If we attack a element we have a weakness against, do we do LESS damage? 
 */
 void Unit::Attack( void ) {
-    if( iAttackCount++ < attackSpeed )
+    if( attackCount++ < attackSpeed )
         return;
 
     attackSpeed = 0;
     if( hasWeakness( iElement, pTarget->iElement ) )
         pTarget->health -= attackDamage * 1.75;
+    else if( hasStrength(iElement, pTarget->iElement) )
+        pTarget->health -= attackDamage * 0.25
     else
         pTarget->health -= attackDamage;
 
@@ -113,4 +121,7 @@ void Unit::Update() {
 float Unit::Rotate( Point pt ) {
     return atan2( (float)pCurrPoint.y - pt.y, (float)pCurrPoint.x - pt.x );
 }
-#endif
+
+string Unit::serializeUnit(const Unit& unit){
+    return 0;
+}

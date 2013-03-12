@@ -3,3 +3,7 @@
 
 # Object files
 *.o
+
+# Output binaries
+client
+server
