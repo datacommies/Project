@@ -7,6 +7,13 @@
 
 using namespace std;
 
+Creep::Creep(const int& uid, const int& pos, const int& hp, const int& atkdmg, const int& atkrng,
+             const int& atkspd, const int& percep, const int& atkcnt, const int& spd, Direction direct,
+             Point* path, const int& movespeed)
+{
+	//validation
+}
+
 /*Copy constructor. */
 /*
   Creep::Creep( const Creep &c ) 

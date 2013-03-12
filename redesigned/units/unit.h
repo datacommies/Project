@@ -18,7 +18,7 @@ public:
 	bool isAlive() { return health == 0; }
 	std::string serializeUnit(const Unit& unit);
 	
-   Unit(const int& uid, const int& pos, const int& hp, const int& atkdmg, const int& atkrng,
+   Unit(const int& uid, Point pos, const int& hp, const int& atkdmg, const int& atkrng,
         const int& atkspd, const int& percep, const int& atkcnt);
 
 	virtual UnitTypes getType() const = 0;

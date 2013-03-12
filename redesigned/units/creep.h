@@ -9,13 +9,19 @@
 class Creep : public MobileUnit
 {
 public: 
-   void spawn(const int& num);  //also creep type? when we have a type
-   std::string serializeCreep(const Creep& creep);
+  	void spawn(const int& num);  //also creep type? when we have a type
+	std::string serializeCreep(const Creep& creep);
 
 	virtual UnitTypes getType() const { return TYPE_CREEP; }
 	virtual size_t getSize() const { return sizeof(Creep); }
 
-	Creep(): pPath( 0 ), pSaved( 0 ), moveSpeed( 0 ){}
+	Creep(const int& uid, const int& pos, const int& hp, const int& atkdmg, const int& atkrng,
+          const int& atkspd, const int& percep, const int& atkcnt, const int& spd, Direction direct,
+          Point* path, const int& movespeed); 
+          //assuming psaved does not need to be initialized when creep is created
+
+	//bad
+	//Creep(): pPath( 0 ), pSaved( 0 ), moveSpeed( 0 ){}
 
 	Creep( const Creep& );
 	void	Update( void );
