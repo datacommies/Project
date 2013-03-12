@@ -38,7 +38,3 @@ public:
     virtual size_t getSize() const = 0;
 private:   
 };
-
-
-
-#endif
