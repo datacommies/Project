@@ -20,7 +20,7 @@ private:
    sf::Sprite  map;
 
    // Functions
-   void drawHud(sf::RenderWindow& window);
+   void drawHud(sf::RenderWindow& window, Graphics* g);
    void drawLobby(sf::RenderWindow& window);
    void drawUnits(sf::RenderWindow& window);
    void drawMap(sf::RenderWindow& window);
