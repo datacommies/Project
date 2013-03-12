@@ -11,18 +11,28 @@ using namespace std;
 #define ID_START 123
 #define ID_QUIT 124
 
-// Pick default system font with font config.
-bool find_font (char ** path) {
-    FcResult result;
-    FcPattern* pat = FcPatternCreate();
-    //pat = FcNameParse ((FcChar8 *) ""); //specify font family?
-    FcConfigSubstitute (0, pat, FcMatchPattern);
-    FcDefaultSubstitute (pat);
-    FcPattern * match =  FcFontMatch(NULL, pat, &result);
-    match = FcFontMatch (0, pat, &result);
-    return (FcPatternGetString(match, FC_FILE, 0, (FcChar8**)path) == FcResultMatch);
-}
+/* Constructor
+ *
+ * PRE:     
+ * POST:    
+ * RETURNS: 
+ * NOTES:   Creates a thread and starts running the module */
+Graphics::Graphics(ClientGameLogic& clientGameLogic)
+   : window(NULL), clientGameLogic_(clientGameLogic)
+{
+	// Load font for game.
+	char * font_path;
+	find_font(&font_path);
 
+    if (!this->font.loadFromFile(font_path)) {
+		cerr << ("error loading font") << endl;
+		exit(0);
+	}
+
+	// Run main graphics thread.
+   	pthread_t t;
+   	pthread_create(&t, NULL, init, (void*)this);
+}
 
 /* Graphics Thread entry point
  *
@@ -38,15 +48,6 @@ void * init (void * in) {
 	// Create window for client.
 	sf::RenderWindow window(sf::VideoMode(800, 600), "Client");
 	g->window = &window;
-	
-	// Load font for game.
-	char * font_path;
-	find_font(&font_path);
-
-    if (!g->font.loadFromFile(font_path)) {
-		cerr << ("error loading font") << endl;
-		exit(0);
-	}
 	
 	// Create buttons for the menu screen and add them to the list of UI elements.
 	Button a(ID_START, sf::Vector2f(250,300), sf::Vector2f(300,50), g->font, "                Start Game");
@@ -120,17 +121,16 @@ void * init (void * in) {
 	return NULL;
 }
 
-/* Constructor
- *
- * PRE:     
- * POST:    
- * RETURNS: 
- * NOTES:   Creates a thread and starts running the module */
-Graphics::Graphics(ClientGameLogic& clientGameLogic)
-   : window(NULL), clientGameLogic_(clientGameLogic)
-{
-   pthread_t t;
-   pthread_create(&t, NULL, init, (void*)this);
+// Pick default system font with font config.
+bool find_font (char ** path) {
+    FcResult result;
+    FcPattern* pat = FcPatternCreate();
+    //pat = FcNameParse ((FcChar8 *) ""); //specify font family?
+    FcConfigSubstitute (0, pat, FcMatchPattern);
+    FcDefaultSubstitute (pat);
+    FcPattern * match =  FcFontMatch(NULL, pat, &result);
+    match = FcFontMatch (0, pat, &result);
+    return (FcPatternGetString(match, FC_FILE, 0, (FcChar8**)path) == FcResultMatch);
 }
 
 /* Draws the HUD.
