@@ -77,6 +77,7 @@ private:
    void drawLobby(sf::RenderWindow& window);
    void drawUnits(sf::RenderWindow& window);
    void drawMap(sf::RenderWindow& window);
+   void initGameControls ();
    friend void * init (void *);
 };
 

@@ -2,8 +2,31 @@
 #include "ControlEvents.h"
 using namespace std;
 
+ClientGameLogic* gameLogicPointer;
 std::vector<int> pressedButtonIds;
 
+/*-------------------------------------------------------------------------------------------------------------------- 
+-- FUNCTION: loadControlEvents
+--
+-- DATE: 2013/03/12
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: John Payment
+--
+-- PROGRAMMER: John Payment
+--
+-- INTERFACE: void loadControlEvents(ClientGameLogic &gameLogic)
+--            ClientGameLogic &gameLogic - Stores a 'local' instance of GameLogic for referencing in /modules/Control.h
+--
+-- RETURNS: void
+--
+-- NOTES: Gets a pointer to gameLogic
+----------------------------------------------------------------------------------------------------------------------*/
+void loadControlEvents(ClientGameLogic* gameLogic)
+{
+	gameLogicPointer = gameLogic;
+}
 
 /*-------------------------------------------------------------------------------------------------------------------- 
 -- FUNCTION: CallExitGameEvent
@@ -71,7 +94,7 @@ void CallEnterLobbyEvent(void* value)
 ----------------------------------------------------------------------------------------------------------------------*/
 void CallMoveLeftEvent(void* value)
 {
-	
+	gameLogicPointer->movePlayer(LEFT);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
@@ -94,7 +117,7 @@ void CallMoveLeftEvent(void* value)
 ----------------------------------------------------------------------------------------------------------------------*/
 void CallMoveRightEvent(void* value)
 {
-	
+	gameLogicPointer->movePlayer(RIGHT);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
@@ -117,7 +140,7 @@ void CallMoveRightEvent(void* value)
 ----------------------------------------------------------------------------------------------------------------------*/
 void CallMoveUpEvent(void* value)
 {
-	
+	gameLogicPointer->movePlayer(UP);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
@@ -140,7 +163,7 @@ void CallMoveUpEvent(void* value)
 ----------------------------------------------------------------------------------------------------------------------*/
 void CallMoveDownEvent(void* value)
 {
-	
+	gameLogicPointer->movePlayer(DOWN);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
@@ -163,7 +186,7 @@ void CallMoveDownEvent(void* value)
 ----------------------------------------------------------------------------------------------------------------------*/
 void CallAttackLeftEvent(void* value)
 {
-	
+	gameLogicPointer->attack(LEFT);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
@@ -186,7 +209,7 @@ void CallAttackLeftEvent(void* value)
 ----------------------------------------------------------------------------------------------------------------------*/
 void CallAttackRightEvent(void* value)
 {
-	
+	gameLogicPointer->attack(RIGHT);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
@@ -209,7 +232,7 @@ void CallAttackRightEvent(void* value)
 ----------------------------------------------------------------------------------------------------------------------*/
 void CallAttackUpEvent(void* value)
 {
-	
+	gameLogicPointer->attack(UP);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
@@ -232,7 +255,7 @@ void CallAttackUpEvent(void* value)
 ----------------------------------------------------------------------------------------------------------------------*/
 void CallAttackDownEvent(void* value)
 {
-	
+	gameLogicPointer->attack(DOWN);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
@@ -257,6 +280,11 @@ void CallBuildTowerEvent(void* value)
 {
 	int x = ((int)value)[0];
 	int y = ((int)value)[1];
+	Point location;
+	location.x = x;
+	location.y = y;
+	
+	gameLogicPointer->createUnit(TOWER, location);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
@@ -278,7 +306,11 @@ void CallBuildTowerEvent(void* value)
 ----------------------------------------------------------------------------------------------------------------------*/
 void CallBuildCreepEvent(void* value)
 {
+	Point location;
+	location.x = 0;
+	location.y = 0;
 	
+	gameLogicPointer->createUnit(CREEP, location);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 

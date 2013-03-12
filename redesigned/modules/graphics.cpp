@@ -47,11 +47,11 @@ void * init (void * in) {
 				sf::Vector2f mouse = sf::Vector2f(sf::Mouse::getPosition(window));
 				for (std::set<Button>::iterator button = g->clientGameLogic_.UIElements.begin(); button != g->clientGameLogic_.UIElements.end(); ++button) {
 					if (button->rect.getGlobalBounds().contains(mouse)) {
-						cout << "Button ID:" << button->id << endl;
+						
 						if (button->id == ID_START){
+							g->initGameControls();
 							g->clientGameLogic_.start();
-							g->clientGameLogic_.UIElements.clear();
-							break;
+							break; // Must break out now, initGameControls invalidates the iterators.
 						} else if (button->id == ID_QUIT) {
 							exit(0);
 						}
@@ -106,22 +106,6 @@ Graphics::Graphics(ClientGameLogic& clientGameLogic)
  * NOTES:    */
 void Graphics::drawHud(sf::RenderWindow& window, Graphics* g)
 {
-    Button a(999,sf::Vector2f(020,575), sf::Vector2f(100,25), g->font, "Tower1");
-	Button b(998,sf::Vector2f(130,575), sf::Vector2f(100,25), g->font, "Tower2");
-	Button c(997,sf::Vector2f(240,575), sf::Vector2f(100,25), g->font, "Tower3");
-	Button d(996,sf::Vector2f(350,575), sf::Vector2f(100,25), g->font, "Creep1");
-	Button e(995,sf::Vector2f(460,575), sf::Vector2f(100,25), g->font, "Creep2");
-	Button f(994,sf::Vector2f(570,575), sf::Vector2f(100,25), g->font, "Creep3");
-	Button h(ID_QUIT,sf::Vector2f(680,575), sf::Vector2f(100,25),  g->font, "Quit");
-	
-	
-	g->clientGameLogic_.UIElements.insert(a);
-	g->clientGameLogic_.UIElements.insert(b);
-	g->clientGameLogic_.UIElements.insert(c);
-	g->clientGameLogic_.UIElements.insert(d);
-	g->clientGameLogic_.UIElements.insert(e);
-	g->clientGameLogic_.UIElements.insert(f);
-	g->clientGameLogic_.UIElements.insert(h);
 }
 
 /* Draws the lobby.
@@ -161,4 +145,30 @@ void Graphics::drawUnits(sf::RenderWindow& window)
 void Graphics::drawMap(sf::RenderWindow& window)
 {
 	window.draw(map);
+}
+
+/* Init Game controls
+ *
+ * PRE:     
+ * POST:    
+ * RETURNS: 
+ * NOTES:   Clears and Initializes the set of UIElements for In-game controls */
+void Graphics::initGameControls () {
+	clientGameLogic_.UIElements.clear();
+	Button a(999,sf::Vector2f(020,575), sf::Vector2f(100,25), font, "Tower1");
+	Button b(998,sf::Vector2f(130,575), sf::Vector2f(100,25), font, "Tower2");
+	Button c(997,sf::Vector2f(240,575), sf::Vector2f(100,25), font, "Tower3");
+	Button d(996,sf::Vector2f(350,575), sf::Vector2f(100,25), font, "Creep1");
+	Button e(995,sf::Vector2f(460,575), sf::Vector2f(100,25), font, "Creep2");
+	Button f(994,sf::Vector2f(570,575), sf::Vector2f(100,25), font, "Creep3");
+	Button h(ID_QUIT,sf::Vector2f(680,575), sf::Vector2f(100,25),  font, "Quit");
+	
+	
+	clientGameLogic_.UIElements.insert(a);
+	clientGameLogic_.UIElements.insert(b);
+	clientGameLogic_.UIElements.insert(c);
+	clientGameLogic_.UIElements.insert(d);
+	clientGameLogic_.UIElements.insert(e);
+	clientGameLogic_.UIElements.insert(f);
+	clientGameLogic_.UIElements.insert(h);
 }

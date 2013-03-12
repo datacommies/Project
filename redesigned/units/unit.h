@@ -11,6 +11,7 @@ public:
     int id; //unit id
     Point position;
     int health;
+    int iElement;
     int attackDamage;//damage that the unit deals per hit
     int attackRange; //distance that the unit can successfully attack
     int attackSpeed; //the speed which the attack counter has to hit in order to initiate an attack
@@ -27,7 +28,7 @@ public:
     virtual void    CheckTarget( void );
     virtual void    FindTarget( void );
     bool            hasWeakness( int, int );
-    Point    		getPos() { return position; }
+    Point           getPos() { return position; }
 
     std::string serializeUnit(const Unit& unit);
     
@@ -38,7 +39,4 @@ public:
     virtual size_t getSize() const = 0;
 private:   
 };
-
-
-
 #endif

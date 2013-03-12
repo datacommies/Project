@@ -1,5 +1,5 @@
-#ifndef CONTROL_H
-#define CONTROL_H
+#ifndef CONTROL_MODULE_H
+#define CONTROL_MODULE_H
 
 #include "../resource.h"
 #include "client_game_logic.h"
@@ -14,11 +14,6 @@ public:
 private:
    // Module references
    ClientGameLogic& clientGameLogicModule_;
-      
-   // Functions
-   void createUnit(UnitType type, Point location);
-   void movePlayer(Direction direction);
-   void attack(Direction direction);
 };
 
 #endif
