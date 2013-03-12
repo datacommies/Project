@@ -32,6 +32,7 @@
 #include "Controller.h"
 #include "ControlState.h"
 #include "ControlManager.h"
+#include "ControlEvents.h"
 
 #define MENU_ID      10 
 #define LOBBY_ID     20
