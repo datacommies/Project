@@ -2,15 +2,17 @@
 #include "creep.h"
 #include <iostream>
 #include <string>
+#include <vector>
+#include <math.h>
 
 using namespace std;
 
 Creep::Creep(const int& uid, Point pos, const int& hp, const int& atkdmg, const int& atkrng,
-             const int& atkspd, const int& percep, const int& atkcnt, const int& spd, Direction direct,
-             Point* path, const int& movespeed): MobileUnit(uid, pos, hp, atkdmg, atkrng, atkspd,
-             percep, atkcnt,spd, direct), pPath(path), moveSpeed(movespeed)
+         const int& atkspd, const int& percep, const int& atkcnt, const int& spd, Direction direct,
+         Point* path, const int& movespeed): MobileUnit(uid, pos, hp, atkdmg, atkrng, atkspd,
+         percep, atkcnt,spd, direct), pPath(path), moveSpeed(movespeed)
 {
-	//validation
+    //validation
 }
 
 /*
@@ -18,19 +20,19 @@ Creep::Creep(const int& uid, Point pos, const int& hp, const int& atkdmg, const 
 */
 int Creep::getDirection( int p1, int p2 ) {
     if( p1 < p2 ) /*Target is below or right. */
-		return 1;
-	else if ( p1 > p2 )  /* Target is above or left. */
-		return -1;
-	else /* Target on the same level. */
-		return 0;
-}
-
-/*
-* Move the current point towards the target point based on Speed. 
-*/
-void Creep::Move( Point pt ) {
-	pCurrPoint.x += getDirection( pCurrPoint.x, pt.x ) * attackSpeed;
-	pCurrPoint.y += getDirection( pCurrPoint.y, pt.y )  * attackSpeed;
+        return 1;
+    else if ( p1 > p2 )  /* Target is above or left. */
+        return -1;
+    else /* Target on the same level. */
+        return 0;
+    }
+    
+    /*
+    * Move the current point towards the target point based on Speed. 
+    */
+    void Creep::Move( Point pt ) {
+    pCurrPoint.x += getDirection( pCurrPoint.x, pt.x ) * attackSpeed;
+    pCurrPoint.y += getDirection( pCurrPoint.y, pt.y )  * attackSpeed;
 }
 
 /*
@@ -39,38 +41,37 @@ void Creep::Move( Point pt ) {
 * If not, move along the path. 
 */
 void Creep::Update( void ) {
-	/* Check if we are at the next path point.  */
-	if( pPath->x == pCurrPoint.x && pPath->y == pCurrPoint.y ) {
-		nextPoint();
-	}
-
-	/*If we have a Target check their stats. */
-	if( pTarget != NULL ) 
-		CheckTarget();
-
-	/* Search for Target. */
-	if( pTarget == NULL ) {
-		FindTarget();
-		if( pTarget != NULL && pSaved == NULL )
-			pSaved = &pCurrPoint;
-
-	}
-
-	/* If we found a new Target. */
-	if( pTarget != NULL ) {
-		if( inRange( pCurrPoint, pTarget->pCurrPoint, attackRange ) )
-			Attack();
-		else 
-			Move( pTarget->getPos() );
-
-		Rotate( pTarget->getPos() );
-	} else { /*No target. Move along path. */
-		if( pSaved == 0 )
-			Move( *pPath );
-		else
-			Move( *pSaved );
-		Rotate( *pPath );
-	}
+    /* Check if we are at the next path point.  */
+    if( pPath->x == pCurrPoint.x && pPath->y == pCurrPoint.y ) {
+        nextPoint();
+    }
+    
+    /*If we have a Target check their stats. */
+    if( pTarget != NULL ) 
+        CheckTarget();
+    
+    /* Search for Target. */
+    if( pTarget == NULL ) {
+        FindTarget();
+    if( pTarget != NULL && pSaved == NULL )
+        pSaved = &pCurrPoint;
+    
+    }
+    
+    /* If we found a new Target. */
+    if( pTarget != NULL ) {
+        if( inRange( pCurrPoint, pTarget->pCurrPoint, attackRange ) )
+            Attack();
+        else 
+            Move( pTarget->getPos() );
+        Rotate( pTarget->getPos() );
+    } else { /*No target. Move along path. */
+        if( pSaved == 0 )
+            Move( *pPath );
+        else
+            Move( *pSaved );
+        Rotate( *pPath );
+    }
 }
 
 string Creep::serializeCreep(const Creep& creep)
