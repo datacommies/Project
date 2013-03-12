@@ -11,6 +11,7 @@ public:
     int id; //unit id
     Point position;
     int health;
+    int iElement;
     int attackDamage;//damage that the unit deals per hit
     int attackRange; //distance that the unit can successfully attack
     int attackSpeed; //the speed which the attack counter has to hit in order to initiate an attack
