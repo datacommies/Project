@@ -31,6 +31,7 @@ enum UnitType
 
 enum GameState
 {
+   MAIN_MENU,
    LOBBY,
    IN_GAME
 };

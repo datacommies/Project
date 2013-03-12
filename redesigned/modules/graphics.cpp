@@ -8,21 +8,8 @@
 using namespace std;
 
 
-#define ID_START 123
-#define ID_QUIT 124
-
-// Pick default system font with font config.
-bool find_font (char ** path) {
-    FcResult result;
-    FcPattern* pat = FcPatternCreate();
-    //pat = FcNameParse ((FcChar8 *) ""); //specify font family?
-    FcConfigSubstitute (0, pat, FcMatchPattern);
-    FcDefaultSubstitute (pat);
-    FcPattern * match =  FcFontMatch(NULL, pat, &result);
-    match = FcFontMatch (0, pat, &result);
-    return (FcPatternGetString(match, FC_FILE, 0, (FcChar8**)path) == FcResultMatch);
-}
-
+#define ID_JOIN 100
+#define ID_QUIT 101
 
 /* Graphics Thread entry point
  *
@@ -35,31 +22,12 @@ void * init (void * in) {
 	// Set g to current instance of Graphics object.
 	Graphics* g = (Graphics *)in;
 
-	// Create window for client.
+	// Create window for client and assign it as the window for the graphics object.
 	sf::RenderWindow window(sf::VideoMode(800, 600), "Client");
 	g->window = &window;
 	
-	// Load font for game.
-	char * font_path;
-	find_font(&font_path);
-
-    if (!g->font.loadFromFile(font_path)) {
-		cerr << ("error loading font") << endl;
-		exit(0);
-	}
-	
-	// Create buttons for the menu screen and add them to the list of UI elements.
-	Button a(ID_START, sf::Vector2f(250,300), sf::Vector2f(300,50), g->font, "                Start Game");
-	Button b(321, 	   sf::Vector2f(250,400), sf::Vector2f(300,50), g->font, "     Press this button for fun");
-	Button c(ID_QUIT,  sf::Vector2f(250,500), sf::Vector2f(300,50), g->font, "                     Quit");
-
-	g->clientGameLogic_.UIElements.insert(a);
-	g->clientGameLogic_.UIElements.insert(b);
-	g->clientGameLogic_.UIElements.insert(c);
-
-	// Load the map texture.
-	g->map_bg.loadFromFile("images/map.png");
-	g->map.setTexture(g->map_bg);
+	// Go to the main menu first upon entering the game.
+	g->drawMainMenu(window);
 
 	// Main loop for the graphics thread.
 	while (window.isOpen()) {
@@ -67,8 +35,10 @@ void * init (void * in) {
 
 		// Check to see if there is an event on the stack. If so, enter the while loop (pollEvent call doesn't block).
 		while (window.pollEvent(event)) {
-			if (event.type == sf::Event::Closed)
+			if (event.type == sf::Event::Closed){
 				window.close();
+				exit(0);
+			}
 			// If a mouse button was pressed, find out where we clicked.
 			else if (event.type == sf::Event::MouseButtonPressed){
 				sf::Vector2f mouse = sf::Vector2f(sf::Mouse::getPosition(window));
@@ -77,13 +47,14 @@ void * init (void * in) {
 					// If we clicked within the button, check to see which button it was by ID.
 					if (button->rect.getGlobalBounds().contains(mouse)) {
 						// Start button.
-						if (button->id == ID_START){
+						if (button->id == ID_JOIN){
 							g->initGameControls();
 							g->clientGameLogic_.start();
 							break; // Must break out now, initGameControls invalidates the iterators.
 						}
 						// Quit button.
 						else if (button->id == ID_QUIT) {
+							window.close();
 							exit(0);
 						}
 						//AddNewCalledButton(button->id);
@@ -104,7 +75,6 @@ void * init (void * in) {
 			g->drawHud(window, g);
 			sf::Text state("In Game", g->font, 20);
 			window.draw(state);
-
 		}
 
 		// Iterate through the buttons and draw them one by one.
@@ -120,6 +90,18 @@ void * init (void * in) {
 	return NULL;
 }
 
+// Pick default system font with font config.
+bool find_font (char ** path) {
+    FcResult result;
+    FcPattern* pat = FcPatternCreate();
+    //pat = FcNameParse ((FcChar8 *) ""); //specify font family?
+    FcConfigSubstitute (0, pat, FcMatchPattern);
+    FcDefaultSubstitute (pat);
+    FcPattern * match =  FcFontMatch(NULL, pat, &result);
+    match = FcFontMatch (0, pat, &result);
+    return (FcPatternGetString(match, FC_FILE, 0, (FcChar8**)path) == FcResultMatch);
+}
+
 /* Constructor
  *
  * PRE:     
@@ -129,8 +111,30 @@ void * init (void * in) {
 Graphics::Graphics(ClientGameLogic& clientGameLogic)
    : window(NULL), clientGameLogic_(clientGameLogic)
 {
-   pthread_t t;
-   pthread_create(&t, NULL, init, (void*)this);
+	// Load font for game.
+	char * font_path;
+	find_font(&font_path);
+
+    if (!this->font.loadFromFile(font_path)) {
+		cerr << ("error loading font") << endl;
+		exit(0);
+	}
+
+	// Run main graphics thread.
+   	pthread_t t;
+   	pthread_create(&t, NULL, init, (void*)this);
+}
+
+void Graphics::drawMainMenu(sf::RenderWindow& window)
+{
+	// Create buttons for the menu screen and add them to the list of UI elements.
+	Button a(ID_JOIN, sf::Vector2f(250,300), sf::Vector2f(300,50), font, "                Join Game");
+	Button b(321, 	   sf::Vector2f(250,400), sf::Vector2f(300,50), font, "     Press this button for fun");
+	Button c(ID_QUIT,  sf::Vector2f(250,500), sf::Vector2f(300,50), font, "                     Quit");
+
+	clientGameLogic_.UIElements.insert(a);
+	clientGameLogic_.UIElements.insert(b);
+	clientGameLogic_.UIElements.insert(c);
 }
 
 /* Draws the HUD.
@@ -179,6 +183,10 @@ void Graphics::drawUnits(sf::RenderWindow& window)
  * NOTES:    */
 void Graphics::drawMap(sf::RenderWindow& window)
 {
+	// Load the map texture.
+	map_bg.loadFromFile("images/map.png");
+	map.setTexture(map_bg);
+
 	window.draw(map);
 }
 

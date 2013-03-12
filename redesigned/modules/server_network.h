@@ -25,6 +25,7 @@ public:
     void initNetwork();
     int initSock(int port = PORT_DEFAULT);
     static void* handleInput(void* args);
+    friend bool operator == (const player_matchmaking_t&, const player_matchmaking_t&);
 private:
     std::vector<player_matchmaking_t> players;
     std::vector<int> clients;       // client sockets

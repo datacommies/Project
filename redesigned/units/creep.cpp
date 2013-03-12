@@ -68,8 +68,10 @@ void Creep::Update( void ) {
     }
 }
 
-string Creep::serializeCreep(const Creep& creep)
+string Creep::serializeCreep()
 {
-
+    string s = MobileUnit::serializeMobileUnit();
+    
+    return s;
 }
 

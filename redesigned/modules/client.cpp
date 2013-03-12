@@ -21,6 +21,8 @@ Client::Client()
  * NOTES:    */
 void Client::run()
 {
+    clientNetwork_.connectToServer("localhost",4545);
+    
 	while (true){
 		sleep(1);
 	}
