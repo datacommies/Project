@@ -7,6 +7,7 @@
 class Unit
 {
 public:
+    Unit *pTarget;
     int id; //unit id
     Point position;
     int health;
