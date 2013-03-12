@@ -1,10 +1,12 @@
-LIBS = -lsfml-window-d -lsfml-graphics-d -lsfml-audio-d -lsfml-system-d
+LIBS = -lsfml-window -lsfml-graphics -lsfml-audio -lsfml-system
 MODULES = build/ai.o build/client_game_logic.o build/control.o build/server.o build/server_network.o build/client.o build/client_network.o build/graphics.o build/server_game_logic.o
 
-all: server client
+all: build server client
 
-build/%.o: modules/%.cpp
-	mkdir -p $(dir $@)
+build:
+	mkdir -p build
+
+build/%.o: modules/%.cpp button.h resource.h team.h types.h units/*.h modules/*.h
 	$(CXX) -c $< -o $@
 
 #server: server.cpp modules/*.cpp
