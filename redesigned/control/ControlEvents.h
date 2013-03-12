@@ -1,7 +1,7 @@
 #ifndef CONTROL_EVENTS_H
 #define CONTROL_EVENTS_H
 
-#include "../resources.h"
+#include "../resource.h"
 
 void loadControlEvents(ClientGameLogic* gameLogic);
 
