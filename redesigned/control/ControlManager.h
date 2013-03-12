@@ -23,6 +23,7 @@
 ----------------------------------------------------------------------------------------------------------------------*/
 
 #include "ControlState.h"
+#include "Control.h"
 #include "../resource.h"
 #include <vector>
 
@@ -38,6 +39,7 @@ class ControlManager
     private:
         std::vector<ControlState> StateCollection;
         ControlState * activeState;
+        int lastState;
 };
 
 #endif
