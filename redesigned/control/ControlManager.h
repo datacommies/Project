@@ -23,7 +23,7 @@
 ----------------------------------------------------------------------------------------------------------------------*/
 
 #include "ControlState.h"
-#include "../resources.h"
+#include "../resource.h"
 #include <vector>
 
 class ControlManager 
