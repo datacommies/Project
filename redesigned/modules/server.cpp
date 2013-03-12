@@ -21,5 +21,10 @@ Server::Server()
  */
 void Server::run()
 {
+    serverNetwork_.initSock();
+    serverNetwork_.initNetwork();
+    while (true) {
+        sleep(1);
+    }
 
 }

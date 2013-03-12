@@ -1,5 +1,7 @@
 #include "server_network.h"
 
+using namespace std;
+
 /*
  TODO:
  Aaron (Mar 11) - added David's code. need to port code to fit design's team new modules tomorrow.
@@ -18,6 +20,9 @@
 ServerNetwork::ServerNetwork(ServerGameLogic& serverGameLogic)
    : serverGameLogic_(serverGameLogic) 
 {
+    // initialize everything
+    
+    
    // TODO: create a thread and begin processing
 
     /*
@@ -51,6 +56,22 @@ ServerNetwork::ServerNetwork(ServerGameLogic& serverGameLogic)
     
     for (size_t i=0; i < threads.size(); i++)
         pthread_join (threads[i], NULL);*/
+}
+
+void ServerNetwork::initNetwork()
+{
+    std::cout << "Listening for connections..." << std::endl;
+    
+    pthread_create (&ui_thread, NULL, handleInput, this); // start server input handler.
+    
+    // Listen for new connections, or until server socket is closed.
+    while (( client = accept(sock, (struct sockaddr *) &cli_addr, &clilen) ) > 0) {
+        std::cout << std::endl << "new connection." << std::endl;
+        pthread_t thread;
+        pthread_create (&thread, NULL, NULL/*serverNetwork_.acceptClient*/, (void*)client); // TODO: use struct as parameter
+        threads.push_back(thread);
+        clients.push_back(client);
+    }
 }
 
 /* Sends current game state to a client.
@@ -106,7 +127,45 @@ int ServerNetwork::initSock(int port)
     return sock;
     
     
-    return 69;
+    //return 69;
+}
+
+void* ServerNetwork::handleInput(void* args)
+{
+    ServerNetwork * thiz = (ServerNetwork*) args;
+    std::string line;
+    
+    while (cout << "server> " && getline(cin, line)) {
+        std::string s;
+        std::stringstream ss(line);
+        ss >> s;
+        
+        if (s == "exit") {
+            shutdown(thiz->sock, SHUT_RDWR);
+            close(thiz->sock);
+            exit(0);
+        } else if (s == "list") {
+            for (size_t i = 0; i < thiz->players.size(); ++i) {
+                player_matchmaking_t& p = thiz->players[i];
+                printf("%s\t %d\t %d\t %s\n",p.name, p.team, p.role, (p.ready ? "yes" : "no"));
+            }
+        } else if (s == "chat") {
+            string rest;
+            ss >> ws;
+            getline(ss, rest);
+            std::cout << "rest: " << rest << std::endl;
+            //create an iterator
+            std::vector<int>::iterator it;
+            
+            for (it = thiz->clients.begin() ; it!= thiz->clients.end() ; ++it){
+            //for (size_t i = 0; i < thiz->clients.size(); ++i) {
+               // send_chat(thiz->clients[i], rest);
+                //send_chat(*it, rest);
+            }
+        }
+    }
+    
+    return NULL;
 }
 
 void ServerNetwork::handleClient()

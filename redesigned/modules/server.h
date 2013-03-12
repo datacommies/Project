@@ -15,6 +15,7 @@ public:
    // Functions
    void run();
 private:
+
    // Modules
    ServerGameLogic serverGameLogic_;
    ServerNetwork serverNetwork_;

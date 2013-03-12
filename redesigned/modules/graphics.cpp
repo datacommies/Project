@@ -1,4 +1,5 @@
 #include "graphics.h"
+#include <fontconfig/fontconfig.h>
 #include <iostream>
 
 #include <unistd.h>
@@ -10,6 +11,18 @@ using namespace std;
 #define ID_START 123
 #define ID_QUIT 124
 
+// Pick default system font with font config.
+bool find_font (char ** path) {
+    FcResult result;
+    FcPattern* pat = FcPatternCreate();
+    //pat = FcNameParse ((FcChar8 *) ""); //specify font family?
+    FcConfigSubstitute (0, pat, FcMatchPattern);
+    FcDefaultSubstitute (pat);
+    FcPattern * match =  FcFontMatch(NULL, pat, &result);
+    match = FcFontMatch (0, pat, &result);
+    return (FcPatternGetString(match, FC_FILE, 0, (FcChar8**)path) == FcResultMatch);
+}
+
 
 /* Graphics Thread entry point
  *
@@ -19,12 +32,15 @@ using namespace std;
  * NOTES:   Graphics init and main loop  
 */
 void * init (void * in) {
-   Graphics* g = (Graphics *)in;
-   sf::RenderWindow window(sf::VideoMode(800, 600), "Client");
-   g->window = &window;
+	Graphics* g = (Graphics *)in;
+	sf::RenderWindow window(sf::VideoMode(800, 600), "Client");
+	g->window = &window;
+	char * font_path;
+	find_font(&font_path);
 
-    if (!g->font.loadFromFile("/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf")) {
-		cerr << ("error loading font") << endl ;
+    if (!g->font.loadFromFile(font_path)) {
+		cerr << ("error loading font") << endl;
+		exit(0);
 	}
 	
 	Button a(ID_START, sf::Vector2f(250,300), sf::Vector2f(300,50), g->font, "                Start Game");
@@ -47,11 +63,11 @@ void * init (void * in) {
 				sf::Vector2f mouse = sf::Vector2f(sf::Mouse::getPosition(window));
 				for (std::set<Button>::iterator button = g->clientGameLogic_.UIElements.begin(); button != g->clientGameLogic_.UIElements.end(); ++button) {
 					if (button->rect.getGlobalBounds().contains(mouse)) {
-						cout << "Button ID:" << button->id << endl;
+						
 						if (button->id == ID_START){
+							g->initGameControls();
 							g->clientGameLogic_.start();
-							g->clientGameLogic_.UIElements.clear();
-							break;
+							break; // Must break out now, initGameControls invalidates the iterators.
 						} else if (button->id == ID_QUIT) {
 							exit(0);
 						}
@@ -92,7 +108,7 @@ void * init (void * in) {
  * RETURNS: 
  * NOTES:   Creates a thread and starts running the module */
 Graphics::Graphics(ClientGameLogic& clientGameLogic)
-   : clientGameLogic_(clientGameLogic), window(NULL)
+   : window(NULL), clientGameLogic_(clientGameLogic)
 {
    pthread_t t;
    pthread_create(&t, NULL, init, (void*)this);
@@ -106,22 +122,6 @@ Graphics::Graphics(ClientGameLogic& clientGameLogic)
  * NOTES:    */
 void Graphics::drawHud(sf::RenderWindow& window, Graphics* g)
 {
-    Button a(999,sf::Vector2f(020,575), sf::Vector2f(100,25), g->font, "Tower1");
-	Button b(998,sf::Vector2f(130,575), sf::Vector2f(100,25), g->font, "Tower2");
-	Button c(997,sf::Vector2f(240,575), sf::Vector2f(100,25), g->font, "Tower3");
-	Button d(996,sf::Vector2f(350,575), sf::Vector2f(100,25), g->font, "Creep1");
-	Button e(995,sf::Vector2f(460,575), sf::Vector2f(100,25), g->font, "Creep2");
-	Button f(994,sf::Vector2f(570,575), sf::Vector2f(100,25), g->font, "Creep3");
-	Button h(ID_QUIT,sf::Vector2f(680,575), sf::Vector2f(100,25),  g->font, "Quit");
-	
-	
-	g->clientGameLogic_.UIElements.insert(a);
-	g->clientGameLogic_.UIElements.insert(b);
-	g->clientGameLogic_.UIElements.insert(c);
-	g->clientGameLogic_.UIElements.insert(d);
-	g->clientGameLogic_.UIElements.insert(e);
-	g->clientGameLogic_.UIElements.insert(f);
-	g->clientGameLogic_.UIElements.insert(h);
 }
 
 /* Draws the lobby.
@@ -161,4 +161,31 @@ void Graphics::drawUnits(sf::RenderWindow& window)
 void Graphics::drawMap(sf::RenderWindow& window)
 {
 	window.draw(map);
+}
+
+/* Init Game controls
+ *
+ * PRE:     
+ * POST:    
+ * RETURNS: 
+ * NOTES:   Clears and Initializes the set of UIElements for In-game controls */
+void Graphics::initGameControls () {
+	clientGameLogic_.UIElements.clear();
+	Button a(999,sf::Vector2f(020,570), sf::Vector2f(100,25), font, "Tower1");
+	Button b(998,sf::Vector2f(130,570), sf::Vector2f(100,25), font, "Tower2");
+	Button c(997,sf::Vector2f(240,570), sf::Vector2f(100,25), font, "Tower3");
+	Button d(996,sf::Vector2f(350,570), sf::Vector2f(100,25), font, "Creep1");
+	Button e(995,sf::Vector2f(460,570), sf::Vector2f(100,25), font, "Creep2");
+	Button f(994,sf::Vector2f(570,570), sf::Vector2f(100,25), font, "Creep3");
+	Button h(ID_QUIT,sf::Vector2f(680,570), sf::Vector2f(100,25),  font, "Quit");
+	
+	a.rect.setFillColor(sf::Color(255, 0, 0));
+	
+	clientGameLogic_.UIElements.insert(a);
+	clientGameLogic_.UIElements.insert(b);
+	clientGameLogic_.UIElements.insert(c);
+	clientGameLogic_.UIElements.insert(d);
+	clientGameLogic_.UIElements.insert(e);
+	clientGameLogic_.UIElements.insert(f);
+	clientGameLogic_.UIElements.insert(h);
 }
