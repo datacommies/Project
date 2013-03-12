@@ -17,8 +17,9 @@ public:
     int attackSpeed; //the speed which the attack counter has to hit in order to initiate an attack
     int perception;  //distance that the unit can aquire a target
     int attackCount; //counter between unit attacks
+    
     bool            isAlive() { return health > 0; } //incase creep get hits more than its remaining health
-    void            Attack( void );
+    virtual void    Attack( void );
     virtual void    Update( void );
     void            setTarget( Unit &newTarget ) { pTarget = &newTarget; }
     float           Rotate( Point ); 
