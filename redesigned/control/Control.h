@@ -41,7 +41,7 @@
 #define BUILDER_ID   40
 #define EXIT_MENU_ID 50
 
-#define TERMINATE    1000
+#define TERMINATE    10000
 
 #define BUILD_TOWER 1337
 #define SPAWN_CREEP 1338

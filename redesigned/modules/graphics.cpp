@@ -32,9 +32,14 @@ bool find_font (char ** path) {
  * NOTES:   Graphics init and main loop  
 */
 void * init (void * in) {
+	// Set g to current instance of Graphics object.
 	Graphics* g = (Graphics *)in;
+
+	// Create window for client.
 	sf::RenderWindow window(sf::VideoMode(800, 600), "Client");
 	g->window = &window;
+	
+	// Load font for game.
 	char * font_path;
 	find_font(&font_path);
 
@@ -43,6 +48,7 @@ void * init (void * in) {
 		exit(0);
 	}
 	
+	// Create buttons for the menu screen and add them to the list of UI elements.
 	Button a(ID_START, sf::Vector2f(250,300), sf::Vector2f(300,50), g->font, "                Start Game");
 	Button b(321, 	   sf::Vector2f(250,400), sf::Vector2f(300,50), g->font, "     Press this button for fun");
 	Button c(ID_QUIT,  sf::Vector2f(250,500), sf::Vector2f(300,50), g->font, "                     Quit");
@@ -51,24 +57,33 @@ void * init (void * in) {
 	g->clientGameLogic_.UIElements.insert(b);
 	g->clientGameLogic_.UIElements.insert(c);
 
+	// Load the map texture.
 	g->map_bg.loadFromFile("images/map.png");
 	g->map.setTexture(g->map_bg);
 
+	// Main loop for the graphics thread.
 	while (window.isOpen()) {
 		sf::Event event;
+
+		// Check to see if there is an event on the stack. If so, enter the while loop (pollEvent call doesn't block).
 		while (window.pollEvent(event)) {
 			if (event.type == sf::Event::Closed)
 				window.close();
+			// If a mouse button was pressed, find out where we clicked.
 			else if (event.type == sf::Event::MouseButtonPressed){
 				sf::Vector2f mouse = sf::Vector2f(sf::Mouse::getPosition(window));
+				// Iterate through the buttons and check each button to see if we clicked within in.
 				for (std::set<Button>::iterator button = g->clientGameLogic_.UIElements.begin(); button != g->clientGameLogic_.UIElements.end(); ++button) {
+					// If we clicked within the button, check to see which button it was by ID.
 					if (button->rect.getGlobalBounds().contains(mouse)) {
-						
+						// Start button.
 						if (button->id == ID_START){
 							g->initGameControls();
 							g->clientGameLogic_.start();
 							break; // Must break out now, initGameControls invalidates the iterators.
-						} else if (button->id == ID_QUIT) {
+						}
+						// Quit button.
+						else if (button->id == ID_QUIT) {
 							exit(0);
 						}
 						//AddNewCalledButton(button->id);
@@ -76,11 +91,14 @@ void * init (void * in) {
 				}
 			}
 		}
+
 		window.clear();
 
+		// Check to see which state the game is in and act accordingly.
 		if (g->clientGameLogic_.getCurrentState() == LOBBY) {
 			g->drawLobby(window);
-		} else if (g->clientGameLogic_.getCurrentState() == IN_GAME) {
+		}
+		else if (g->clientGameLogic_.getCurrentState() == IN_GAME) {
 			g->drawUnits(window);
 			g->drawMap(window);
 			g->drawHud(window, g);
@@ -89,6 +107,7 @@ void * init (void * in) {
 
 		}
 
+		// Iterate through the buttons and draw them one by one.
 		for (std::set<Button>::iterator button = g->clientGameLogic_.UIElements.begin(); button != g->clientGameLogic_.UIElements.end(); ++button)
 		{
 			Button b = *button;

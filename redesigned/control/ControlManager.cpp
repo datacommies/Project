@@ -18,10 +18,7 @@ using namespace std;
 --
 -- NOTES: Initializes the ControlManager class. The members does most of the functionality.
 ----------------------------------------------------------------------------------------------------------------------*/
-ControlManager::ControlManager()
-{
-	
-}
+ControlManager::ControlManager() {}
 
 /*-------------------------------------------------------------------------------------------------------------------- 
 -- FUNCTION: AddNewState
@@ -71,13 +68,22 @@ void ControlManager::AddNewState(ControlState state)
 ----------------------------------------------------------------------------------------------------------------------*/
 int ControlManager::CheckState()
 {
+    
 	int checkValue = 0;
 	if((checkValue = activeState->CheckControllers()) > 0)
 	{
+	    if(checkValue == LAST_STATE)
+	    {
+	        checkValue = lastState;
+	    } else if(checkValue == TERMINATE) 
+	    {
+	        return TERMINATE;
+	    }
 		for(vector<ControlState>::size_type i = 0; i < StateCollection.size(); i++)
 		{
 			if(checkValue == StateCollection[i].getIdentifier())
 			{
+			    lastState = StateCollection[i].getIdentifier();
 				SetNewActiveState(&StateCollection[i]);
 				return 0;
 			}
@@ -110,7 +116,8 @@ void ControlManager::SetNewActiveState(ControlState * state)
 	if(state->getOverride() || !activeState->getOverride())
 	{
 		activeState->UnloadGUIs();
-	}
+		lastState = LAST_STATE;
+	} 
 	activeState = state;
 	activeState->LoadGUIs();
 }
