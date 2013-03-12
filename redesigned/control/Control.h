@@ -34,11 +34,14 @@
 #include "ControlManager.h"
 #include "ControlEvents.h"
 
+#define LAST_STATE   1
 #define MENU_ID      10 
 #define LOBBY_ID     20
 #define PLAYER_ID    30
 #define BUILDER_ID   40
 #define EXIT_MENU_ID 50
+
+#define TERMINATE    1000
 
 #define BUILD_TOWER 1337
 #define SPAWN_CREEP 1338
