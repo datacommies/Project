@@ -11,7 +11,14 @@ Tower::Tower(const int& uid, Point pos, const int& hp, const int& atkdmg, const 
     //validation
 }
 
-string Tower::serializeTower(const Tower& tower){
+string Tower::serializeTower(){
+    string s;
+    s = Unit::serializeUnit();
 
-
+    tower_t t;
+    t.wallArmour = wallArmour_;
+    
+    s += string(&t, sizeof(t));
+    
+    return s;
 }

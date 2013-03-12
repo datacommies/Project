@@ -32,13 +32,13 @@ public:
     bool            hasStrength(int, int);
     Point           getPos() { return position; }
 
-    std::string serializeUnit(const Unit& unit);
+    std::string serializeUnit();
     
     Unit(const int& uid, Point pos, const int& hp, const int& atkdmg, const int& atkrng,
          const int& atkspd, const int& percep, const int& atkcnt);
     
     virtual UnitTypes getType() const = 0;
-    virtual size_t getSize() const = 0;
+    virtual size_t getSize() const { return sizeof(unit_t); };
 private:   
 };
 #endif

@@ -19,7 +19,14 @@ void MobileUnit::Move( Point pt ) {
     //position.y += getDirection( position.y, pt.y )  * moveSpeed;
 }
 
-string MobileUnit::serializeMobileUnit(const MobileUnit& mobileUnit)
+string MobileUnit::serializeMobileUnit()
 {
-    return 0;
+    string s = Unit::serializeUnit();
+    
+    mobileunit_t m;
+    m.speed = speed;
+    m.direction = direction;
+    s += string(&m, sizeof(mobileunit_t));
+    
+    return s;
 }

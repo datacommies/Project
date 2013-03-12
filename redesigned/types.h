@@ -66,22 +66,17 @@ typedef struct {
 } player_game_t;
 
 typedef struct {
-    header_t head;
-    int id;
-    //int type;
-    float xpos;
-    float ypos;
-    int health;
+    int wallArmour;
 } tower_t;
 
-typedef struct {
+/*typedef struct {
     header_t head;
     int id;
     //int type;
     float xpos;
     float ypos;
     int health;
-} castle_t;
+} castle_t;*/
 
 typedef struct {
     header_t head;
@@ -89,14 +84,32 @@ typedef struct {
     int value;
 } resource_t;
 
-typedef struct {
+/*typedef struct {
     header_t head;
     int id;
     int team;
     int health;
     float xpos;
     float ypos;
-} creep_t;
+} creep_t;*/
+
+typedef struct {
+    header_t head;
+    int id; //unit id
+    int posx, posy;
+    int health;
+    //int iElement;
+    int attackDamage;//damage that the unit deals per hit
+    int attackRange; //distance that the unit can successfully attack
+    int attackSpeed; //the speed which the attack counter has to hit in order to initiate an attack
+    int perception;  //distance that the unit can aquire a target
+    int attackCount; //counter between unit attacks
+} unit_t;
+
+typedef struct {
+    int speed;
+    int direction;
+} mobileunit_t;
 
 
 bool operator == (const player_matchmaking_t& a, const player_matchmaking_t& b);
