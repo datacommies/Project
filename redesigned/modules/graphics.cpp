@@ -92,7 +92,7 @@ void * init (void * in) {
  * RETURNS: 
  * NOTES:   Creates a thread and starts running the module */
 Graphics::Graphics(ClientGameLogic& clientGameLogic)
-   : clientGameLogic_(clientGameLogic), window(NULL)
+   : window(NULL), clientGameLogic_(clientGameLogic)
 {
    pthread_t t;
    pthread_create(&t, NULL, init, (void*)this);
@@ -155,14 +155,15 @@ void Graphics::drawMap(sf::RenderWindow& window)
  * NOTES:   Clears and Initializes the set of UIElements for In-game controls */
 void Graphics::initGameControls () {
 	clientGameLogic_.UIElements.clear();
-	Button a(999,sf::Vector2f(020,575), sf::Vector2f(100,25), font, "Tower1");
-	Button b(998,sf::Vector2f(130,575), sf::Vector2f(100,25), font, "Tower2");
-	Button c(997,sf::Vector2f(240,575), sf::Vector2f(100,25), font, "Tower3");
-	Button d(996,sf::Vector2f(350,575), sf::Vector2f(100,25), font, "Creep1");
-	Button e(995,sf::Vector2f(460,575), sf::Vector2f(100,25), font, "Creep2");
-	Button f(994,sf::Vector2f(570,575), sf::Vector2f(100,25), font, "Creep3");
-	Button h(ID_QUIT,sf::Vector2f(680,575), sf::Vector2f(100,25),  font, "Quit");
+	Button a(999,sf::Vector2f(020,570), sf::Vector2f(100,25), font, "Tower1");
+	Button b(998,sf::Vector2f(130,570), sf::Vector2f(100,25), font, "Tower2");
+	Button c(997,sf::Vector2f(240,570), sf::Vector2f(100,25), font, "Tower3");
+	Button d(996,sf::Vector2f(350,570), sf::Vector2f(100,25), font, "Creep1");
+	Button e(995,sf::Vector2f(460,570), sf::Vector2f(100,25), font, "Creep2");
+	Button f(994,sf::Vector2f(570,570), sf::Vector2f(100,25), font, "Creep3");
+	Button h(ID_QUIT,sf::Vector2f(680,570), sf::Vector2f(100,25),  font, "Quit");
 	
+	a.rect.setFillColor(sf::Color(255, 0, 0));
 	
 	clientGameLogic_.UIElements.insert(a);
 	clientGameLogic_.UIElements.insert(b);
