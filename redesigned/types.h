@@ -25,12 +25,12 @@ enum {
     MSG_RESOURCE_UPDATE
 };
 
-enum {
+enum UnitTypes {
 	TYPE_CREEP,
 	TYPE_TOWER,
 	TYPE_PLAYER,
-	TYPE_CASTLE   
-} UnitTypes;
+	TYPE_CASTLE
+};
 
 // Common Message Header
 typedef struct {

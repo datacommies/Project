@@ -18,7 +18,7 @@ public:
    int teamId;
 
    bool isAlive() { return towers.size() > 0 && towers[0].isAlive(); }
-private:   
+private:
 };
 
 #endif
