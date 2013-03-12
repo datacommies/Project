@@ -14,7 +14,7 @@ public:
           const int& atkspd, const int& percep, const int& atkcnt, const int& wall);
 
     int getWallArmour() { return wallArmour_; }
-    bool setWallArmour(const int& amount) { wallArmour_ = amount; }
+    void setWallArmour(const int& amount) { wallArmour_ = amount; }
     std::string serializeTower(const Tower& tower);
 
     virtual UnitTypes getType() const { return TYPE_TOWER; }
