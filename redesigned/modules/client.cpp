@@ -1,4 +1,5 @@
 #include "client.h"
+#include <unistd.h>
 
 /* Default ctor
  *
@@ -20,4 +21,7 @@ Client::Client()
  * NOTES:    */
 void Client::run()
 {
+	while (true){
+		sleep(1);
+	}
 }

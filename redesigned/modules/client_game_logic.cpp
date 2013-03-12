@@ -7,9 +7,13 @@
  * RETURNS: 
  * NOTES:   Creates a thread and starts running the module */
 ClientGameLogic::ClientGameLogic(ClientNetwork& clientNetwork)
-   : clientNetwork_(clientNetwork)
+   : clientNetwork_(clientNetwork), gameState_(LOBBY)
 {
    // TODO: create a thread and begin processing
+}
+
+void ClientGameLogic::start () {
+   gameState_ = IN_GAME;
 }
 
 /* Sends a create unit request to network module.
@@ -68,4 +72,8 @@ bool ClientGameLogic::attack(Direction direction)
  * NOTES:   Any teardown should be performed here (eg. notify server). */
 void ClientGameLogic::exit()
 {
+}
+
+GameState ClientGameLogic::getCurrentState() {
+   return gameState_;
 }
