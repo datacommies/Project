@@ -15,7 +15,7 @@ public:
 	virtual UnitTypes getType() const { return TYPE_CREEP; }
 	virtual size_t getSize() const { return sizeof(Creep); }
 
-	Creep(): pPath( 0 ), pSaved( 0 ), moveSpeed( 0 ){}
+	//Creep(): pPath( 0 ), pSaved( 0 ), moveSpeed( 0 ){}
 
 	Creep( const Creep& );
 	void	Update( void );
