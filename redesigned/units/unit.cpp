@@ -49,7 +49,7 @@ bool Unit::hasStrength( int iAttack, int iTarget ) {
 * QUESTION - If we attack a element we have a weakness against, do we do LESS damage? 
 */
 void Unit::Attack( void ) {
-    if( iAttackCount++ < attackSpeed )
+    if( attackCount++ < attackSpeed )
         return;
 
     attackSpeed = 0;
