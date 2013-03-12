@@ -1,4 +1,5 @@
 #include "graphics.h"
+#include <fontconfig/fontconfig.h>
 #include <iostream>
 
 #include <unistd.h>
@@ -10,6 +11,18 @@ using namespace std;
 #define ID_START 123
 #define ID_QUIT 124
 
+// Pick default system font with font config.
+bool find_font (char ** path) {
+    FcResult result;
+    FcPattern* pat = FcPatternCreate();
+    //pat = FcNameParse ((FcChar8 *) ""); //specify font family?
+    FcConfigSubstitute (0, pat, FcMatchPattern);
+    FcDefaultSubstitute (pat);
+    FcPattern * match =  FcFontMatch(NULL, pat, &result);
+    match = FcFontMatch (0, pat, &result);
+    return (FcPatternGetString(match, FC_FILE, 0, (FcChar8**)path) == FcResultMatch);
+}
+
 
 /* Graphics Thread entry point
  *
@@ -19,12 +32,15 @@ using namespace std;
  * NOTES:   Graphics init and main loop  
 */
 void * init (void * in) {
-   Graphics* g = (Graphics *)in;
-   sf::RenderWindow window(sf::VideoMode(800, 600), "Client");
-   g->window = &window;
+	Graphics* g = (Graphics *)in;
+	sf::RenderWindow window(sf::VideoMode(800, 600), "Client");
+	g->window = &window;
+	char * font_path;
+	find_font(&font_path);
 
-    if (!g->font.loadFromFile("/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf")) {
-		cerr << ("error loading font") << endl ;
+    if (!g->font.loadFromFile(font_path)) {
+		cerr << ("error loading font") << endl;
+		exit(0);
 	}
 	
 	Button a(ID_START, sf::Vector2f(250,300), sf::Vector2f(300,50), g->font, "                Start Game");
