@@ -25,7 +25,7 @@ public:
 
 	Creep(const Creep&);
 	void	Update(void);
-	
+	void 	Move(Point);
 	void	setPath(Point *pt)	{ pPath = pt; }
 	void	nextPoint(void)	{ pPath++; }
 	void	savePoint(Point &pt)	{ pSaved = &pt; }
