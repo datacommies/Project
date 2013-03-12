@@ -18,22 +18,16 @@ Creep::Creep(const int& uid, Point pos, const int& hp, const int& atkdmg, const 
 /*
 * Function to return the difference in two points. Used for movement. 
 */
-int Creep::getDirection( int p1, int p2 ) {
+int Creep::getTargetDirection( int p1, int p2 ) {
     if( p1 < p2 ) /*Target is below or right. */
         return 1;
     else if ( p1 > p2 )  /* Target is above or left. */
         return -1;
     else /* Target on the same level. */
         return 0;
-    }
-    
-    /*
-    * Move the current point towards the target point based on Speed. 
-    */
-    void Creep::Move( Point pt ) {
-    pCurrPoint.x += getDirection( pCurrPoint.x, pt.x ) * attackSpeed;
-    pCurrPoint.y += getDirection( pCurrPoint.y, pt.y )  * attackSpeed;
 }
+    
+
 
 /*
 * Check if we're at the next path point, if we are, update the path target.
