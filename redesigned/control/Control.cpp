@@ -2,7 +2,7 @@
 #include "ControlEvents.h"
 
 /*-------------------------------------------------------------------------------------------------------------------- 
--- FUNCTION: Control
+-- FUNCTION: ControlRun
 --
 -- DATE: 2013/03/11
 --
@@ -12,13 +12,13 @@
 --
 -- PROGRAMMER: John Payment
 --
--- INTERFACE: int Control()
+-- INTERFACE: int ControlRun()
 --
 -- RETURNS: Returns 0 on normal termination
 --
 -- NOTES: This is the main Control function that powers the Control Module
 ----------------------------------------------------------------------------------------------------------------------*/
-int Control()
+int ControlRun()
 {
 	ControlManager manager;
 	

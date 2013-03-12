@@ -1,7 +1,8 @@
 #ifndef CONTROL_EVENTS_H
 #define CONTROL_EVENTS_H
 
-#include "resources.h"
+#include "../resources.h"
+#include "../modules/control.h"
 
 void CallExitGameEvent();
 
@@ -19,8 +20,6 @@ void CallAttackDownEvent();
 
 void CallBuildTowerEvent(int x, int y);
 void CallBuildCreepEvent();
-
-std::vector<int> pressedButtonIds;
 
 void AddNewCalledButton(int id);
 bool getCalledButton(int id);

@@ -2,8 +2,6 @@
 #define CONTROLLER_H
 #include "../resource.h"
 
-#define BUILD_TOWER 1337
-#define SPAWN_CREEP 1338
 class Controller
 {
 

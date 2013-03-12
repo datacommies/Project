@@ -57,8 +57,10 @@ void ControlManager::AddNewState(ControlState state)
 -- REVISIONS: (Date and Description)
 --
 -- DESIGNER: Luke Tao
+--           John Payment
 --
 -- PROGRAMMER: Luke Tao
+--             John Payment
 --
 -- INTERFACE: int CheckState()
 --
@@ -69,11 +71,12 @@ void ControlManager::AddNewState(ControlState state)
 ----------------------------------------------------------------------------------------------------------------------*/
 int ControlManager::CheckState()
 {
-	if(activeState->CheckControllers() > 0)
+	int checkValue = 0;
+	if((checkValue = activeState->CheckControllers()) > 0)
 	{
 		for(vector<ControlState>::size_type i = 0; i < StateCollection.size(); i++)
 		{
-			if(activeState->getIdentifier() == StateCollection[i].getIdentifier())
+			if(checkValue == StateCollection[i].getIdentifier())
 			{
 				SetNewActiveState(&StateCollection[i]);
 				return 0;

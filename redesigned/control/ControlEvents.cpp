@@ -2,6 +2,9 @@
 #include "ControlEvents.h"
 using namespace std;
 
+std::vector<int> pressedButtonIds;
+
+
 /*-------------------------------------------------------------------------------------------------------------------- 
 -- FUNCTION: CallExitGameEvent
 --
@@ -278,11 +281,48 @@ void CallBuildCreepEvent(void* value)
 	
 }
 
+/*-------------------------------------------------------------------------------------------------------------------- 
+-- FUNCTION: AddNewCalledButton
+--
+-- DATE: 2013/03/11
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: John Payment
+--
+-- PROGRAMMER: John Payment
+--
+-- INTERFACE: void AddNewCalledButton(int id)
+--            int id - The id for the button that was pressed
+--
+-- RETURNS: void
+--
+-- NOTES: adds a new id to the list of butons that have been presed
+----------------------------------------------------------------------------------------------------------------------*/
 void AddNewCalledButton(int id)
 {
 	pressedButtonIds.pushBack(id);
 }
 
+/*-------------------------------------------------------------------------------------------------------------------- 
+-- FUNCTION: getCalledButton
+--
+-- DATE: 2013/03/11
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: John Payment
+--
+-- PROGRAMMER: John Payment
+--
+-- INTERFACE: bool getCalledButton(int id)
+--            int id - The id for the button that was pressed
+--
+-- RETURNS: Returns true on found button press, otherwise false
+--
+-- NOTES: Checks through the pressedButton list for a matching ID to id. If it is found it returns true and removes that
+--        ID from the list. Otherwise it returns false.
+----------------------------------------------------------------------------------------------------------------------*/
 bool getCalledButton(int id)
 {
 	for(vector<int>::iterator i = pressedButtonIds.front(); i != pressedButtonIds.back(); ++i)

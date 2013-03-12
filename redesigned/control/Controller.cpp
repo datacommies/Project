@@ -1,18 +1,22 @@
 #include "Controller.h"
+#include "Control.h"
 #include <SFML/Graphics.hpp>
 
 void Controller::LoadGui()
 {
 	// call Graphics function.
 }
+
 void Controller::UnloadGui()
 {
 	// call graphics function.
 }
+
 void Controller::RunCommand()
 {
 	// stuff happens.
 }
+
 int Controller::CheckController(int buttonID, sf::Window *window)
 {
 	Point p;

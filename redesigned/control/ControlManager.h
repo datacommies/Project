@@ -13,7 +13,7 @@
 --
 -- REVISIONS: (Date and Description)
 --
--- DESIGNER: Luke Tao
+-- DESIGNER: John Payment
 --
 -- PROGRAMMER: Luke Tao
 --
@@ -23,11 +23,11 @@
 ----------------------------------------------------------------------------------------------------------------------*/
 
 #include "ControlState.h"
-#include "resource.h"
+#include "../resources.h"
 #include <vector>
 
-class ControlManager {
-
+class ControlManager 
+{
     public:    
         ControlManager();
         
