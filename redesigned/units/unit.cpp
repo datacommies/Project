@@ -14,10 +14,6 @@ Unit::Unit(const int& uid, Point pos, const int& hp, const int& atkdmg,
 
 }
 
-string Unit::serializeUnit(const Unit& unit){
-    return 0;
-}
-
 /*
 * Using the a^2 + b^2 = c^2 formula to calculate if the target is within a circle.
 */
@@ -113,4 +109,8 @@ void Unit::Update() {
 */
 float Unit::Rotate( Point pt ) {
     return atan2( (float)pCurrPoint.y - pt.y, (float)pCurrPoint.x - pt.x );
+}
+
+string Unit::serializeUnit(const Unit& unit){
+    return 0;
 }
