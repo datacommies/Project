@@ -21,7 +21,7 @@ Client::Client()
  * NOTES:    */
 void Client::run()
 {
-	while (1){
+	while (true){
 		sleep(1);
 	}
 }

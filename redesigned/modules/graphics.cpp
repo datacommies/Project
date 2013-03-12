@@ -21,18 +21,11 @@ void * init (void * in) {
 		cerr << ("error loading font") << endl ;
 	}
 	
-	Button a;
-	a.id = 1373;
-	a.rect.setPosition (sf::Vector2f(0,300));
-	a.rect.setSize (sf::Vector2f(100,100));
-	g->clientGameLogic_.UIElements.insert(a);
-	
-	a.id = 100;
-	a.rect.setPosition (sf::Vector2f(200,300));
-	a.rect.setSize (sf::Vector2f(100,100));
-	g->clientGameLogic_.UIElements.insert(a);
+	Button a(123, sf::Vector2f(200,300), sf::Vector2f(100,100), g->font, "Button A");
+	Button b(321, sf::Vector2f(50,300), sf::Vector2f(100,100), g->font, "Button B");
 
-
+	g->clientGameLogic_.UIElements.insert(a);
+	g->clientGameLogic_.UIElements.insert(b);
 
 	while (window.isOpen()) {
 		sf::Event event;
@@ -60,7 +53,7 @@ void * init (void * in) {
 
 		for (std::set<Button>::iterator button = g->clientGameLogic_.UIElements.begin(); button != g->clientGameLogic_.UIElements.end(); ++button)
 		{
-			sf::Vector2f mouse = sf::Vector2f(sf::Mouse::getPosition(window));
+			/*
 			
 			sf::RectangleShape rs = button->rect;
 			rs.setOutlineThickness(2.0f);
@@ -68,12 +61,11 @@ void * init (void * in) {
 			if (rs.getGlobalBounds().contains(mouse))
 				rs.setOutlineColor(sf::Color(100, 100, 100));
 			window.draw(rs);
+			window.draw(button->label);*/
+			Button b = *button;
+			b.draw(window);
 		}
 
-		/*for (std::vector<CLIENT_UNIT>::iterator unit = g->clientGameLogic_.units.begin(); unit != g->clientGameLogic_.units.end(); ++unit)
-		{
-			//window.draw(button->rect);
-		}*/
 		window.display();
 	}
 
@@ -111,8 +103,8 @@ void Graphics::drawHud(sf::RenderWindow& window)
  * NOTES:    */
 void Graphics::drawLobby(sf::RenderWindow& window)
 {
-	sf::Text state("Lobby", font, 20);
-	window.draw(state);
+	//sf::Text state("Lobby", font, 20);
+	//window.draw(state);
 }
 
 /* Draws all current units.
@@ -123,6 +115,11 @@ void Graphics::drawLobby(sf::RenderWindow& window)
  * NOTES:    */
 void Graphics::drawUnits(sf::RenderWindow& window)
 {
+
+	for (std::vector<CLIENT_UNIT>::iterator unit = clientGameLogic_.units.begin(); unit != clientGameLogic_.units.end(); ++unit)
+	{
+		//window.draw(button->rect);
+	}
 }
 
 /* Draws the map

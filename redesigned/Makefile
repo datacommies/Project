@@ -7,3 +7,6 @@ server: server.cpp modules/*.cpp
 
 client: client.cpp modules/*.cpp
 	g++ -g -lpthread client.cpp modules/*.cpp -o client $(LIBS)
+
+clean:
+	rm -rf server client
