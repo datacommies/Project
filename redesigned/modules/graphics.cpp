@@ -11,28 +11,7 @@ using namespace std;
 #define ID_START 123
 #define ID_QUIT 124
 
-/* Constructor
- *
- * PRE:     
- * POST:    
- * RETURNS: 
- * NOTES:   Creates a thread and starts running the module */
-Graphics::Graphics(ClientGameLogic& clientGameLogic)
-   : window(NULL), clientGameLogic_(clientGameLogic)
-{
-	// Load font for game.
-	char * font_path;
-	find_font(&font_path);
 
-    if (!this->font.loadFromFile(font_path)) {
-		cerr << ("error loading font") << endl;
-		exit(0);
-	}
-
-	// Run main graphics thread.
-   	pthread_t t;
-   	pthread_create(&t, NULL, init, (void*)this);
-}
 
 /* Graphics Thread entry point
  *
@@ -133,12 +112,41 @@ bool find_font (char ** path) {
     return (FcPatternGetString(match, FC_FILE, 0, (FcChar8**)path) == FcResultMatch);
 }
 
+/* Constructor
+ *
+ * PRE:     
+ * POST:    
+ * RETURNS: 
+ * NOTES:   Creates a thread and starts running the module */
+Graphics::Graphics(ClientGameLogic& clientGameLogic)
+   : window(NULL), clientGameLogic_(clientGameLogic)
+{
+	// Load font for game.
+	char * font_path;
+	find_font(&font_path);
+
+    if (!this->font.loadFromFile(font_path)) {
+		cerr << ("error loading font") << endl;
+		exit(0);
+	}
+
+	// Run main graphics thread.
+   	pthread_t t;
+   	pthread_create(&t, NULL, init, (void*)this);
+}
+
+void Graphics::drawMainMenu(sf::RenderWindow& window)
+{
+
+}
+
 /* Draws the HUD.
  *
  * PRE:     
  * POST:    Current HUD is displayed
  * RETURNS: 
  * NOTES:    */
+
 void Graphics::drawHud(sf::RenderWindow& window, Graphics* g)
 {
 }
