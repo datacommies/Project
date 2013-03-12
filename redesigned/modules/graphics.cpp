@@ -3,14 +3,19 @@
 
 #include <unistd.h>
 #include <SFML/Graphics.hpp>
+#include <SFML/OpenGL.hpp>
 
 using namespace std;
+
+
+#define ID_START 123
+#define ID_QUIT 124
 
 /* Graphics Thread entry point
  *
  * PRE:     
- * POST:    
- * RETURNS: 
+ * POST:    Window closed: no more graphics thread necessary.
+ * RETURNS: nothing
  * NOTES:   Graphics init and main loop  */
 void * init (void * in) {
    Graphics* g = (Graphics *)in;
@@ -21,11 +26,16 @@ void * init (void * in) {
 		cerr << ("error loading font") << endl ;
 	}
 	
-	Button a(123, sf::Vector2f(200,300), sf::Vector2f(100,100), g->font, "Button A");
-	Button b(321, sf::Vector2f(50,300), sf::Vector2f(100,100), g->font, "Button B");
+	Button a(ID_START, sf::Vector2f(200,300), sf::Vector2f(300,50), g->font, "Start Game");
+	Button b(321, 	   sf::Vector2f(200,400), sf::Vector2f(300,50), g->font, "Press This button for fun");
+	Button c(ID_QUIT,  sf::Vector2f(200,500), sf::Vector2f(300,50), g->font, "Quit");
 
 	g->clientGameLogic_.UIElements.insert(a);
 	g->clientGameLogic_.UIElements.insert(b);
+	g->clientGameLogic_.UIElements.insert(c);
+
+	g->map_bg.loadFromFile("images/map.png");
+	g->map.setTexture(g->map_bg);
 
 	while (window.isOpen()) {
 		sf::Event event;
@@ -37,6 +47,13 @@ void * init (void * in) {
 				for (std::set<Button>::iterator button = g->clientGameLogic_.UIElements.begin(); button != g->clientGameLogic_.UIElements.end(); ++button) {
 					if (button->rect.getGlobalBounds().contains(mouse)) {
 						cout << "Button ID:" << button->id << endl;
+						if (button->id == ID_START){
+							g->clientGameLogic_.start();
+							g->clientGameLogic_.UIElements.clear();
+							break;
+						} else if (button->id == ID_QUIT) {
+							exit(0);
+						}
 						//AddNewCalledButton(button->id);
 					}
 				}
@@ -47,21 +64,15 @@ void * init (void * in) {
 		if (g->clientGameLogic_.getCurrentState() == LOBBY) {
 			g->drawLobby(window);
 		} else if (g->clientGameLogic_.getCurrentState() == IN_GAME) {
+			g->drawUnits(window);
+			g->drawMap(window);
+			
 			sf::Text state("In Game", g->font, 20);
 			window.draw(state);
 		}
 
 		for (std::set<Button>::iterator button = g->clientGameLogic_.UIElements.begin(); button != g->clientGameLogic_.UIElements.end(); ++button)
 		{
-			/*
-			
-			sf::RectangleShape rs = button->rect;
-			rs.setOutlineThickness(2.0f);
-
-			if (rs.getGlobalBounds().contains(mouse))
-				rs.setOutlineColor(sf::Color(100, 100, 100));
-			window.draw(rs);
-			window.draw(button->label);*/
 			Button b = *button;
 			b.draw(window);
 		}
@@ -103,8 +114,9 @@ void Graphics::drawHud(sf::RenderWindow& window)
  * NOTES:    */
 void Graphics::drawLobby(sf::RenderWindow& window)
 {
-	//sf::Text state("Lobby", font, 20);
-	//window.draw(state);
+	sf::Text title("Child's Play", font, 71);
+	title.setPosition(sf::Vector2f(200, 0));
+	window.draw(title);
 }
 
 /* Draws all current units.
@@ -130,4 +142,5 @@ void Graphics::drawUnits(sf::RenderWindow& window)
  * NOTES:    */
 void Graphics::drawMap(sf::RenderWindow& window)
 {
+	window.draw(map);
 }

@@ -22,6 +22,7 @@ public:
 
    // Functions
    GameState getCurrentState();
+   void start ();
    bool createUnit(UnitType type, Point location);
    bool movePlayer(Direction direction);
    bool attack(Direction direction);
