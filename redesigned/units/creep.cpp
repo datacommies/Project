@@ -7,9 +7,10 @@
 
 using namespace std;
 
-Creep::Creep(const int& uid, const int& pos, const int& hp, const int& atkdmg, const int& atkrng,
+Creep::Creep(const int& uid, Point pos, const int& hp, const int& atkdmg, const int& atkrng,
              const int& atkspd, const int& percep, const int& atkcnt, const int& spd, Direction direct,
-             Point* path, const int& movespeed)
+             Point* path, const int& movespeed): MobileUnit(uid, pos, hp, atkdmg, atkrng, atkspd,
+             percep, atkcnt,spd, direct), pPath(path), moveSpeed(movespeed)
 {
 	//validation
 }
@@ -31,6 +32,9 @@ int Creep::getDirection( int p1, int p2 ) {
 	else /* Target on the same level. */
 		return 0;
 }
+
+//commented out until these are working so that
+#if 0
 
 /*
 * Move the current point towards the target point based on Speed. 
@@ -181,3 +185,5 @@ string Creep::serializeCreep(const Creep& creep)
 {
 
 }
+
+#endif
