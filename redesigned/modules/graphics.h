@@ -16,6 +16,8 @@ private:
 
    // Graphics internals
    sf::Font font;
+   sf::Texture map_bg;
+   sf::Sprite  map;
 
    // Functions
    void drawHud(sf::RenderWindow& window);
