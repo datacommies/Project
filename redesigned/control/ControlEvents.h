@@ -1,19 +1,29 @@
+#ifndef CONTROL_EVENTS_H
+#define CONTROL_EVENTS_H
 
-#include "resources.h"
+#include "../resource.h"
+#include "../modules/client_game_logic.h"
 
-void CallExitGameEvent();
+void loadControlEvents(ClientGameLogic* gameLogic);
 
-void CallEnterLobbyEvent();
+void CallExitGameEvent(void* value);
 
-void CallMoveLeftEvent();
-void CallMoveRightEvent();
-void CallMoveUpEvent();
-void CallMoveDownEvent();
+void CallEnterLobbyEvent(void* value);
 
-void CallAttackLeftEvent();
-void CallAttackRightEvent();
-void CallAttackUpEvent();
-void CallAttackDownEvent();
+void CallMoveLeftEvent(void* value);
+void CallMoveRightEvent(void* value);
+void CallMoveUpEvent(void* value);
+void CallMoveDownEvent(void* value);
 
-void CallBuildTowerEvent(int x, int y);
-void CallBuildCreepEvent();
+void CallAttackLeftEvent(void* value);
+void CallAttackRightEvent(void* value);
+void CallAttackUpEvent(void* value);
+void CallAttackDownEvent(void* value);
+
+void CallBuildTowerEvent(void* value);
+void CallBuildCreepEvent(void* value);
+
+void AddNewCalledButton(int id);
+bool getCalledButton(int id);
+
+#endif

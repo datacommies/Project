@@ -30,7 +30,7 @@ enum UnitTypes {
 	TYPE_TOWER,
 	TYPE_PLAYER,
 	TYPE_CASTLE
-};
+} ;
 
 // Common Message Header
 typedef struct {

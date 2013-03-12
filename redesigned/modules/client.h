@@ -17,8 +17,8 @@ public:
    void run();
 private:
    // Modules
-   ClientGameLogic clientGameLogic_;
    ClientNetwork clientNetwork_;
+   ClientGameLogic clientGameLogic_;
    Graphics graphics_;
    Control control_;
 };
