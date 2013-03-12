@@ -42,9 +42,9 @@ private:
    bool sync(int); // TODO: clientId is a placeholder. May be a socket or something else
     void error(const char *);
     
-    void handleClient();
+    static void* handleClient(void*);
     void handleRequests();
-    int recv_complete(int,void*,size_t,int);
+    static int recv_complete(int,void*,size_t,int);
     
 };
 

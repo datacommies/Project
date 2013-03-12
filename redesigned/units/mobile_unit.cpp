@@ -10,6 +10,14 @@ MobileUnit::MobileUnit(const int& uid, Point pos, const int& hp, const int& atkd
     //validation
 }
 
+/*
+* Move the current point towards the target point based on Speed. 
+*/
+void MobileUnit::Move( Point pt ) {
+    pCurrPoint.x += getDirection( pCurrPoint.x, pt.x ) * moveSpeed;
+    pCurrPoint.y += getDirection( pCurrPoint.y, pt.y )  * moveSpeed;
+}
+
 string MobileUnit::serializeMobileUnit(const MobileUnit& mobileUnit)
 {
     return 0;

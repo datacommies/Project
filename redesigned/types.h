@@ -25,6 +25,13 @@ enum {
     MSG_RESOURCE_UPDATE
 };
 
+enum UnitTypes {
+	TYPE_CREEP,
+	TYPE_TOWER,
+	TYPE_PLAYER,
+	TYPE_CASTLE
+} ;
+
 // Common Message Header
 typedef struct {
     int type; //MSG_PLAYER_UPDATE for e.g.
@@ -61,20 +68,11 @@ typedef struct {
 typedef struct {
     header_t head;
     int id;
+    //int type;
     float xpos;
     float ypos;
     int health;
-    int attackDamage;
-    int attackRange; 
-    int attackSpeed;
-} unit_t;
-
-enum UnitTypes{
-    TYPE_CREEP,
-    TYPE_PLAYER,
-    TYPE_TOWER,
-    TYPE_CASTLE
-};
+} tower_t;
 
 typedef struct {
     header_t head;
@@ -83,7 +81,7 @@ typedef struct {
     float xpos;
     float ypos;
     int health;
-} tower_t;
+} castle_t;
 
 typedef struct {
     header_t head;
