@@ -3,8 +3,10 @@ MODULES = build/ai.o build/client_game_logic.o build/control.o build/server.o bu
 
 all: server client
 
-build/%.o: modules/%.cpp
-	mkdir -p $(dir $@)
+build:
+	mkdir -p build
+
+build/%.o: modules/%.cpp button.h resource.h team.h types.h units/*.h modules/*.h build
 	$(CXX) -c $< -o $@
 
 #server: server.cpp modules/*.cpp

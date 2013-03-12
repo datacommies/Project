@@ -27,7 +27,7 @@ public:
     virtual void    CheckTarget( void );
     virtual void    FindTarget( void );
     bool            hasWeakness( int, int );
-    Point    		getPos() { return pCurrPoint; }
+    Point    		getPos() { return position; }
 
     std::string serializeUnit(const Unit& unit);
     
