@@ -11,16 +11,6 @@
 
 ServerGameLogic * gSGL;
  
-void *UpdateThreadFunc(void *p)
-{
-  ServerGameLogic *sgl = (ServerGameLogic *) p;
-  for(;;)
-    sgl->update();
- 
-  return NULL;
-}
- 
- 
 /* Constructor
  *
  * PRE:    
@@ -41,16 +31,6 @@ ServerGameLogic::ServerGameLogic()
 
 ServerGameLogic::~ServerGameLogic()
 {
-}
- 
-void ServerGameLogic::startThread() 
-{
-
-  int result = pthread_create( &update_thread_, NULL, UpdateThreadFunc, (void*) this);
- 
-  if (result != 0)
-    fprintf(stderr, "Error creating thread in %s line %d\n", __FILE__, __LINE__);
-
 }
 
 void ServerGameLogic::initializeCastles() 
@@ -115,7 +95,6 @@ void ServerGameLogic::initializeCastles()
     void ServerGameLogic::startGame()
     {
       gSGL = this;
-      startThread();
       setAlarm();
     }
      
@@ -246,10 +225,11 @@ void ServerGameLogic::initializeCastles()
      
     void ServerGameLogic::updateClients(int i)
     {
-     
       signal(SIGALRM, updateClients);
       
       AiUpdate(gSGL->teams[0], gSGL->teams[1]);
+
+      gSGL->update();
 
       // Call network update function
       ServerGameLogic::setAlarm();
@@ -269,26 +249,25 @@ void ServerGameLogic::initializeCastles()
      
       if (result != 0)
         fprintf(stderr, "Error calling setitimer error %d in %s line %d\n", errno, __FILE__, __LINE__);
-     
-     
+
       signal(SIGALRM, updateClients); /* set the Alarm signal capture */
      
     }
      
      
-    /*
-     * To test this class use  g++ -DTESTCLASS -pthread -Wall server_game_logic.cpp
-     */
-    #ifdef TESTCLASS
-    int main() {
-     
-      ServerGameLogic game;
-     
-      game.startGame();
-     
-      while (1)
-        ;
-     
-    }
-    #endif
+/*
+* To test this class use  g++ -DTESTCLASS -pthread -Wall server_game_logic.cpp
+*/
+#ifdef TESTCLASS
+int main() {
+
+  ServerGameLogic game;
+
+  game.startGame();
+
+  while (1)
+    ;
+
+}
+#endif
 
