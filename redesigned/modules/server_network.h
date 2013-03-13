@@ -27,14 +27,14 @@ public:
     static void* handleInput(void* args);
     friend bool operator == (const player_matchmaking_t&, const player_matchmaking_t&);
 private:
-    std::vector<player_matchmaking_t> players;
-    std::vector<int> clients;       // client sockets
-    pthread_t ui_thread;
-    socklen_t clilen;
-    struct sockaddr_in cli_addr;
-    long client;
-    int sock;
-    std::vector<pthread_t> threads; // client handler threads.
+    std::vector<player_matchmaking_t> players_;
+    std::vector<int> clients_;       // client_ sockets
+    pthread_t uiThread_;
+    socklen_t clientLength_;
+    struct sockaddr_in clientAddr_;
+    long client_;
+    int sock_;
+    std::vector<pthread_t> threads_; // client_ handler threads_.
     
    // Module references
    ServerGameLogic& serverGameLogic_;
