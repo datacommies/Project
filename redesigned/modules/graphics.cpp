@@ -13,6 +13,9 @@ using namespace std;
 sf::Texture creep_tex;
 sf::Sprite  creep_sprite;
 
+sf::Texture castle_tex;
+sf::Sprite  castle_sprite;
+
 /* Graphics Thread entry point
  *
  * PRE:     
@@ -27,6 +30,9 @@ void * init (void * in) {
 	creep_tex.loadFromFile("images/creep.png");
 	creep_sprite.setTexture(creep_tex);
     
+    castle_tex.loadFromFile("images/castle.png");
+	castle_sprite.setTexture(castle_tex);
+
 	// Create window for client and assign it as the window for the graphics object.
 	sf::RenderWindow window(sf::VideoMode(800, 600), "Client");
 	g->window = &window;
@@ -200,16 +206,24 @@ void Graphics::drawUnits(sf::RenderWindow& window)
 			unit->past_position = unit->position; 
 			unit->inter_value = 0;
 		}
+		
+		if (unit->type == CASTLE) {
+			castle_sprite.setPosition(unit->position.x, unit->position.y);
+			health_bg.setPosition(unit->position.x, unit->position.y + castle_sprite.getTextureRect().height);
+			healthbar.setPosition(unit->position.x, unit->position.y + castle_sprite.getTextureRect().height);
+			healthbar.setSize(sf::Vector2f( min(max(unit->health/4, 0), 100), 5));
+			window.draw(castle_sprite);
+		} else if (unit->type == CREEP) {
+			// Linear interpolation between a unit's past position and new position.
+			Point interpolated = Lerp(unit->past_position, unit->position, unit->inter_value);
+			// All drawable unit elements use the same interpolated position.
+			creep_sprite.setPosition(interpolated.x, interpolated.y);
+			health_bg.setPosition(interpolated.x, interpolated.y+25);
+			healthbar.setPosition(interpolated.x, interpolated.y+25);
+			healthbar.setSize(sf::Vector2f( min(max(unit->health/4, 0), 100), 5));
+			window.draw(creep_sprite);
+		}
 
-		// Linear interpolation between a unit's past position and new position.
-		Point interpolated = Lerp(unit->past_position, unit->position, unit->inter_value);
-
-		// All drawable unit elements use the same interpolated position.
-		creep_sprite.setPosition(interpolated.x, interpolated.y);
-		health_bg.setPosition(interpolated.x, interpolated.y+25);
-		healthbar.setPosition(interpolated.x, interpolated.y+25);
-		healthbar.setSize(sf::Vector2f( min(max(unit->health/4, 0), 100), 5));
-		window.draw(creep_sprite);
 		window.draw(health_bg);
 		window.draw(healthbar);
 	}

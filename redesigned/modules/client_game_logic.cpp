@@ -15,10 +15,18 @@ ClientGameLogic::ClientGameLogic(ClientNetwork& clientNetwork)
    test.position.x = 100;
    test.position.y = 100;
    test.past_position = test.position;
+   test.type = CREEP;
    units.push_back(test);
    test.position.x = 200;
    test.position.y = 100;
    test.past_position = test.position;
+   units.push_back(test);
+
+   test.health = 100;
+   test.position.x = 10;
+   test.position.y = 10;
+   test.past_position = test.position;
+   test.type = CASTLE;
    units.push_back(test);
 }
 
