@@ -1,4 +1,5 @@
     #include "server_game_logic.h"
+    #include "../units/castle.h"
      
     #include <stdio.h>
     #include <signal.h>
@@ -28,20 +29,46 @@
     ServerGameLogic::ServerGameLogic()
        : gameState_(LOBBY)
     {
+    }
      
+
+    ServerGameLogic::~ServerGameLogic()
+    {
+    }
+     
+    void ServerGameLogic::startThread() 
+    {
+
       int result = pthread_create( &update_thread_, NULL, UpdateThreadFunc, (void*) this);
      
       if (result != 0)
         fprintf(stderr, "Error creating thread in %s line %d\n", __FILE__, __LINE__);
-     
+
     }
-     
-    ServerGameLogic::~ServerGameLogic()
+
+
+    void ServerGameLogic::initializeTeams()
     {
-     
-     
+
+        next_unit_id_ = 1;
+        // Point pos;
+        // int hp = INIT_HEALTH;
+
+        for (int i=0; i<2; i++) {
+           teams[i].teamId = i;
+           teams[i].currency = INIT_CURRENCY;
+
+           // Create castle
+           // pos.x = i == 0 ? 0 : MAX_X; // TODO: MAX_X and MAX_Y will  be replaced later when we get map reading functionality working
+           // pos.y = 1 == 0 ? 0 : MAX_Y; // TODO:
+           // Castle castle = Castle(next_unit_id_++, pos, hp, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+                
+        
+        }
+        
+
     }
-     
+
     /* Starts the game.
      *
      * PRE:     Game is in the lobby and players are ready.
@@ -50,6 +77,7 @@
      * NOTES:    */
     void ServerGameLogic::startGame()
     {
+      startThread();
       setAlarm();
     }
      

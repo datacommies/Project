@@ -1,9 +1,19 @@
     #ifndef SERVERGAMELOGIC_H
     #define SERVERGAMELOGIC_H
      
-     
     #define INTERVAL 33333
+    
+    #define INIT_NUM_CREEPS 3
+    #define INIT_TOWERS_START 4
+    #define INIT_CURRENCY 100
+    #define INIT_HEALTH 100
+
+    #define DEFAULT_ATKDMG 5
      
+    // This will come actually be read from the map
+    #define MAX_X 100
+    #define MAX_Y 100
+
     #include <stdio.h>
     #include <stdlib.h>
     #include <pthread.h>
@@ -53,7 +63,7 @@
        // Fields
        GameState gameState_;
        pthread_t update_thread_;
-     
+       int next_unit_id_;
      
        // Functions
        void update();
@@ -62,6 +72,8 @@
        void updateMovePlayer(CommandData& command);
        void updateMoveUnit(CommandData& command);
      
+       void startThread();
+       void initializeTeams();
        static void setAlarm();
        static void updateClients(int i);
 
