@@ -14,55 +14,6 @@ using namespace std;
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 800
 
-void Graphics::showJoinWindow()
-{
-	sfgJoinWindow->Show(true);
-}
-
-void Graphics::hideJoinWindow()
-{
-	sfgJoinWindow->Show(false);
-}
-
-void Graphics::initJoinWindow(){
-	// Create join window using SFGUI
-	sfgJoinWindow = sfg::Window::Create( sfg::Window::TITLEBAR | sfg::Window::BACKGROUND ); // Make the window.
-	sfgJoinWindow->SetTitle(L"Join Game"); // Add a title to the window.
-	sfgJoinWindow->SetPosition(sf::Vector2f(400,400)); // Change the window position.
-	
-	// Create a button to close the join window.
-	sfgCloseJoinButton = sfg::Button::Create();
-	sfgCloseJoinButton->SetLabel("Yo");
-
-	// Add it to the join window and set a signal up.
-	sfgJoinWindow->Add(sfgCloseJoinButton);	
-	sfgCloseJoinButton->GetSignal( sfg::Widget::OnLeftClick ).Connect(&Graphics::hideJoinWindow, this);
-
-	// Hide this window on startup.
-	hideJoinWindow();
-}
-
-void Graphics::loadImages(){
-	// Load the HUD background.
-	hud_bg.loadFromFile("images/hud.png");
-	hud.setTexture(hud_bg);
-	hud.setPosition(0, 600);
-
-	// Load the map texture.
-	map_bg.loadFromFile("images/map.png");
-	map.setTexture(map_bg);
-
-	// Load the creep texture.
-	creep_tex.loadFromFile("images/creep.png");
-	creep_sprite.setTexture(creep_tex);
-    
-    // Load the castle texture.
-    castle_tex.loadFromFile("images/castle.png");
-	castle_sprite.setTexture(castle_tex);
-
-	// Load the 
-}
-
 /* Graphics Thread entry point
  *
  * PRE:     
@@ -87,9 +38,11 @@ void * init (void * in) {
 	sfg::SFGUI sfgui;
 
 	// Go to the main menu first upon entering the game.
-	g->setupMainMenu();
+	g->initMainMenuControls();
 
+	// Initialize the SFGUI join server widget and hide it on startup.
 	g->initJoinWindow();
+	g->hideJoinWindow();
 
 	// Main loop for the graphics thread.
 	while (window.isOpen()) {
@@ -101,18 +54,14 @@ void * init (void * in) {
 			// Handle SFGUI events.
 			g->sfgJoinWindow->HandleEvent(event);
 
-			if (event.type == sf::Event::Closed){
-				window.close();
-				exit(0);
-			}
 			// If a mouse button was pressed, find out where we clicked.
-			else if (event.type == sf::Event::MouseButtonPressed){
+			if (event.type == sf::Event::MouseButtonPressed){
 				sf::Vector2f mouse = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 				// Iterate through the buttons and check each button to see if we clicked within in.
 				for (std::set<Button>::iterator button = g->clientGameLogic_.UIElements.begin(); button != g->clientGameLogic_.UIElements.end(); ++button) {
 					// If we clicked within the button, check to see which button it was by ID.
 					if (button->rect.getGlobalBounds().contains(mouse)) {
-						// Start button.
+						// Join server button.
 						if (button->id == ID_JOIN){
 							g->showJoinWindow();
 						}
@@ -131,6 +80,11 @@ void * init (void * in) {
 					}
 				}
 			}
+			// Close the application if requested.
+			else if (event.type == sf::Event::Closed){
+				window.close();
+				exit(0);
+			}
 		}
  		
  		// Update the sfgui test window
@@ -140,7 +94,7 @@ void * init (void * in) {
 
 		// Check to see which state the game is in and act accordingly.
 		if (g->clientGameLogic_.getCurrentState() == LOBBY) {
-			g->drawLobby(window);
+			g->drawMainMenu(window);
 		}
 		else if (g->clientGameLogic_.getCurrentState() == IN_GAME) {
 			g->drawMap(window);
@@ -178,6 +132,16 @@ bool find_font (char ** path) {
     return (FcPatternGetString(match, FC_FILE, 0, (FcChar8**)path) == FcResultMatch);
 }
 
+Point Lerp(Point start, Point end, float percent)
+{
+	float sx = start.x, sy= start.y;
+	float ex = end.x, ey= end.y;
+	Point result;
+	result.x = sx + percent * (ex - sx);
+	result.y = sy + percent * (ey - sy);
+	return result;
+}
+
 /* Constructor
  *
  * PRE:     
@@ -201,8 +165,11 @@ Graphics::Graphics(ClientGameLogic& clientGameLogic)
    	pthread_create(&t, NULL, init, (void*)this);
 }
 
-void Graphics::setupMainMenu()
+void Graphics::initMainMenuControls()
 {
+	// Clear all the UI buttons previous
+	clientGameLogic_.UIElements.clear();
+
 	// Create buttons for the menu screen and add them to the list of UI elements.
 	Button a(ID_TEST, sf::Vector2f(250,300), sf::Vector2f(300,50), font, "                Test Game");
 	Button b(ID_JOIN, 	   sf::Vector2f(250,400), sf::Vector2f(300,50), font, "               Join Game");
@@ -211,6 +178,59 @@ void Graphics::setupMainMenu()
 	clientGameLogic_.UIElements.insert(a);
 	clientGameLogic_.UIElements.insert(b);
 	clientGameLogic_.UIElements.insert(c);
+}
+
+/* Init Game controls
+ *
+ * PRE:     
+ * POST:    
+ * RETURNS: 
+ * NOTES:   Clears and Initializes the set of UIElements for In-game controls */
+void Graphics::initGameControls () {
+	clientGameLogic_.UIElements.clear();
+	
+	Button a(999,sf::Vector2f(020,570), sf::Vector2f(100,25), font, "Tower1");
+	Button b(998,sf::Vector2f(130,570), sf::Vector2f(100,25), font, "Tower2");
+	Button c(997,sf::Vector2f(240,570), sf::Vector2f(100,25), font, "Tower3");
+	Button d(996,sf::Vector2f(350,570), sf::Vector2f(100,25), font, "Creep1");
+	Button e(995,sf::Vector2f(460,570), sf::Vector2f(100,25), font, "Creep2");
+	Button f(994,sf::Vector2f(570,570), sf::Vector2f(100,25), font, "Creep3");
+	Button h(ID_QUIT,sf::Vector2f(680,570), sf::Vector2f(100,25),  font, "Quit");
+	
+	a.rect.setFillColor(sf::Color(255, 0, 0));
+	
+	clientGameLogic_.UIElements.insert(a);
+	clientGameLogic_.UIElements.insert(b);
+	clientGameLogic_.UIElements.insert(c);
+	clientGameLogic_.UIElements.insert(d);
+	clientGameLogic_.UIElements.insert(e);
+	clientGameLogic_.UIElements.insert(f);
+	clientGameLogic_.UIElements.insert(h);
+}
+
+void Graphics::initJoinWindow(){
+	// Create join window using SFGUI
+	sfgJoinWindow = sfg::Window::Create( sfg::Window::TITLEBAR | sfg::Window::BACKGROUND ); // Make the window.
+	sfgJoinWindow->SetTitle(L"Join Game"); // Add a title to the window.
+	sfgJoinWindow->SetPosition(sf::Vector2f(400,400)); // Change the window position.
+	
+	// Create a button to close the join window.
+	sfgCloseJoinButton = sfg::Button::Create();
+	sfgCloseJoinButton->SetLabel("Yo");
+
+	// Add it to the join window and set a signal up.
+	sfgJoinWindow->Add(sfgCloseJoinButton);	
+	sfgCloseJoinButton->GetSignal( sfg::Widget::OnLeftClick ).Connect(&Graphics::hideJoinWindow, this);
+}
+
+void Graphics::showJoinWindow()
+{
+	sfgJoinWindow->Show(true);
+}
+
+void Graphics::hideJoinWindow()
+{
+	sfgJoinWindow->Show(false);
 }
 
 /* Draws the HUD.
@@ -241,21 +261,11 @@ void Graphics::drawMap(sf::RenderWindow& window)
  * POST:    Current lobby is displayed
  * RETURNS: 
  * NOTES:    */
-void Graphics::drawLobby(sf::RenderWindow& window)
+void Graphics::drawMainMenu(sf::RenderWindow& window)
 {
 	sf::Text title("Child's Play", font, 71);
 	title.setPosition(sf::Vector2f(200, 0));
 	window.draw(title);
-}
-
-Point Lerp(Point start, Point end, float percent)
-{
-	float sx = start.x, sy= start.y;
-	float ex = end.x, ey= end.y;
-	Point result;
-	result.x = sx + percent * (ex - sx);
-	result.y = sy + percent * (ey - sy);
-	return result;
 }
 
 /* Draws all current units.
@@ -306,30 +316,25 @@ void Graphics::drawUnits(sf::RenderWindow& window)
 	}
 }
 
-/* Init Game controls
- *
- * PRE:     
- * POST:    
- * RETURNS: 
- * NOTES:   Clears and Initializes the set of UIElements for In-game controls */
-void Graphics::initGameControls () {
-	clientGameLogic_.UIElements.clear();
-	Button a(999,sf::Vector2f(020,570), sf::Vector2f(100,25), font, "Tower1");
-	Button b(998,sf::Vector2f(130,570), sf::Vector2f(100,25), font, "Tower2");
-	Button c(997,sf::Vector2f(240,570), sf::Vector2f(100,25), font, "Tower3");
-	Button d(996,sf::Vector2f(350,570), sf::Vector2f(100,25), font, "Creep1");
-	Button e(995,sf::Vector2f(460,570), sf::Vector2f(100,25), font, "Creep2");
-	Button f(994,sf::Vector2f(570,570), sf::Vector2f(100,25), font, "Creep3");
-	Button h(ID_QUIT,sf::Vector2f(680,570), sf::Vector2f(100,25),  font, "Quit");
-	
-	a.rect.setFillColor(sf::Color(255, 0, 0));
-	
-	clientGameLogic_.UIElements.insert(a);
-	clientGameLogic_.UIElements.insert(b);
-	clientGameLogic_.UIElements.insert(c);
-	clientGameLogic_.UIElements.insert(d);
-	clientGameLogic_.UIElements.insert(e);
-	clientGameLogic_.UIElements.insert(f);
-	clientGameLogic_.UIElements.insert(h);
-}
+void Graphics::loadImages(){
+	// Load the HUD background.
+	hud_bg.loadFromFile("images/hud.png");
+	hud.setTexture(hud_bg);
+	hud.setPosition(0, 600);
 
+	// Load the map texture.
+	map_bg.loadFromFile("images/map.png");
+	map.setTexture(map_bg);
+
+	// Load the creep texture.
+	creep_tex.loadFromFile("images/creep.png");
+	creep_sprite.setTexture(creep_tex);
+    
+    // Load the castle texture.
+    castle_tex.loadFromFile("images/castle.png");
+	castle_sprite.setTexture(castle_tex);
+
+	// Load the player texture.
+    player_tex.loadFromFile("images/player.png");
+	player_sprite.setTexture(player_tex);
+}

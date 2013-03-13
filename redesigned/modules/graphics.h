@@ -79,15 +79,17 @@ private:
    sf::Sprite creep_sprite;
    sf::Texture castle_tex;
    sf::Sprite castle_sprite;
+   sf::Texture player_tex;
+   sf::Sprite player_sprite;
 
    // SFGUI stuff
    sfg::Window::Ptr sfgJoinWindow;
    sfg::Button::Ptr sfgCloseJoinButton;
 
    // Functions
-   void setupMainMenu();
+   void initMainMenuControls();
    void drawHud(sf::RenderWindow& window);
-   void drawLobby(sf::RenderWindow& window);
+   void drawMainMenu(sf::RenderWindow& window);
    void drawUnits(sf::RenderWindow& window);
    void drawMap(sf::RenderWindow& window);
    void initGameControls ();
