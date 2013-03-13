@@ -25,5 +25,11 @@ make install -j 4
 cd ../
 mv LaurentGomila-SFML-* sfml
 
-echo "Installation Complete!"
+cp /usr/local/share/SFML/cmake/Modules/FindSFML.cmake /usr/share/cmake/Modules/
 
+git clone git://boxbox.org/SFGUI.git
+cd SFGUI
+cmake .
+make install -j 4
+
+echo "Installation Complete!"

@@ -5,8 +5,8 @@
 
 using namespace std;
 
-Unit::Unit(const int& uid, Point pos, const int& hp, const int& atkdmg,
-           const int& atkrng, const int& atkspd, const int& percep, const int& atkcnt):
+Unit::Unit(int uid, Point pos, int hp, int atkdmg,
+           int atkrng, int atkspd, int percep, int atkcnt):
            id(uid), position(pos), health(hp), attackDamage(atkdmg), attackRange(atkrng),
            attackSpeed(atkspd), perception(percep), attackCount(atkcnt)
 {
@@ -130,11 +130,11 @@ string Unit::serializeUnit()
     
     unit_t u;
     
-    u.header.type = getType();
-    u.header.size = getSize();
+    u.head.type = getType();
+    u.head.size = getSize();
     u.id = id;
-    u.x = position.x;
-    u.y = position.y;
+    u.posx = position.x;
+    u.posy = position.y;
     u.health = health;
     u.attackDamage = attackDamage;
     u.attackRange = attackRange;
@@ -142,5 +142,5 @@ string Unit::serializeUnit()
     u.perception = perception;
     u.attackCount = attackCount;
     
-    return string(&u, sizeof(unit_t));
+    return string((char*)&u, sizeof(unit_t));
 }
