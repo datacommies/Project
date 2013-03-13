@@ -130,11 +130,11 @@ string Unit::serializeUnit()
     
     unit_t u;
     
-    u.header.type = getType();
-    u.header.size = getSize();
+    u.head.type = getType();
+    u.head.size = getSize();
     u.id = id;
-    u.x = position.x;
-    u.y = position.y;
+    u.posx = position.x;
+    u.posy = position.y;
     u.health = health;
     u.attackDamage = attackDamage;
     u.attackRange = attackRange;
@@ -142,5 +142,5 @@ string Unit::serializeUnit()
     u.perception = perception;
     u.attackCount = attackCount;
     
-    return string(&u, sizeof(unit_t));
+    return string((char*)&u, sizeof(unit_t));
 }
