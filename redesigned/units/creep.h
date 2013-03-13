@@ -15,9 +15,9 @@ public:
 	virtual UnitTypes getType() const { return TYPE_CREEP; }
 	virtual size_t getSize() const { return MobileUnit::getSize(); }
 
-	Creep(const int& uid, Point pos, const int& hp, const int& atkdmg, const int& atkrng,
-          const int& atkspd, const int& percep, const int& atkcnt, const int& spd, Direction direct,
-          Point* path, const int& movespeed); 
+	Creep(int uid, Point pos, int hp, int atkdmg, int atkrng,
+          int atkspd, int percep, int atkcnt, int spd, Direction direct,
+          Point* path, int movespeed); 
           //assuming psaved does not need to be initialized when creep is created
 
 	//bad

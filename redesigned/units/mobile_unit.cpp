@@ -3,8 +3,8 @@
 
 using namespace std;
 
-MobileUnit::MobileUnit(const int& uid, Point pos, const int& hp, const int& atkdmg, const int& atkrng,
-                       const int& atkspd, const int& percep, const int& atkcnt, const int& spd, Direction direct):
+MobileUnit::MobileUnit(int uid, Point pos, int hp, int atkdmg, int atkrng,
+                       int atkspd, int percep, int atkcnt, int spd, Direction direct):
                        Unit(uid, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt), moveSpeed(spd), direction(direct)
 {
     //validation
