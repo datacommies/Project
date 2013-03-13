@@ -9,17 +9,19 @@ using namespace std;
 
 #define ID_JOIN 100
 #define ID_QUIT 101
-#define ID_TEMP 999
+#define ID_TEST 999
 
-sf::Texture creep_tex;
-sf::Sprite  creep_sprite;
+#define WINDOW_WIDTH 800
+#define WINDOW_HEIGHT 800
 
-sf::Texture castle_tex;
-sf::Sprite  castle_sprite;
-
-void Graphics::SFGUI_ShowWindow(sfg::Window::Ptr window, bool show)
+void Graphics::showJoinWindow()
 {
-	window->Show(show);
+	sfgJoinWindow->Show(true);
+}
+
+void Graphics::hideJoinWindow()
+{
+	sfgJoinWindow->Show(false);
 }
 
 void Graphics::initJoinWindow(){
@@ -29,16 +31,36 @@ void Graphics::initJoinWindow(){
 	sfgJoinWindow->SetPosition(sf::Vector2f(400,400)); // Change the window position.
 	
 	// Create a button to close the join window.
-	sfg::Button::Ptr sfgCloseJoinButton( sfg::Button::Create(L"Close window"));
-	
-	//sfgCloseJoinButton->SetId("close");
+	sfgCloseJoinButton = sfg::Button::Create();
+	sfgCloseJoinButton->SetLabel("Yo");
 
 	// Add it to the join window and set a signal up.
-	sfgJoinWindow->Add(sfgCloseJoinButton);
-	//sfgCloseJoinButton->GetSignal( sfg::Widget::OnLeftClick ).Connect(&Graphics::SFGUI_ShowWindow, this);
+	sfgJoinWindow->Add(sfgCloseJoinButton);	
+	sfgCloseJoinButton->GetSignal( sfg::Widget::OnLeftClick ).Connect(&Graphics::hideJoinWindow, this);
 
 	// Hide this window on startup.
-	SFGUI_ShowWindow(sfgJoinWindow, false);
+	hideJoinWindow();
+}
+
+void Graphics::loadImages(){
+	// Load the HUD background.
+	hud_bg.loadFromFile("images/hud.png");
+	hud.setTexture(hud_bg);
+	hud.setPosition(0, 600);
+
+	// Load the map texture.
+	map_bg.loadFromFile("images/map.png");
+	map.setTexture(map_bg);
+
+	// Load the creep texture.
+	creep_tex.loadFromFile("images/creep.png");
+	creep_sprite.setTexture(creep_tex);
+    
+    // Load the castle texture.
+    castle_tex.loadFromFile("images/castle.png");
+	castle_sprite.setTexture(castle_tex);
+
+	// Load the 
 }
 
 /* Graphics Thread entry point
@@ -52,14 +74,10 @@ void * init (void * in) {
 	// Pointer to the Graphics instance is passed through the thread create argument.
 	Graphics* g = (Graphics *)in;
 	
-	creep_tex.loadFromFile("images/creep.png");
-	creep_sprite.setTexture(creep_tex);
-    
-    castle_tex.loadFromFile("images/castle.png");
-	castle_sprite.setTexture(castle_tex);
+	g->loadImages();
 
 	// Create window for client and assign it as the window for the graphics object.
-	sf::RenderWindow window(sf::VideoMode(800, 800), "Client");
+	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Client");
 	g->window = &window;
 	
 	// We have to do this because we don't use SFML to draw.
@@ -68,10 +86,10 @@ void * init (void * in) {
 	// Create an sfgui object. Needs to be done before other SFGUI calls.
 	sfg::SFGUI sfgui;
 
-	g->initJoinWindow();
-
 	// Go to the main menu first upon entering the game.
 	g->setupMainMenu();
+
+	g->initJoinWindow();
 
 	// Main loop for the graphics thread.
 	while (window.isOpen()) {
@@ -96,9 +114,9 @@ void * init (void * in) {
 					if (button->rect.getGlobalBounds().contains(mouse)) {
 						// Start button.
 						if (button->id == ID_JOIN){
-							Graphics::SFGUI_ShowWindow(g->sfgJoinWindow, true);
+							g->showJoinWindow();
 						}
-						else if (button->id == ID_TEMP)
+						else if (button->id == ID_TEST)
 						{
 							g->initGameControls();
 							g->clientGameLogic_.start();
@@ -186,7 +204,7 @@ Graphics::Graphics(ClientGameLogic& clientGameLogic)
 void Graphics::setupMainMenu()
 {
 	// Create buttons for the menu screen and add them to the list of UI elements.
-	Button a(ID_TEMP, sf::Vector2f(250,300), sf::Vector2f(300,50), font, "                Test Game");
+	Button a(ID_TEST, sf::Vector2f(250,300), sf::Vector2f(300,50), font, "                Test Game");
 	Button b(ID_JOIN, 	   sf::Vector2f(250,400), sf::Vector2f(300,50), font, "               Join Game");
 	Button c(ID_QUIT,  sf::Vector2f(250,500), sf::Vector2f(300,50), font, "                     Quit");
 
@@ -203,10 +221,6 @@ void Graphics::setupMainMenu()
  * NOTES:    */
 void Graphics::drawHud(sf::RenderWindow& window)
 {
-	hud_bg.loadFromFile("images/hud.png");
-	hud.setTexture(hud_bg);
-	hud.setPosition(0, 600);
-
 	window.draw(hud);
 }
 
@@ -218,10 +232,6 @@ void Graphics::drawHud(sf::RenderWindow& window)
  * NOTES:    */
 void Graphics::drawMap(sf::RenderWindow& window)
 {
-	// Load the map texture.
-	map_bg.loadFromFile("images/map.png");
-	map.setTexture(map_bg);
-
 	window.draw(map);
 }
 

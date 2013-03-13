@@ -6,6 +6,7 @@
 #include <cmath>
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <SFGUI/SFGUI.hpp>
 
 /*
 ** 3D Sprite rotation (cause why not) **
@@ -63,6 +64,7 @@ public:
    // Constructors
    Graphics(ClientGameLogic& clientGameLogic);
    sf::RenderWindow * window;
+
 private:
    // Module references
    ClientGameLogic& clientGameLogic_;
@@ -73,6 +75,14 @@ private:
    sf::Texture hud_bg;
    sf::Sprite  map;
    sf::Sprite hud;
+   sf::Texture creep_tex;
+   sf::Sprite creep_sprite;
+   sf::Texture castle_tex;
+   sf::Sprite castle_sprite;
+
+   // SFGUI stuff
+   sfg::Window::Ptr sfgJoinWindow;
+   sfg::Button::Ptr sfgCloseJoinButton;
 
    // Functions
    void setupMainMenu();
@@ -81,6 +91,13 @@ private:
    void drawUnits(sf::RenderWindow& window);
    void drawMap(sf::RenderWindow& window);
    void initGameControls ();
+   void loadImages();
+
+   // SFGUI Functions
+   void initJoinWindow();
+   void showJoinWindow();
+   void hideJoinWindow();
+
    friend void * init (void *);
 };
 
