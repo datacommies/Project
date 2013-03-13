@@ -7,9 +7,9 @@
 
 using namespace std;
 
-Creep::Creep(const int& uid, Point pos, const int& hp, const int& atkdmg, const int& atkrng,
-         const int& atkspd, const int& percep, const int& atkcnt, const int& spd, Direction direct,
-         Point* path, const int& movespeed): MobileUnit(uid, pos, hp, atkdmg, atkrng, atkspd,
+Creep::Creep(int uid, Point pos, int hp, int atkdmg, int atkrng,
+         int atkspd, int percep, int atkcnt, int spd, Direction direct,
+         Point* path, int movespeed): MobileUnit(uid, pos, hp, atkdmg, atkrng, atkspd,
          percep, atkcnt,spd, direct), pPath(path)
 {
     //validation

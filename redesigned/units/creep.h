@@ -9,15 +9,16 @@
 class Creep : public MobileUnit
 {
 public: 
-  	void spawn(const int& num);  //also creep type? when we have a type
+  	void spawn(int num);  //also creep type? when we have a type
 	std::string serializeCreep();
 
 	virtual UnitTypes getType() const { return TYPE_CREEP; }
 	virtual size_t getSize() const { return MobileUnit::getSize(); }
 
-	Creep(const int& uid = 0, Point pos = Point(), const int& hp = 0, const int& atkdmg = 0, const int& atkrng = 0,
-          const int& atkspd = 0, const int& percep = 0, const int& atkcnt = 0, const int& spd = 0, Direction direct = Direction(),
-          Point* path=NULL, const int& movespeed = 0); 
+	Creep(int uid = 0, Point pos = Point(), int hp = 0, int atkdmg = 0, int atkrng = 0,
+          int atkspd = 0, int percep = 0, int atkcnt = 0, int spd = 0, Direction direct = Direction(),
+          Point* path=NULL, int movespeed = 0); 
+          
           //assuming psaved does not need to be initialized when creep is created
 
 	//bad
