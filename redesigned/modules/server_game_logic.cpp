@@ -50,23 +50,29 @@
     void ServerGameLogic::initializeTeams()
     {
 
+        /* 
+        Work in progress.....
+
         next_unit_id_ = 1;
-        // Point pos;
-        // int hp = INIT_HEALTH;
+        Point pos;
+        int hp = INIT_HEALTH;
+        int unit_id = next_unit_id_++;
 
         for (int i=0; i<2; i++) {
            teams[i].teamId = i;
            teams[i].currency = INIT_CURRENCY;
 
            // Create castle
-           // pos.x = i == 0 ? 0 : MAX_X; // TODO: MAX_X and MAX_Y will  be replaced later when we get map reading functionality working
-           // pos.y = 1 == 0 ? 0 : MAX_Y; // TODO:
-           // Castle castle = Castle(next_unit_id_++, pos, hp, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+            pos.x = i == 0 ? 0 : MAX_X; // TODO: MAX_X and MAX_Y will  be replaced later when we get map reading functionality working
+            pos.y = 1 == 0 ? 0 : MAX_Y; // TODO:
+            //Castle castle = Castle(unit_id, pos, hp, 0, 0, 0, 0, 0, 0, 0);
+            
+
                 
         
         }
         
-
+        */
     }
 
     /* Starts the game.
