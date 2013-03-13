@@ -34,7 +34,7 @@ void * init (void * in) {
 	castle_sprite.setTexture(castle_tex);
 
 	// Create window for client and assign it as the window for the graphics object.
-	sf::RenderWindow window(sf::VideoMode(800, 600), "Client");
+	sf::RenderWindow window(sf::VideoMode(800, 800), "Client");
 	g->window = &window;
 	
 	// Go to the main menu first upon entering the game.
@@ -83,7 +83,7 @@ void * init (void * in) {
 		else if (g->clientGameLogic_.getCurrentState() == IN_GAME) {
 			g->drawMap(window);
 			g->drawUnits(window);
-			g->drawHud(window, g);
+			g->drawHud(window);
 			sf::Text state("In Game", g->font, 20);
 			window.draw(state);
 		}
@@ -154,8 +154,28 @@ void Graphics::setupMainMenu()
  * POST:    Current HUD is displayed
  * RETURNS: 
  * NOTES:    */
-void Graphics::drawHud(sf::RenderWindow& window, Graphics* g)
+void Graphics::drawHud(sf::RenderWindow& window)
 {
+	hud_bg.loadFromFile("images/hud.png");
+	hud.setTexture(hud_bg);
+	hud.setPosition(0, 600);
+
+	window.draw(hud);
+}
+
+/* Draws the map
+ *
+ * PRE:     
+ * POST:    The map is displayed
+ * RETURNS: 
+ * NOTES:    */
+void Graphics::drawMap(sf::RenderWindow& window)
+{
+	// Load the map texture.
+	map_bg.loadFromFile("images/map.png");
+	map.setTexture(map_bg);
+
+	window.draw(map);
 }
 
 /* Draws the lobby.
@@ -227,21 +247,6 @@ void Graphics::drawUnits(sf::RenderWindow& window)
 		window.draw(health_bg);
 		window.draw(healthbar);
 	}
-}
-
-/* Draws the map
- *
- * PRE:     
- * POST:    The map is displayed
- * RETURNS: 
- * NOTES:    */
-void Graphics::drawMap(sf::RenderWindow& window)
-{
-	// Load the map texture.
-	map_bg.loadFromFile("images/map.png");
-	map.setTexture(map_bg);
-
-	window.draw(map);
 }
 
 /* Init Game controls

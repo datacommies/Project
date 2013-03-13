@@ -4,10 +4,9 @@
 #include "../resource.h"
 #include "server_game_logic.h"
 #include "../team.h"
-
-class Ai
-{
-public:
+ class Ai
+ {
+ public:
    // Constructors
    Ai(ServerGameLogic& serverGameLogicModule);
 private:
@@ -20,5 +19,5 @@ private:
    void attack(int unitId, Direction direction);
    void UpdateAI(Team &team1, Team &team2);
 };
-
+ 
 #endif

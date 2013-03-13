@@ -1,5 +1,5 @@
 #include "ai.h"
-
+ 
 /* Constructor
  *
  * PRE:     
@@ -50,5 +50,5 @@ void Ai::attack(int unitId, Direction direction)
  */
 void UpdateAI(Team &team1, Team &team2)
 {
-   
+ 
 }
