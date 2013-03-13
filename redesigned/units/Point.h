@@ -3,8 +3,8 @@
 
 class Point {
   private:
-		double x;
-		double y;
+		int x;
+		int y;
   public:
   		Point(double xp = 0, double yp = 0){
   			x = xp; 
@@ -20,14 +20,14 @@ class Point {
   		void setY(const double& yp);
   		
   		double distance(Point otherP){
-  			double xdis = x - otherP.x;
-  			double ydis = y - otherP.y;
+  			double xdis = (double)x - otherP.x;
+  			double ydis = (double)y - otherP.y;
   			return sqrt(xdis*xdis + ydis*ydis);
   		}
   		
   		void move(double a, double b){
-  			x += a;
-  			y += b;
+  			(double)x += a;
+  			(double)y += b;
   		}
   		
   		
