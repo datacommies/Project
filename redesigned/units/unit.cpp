@@ -75,7 +75,7 @@ void Unit::Attack(void) {
 */
 void Unit::FindTarget(Team *team) {
     /* If in range and alive, set as target. */
-    for (int i = 0; i < team->creeps.size(); ++i)
+    for (size_t i = 0; i < team->creeps.size(); ++i)
     {
         if( inRange( position, team->creeps[i].getPos(), perception ) && team->creeps[i].health > 0 ) {
             pTarget = (Unit*)&team->creeps[i];
@@ -83,7 +83,7 @@ void Unit::FindTarget(Team *team) {
         }
     }
 
-    for (int i = 0; i < team->towers.size(); ++i)
+    for (size_t i = 0; i < team->towers.size(); ++i)
     {
         if( inRange( position, team->towers[i].getPos(), perception ) && team->towers[i].health > 0 ) {
             pTarget = (Unit*)&team->towers[i];
@@ -91,10 +91,10 @@ void Unit::FindTarget(Team *team) {
         }
     }
 
-    for (int i = 0; i < team.players.size(); ++i)
+    for (size_t i = 0; i < team->players.size(); ++i)
     {
-        if( inRange( position, team.players[i].getPos(), perception ) && team.players[i].health > 0 ) {
-            pTarget = *towers.players[i];
+        if( inRange( position, team->players[i].getPos(), perception ) && team->players[i].health > 0 ) {
+            pTarget = &team->players[i];
             return;
         }
     }
