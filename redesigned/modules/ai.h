@@ -17,6 +17,7 @@ private:
    void createUnit(int unitId, UnitType type, Point location, Point destination);
    void moveUnit(int unitId, Direction direction);
    void attack(int unitId, Direction direction);
+   void UpdateAI(Team &team[]);
 };
 
 #endif
