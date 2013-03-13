@@ -33,6 +33,7 @@ bool Unit::hasWeakness(int iAttack, int iTarget) {
     /*if(iAttack == iTarget + 1 % ELEMENT_COUNT)
         return true;
     return false;*/
+	return false;
 }
 
 /*
@@ -42,6 +43,7 @@ bool Unit::hasStrength(int iAttack, int iTarget) {
     /*if(iAttack == iTarget - 1 % ELEMENT_COUNT)
         return true;
     return false;*/
+	return false;
 }
 
 /*
