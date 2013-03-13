@@ -43,8 +43,10 @@ private:
     
     static void* handleClient(void*);
     void handleRequests();
-    static int recv_complete(int,void*,size_t,int);
+    
     
 };
+
+int recv_complete(int,void*,size_t,int);
 
 #endif

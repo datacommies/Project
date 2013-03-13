@@ -4,7 +4,7 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include "button.h"
-
+#include "units/Point.h"
 // Defines --------------------------------------------------------------------
 
 #define MAPWIDTH  500 //TODO: change placeholder value
@@ -37,12 +37,6 @@ enum GameState
 };
 
 // Structs --------------------------------------------------------------------
-
-struct Point
-{
-   int x;
-   int y;
-};
 
 struct CLIENT_UNIT // This struct applies only to the client side - server side units are stored differently
 {

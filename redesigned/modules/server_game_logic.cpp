@@ -1,52 +1,57 @@
-    #include "server_game_logic.h"
-    #include "../units/castle.h"
-     
-    #include <stdio.h>
-    #include <signal.h>
-    #include <sys/time.h>
-    #include <stdlib.h>
-    #include <errno.h>
-     
-     
-     
-    void *UpdateThreadFunc(void *p)
-    {
-      ServerGameLogic *sgl = (ServerGameLogic *) p;
-     
-      for(;;)
-        sgl->update();
-     
-      return NULL;
-    }
-     
-     
-    /* Constructor
-     *
-     * PRE:    
-     * POST:    
-     * RETURNS:
-     * NOTES:   Creates a thread and starts running the module */
-    ServerGameLogic::ServerGameLogic()
-       : gameState_(LOBBY)
-    {
-      Creep c;
-      teams[0].creeps.push_back(c);
-    }
+#include "server_game_logic.h"
+#include "../units/castle.h"
+#include "../units/AiController.h"
+
+#include <stdio.h>
+#include <signal.h>
+#include <sys/time.h>
+#include <stdlib.h>
+#include <errno.h>
      
 
-    ServerGameLogic::~ServerGameLogic()
-    {
-    }
-     
-    void ServerGameLogic::startThread() 
-    {
+ServerGameLogic * gSGL;
+ 
+void *UpdateThreadFunc(void *p)
+{
+  ServerGameLogic *sgl = (ServerGameLogic *) p;
+  for(;;)
+    sgl->update();
+ 
+  return NULL;
+}
+ 
+ 
+/* Constructor
+ *
+ * PRE:    
+ * POST:    
+ * RETURNS:
+ * NOTES:   Creates a thread and starts running the module */
+ServerGameLogic::ServerGameLogic()
+   : gameState_(LOBBY)
+{
+  Creep c;
+  c.attackDamage = 10;
+  c.health = 100;
 
-      int result = pthread_create( &update_thread_, NULL, UpdateThreadFunc, (void*) this);
-     
-      if (result != 0)
-        fprintf(stderr, "Error creating thread in %s line %d\n", __FILE__, __LINE__);
+  teams[0].creeps.push_back(c);
+  teams[1].creeps.push_back(c);
+}
+ 
 
-    }
+ServerGameLogic::~ServerGameLogic()
+{
+}
+ 
+void ServerGameLogic::startThread() 
+{
+
+  int result = pthread_create( &update_thread_, NULL, UpdateThreadFunc, (void*) this);
+ 
+  if (result != 0)
+    fprintf(stderr, "Error creating thread in %s line %d\n", __FILE__, __LINE__);
+
+}
 
 void ServerGameLogic::initializeCastles() 
 {
@@ -109,6 +114,7 @@ void ServerGameLogic::initializeCastles()
      * NOTES:    */
     void ServerGameLogic::startGame()
     {
+      gSGL = this;
       startThread();
       setAlarm();
     }
@@ -215,9 +221,7 @@ void ServerGameLogic::initializeCastles()
      * NOTES:   Perform validation here.
      *          Nice to have: send a fail message if command is invalid */
     void ServerGameLogic::update()
-    {
-      
-      
+    {      
       if (requestedCommands.empty())
         return;
      
@@ -244,13 +248,10 @@ void ServerGameLogic::initializeCastles()
     {
      
       signal(SIGALRM, updateClients);
-     
-      // Run AI     
-      //ai_.update(teams[0], teams[1]);
-     
-     
-      // Call network update function
+      
+      AiUpdate(gSGL->teams[0], gSGL->teams[1]);
 
+      // Call network update function
       ServerGameLogic::setAlarm();
     }
      
@@ -263,7 +264,7 @@ void ServerGameLogic::initializeCastles()
       tout_val.it_interval.tv_sec = 0;
       tout_val.it_interval.tv_usec = 0;
       tout_val.it_value.tv_sec = 0;
-      tout_val.it_value.tv_usec = INTERVAL; /* set time for interval (1/30th of a second) */
+      tout_val.it_value.tv_usec = INTERVAL*30; /* set time for interval (1/30th of a second) */
       result = setitimer(ITIMER_REAL, &tout_val,0);
      
       if (result != 0)

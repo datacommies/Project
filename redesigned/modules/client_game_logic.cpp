@@ -17,6 +17,7 @@ ClientGameLogic::ClientGameLogic(ClientNetwork& clientNetwork)
    test.past_position = test.position;
    test.type = CREEP;
    units.push_back(test);
+
    test.position.x = 200;
    test.position.y = 100;
    test.past_position = test.position;
@@ -28,6 +29,8 @@ ClientGameLogic::ClientGameLogic(ClientNetwork& clientNetwork)
    test.past_position = test.position;
    test.type = CASTLE;
    units.push_back(test);
+
+   clientNetwork_.gl = this;
 }
 
 void ClientGameLogic::start () {

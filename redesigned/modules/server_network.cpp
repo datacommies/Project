@@ -141,6 +141,13 @@ void* ServerNetwork::handleClient(void* args)
     ServerNetwork* thiz = (ServerNetwork*) args;
     //long client_ = (long)args;
     
+    for (int i = 0; i < thiz->serverGameLogic_.teams[0].creeps.size(); ++i)
+    {
+        string sc = thiz->serverGameLogic_.teams[0].creeps[i].serializeCreep();
+        send(thiz->client_, sc.data(), sc.size(), 0);
+        cout << "Sent " << sc.size() << endl;
+    }   
+
     // Add this player first
     player_matchmaking_t player;
     
@@ -159,9 +166,9 @@ void* ServerNetwork::handleClient(void* args)
         send(thiz->client_, &thiz->players_[i], sizeof(player_matchmaking_t), 0);
     }
     //update_all_clients_(MSG_PLAYER_UPDATE);
-    
-    string sc = thiz->serverGameLogic_.teams[0].creeps[0].serializeCreep();
-    cout << "Serialized creep: " << sc << endl;
+    /*const char * data = sc.data();
+    header_t * head = (header_t*)&data;
+    cout << head->type << endl;*/
 
     player.head.type = MSG_PLAYER_UPDATE;
     // Inform all other clients_ that this player has arrived.
@@ -221,7 +228,7 @@ void ServerNetwork::handleRequests()
 /* Receive len amount of byte completely (no partial recv) */
 // returns int bytes read
 // recv_complete
-int ServerNetwork::recv_complete (int sockfd, void *buf, size_t len, int flags) {
+int recv_complete (int sockfd, void *buf, size_t len, int flags) {
     size_t bytesRead = 0;
     ssize_t result;
     

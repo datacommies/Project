@@ -25,7 +25,6 @@ public:
 	//Creep(): pPath( 0 ), pSaved( 0 ), moveSpeed( 0 ){}
 
 	//Creep(const Creep&);
-	void	Update(void);
 	void	setPath(Point *pt)	{ pPath = pt; }
 	void	nextPoint(void)	{ pPath++; }
 	void	savePoint(Point &pt)	{ pSaved = &pt; }
@@ -34,8 +33,8 @@ public:
 	void	setTarget(Unit &newTarget) { pTarget = &newTarget; }
 
 
-	virtual void	CheckTarget(void) {}
-	virtual void	FindTarget(void) {}
+	//virtual void	CheckTarget(void) {}
+	//virtual void	FindTarget(void) {}
 	bool			hasWeakness(int, int);
 
 	Point	*	pPath;

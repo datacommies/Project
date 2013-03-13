@@ -1,5 +1,9 @@
+#include <iostream>
 #include "client_network.h"
 #include "../units/creep.h"
+#include "client_game_logic.h"
+
+using namespace std;
 
 /* Constructor
  *
@@ -72,6 +76,26 @@ bool ClientNetwork::connectToServer(std::string hostname, int port)
 	}
 
 	std::cout << "I'M CONNECTEDDDDD!!!!! YEAAAAAAAAAAAAAAAAAAAAAAAA" << std::endl;
+
+	header_t head;
+	recv_complete(connectsock, &head, sizeof(head), 0);
+	cout << "Recv head size:" << head.size << endl;
+
+	// TYPE_CREEP message has 
+	if (head.type == TYPE_CREEP) {
+		CLIENT_UNIT c= {0};
+
+		unit_t u;
+		//int headLength = head.size - sizeof(head);
+		cout << "Waiting for " << head.size - sizeof(head) << endl;
+		recv_complete(connectsock, &u, head.size - sizeof(head), 0);
+		c.position.x = u.posx;
+		c.position.y = u.posy;
+		c.type = CREEP;
+		gl->units.push_back(c);
+	}
+
+	cout << "Done getting a unit" << endl;
 
 	return true;
 }

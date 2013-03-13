@@ -21,6 +21,7 @@ public:
    std::set<Button> UIElements;
 
    // Functions
+   void updateUnits(CLIENT_UNIT unit);
    GameState getCurrentState();
    void start ();
    bool createUnit(UnitType type, Point location);

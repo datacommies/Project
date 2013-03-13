@@ -1,5 +1,6 @@
 #include "server.h"
-
+#include <signal.h>
+#include "../units/AiController.h"
 /* Default ctor
  *
  * PRE:     
@@ -21,10 +22,10 @@ Server::Server()
  */
 void Server::run()
 {
+
+    serverGameLogic_.startGame();
+    signal(SIGPIPE, SIG_IGN); 
     serverNetwork_.initSock();
     serverNetwork_.initNetwork();
-    while (true) {
-        sleep(1);
-    }
 
 }

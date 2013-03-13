@@ -1,6 +1,6 @@
 CFLAGS = -Wall -g
 LIBS = -lsfml-window -lsfml-graphics -lsfml-audio -lsfml-system -lfontconfig -lsfgui
-MODULES = build/modules/ai.o build/modules/client_game_logic.o build/modules/control.o build/modules/server.o build/modules/server_network.o build/modules/client.o build/modules/client_network.o build/modules/graphics.o build/modules/server_game_logic.o build/units/creep.o build/units/mobile_unit.o build/units/unit.o build/units/castle.o build/units/tower.o
+MODULES = build/modules/ai.o build/modules/client_game_logic.o build/modules/control.o build/modules/server.o build/modules/server_network.o build/modules/client.o build/modules/client_network.o build/modules/graphics.o build/modules/server_game_logic.o build/units/creep.o build/units/mobile_unit.o build/units/unit.o build/units/castle.o build/units/tower.o build/units/AiController.o
 
 
 all: build server client

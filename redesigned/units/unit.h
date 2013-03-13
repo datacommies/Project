@@ -23,7 +23,7 @@ public:
     
     bool            isAlive() { return health > 0; } //incase creep get hits more than its remaining health
     virtual void    Attack(void);
-    virtual void    Update(Team*);
+    virtual void    Update(Team&);
     void            setTarget(Unit &newTarget) { pTarget = &newTarget; }
     float           Rotate(Point); 
     void            setDamage(int newDamage) { attackDamage = newDamage;  }
