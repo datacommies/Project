@@ -44,11 +44,11 @@ void * init (void * in) {
 	sfg::SFGUI sfgui;
 
 	//Create a test window.
-	sfg::Window::Ptr m_wndmain;
-	m_wndmain = sfg::Window::Create( sfg::Window::TITLEBAR | sfg::Window::BACKGROUND | sfg::Window::RESIZE );
-	m_wndmain->SetTitle( L"Example application" );
+	sfg::Window::Ptr testwindow;
+	testwindow = sfg::Window::Create( sfg::Window::TITLEBAR | sfg::Window::BACKGROUND );
+	testwindow->SetTitle( L"application" );
 
-	
+	testwindow->SetPosition(sf::Vector2f(100,100));
 
 	// Go to the main menu first upon entering the game.
 	g->setupMainMenu();
@@ -59,6 +59,8 @@ void * init (void * in) {
 
 		// Check to see if there is an event on the stack. If so, enter the while loop (pollEvent call doesn't block).
 		while (window.pollEvent(event)) {
+			testwindow->HandleEvent( event );
+
 			if (event.type == sf::Event::Closed){
 				window.close();
 				exit(0);
@@ -88,7 +90,7 @@ void * init (void * in) {
 		}
  		
  		// Update the sfgui test window
- 		m_wndmain->Update( 0.f );
+ 		testwindow->Update( 0.f );
 		
 		window.clear();
 
