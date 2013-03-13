@@ -124,6 +124,23 @@ float Unit::Rotate(Point pt) {
     return atan2( (float)position.y - pt.y, (float)position.x - pt.x );
 }
 
-string Unit::serializeUnit(const Unit& unit){
-    return 0;
+
+string Unit::serializeUnit()
+{
+    
+    unit_t u;
+    
+    u.header.type = getType();
+    u.header.size = getSize();
+    u.id = id;
+    u.x = position.x;
+    u.y = position.y;
+    u.health = health;
+    u.attackDamage = attackDamage;
+    u.attackRange = attackRange;
+    u.attackSpeed = attackSpeed;
+    u.perception = perception;
+    u.attackCount = attackCount;
+    
+    return string(&u, sizeof(unit_t));
 }

@@ -14,13 +14,14 @@ public:
           const int& atkspd, const int& percep, const int& atkcnt, const int& spd, Direction direct,
           const int& cid);
 
-    std::string serializePlayer(const Player& player);
+    std::string serializePlayer();
 
-    virtual void Attack( void );
-    virtual void Update( void );
+    virtual void Attack(void);
+    virtual void Update(void);
+    virtual void Move(void);
 
     virtual UnitTypes getType() const { return TYPE_PLAYER; }
-	virtual size_t getSize() const { return sizeof(Player); }
+	virtual size_t getSize() const { return MobileUnit::getSize(); }
 
 private:   
 };

@@ -15,10 +15,10 @@ public:
 
     int getWallArmour() { return wallArmour_; }
     void setWallArmour(const int& amount) { wallArmour_ = amount; }
-    std::string serializeTower(const Tower& tower);
+    std::string serializeTower();
 
     virtual UnitTypes getType() const { return TYPE_TOWER; }
-	virtual size_t getSize() const { return sizeof(Tower); }
+	virtual size_t getSize() const { return Unit::getSize() + sizeof(tower_t); }
 	
 private:  
 };

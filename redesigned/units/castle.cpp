@@ -11,7 +11,7 @@ Castle::Castle(const int& uid, Point pos, const int& hp, const int& atkdmg, cons
     //validation
 }
 
-string Castle::serializeCastle(const Castle& castle)
+string Castle::serializeCastle()
 {
     return 0;
 }

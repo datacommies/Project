@@ -10,10 +10,10 @@ class Creep : public MobileUnit
 {
 public: 
   	void spawn(const int& num);  //also creep type? when we have a type
-	std::string serializeCreep(const Creep& creep);
+	std::string serializeCreep();
 
 	virtual UnitTypes getType() const { return TYPE_CREEP; }
-	virtual size_t getSize() const { return sizeof(Creep); }
+	virtual size_t getSize() const { return MobileUnit::getSize(); }
 
 	Creep(const int& uid, Point pos, const int& hp, const int& atkdmg, const int& atkrng,
           const int& atkspd, const int& percep, const int& atkcnt, const int& spd, Direction direct,
@@ -25,7 +25,7 @@ public:
 
 	Creep(const Creep&);
 	void	Update(void);
-	
+	void 	Move(Point);
 	void	setPath(Point *pt)	{ pPath = pt; }
 	void	nextPoint(void)	{ pPath++; }
 	void	savePoint(Point &pt)	{ pSaved = &pt; }
