@@ -10,8 +10,8 @@ class Tower : public Unit
 public:
     int wallArmour_;
 
-    Tower(const int& uid, Point pos, const int& hp, const int& atkdmg, const int& atkrng,
-          const int& atkspd, const int& percep, const int& atkcnt, const int& wall);
+    Tower(int uid, Point pos, int hp, int atkdmg, int atkrng,
+          int atkspd, int percep, int atkcnt, int wall);
 
     int getWallArmour() { return wallArmour_; }
     void setWallArmour(const int& amount) { wallArmour_ = amount; }
