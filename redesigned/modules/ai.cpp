@@ -1,5 +1,4 @@
 #include "ai.h"
-#include "../team.h"
 
 /* Constructor
  *
