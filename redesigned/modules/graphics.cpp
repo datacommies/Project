@@ -165,6 +165,16 @@ void Graphics::drawLobby(sf::RenderWindow& window)
 	window.draw(title);
 }
 
+Point Lerp(Point start, Point end, float percent)
+{
+	float sx = start.x, sy= start.y;
+	float ex = end.x, ey= end.y;
+	Point result;
+	result.x = sx + percent * (ex - sx);
+	result.y = sy + percent * (ey - sy);
+	return result;
+}
+
 /* Draws all current units.
  *
  * PRE:     
@@ -176,15 +186,28 @@ void Graphics::drawUnits(sf::RenderWindow& window)
 	sf::RectangleShape healthbar, health_bg;
 	healthbar.setFillColor(sf::Color(  0, 255,  0));
 	health_bg.setFillColor(sf::Color(255,   0,  0));
+	health_bg.setSize(sf::Vector2f( 25, 5));
 
 	for (std::vector<CLIENT_UNIT>::iterator unit = clientGameLogic_.units.begin(); unit != clientGameLogic_.units.end(); ++unit)
 	{
-		creep_sprite.setPosition(unit->position.x, unit->position.y);
+		// Increment interpolation value, if there is a different between past and current positions.
+		if (unit->past_position.x != unit->position.x || unit->past_position.y != unit->position.y)
+			//  This increment should be as close as possible to the 1 over amount of time required until the next change in unit->position.
+			unit->inter_value += 1/50.0; // TODO: factor in elapsed time since last draw.
 		
-		health_bg.setPosition(unit->position.x, unit->position.y+25);
-		health_bg.setSize(sf::Vector2f( 25, 5));
+		// Interpolation complete: set the past position to the current position and stop interpolation.
+		if (unit->inter_value >= 1.0) {
+			unit->past_position = unit->position; 
+			unit->inter_value = 0;
+		}
 
-		healthbar.setPosition(unit->position.x, unit->position.y+25);
+		// Linear interpolation between a unit's past position and new position.
+		Point interpolated = Lerp(unit->past_position, unit->position, unit->inter_value);
+
+		// All drawable unit elements use the same interpolated position.
+		creep_sprite.setPosition(interpolated.x, interpolated.y);
+		health_bg.setPosition(interpolated.x, interpolated.y+25);
+		healthbar.setPosition(interpolated.x, interpolated.y+25);
 		healthbar.setSize(sf::Vector2f( min(max(unit->health/4, 0), 100), 5));
 		window.draw(creep_sprite);
 		window.draw(health_bg);

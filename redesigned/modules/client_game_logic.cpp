@@ -14,9 +14,11 @@ ClientGameLogic::ClientGameLogic(ClientNetwork& clientNetwork)
    test.health = 100;
    test.position.x = 100;
    test.position.y = 100;
+   test.past_position = test.position;
    units.push_back(test);
    test.position.x = 200;
    test.position.y = 100;
+   test.past_position = test.position;
    units.push_back(test);
 }
 
