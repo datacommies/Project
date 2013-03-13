@@ -70,11 +70,13 @@ private:
    // Graphics internals
    sf::Font font;
    sf::Texture map_bg;
+   sf::Texture hud_bg;
    sf::Sprite  map;
+   sf::Sprite hud;
 
    // Functions
    void setupMainMenu();
-   void drawHud(sf::RenderWindow& window, Graphics* g);
+   void drawHud(sf::RenderWindow& window);
    void drawLobby(sf::RenderWindow& window);
    void drawUnits(sf::RenderWindow& window);
    void drawMap(sf::RenderWindow& window);

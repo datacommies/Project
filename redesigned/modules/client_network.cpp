@@ -1,4 +1,5 @@
 #include "client_network.h"
+#include "../units/creep.h"
 
 /* Constructor
  *

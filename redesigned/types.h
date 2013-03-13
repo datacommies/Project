@@ -25,6 +25,7 @@ enum {
     MSG_RESOURCE_UPDATE
 };
 
+// Use resouce UnitType instead!
 enum UnitTypes {
 	TYPE_CREEP,
 	TYPE_TOWER,

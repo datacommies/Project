@@ -13,20 +13,20 @@ MobileUnit::MobileUnit(int uid, Point pos, int hp, int atkdmg, int atkrng,
 /*
 * Move the current point towards the target point based on Speed. 
 * this is what the creep move should be, not the mobile units
-*/
+*
 void MobileUnit::Move( Point pt ) {
     //position.x += getDirection( position.x, pt.x ) * moveSpeed;
     //position.y += getDirection( position.y, pt.y )  * moveSpeed;
-}
+}*/
 
 string MobileUnit::serializeMobileUnit()
 {
     string s = Unit::serializeUnit();
     
     mobileunit_t m;
-    m.speed = speed;
+    m.speed = moveSpeed;
     m.direction = direction;
-    s += string(&m, sizeof(mobileunit_t));
-    
+    s += string((char*)&m, sizeof(mobileunit_t));
+    cout  << "MobileUnit Serialized: |"  << s << "| size: " << s.size() << endl;
     return s;
 }

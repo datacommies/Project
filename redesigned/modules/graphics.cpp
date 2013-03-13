@@ -1,7 +1,7 @@
 #include "graphics.h"
 #include <fontconfig/fontconfig.h>
 #include <iostream>
-
+#include <SFGUI/SFGUI.hpp>
 #include <unistd.h>
 #include <SFML/Graphics.hpp>
 
@@ -34,9 +34,22 @@ void * init (void * in) {
 	castle_sprite.setTexture(castle_tex);
 
 	// Create window for client and assign it as the window for the graphics object.
-	sf::RenderWindow window(sf::VideoMode(800, 600), "Client");
+	sf::RenderWindow window(sf::VideoMode(800, 800), "Client");
 	g->window = &window;
 	
+	// We have to do this because we don't use SFML to draw.
+	window.resetGLStates();
+
+	// Creat an sfgui object. Needs to be done before other SFGUI calls.
+	sfg::SFGUI sfgui;
+
+	//Create a test window.
+	sfg::Window::Ptr m_wndmain;
+	m_wndmain = sfg::Window::Create( sfg::Window::TITLEBAR | sfg::Window::BACKGROUND | sfg::Window::RESIZE );
+	m_wndmain->SetTitle( L"Example application" );
+
+	
+
 	// Go to the main menu first upon entering the game.
 	g->setupMainMenu();
 
@@ -73,7 +86,10 @@ void * init (void * in) {
 				}
 			}
 		}
-
+ 		
+ 		// Update the sfgui test window
+ 		m_wndmain->Update( 0.f );
+		
 		window.clear();
 
 		// Check to see which state the game is in and act accordingly.
@@ -83,7 +99,7 @@ void * init (void * in) {
 		else if (g->clientGameLogic_.getCurrentState() == IN_GAME) {
 			g->drawMap(window);
 			g->drawUnits(window);
-			g->drawHud(window, g);
+			g->drawHud(window);
 			sf::Text state("In Game", g->font, 20);
 			window.draw(state);
 		}
@@ -94,6 +110,9 @@ void * init (void * in) {
 			Button b = *button;
 			b.draw(window);
 		}
+
+		// Display test windows.
+		sfgui.Display(window);
 
 		window.display();
 	}
@@ -154,8 +173,28 @@ void Graphics::setupMainMenu()
  * POST:    Current HUD is displayed
  * RETURNS: 
  * NOTES:    */
-void Graphics::drawHud(sf::RenderWindow& window, Graphics* g)
+void Graphics::drawHud(sf::RenderWindow& window)
 {
+	hud_bg.loadFromFile("images/hud.png");
+	hud.setTexture(hud_bg);
+	hud.setPosition(0, 600);
+
+	window.draw(hud);
+}
+
+/* Draws the map
+ *
+ * PRE:     
+ * POST:    The map is displayed
+ * RETURNS: 
+ * NOTES:    */
+void Graphics::drawMap(sf::RenderWindow& window)
+{
+	// Load the map texture.
+	map_bg.loadFromFile("images/map.png");
+	map.setTexture(map_bg);
+
+	window.draw(map);
 }
 
 /* Draws the lobby.
@@ -227,21 +266,6 @@ void Graphics::drawUnits(sf::RenderWindow& window)
 		window.draw(health_bg);
 		window.draw(healthbar);
 	}
-}
-
-/* Draws the map
- *
- * PRE:     
- * POST:    The map is displayed
- * RETURNS: 
- * NOTES:    */
-void Graphics::drawMap(sf::RenderWindow& window)
-{
-	// Load the map texture.
-	map_bg.loadFromFile("images/map.png");
-	map.setTexture(map_bg);
-
-	window.draw(map);
 }
 
 /* Init Game controls
