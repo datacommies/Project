@@ -32,7 +32,7 @@ void * init (void * in) {
 	g->window = &window;
 	
 	// Go to the main menu first upon entering the game.
-	g->drawMainMenu(window);
+	g->setupMainMenu();
 
 	// Main loop for the graphics thread.
 	while (window.isOpen()) {
@@ -130,7 +130,7 @@ Graphics::Graphics(ClientGameLogic& clientGameLogic)
    	pthread_create(&t, NULL, init, (void*)this);
 }
 
-void Graphics::drawMainMenu(sf::RenderWindow& window)
+void Graphics::setupMainMenu()
 {
 	// Create buttons for the menu screen and add them to the list of UI elements.
 	Button a(ID_JOIN, sf::Vector2f(250,300), sf::Vector2f(300,50), font, "                Join Game");
@@ -173,15 +173,21 @@ void Graphics::drawLobby(sf::RenderWindow& window)
  * NOTES:    */
 void Graphics::drawUnits(sf::RenderWindow& window)
 {
-	sf::RectangleShape healthbar;
-	healthbar.setFillColor(sf::Color(0,255,0));
+	sf::RectangleShape healthbar, health_bg;
+	healthbar.setFillColor(sf::Color(  0, 255,  0));
+	health_bg.setFillColor(sf::Color(255,   0,  0));
 
 	for (std::vector<CLIENT_UNIT>::iterator unit = clientGameLogic_.units.begin(); unit != clientGameLogic_.units.end(); ++unit)
 	{
 		creep_sprite.setPosition(unit->position.x, unit->position.y);
+		
+		health_bg.setPosition(unit->position.x, unit->position.y+25);
+		health_bg.setSize(sf::Vector2f( 25, 5));
+
 		healthbar.setPosition(unit->position.x, unit->position.y+25);
-		healthbar.setSize(sf::Vector2f(unit->health/4.0, 5));
+		healthbar.setSize(sf::Vector2f( min(max(unit->health/4, 0), 100), 5));
 		window.draw(creep_sprite);
+		window.draw(health_bg);
 		window.draw(healthbar);
 	}
 }

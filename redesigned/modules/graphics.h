@@ -73,7 +73,7 @@ private:
    sf::Sprite  map;
 
    // Functions
-   void drawMainMenu(sf::RenderWindow& window);
+   void setupMainMenu();
    void drawHud(sf::RenderWindow& window, Graphics* g);
    void drawLobby(sf::RenderWindow& window);
    void drawUnits(sf::RenderWindow& window);
