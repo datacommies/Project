@@ -18,7 +18,7 @@ public:
 
     virtual void Attack(void);
     virtual void Update(void);
-    virtual void Move(void)
+    virtual void Move(void);
 
     virtual UnitTypes getType() const { return TYPE_PLAYER; }
 	virtual size_t getSize() const { return MobileUnit::getSize(); }
