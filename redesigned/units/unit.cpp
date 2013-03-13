@@ -70,18 +70,23 @@ void Unit::Attack(void) {
 * Finds the next target, will loop through all enemies until one target is found.
 * TODO - Add priority. ( Attack players over creeps )
 */
-void Unit::FindTarget(void) {
-    //the game class does not exist, foos!
-    /*std::vector<Unit*>::iterator it = Game::getEnemiesBegin( iTeam );
-    std::vector<Unit*>::iterator end = Game::getEnemiesEnd( iTeam );*/
-
-    //for( ; it != end; ++it ) {
-        /* If in range and alive, set as target. */
-        /*if( inRange( pCurrPoint, (*it)->getPos(), perception ) && (*it)->health > 0 ) {
-            pTarget = *it;
-            break;
+void Unit::FindTarget(Team& team) {
+    /* If in range and alive, set as target. */
+    for (int i = 0; i < team.creeps.size(); ++i)
+    {
+        if( inRange( position, team.creeps[i].getPos(), perception ) && team.creeps[i].health > 0 ) {
+            pTarget = *team.creeps[i];
+            return;
         }
-    }*/
+    }
+
+    for (int i = 0; i < team.towers.size(); ++i)
+    {
+        if( inRange( position, team.towers[i].getPos(), perception ) && team.towers[i].health > 0 ) {
+            pTarget = *towers.towers[i];
+            return;
+        }
+    }
 }
 
 /*
@@ -100,7 +105,7 @@ void Unit::CheckTarget(void) {
 /*
 * If we have an Unit target, attack.
 */
-void Unit::Update() {
+void Unit::Update(Team& team) {
 
     /* If we have a Target, check their status. */
     if( pTarget != NULL )
@@ -108,7 +113,7 @@ void Unit::Update() {
 
     /* Search for Target. */
     if( pTarget == NULL )
-        FindTarget();
+        FindTarget(team);
 
     /* If we found a new Target, and they are in range.. */
     if( pTarget != NULL ) {
