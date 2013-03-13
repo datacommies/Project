@@ -9,12 +9,37 @@ using namespace std;
 
 #define ID_JOIN 100
 #define ID_QUIT 101
+#define ID_TEMP 999
 
 sf::Texture creep_tex;
 sf::Sprite  creep_sprite;
 
 sf::Texture castle_tex;
 sf::Sprite  castle_sprite;
+
+void Graphics::SFGUI_ShowWindow(sfg::Window::Ptr window, bool show)
+{
+	window->Show(show);
+}
+
+void Graphics::initJoinWindow(){
+	// Create join window using SFGUI
+	sfgJoinWindow = sfg::Window::Create( sfg::Window::TITLEBAR | sfg::Window::BACKGROUND ); // Make the window.
+	sfgJoinWindow->SetTitle(L"Join Game"); // Add a title to the window.
+	sfgJoinWindow->SetPosition(sf::Vector2f(400,400)); // Change the window position.
+	
+	// Create a button to close the join window.
+	sfg::Button::Ptr sfgCloseJoinButton( sfg::Button::Create(L"Close window"));
+	
+	//sfgCloseJoinButton->SetId("close");
+
+	// Add it to the join window and set a signal up.
+	sfgJoinWindow->Add(sfgCloseJoinButton);
+	//sfgCloseJoinButton->GetSignal( sfg::Widget::OnLeftClick ).Connect(&Graphics::SFGUI_ShowWindow, this);
+
+	// Hide this window on startup.
+	SFGUI_ShowWindow(sfgJoinWindow, false);
+}
 
 /* Graphics Thread entry point
  *
@@ -40,15 +65,10 @@ void * init (void * in) {
 	// We have to do this because we don't use SFML to draw.
 	window.resetGLStates();
 
-	// Creat an sfgui object. Needs to be done before other SFGUI calls.
+	// Create an sfgui object. Needs to be done before other SFGUI calls.
 	sfg::SFGUI sfgui;
 
-	//Create a test window.
-	sfg::Window::Ptr testwindow;
-	testwindow = sfg::Window::Create( sfg::Window::TITLEBAR | sfg::Window::BACKGROUND );
-	testwindow->SetTitle( L"application" );
-
-	testwindow->SetPosition(sf::Vector2f(100,100));
+	g->initJoinWindow();
 
 	// Go to the main menu first upon entering the game.
 	g->setupMainMenu();
@@ -59,7 +79,9 @@ void * init (void * in) {
 
 		// Check to see if there is an event on the stack. If so, enter the while loop (pollEvent call doesn't block).
 		while (window.pollEvent(event)) {
-			testwindow->HandleEvent( event );
+			
+			// Handle SFGUI events.
+			g->sfgJoinWindow->HandleEvent(event);
 
 			if (event.type == sf::Event::Closed){
 				window.close();
@@ -74,6 +96,10 @@ void * init (void * in) {
 					if (button->rect.getGlobalBounds().contains(mouse)) {
 						// Start button.
 						if (button->id == ID_JOIN){
+							Graphics::SFGUI_ShowWindow(g->sfgJoinWindow, true);
+						}
+						else if (button->id == ID_TEMP)
+						{
 							g->initGameControls();
 							g->clientGameLogic_.start();
 							break; // Must break out now, initGameControls invalidates the iterators.
@@ -90,7 +116,7 @@ void * init (void * in) {
 		}
  		
  		// Update the sfgui test window
- 		testwindow->Update( 0.f );
+ 		g->sfgJoinWindow->Update( 0.f );
 		
 		window.clear();
 
@@ -160,8 +186,8 @@ Graphics::Graphics(ClientGameLogic& clientGameLogic)
 void Graphics::setupMainMenu()
 {
 	// Create buttons for the menu screen and add them to the list of UI elements.
-	Button a(ID_JOIN, sf::Vector2f(250,300), sf::Vector2f(300,50), font, "                Join Game");
-	Button b(321, 	   sf::Vector2f(250,400), sf::Vector2f(300,50), font, "     Press this button for fun");
+	Button a(ID_TEMP, sf::Vector2f(250,300), sf::Vector2f(300,50), font, "                Test Game");
+	Button b(ID_JOIN, 	   sf::Vector2f(250,400), sf::Vector2f(300,50), font, "               Join Game");
 	Button c(ID_QUIT,  sf::Vector2f(250,500), sf::Vector2f(300,50), font, "                     Quit");
 
 	clientGameLogic_.UIElements.insert(a);
@@ -296,3 +322,4 @@ void Graphics::initGameControls () {
 	clientGameLogic_.UIElements.insert(f);
 	clientGameLogic_.UIElements.insert(h);
 }
+
