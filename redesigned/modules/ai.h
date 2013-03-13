@@ -3,6 +3,7 @@
 
 #include "../resource.h"
 #include "server_game_logic.h"
+#include "../team.h"
 
 class Ai
 {
