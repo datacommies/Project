@@ -46,6 +46,38 @@
 
     }
 
+void ServerGameLogic::initializeCastles() 
+{
+/*
+    int uid = next_unit_id_++;
+    Point pos;
+    int hp = 100;
+    int atkdmg = 0; 
+    int atkrng = 0;
+    int atkspd = 0;
+    int percep = 0;
+    int atkcnt = 0;
+    int wall = 1;
+    int cid = 0;
+    
+    pos.x = 0;
+    pos.y = 0;
+   
+    // Team 0
+    //Castle castle1 = Castle(uid, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, wall, cid);
+
+    // Team 1
+    //castle2 = 
+    */
+    /*
+    int zero = 0;
+    Point pos;
+    
+    Castle castle = Castle(zero, pos, zero, zero, zero, zero, zero, zero, zero, zero);
+    */
+    
+}
+
 
     void ServerGameLogic::initializeTeams()
     {
@@ -190,14 +222,14 @@
      *          Nice to have: send a fail message if command is invalid */
     void ServerGameLogic::update()
     {
+      ai_.update(teams[0], teams[1]);
+      
       if (requestedCommands.empty())
         return;
      
       CommandData newCommand = requestedCommands.front();
       requestedCommands.pop();
 
-
-     
       switch (newCommand.cmd) {
         case Create:
           updateCreate(newCommand);

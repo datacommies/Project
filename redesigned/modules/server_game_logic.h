@@ -18,13 +18,21 @@
     #include <stdlib.h>
     #include <pthread.h>
      
+
     #include "../resource.h"
-     
+    //#include "ai.h"    
+
     #include <string>
     #include <queue>
     #include "../team.h"
      
     enum Command { Create, MovePlayer, MoveUnit, Attack };
+     
+    /* Until Ai is available/fixed */
+    class MyAi {
+        public: 
+            void update(Team &team1, Team &team2) {}
+    };
      
     struct CommandData {
       Command cmd;
@@ -61,6 +69,7 @@
      
     private:
        // Fields
+       MyAi ai_;
        GameState gameState_;
        pthread_t update_thread_;
        int next_unit_id_;
@@ -73,7 +82,16 @@
        void updateMoveUnit(CommandData& command);
      
        void startThread();
+       
+       
+       // Initializing the Game functions
        void initializeTeams();
+       void initializeCastles();
+       
+       
+       
+       
+       
        static void setAlarm();
        static void updateClients(int i);
 
