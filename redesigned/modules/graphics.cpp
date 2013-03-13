@@ -37,11 +37,18 @@ void * init (void * in) {
 	sf::RenderWindow window(sf::VideoMode(800, 800), "Client");
 	g->window = &window;
 	
-window.resetGLStates();
+	// We have to do this because we don't use SFML to draw.
+	window.resetGLStates();
+
+	// Creat an sfgui object. Needs to be done before other SFGUI calls.
 	sfg::SFGUI sfgui;
+
+	//Create a test window.
 	sfg::Window::Ptr m_wndmain;
 	m_wndmain = sfg::Window::Create( sfg::Window::TITLEBAR | sfg::Window::BACKGROUND | sfg::Window::RESIZE );
 	m_wndmain->SetTitle( L"Example application" );
+
+	
 
 	// Go to the main menu first upon entering the game.
 	g->setupMainMenu();
@@ -80,6 +87,7 @@ window.resetGLStates();
 			}
 		}
  		
+ 		// Update the sfgui test window
  		m_wndmain->Update( 0.f );
 		
 		window.clear();
@@ -103,6 +111,7 @@ window.resetGLStates();
 			b.draw(window);
 		}
 
+		// Display test windows.
 		sfgui.Display(window);
 
 		window.display();
