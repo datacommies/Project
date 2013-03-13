@@ -1,4 +1,5 @@
 #include "ai.h"
+#include "../team.h"
 
 /* Constructor
  *
@@ -43,4 +44,12 @@ void Ai::moveUnit(int unitId, Direction direction)
 void Ai::attack(int unitId, Direction direction)
 {
    serverGameLogicModule_.receiveAttackCommand(unitId, direction);
+}
+
+/*
+ * Updates all of the AI.
+ */
+void UpdateAI(Team &team[])
+{
+   
 }
