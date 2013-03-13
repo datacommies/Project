@@ -10,7 +10,7 @@ class MobileUnit : public Unit
 public:
     int moveSpeed;   //the speed which a unit can move. ex. (it can move 1 square per 30 frames)
     Direction direction;
-    int moveCounter
+    int moveCounter;
    
     MobileUnit(const int& uid, Point pos, const int& hp, const int& atkdmg, const int& atkrng,
         	   const int& atkspd, const int& percep, const int& atkcnt, const int& spd, Direction direct);
