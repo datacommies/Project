@@ -44,7 +44,7 @@ void Ai::attack(int unitId, Direction direction)
 {
    serverGameLogicModule_.receiveAttackCommand(unitId, direction);
 }
--
+
  /*
   * Updates all of the AI.
   */
