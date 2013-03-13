@@ -3,7 +3,7 @@
 /*
  * Updates all of the AI.
  */
-void UpdateAI(Team &team1, Team &team2)
-{
-   
-}
+ 
+//void UpdateAI(Team &team1, Team &team2)
+//{  
+//}
