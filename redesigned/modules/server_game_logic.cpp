@@ -29,6 +29,8 @@
     ServerGameLogic::ServerGameLogic()
        : gameState_(LOBBY)
     {
+      Creep c;
+      teams[0].creeps.push_back(c);
     }
      
 

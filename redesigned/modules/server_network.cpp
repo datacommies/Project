@@ -21,7 +21,7 @@ int ServerNetwork::initSock(int port)
     int ov = 1;
     struct sockaddr_in serv_addr;
     
-    int sock_ = socket(AF_INET, SOCK_STREAM, 0);
+    sock_ = socket(AF_INET, SOCK_STREAM, 0);
     if (sock_ < 0)
         error("ERROR opening socket");
     
@@ -30,7 +30,7 @@ int ServerNetwork::initSock(int port)
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = INADDR_ANY;
     serv_addr.sin_port = htons(port);
-    
+    cout << "port: " << port << endl;
     if (bind(sock_, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
         error("ERROR on binding");
 
@@ -43,18 +43,24 @@ int ServerNetwork::initSock(int port)
 
 void ServerNetwork::initNetwork()
 {
-    std::cout << "Listening for connections..." << std::endl;
+
+    std::cout << "Entering initNetwork()..." << std::endl;
     
     pthread_create (&uiThread_, NULL, handleInput, this); // start server input handler.
-    
+
+    std::cout << "created handleInput thread..." << std::endl;
+    socklen_t clientLength_ = sizeof(sockaddr_in);
+    struct sockaddr_in clientAddr_ = {0};
+
     // Listen for new connections, or until server socket is closed.
-    while (( client_ = accept(sock_, (struct sockaddr *) &clientAddr_, &clientLength_) ) > 0) {
+    while (( client_ = accept(sock_, (struct sockaddr *) &clientAddr_, &clientLength_) ) > 0) { //return -1 now
         std::cout << std::endl << "new connection." << std::endl;
         pthread_t thread;
         pthread_create (&thread, NULL, handleClient, this); // TODO: use struct as parameter
         threads_.push_back(thread);
         clients_.push_back(client_);
     }
+    std::cout << "Leaving initNetwork()... client_ has value " << client_<<  " " << std::endl;
 }
 
 /* Sends current game state to a client_.
@@ -83,8 +89,6 @@ void ServerNetwork::error (const char *msg)
     exit(1);
 }
 
-
-
 /* Interactive CLI console
  *
  * PRE:     Server sockets started
@@ -93,6 +97,8 @@ void ServerNetwork::error (const char *msg)
  * NOTES:   Current implementation is to refresh ALL data on each update. */
 void* ServerNetwork::handleInput(void* args)
 {
+
+
     ServerNetwork * thiz = (ServerNetwork*) args;
     std::string line;
     
@@ -131,6 +137,7 @@ void* ServerNetwork::handleInput(void* args)
 
 void* ServerNetwork::handleClient(void* args)
 {
+    cout << "Hello world!" << endl;
     ServerNetwork* thiz = (ServerNetwork*) args;
     //long client_ = (long)args;
     
@@ -153,6 +160,9 @@ void* ServerNetwork::handleClient(void* args)
     }
     //update_all_clients_(MSG_PLAYER_UPDATE);
     
+    string sc = thiz->serverGameLogic_.teams[0].creeps[0].serializeCreep();
+    cout << "Serialized creep: " << sc << endl;
+
     player.head.type = MSG_PLAYER_UPDATE;
     // Inform all other clients_ that this player has arrived.
     for (size_t i = 0; i < thiz->clients_.size(); ++i)
@@ -175,7 +185,7 @@ void* ServerNetwork::handleClient(void* args)
         header_t head;
         int n = recv_complete(thiz->client_, &head, sizeof(head), 0);
         
-        if (n < 0)
+        if (n <= 0)
             break;
         
         if (head.type == MSG_CHAT) {
@@ -218,8 +228,10 @@ int ServerNetwork::recv_complete (int sockfd, void *buf, size_t len, int flags) 
     while (bytesRead < len) {
         result = recv (sockfd, (char*)buf + bytesRead, len - bytesRead, flags);
         
-        if (result < 1)
-            cerr << "recv" << endl;//error("recv");
+        if (result < 1) {
+            cerr << ("recasdfasdfsadfv") << endl;
+            return result;
+        }
         
         bytesRead += result;
     }
@@ -231,4 +243,3 @@ int ServerNetwork::recv_complete (int sockfd, void *buf, size_t len, int flags) 
 bool operator == (const player_matchmaking_t& a, const player_matchmaking_t& b) {
     return a.pid == b.pid;
 }
-
