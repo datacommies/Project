@@ -69,7 +69,7 @@
      
     private:
        // Fields
-       MyAi ai_;
+       static MyAi ai_;
        GameState gameState_;
        pthread_t update_thread_;
        int next_unit_id_;

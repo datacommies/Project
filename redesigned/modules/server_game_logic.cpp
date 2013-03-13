@@ -224,7 +224,7 @@ void ServerGameLogic::initializeCastles()
      *          Nice to have: send a fail message if command is invalid */
     void ServerGameLogic::update()
     {
-      ai_.update(teams[0], teams[1]);
+      
       
       if (requestedCommands.empty())
         return;
@@ -252,6 +252,10 @@ void ServerGameLogic::initializeCastles()
     {
      
       signal(SIGALRM, updateClients);
+     
+      // Run AI     
+      //ai_.update(teams[0], teams[1]);
+     
      
       // Call network update function
 
