@@ -10,6 +10,10 @@ ClientGameLogic::ClientGameLogic(ClientNetwork& clientNetwork)
    : clientNetwork_(clientNetwork), gameState_(LOBBY)
 {
    // TODO: create a thread and begin processing
+   CLIENT_UNIT test = {0};
+   test.position.x = 100;
+   test.position.y = 100;
+   units.push_back(test);
 }
 
 void ClientGameLogic::start () {

@@ -7,9 +7,11 @@
 
 using namespace std;
 
-
 #define ID_JOIN 100
 #define ID_QUIT 101
+
+sf::Texture creep_tex;
+sf::Sprite  creep_sprite;
 
 /* Graphics Thread entry point
  *
@@ -19,9 +21,12 @@ using namespace std;
  * NOTES:   Graphics init and main loop  
 */
 void * init (void * in) {
-	// Set g to current instance of Graphics object.
+	// Pointer to the Graphics instance is passed through the thread create argument.
 	Graphics* g = (Graphics *)in;
-
+	
+	creep_tex.loadFromFile("images/creep.png");
+	creep_sprite.setTexture(creep_tex);
+    
 	// Create window for client and assign it as the window for the graphics object.
 	sf::RenderWindow window(sf::VideoMode(800, 600), "Client");
 	g->window = &window;
@@ -70,8 +75,8 @@ void * init (void * in) {
 			g->drawLobby(window);
 		}
 		else if (g->clientGameLogic_.getCurrentState() == IN_GAME) {
-			g->drawUnits(window);
 			g->drawMap(window);
+			g->drawUnits(window);
 			g->drawHud(window, g);
 			sf::Text state("In Game", g->font, 20);
 			window.draw(state);
@@ -171,7 +176,8 @@ void Graphics::drawUnits(sf::RenderWindow& window)
 
 	for (std::vector<CLIENT_UNIT>::iterator unit = clientGameLogic_.units.begin(); unit != clientGameLogic_.units.end(); ++unit)
 	{
-		//window.draw(button->rect);
+		creep_sprite.setPosition(unit->position.x, unit->position.y);
+		window.draw(creep_sprite);
 	}
 }
 
