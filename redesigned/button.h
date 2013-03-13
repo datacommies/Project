@@ -27,8 +27,8 @@ struct Button {
   }
 
   void draw (sf::RenderWindow& win) {
-    sf::Vector2f mouse = sf::Vector2f(sf::Mouse::getPosition(win));
-    
+    sf::Vector2f mouse  = win.mapPixelToCoords(sf::Mouse::getPosition(win));// = sf::Vector2f(sf::Mouse::getPosition(win));
+
     if (rect.getGlobalBounds().contains(mouse))
       rect.setOutlineColor(sf::Color(100, 100, 100));
 

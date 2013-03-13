@@ -46,7 +46,7 @@ void * init (void * in) {
 			}
 			// If a mouse button was pressed, find out where we clicked.
 			else if (event.type == sf::Event::MouseButtonPressed){
-				sf::Vector2f mouse = sf::Vector2f(sf::Mouse::getPosition(window));
+				sf::Vector2f mouse = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 				// Iterate through the buttons and check each button to see if we clicked within in.
 				for (std::set<Button>::iterator button = g->clientGameLogic_.UIElements.begin(); button != g->clientGameLogic_.UIElements.end(); ++button) {
 					// If we clicked within the button, check to see which button it was by ID.
