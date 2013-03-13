@@ -11,7 +11,11 @@ ClientGameLogic::ClientGameLogic(ClientNetwork& clientNetwork)
 {
    // TODO: create a thread and begin processing
    CLIENT_UNIT test = {0};
+   test.health = 100;
    test.position.x = 100;
+   test.position.y = 100;
+   units.push_back(test);
+   test.position.x = 200;
    test.position.y = 100;
    units.push_back(test);
 }

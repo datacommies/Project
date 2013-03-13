@@ -25,5 +25,7 @@ void Client::run()
     
 	while (true){
 		sleep(1);
+        clientGameLogic_.units[0].position.x+=10;
+        clientGameLogic_.units[0].health-=10;
 	}
 }

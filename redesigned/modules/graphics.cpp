@@ -173,11 +173,16 @@ void Graphics::drawLobby(sf::RenderWindow& window)
  * NOTES:    */
 void Graphics::drawUnits(sf::RenderWindow& window)
 {
+	sf::RectangleShape healthbar;
+	healthbar.setFillColor(sf::Color(0,255,0));
 
 	for (std::vector<CLIENT_UNIT>::iterator unit = clientGameLogic_.units.begin(); unit != clientGameLogic_.units.end(); ++unit)
 	{
 		creep_sprite.setPosition(unit->position.x, unit->position.y);
+		healthbar.setPosition(unit->position.x, unit->position.y+25);
+		healthbar.setSize(sf::Vector2f(unit->health/4.0, 5));
 		window.draw(creep_sprite);
+		window.draw(healthbar);
 	}
 }
 
