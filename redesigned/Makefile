@@ -1,13 +1,18 @@
 CFLAGS = -Wall -g
 LIBS = -lsfml-window -lsfml-graphics -lsfml-audio -lsfml-system -lfontconfig -lsfgui
-MODULES = build/ai.o build/client_game_logic.o build/control.o build/server.o build/server_network.o build/client.o build/client_network.o build/graphics.o build/server_game_logic.o units/creep.cpp units/mobile_unit.cpp units/unit.cpp
+MODULES = build/modules/ai.o build/modules/client_game_logic.o build/modules/control.o build/modules/server.o build/modules/server_network.o build/modules/client.o build/modules/client_network.o build/modules/graphics.o build/modules/server_game_logic.o build/units/creep.o build/units/mobile_unit.o build/units/unit.o build/units/castle.o build/units/tower.o
+
 
 all: build server client
 
 build:
-	mkdir -p build
+	mkdir -p build/modules
+	mkdir -p build/units
 
-build/%.o: modules/%.cpp button.h resource.h team.h types.h units/*.h modules/*.h
+build/modules/%.o: modules/%.cpp button.h resource.h team.h types.h units/*.h modules/*.h
+	$(CXX) $(CFLAGS) -c $< -o $@
+
+build/units/%.o: units/%.cpp button.h resource.h team.h types.h units/*.h modules/*.h
 	$(CXX) $(CFLAGS) -c $< -o $@
 
 client: client.cpp $(MODULES)

@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <math.h>
+#include "../team.h"
 
 using namespace std;
 
@@ -72,20 +73,20 @@ void Unit::Attack(void) {
 * Finds the next target, will loop through all enemies until one target is found.
 * TODO - Add priority. ( Attack players over creeps )
 */
-void Unit::FindTarget(Team& team) {
+void Unit::FindTarget(Team *team) {
     /* If in range and alive, set as target. */
-    for (int i = 0; i < team.creeps.size(); ++i)
+    for (int i = 0; i < team->creeps.size(); ++i)
     {
-        if( inRange( position, team.creeps[i].getPos(), perception ) && team.creeps[i].health > 0 ) {
-            pTarget = *team.creeps[i];
+        if( inRange( position, team->creeps[i].getPos(), perception ) && team->creeps[i].health > 0 ) {
+            pTarget = (Unit*)&team->creeps[i];
             return;
         }
     }
 
-    for (int i = 0; i < team.towers.size(); ++i)
+    for (int i = 0; i < team->towers.size(); ++i)
     {
-        if( inRange( position, team.towers[i].getPos(), perception ) && team.towers[i].health > 0 ) {
-            pTarget = *towers.towers[i];
+        if( inRange( position, team->towers[i].getPos(), perception ) && team->towers[i].health > 0 ) {
+            pTarget = (Unit*)&team->towers[i];
             return;
         }
     }
@@ -107,7 +108,7 @@ void Unit::CheckTarget(void) {
 /*
 * If we have an Unit target, attack.
 */
-void Unit::Update(Team& team) {
+void Unit::Update(Team *team) {
 
     /* If we have a Target, check their status. */
     if( pTarget != NULL )

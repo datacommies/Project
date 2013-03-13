@@ -50,7 +50,7 @@
 
 void ServerGameLogic::initializeCastles() 
 {
-/*
+
     int uid = next_unit_id_++;
     Point pos;
     int hp = 100;
@@ -66,18 +66,10 @@ void ServerGameLogic::initializeCastles()
     pos.y = 0;
    
     // Team 0
-    //Castle castle1 = Castle(uid, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, wall, cid);
+    Castle castle1 = Castle(uid, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, wall, cid);
 
-    // Team 1
-    //castle2 = 
-    */
-    /*
-    int zero = 0;
-    Point pos;
     
-    Castle castle = Castle(zero, pos, zero, zero, zero, zero, zero, zero, zero, zero);
-    */
-    
+
 }
 
 

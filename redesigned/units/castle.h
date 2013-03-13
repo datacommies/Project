@@ -10,7 +10,7 @@ class Castle : public Tower
 public:
     int clientID_; 
 
-    Castle(int uid, Point pos, int hp, int atkdmg, int atkrng,
+    Castle(int uidzz, Point pos, int hp, int atkdmg, int atkrng,
            int atkspd, int percep, int atkcnt, int wall, int cid);
 
 	std::string serializeCastle();

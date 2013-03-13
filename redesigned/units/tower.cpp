@@ -18,7 +18,7 @@ string Tower::serializeTower(){
     tower_t t;
     t.wallArmour = wallArmour_;
     
-    s += string(&t, sizeof(t));
+    s += string((const char*)&t, sizeof(t));
     
     return s;
 }

@@ -3,6 +3,9 @@
 
 #include "../resource.h"
 #include "../types.h"
+//#include "../team.h"
+
+class Team;
 
 class Unit
 {
@@ -20,14 +23,14 @@ public:
     
     bool            isAlive() { return health > 0; } //incase creep get hits more than its remaining health
     virtual void    Attack(void);
-    virtual void    Update(void);
+    virtual void    Update(Team*);
     void            setTarget(Unit &newTarget) { pTarget = &newTarget; }
     float           Rotate(Point); 
     void            setDamage(int newDamage) { attackDamage = newDamage;  }
     void            setRange(int newRange) { attackRange = newRange; }
     bool            inRange(Point, Point, int);
     virtual void    CheckTarget(void);
-    virtual void    FindTarget(void);
+    virtual void    FindTarget(Team* team); // MAKE IMPL
     bool            hasWeakness(int, int);
     bool            hasStrength(int, int);
     Point           getPos() { return position; }
