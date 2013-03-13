@@ -1,7 +1,7 @@
 #include "graphics.h"
 #include <fontconfig/fontconfig.h>
 #include <iostream>
-
+#include <SFGUI/SFGUI.hpp>
 #include <unistd.h>
 #include <SFML/Graphics.hpp>
 
@@ -37,6 +37,12 @@ void * init (void * in) {
 	sf::RenderWindow window(sf::VideoMode(800, 800), "Client");
 	g->window = &window;
 	
+window.resetGLStates();
+	sfg::SFGUI sfgui;
+	sfg::Window::Ptr m_wndmain;
+	m_wndmain = sfg::Window::Create( sfg::Window::TITLEBAR | sfg::Window::BACKGROUND | sfg::Window::RESIZE );
+	m_wndmain->SetTitle( L"Example application" );
+
 	// Go to the main menu first upon entering the game.
 	g->setupMainMenu();
 
@@ -73,7 +79,9 @@ void * init (void * in) {
 				}
 			}
 		}
-
+ 		
+ 		m_wndmain->Update( 0.f );
+		
 		window.clear();
 
 		// Check to see which state the game is in and act accordingly.
@@ -94,6 +102,8 @@ void * init (void * in) {
 			Button b = *button;
 			b.draw(window);
 		}
+
+		sfgui.Display(window);
 
 		window.display();
 	}
