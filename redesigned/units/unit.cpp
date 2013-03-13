@@ -89,6 +89,14 @@ void Unit::FindTarget(Team& team) {
             return;
         }
     }
+
+    for (int i = 0; i < team.players.size(); ++i)
+    {
+        if( inRange( position, team.players[i].getPos(), perception ) && team.players[i].health > 0 ) {
+            pTarget = *towers.players[i];
+            return;
+        }
+    }
 }
 
 /*
