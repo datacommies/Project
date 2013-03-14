@@ -309,6 +309,11 @@ void Graphics::drawMainMenu(sf::RenderWindow& window)
 	window.draw(title);
 }
 
+void Graphics::drawHealthBar(sf::RenderWindow& window, float x, float y, int health)
+{
+	
+}
+
 /* Draws all current units.
  *
  * PRE:     

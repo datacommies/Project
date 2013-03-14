@@ -102,6 +102,7 @@ private:
    void drawMap(sf::RenderWindow& window);
    void initGameControls ();
    void loadImages();
+   void drawHealthBar(sf::RenderWindow& window, float x, float y, int health);
 
    // SFGUI Functions
    void initJoinWindow();
