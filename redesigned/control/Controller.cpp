@@ -98,7 +98,7 @@ void Controller::UnloadGui()
 void 
 Controller::RunCommand()
 {
-	//eventFunction(void *);
+	eventFunction(NULL);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
@@ -122,7 +122,7 @@ Controller::RunCommand()
 int 
 Controller::CheckController()
 {
-	/*if(_buttonRECT.id != 0)
+	if(_buttonRECT.id != 0)
 	{
 		if(getCalledButton(_buttonRECT.id))
 		{
@@ -132,12 +132,12 @@ Controller::CheckController()
 	
 	if(_key != 0)
 	{
-		//if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key))
-		//{
-			//return _returnValue;
-		//}
+		if(sf::Keyboard::isKeyPressed(_key))
+		{
+			return _returnValue;
+		}
 	  
-	}*/
+	}
 
 	return 0;
 }
