@@ -28,9 +28,10 @@ public:
 	void	setPath(Point *pt)	{ pPath = pt; }
 	void	nextPoint(void)	{ pPath++; }
 	void	savePoint(Point &pt)	{ pSaved = &pt; }
-	void    Move(Point) {}
+	void    Move(Point);
 	int		getTargetDirection(int, int);
 	void	setTarget(Unit &newTarget) { pTarget = &newTarget; }
+	void    Update( Team& team );
 
 
 	//virtual void	CheckTarget(void) {}
