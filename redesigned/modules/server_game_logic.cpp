@@ -45,27 +45,20 @@ void ServerGameLogic::initializeCastles()
 
     int uid = next_unit_id_++;
     Point pos;
-    int hp = 100;
-    int atkdmg = 0; 
-    int atkrng = 0;
-    int atkspd = 0;
-    int percep = 0;
-    int atkcnt = 0;
-    int wall = 1;
-    int cid = 0;
-
     pos.x = 0;
     pos.y = 0;
 
     // Team 0
-    Castle castle1 = Castle(uid, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, wall, cid);
+    Castle castle1 = Castle(uid, pos, INIT_CASTLE_HP, INIT_CASTLE_ATKDMG, INIT_CASTLE_ATKRNG, INIT_CASTLE_ATKSPD,
+                        INIT_CASTLE_PERCEP, INIT_CASTLE_ATKCNT, INIT_CASTLE_WALL, 0);
     teams[0].towers.push_back(castle1);
 
     // Team 1
     uid = next_unit_id_++;
     pos.x = MAX_X; // TODO: MAX_X and MAX_Y will  be replaced later when we get map reading functionality working
     pos.y = MAX_Y; // TODO:
-    Castle castle2 = Castle(uid, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, wall, cid);
+    Castle castle2 = Castle(uid, pos, INIT_CASTLE_HP, INIT_CASTLE_ATKDMG, INIT_CASTLE_ATKRNG, INIT_CASTLE_ATKSPD,
+                        INIT_CASTLE_PERCEP, INIT_CASTLE_ATKCNT, INIT_CASTLE_WALL, 1);
     teams[1].towers.push_back(castle2);
 }
 
