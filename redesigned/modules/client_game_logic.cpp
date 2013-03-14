@@ -10,7 +10,7 @@ ClientGameLogic::ClientGameLogic(ClientNetwork& clientNetwork)
    : clientNetwork_(clientNetwork), gameState_(LOBBY)
 {
    // TODO: create a thread and begin processing
-   CLIENT_UNIT test = {0};
+   /*CLIENT_UNIT test = {0};
    test.health = 100;
    test.position.x = 100;
    test.position.y = 100;
@@ -28,7 +28,7 @@ ClientGameLogic::ClientGameLogic(ClientNetwork& clientNetwork)
    test.position.y = 10;
    test.past_position = test.position;
    test.type = CASTLE;
-   units.push_back(test);
+   units.push_back(test);*/
 
    clientNetwork_.gl = this;
 }

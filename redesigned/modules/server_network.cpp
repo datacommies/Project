@@ -140,13 +140,21 @@ void* ServerNetwork::handleClient(void* args)
     cout << "Hello world!" << endl;
     ServerNetwork* thiz = (ServerNetwork*) args;
     //long client_ = (long)args;
-    
-    for (int i = 0; i < thiz->serverGameLogic_.teams[0].creeps.size(); ++i)
-    {
-        string sc = thiz->serverGameLogic_.teams[0].creeps[i].serializeCreep();
-        send(thiz->client_, sc.data(), sc.size(), 0);
-        cout << "Sent " << sc.size() << endl;
-    }   
+    while (true) {
+        for (size_t i = 0; i < thiz->serverGameLogic_.teams[0].creeps.size(); ++i)
+        {
+            string sc = thiz->serverGameLogic_.teams[0].creeps[i].serializeCreep();
+            send(thiz->client_, sc.data(), sc.size(), 0);
+            cout << "Sent " << sc.size() << endl;
+        }
+        for (size_t i = 0; i < thiz->serverGameLogic_.teams[1].creeps.size(); ++i)
+        {
+            string sc = thiz->serverGameLogic_.teams[1].creeps[i].serializeCreep();
+            send(thiz->client_, sc.data(), sc.size(), 0);
+            cout << "Sent " << sc.size() << endl;
+        }
+        sleep(1);
+    }
 
     // Add this player first
     player_matchmaking_t player;

@@ -21,10 +21,16 @@ ServerGameLogic::ServerGameLogic()
    : gameState_(LOBBY)
 {
   Creep c;
+  c.attackRange = 100;
   c.attackDamage = 10;
   c.health = 100;
-
+  c.position.x = 200;
+  c.position.y = 200;
   teams[0].creeps.push_back(c);
+
+  c.perception = 100;
+  c.position.x = 250;
+  c.position.y = 200;
   teams[1].creeps.push_back(c);
 }
  

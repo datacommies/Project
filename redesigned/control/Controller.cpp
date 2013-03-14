@@ -122,7 +122,7 @@ Controller::RunCommand()
 int 
 Controller::CheckController()
 {
-	if(_buttonRECT.id != 0)
+	/*if(_buttonRECT.id != 0)
 	{
 		if(getCalledButton(_buttonRECT.id))
 		{
@@ -137,7 +137,7 @@ Controller::CheckController()
 			//return _returnValue;
 		//}
 	  
-	}
+	}*/
 
 	return 0;
 }
