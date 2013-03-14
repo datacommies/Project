@@ -24,7 +24,7 @@ std::vector<int> pressedButtonIds;
 ----------------------------------------------------------------------------------------------------------------------*/
 void loadControlEvents(ClientGameLogic* gameLogic)
 {
-	gameLogicPointer = gameLogic;
+	_gameLogicPointer = gameLogic;
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
@@ -93,7 +93,7 @@ void CallEnterLobbyEvent(void* value)
 ----------------------------------------------------------------------------------------------------------------------*/
 void CallMoveLeftEvent(void* value)
 {
-	gameLogicPointer->movePlayer(LEFT);
+	_gameLogicPointer->movePlayer(LEFT);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
@@ -116,7 +116,7 @@ void CallMoveLeftEvent(void* value)
 ----------------------------------------------------------------------------------------------------------------------*/
 void CallMoveRightEvent(void* value)
 {
-	gameLogicPointer->movePlayer(RIGHT);
+	_gameLogicPointer->movePlayer(RIGHT);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
@@ -139,7 +139,7 @@ void CallMoveRightEvent(void* value)
 ----------------------------------------------------------------------------------------------------------------------*/
 void CallMoveUpEvent(void* value)
 {
-	gameLogicPointer->movePlayer(UP);
+	_gameLogicPointer->movePlayer(UP);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
@@ -162,7 +162,7 @@ void CallMoveUpEvent(void* value)
 ----------------------------------------------------------------------------------------------------------------------*/
 void CallMoveDownEvent(void* value)
 {
-	gameLogicPointer->movePlayer(DOWN);
+	_gameLogicPointer->movePlayer(DOWN);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
@@ -185,7 +185,7 @@ void CallMoveDownEvent(void* value)
 ----------------------------------------------------------------------------------------------------------------------*/
 void CallAttackLeftEvent(void* value)
 {
-	gameLogicPointer->attack(LEFT);
+	_gameLogicPointer->attack(LEFT);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
@@ -208,7 +208,7 @@ void CallAttackLeftEvent(void* value)
 ----------------------------------------------------------------------------------------------------------------------*/
 void CallAttackRightEvent(void* value)
 {
-	gameLogicPointer->attack(RIGHT);
+	_gameLogicPointer->attack(RIGHT);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
@@ -231,7 +231,7 @@ void CallAttackRightEvent(void* value)
 ----------------------------------------------------------------------------------------------------------------------*/
 void CallAttackUpEvent(void* value)
 {
-	gameLogicPointer->attack(UP);
+	_gameLogicPointer->attack(UP);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
@@ -254,7 +254,7 @@ void CallAttackUpEvent(void* value)
 ----------------------------------------------------------------------------------------------------------------------*/
 void CallAttackDownEvent(void* value)
 {
-	gameLogicPointer->attack(DOWN);
+	_gameLogicPointer->attack(DOWN);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
@@ -283,7 +283,7 @@ void CallBuildTowerEvent(void* value)
 	location.x = x;
 	location.y = y;
 	
-	gameLogicPointer->createUnit(TOWER, location);
+	_gameLogicPointer->createUnit(TOWER, location);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
@@ -309,7 +309,7 @@ void CallBuildCreepEvent(void* value)
 	location.x = 0;
 	location.y = 0;
 	
-	gameLogicPointer->createUnit(CREEP, location);
+	_gameLogicPointer->createUnit(CREEP, location);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
