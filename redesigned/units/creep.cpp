@@ -15,7 +15,7 @@ Creep::Creep(int uid, Point pos, int hp, int atkdmg, int atkrng,
     //validation
 }
 
-ifdef 1
+#ifdef 1
 /*
 * Function to return the difference in two points. Used for movement. 
 */
