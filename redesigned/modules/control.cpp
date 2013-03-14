@@ -12,5 +12,5 @@ Control::Control(ClientGameLogic& clientGameLogicModule)
 {
 	// TODO: create a thread
 	loadControlEvents(&clientGameLogicModule);
-	ControlRun();
+	//ControlRun();
 }
