@@ -22,8 +22,8 @@ ServerGameLogic * gSGL;
 {
   PATH p;
   Point a;
-  a.x = 0;
-  a.y = 0;
+  a.x = 210;
+  a.y = 210;
   p.push_back(a);
   a.x = 100;
   a.y = 200;
@@ -38,11 +38,13 @@ ServerGameLogic * gSGL;
   c.health = 100;
   c.position.x = 200;
   c.position.y = 200;
+  c.moveSpeed = 1;
   teams[0].creeps.push_back(c);
 
-  c.perception = 100;
+  
   c.position.x = 250;
   c.position.y = 200;
+  c.moveSpeed = 1;
   teams[1].creeps.push_back(c);
   //initializeTeams();
 }
@@ -318,7 +320,7 @@ void ServerGameLogic::setAlarm()
   tout_val.it_interval.tv_sec = 0;
   tout_val.it_interval.tv_usec = 0;
   tout_val.it_value.tv_sec = 0;
-  tout_val.it_value.tv_usec = INTERVAL*30; /* set time for interval (1/30th of a second) */
+  tout_val.it_value.tv_usec = INTERVAL*10; /* set time for interval (1/30th of a second) */
   result = setitimer(ITIMER_REAL, &tout_val,0);
 
   if (result != 0)
