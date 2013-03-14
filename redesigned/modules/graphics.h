@@ -84,7 +84,15 @@ private:
 
    // SFGUI stuff
    sfg::Window::Ptr sfgJoinWindow;
+   sfg::Entry::Ptr  sfgNameEntryBox;
+   sfg::Entry::Ptr  sfgServerEntryBox;
+   sfg::Entry::Ptr  sfgPortEntryBox;
    sfg::Button::Ptr sfgCloseJoinButton;
+   sfg::Button::Ptr sfgJoinButton;
+   sfg::Box::Ptr sfgJoinBox;
+   sfg::Label::Ptr sfgNameLabel;
+   sfg::Label::Ptr sfgServerLabel;
+   sfg::Label::Ptr sfgPortLabel;
 
    // Functions
    void initMainMenuControls();
@@ -99,6 +107,7 @@ private:
    void initJoinWindow();
    void showJoinWindow();
    void hideJoinWindow();
+   void joinButtonHandler();
 
    friend void * init (void *);
 };
