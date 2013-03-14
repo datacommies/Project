@@ -24,7 +24,7 @@
 #define INIT_CREEP_PERCEP 1
 #define INIT_CREEP_ATKCNT 1
 #define INIT_CREEP_SPD 1
-#define INIT_MOVESPEED 1
+#define INIT_CREEP_MOVESPEED 1
 
 #define INIT_TOWER_HP 200
 #define INIT_TOWER_ATKDMG 7
@@ -35,8 +35,8 @@
 #define INIT_TOWER_WALL 2 
 
 // This will come actually be read from the map
-#define MAX_X 100
-#define MAX_Y 100
+#define MAX_X 1000
+#define MAX_Y 1000
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -90,6 +90,11 @@ class ServerGameLogic
     int next_unit_id_;
     //Ai ai_;
 
+    struct Location {
+      Point pos;
+      UnitType type;
+    };
+
     struct GameLogicMap {
 
       int max_x_;
@@ -98,10 +103,6 @@ class ServerGameLogic
       // Create a two dimensional grid player_ids .. 0 means the a position is empty
       int **grid_; 
 
-      struct Location {
-        Point pos;
-        UnitType type;
-      };
 
       // Store locatation for each player_id
       std::map<int, Location> units_;
