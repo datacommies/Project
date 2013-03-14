@@ -140,7 +140,7 @@ void* ClientNetwork::recvReply(void* args) {
 			case CREEP:
 			//FALL THROUGH 
 
-			case PLAYER:
+			case PLAYER: {
 				unit_t u = {0};
 				CLIENT_UNIT c = {0};
 				//int headLength = head.size - sizeof(head);
@@ -155,6 +155,7 @@ void* ClientNetwork::recvReply(void* args) {
 				c.type = (UnitType)head.type;
 				cn->gl->units.push_back(c);
 				break;
+			}
 
 			case MSG_CLEAR:
 				cn->gl->units.clear();

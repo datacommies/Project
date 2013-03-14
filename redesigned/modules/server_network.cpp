@@ -142,18 +142,11 @@ void* ServerNetwork::handleInput(void* args)
 
 void* ServerNetwork::handleClient(void* args)
 {
-<<<<<<< HEAD
-    //sendSerializedData(int teamIdx)
-    cout << "Hello world!" << endl;
-    ServerNetwork* thiz = (ServerNetwork*) args;
-    //long client_ = (long)args;
-=======
     cout << "Handling client!" << endl;
     ClientCtx* ctx = (ClientCtx*)args;
     ServerNetwork* thiz = (ServerNetwork*) ctx->sn;
     int client_ = ctx->client;
 
->>>>>>> e24eeda593780070bc900b49df1b11c5ef4d4344
     while (true) {
         header_t clear = {MSG_CLEAR, 0};
         send(client_, &clear, sizeof(header_t), 0);

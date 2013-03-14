@@ -97,10 +97,11 @@ void * init (void * in) {
 		window.clear();
 
 		// Check to see which state the game is in and act accordingly.
-		if (g->clientGameLogic_.getCurrentState() == LOBBY) {
+		if (g->clientGameLogic_.getCurrentState() == MAIN_MENU) {
 			g->drawMainMenu(window);
-		}
-		else if (g->clientGameLogic_.getCurrentState() == IN_GAME) {
+		} else if (g->clientGameLogic_.getCurrentState() == LOBBY) {
+			g->drawLobby(window);
+		} else if (g->clientGameLogic_.getCurrentState() == IN_GAME) {
 			g->drawMap(window);
 			g->drawUnits(window);
 			g->drawHud(window);
@@ -322,6 +323,8 @@ void Graphics::joinButtonHandler()
 	cout << "Name:" << sfgNameEntryBox->GetText().toAnsiString() << endl;
 	cout << "Server:" << sfgServerEntryBox->GetText().toAnsiString() << endl;
 	cout << "Port:" << sfgPortEntryBox->GetText().toAnsiString() << endl;
+	clientGameLogic_.join();
+	sfgJoinWindow->Show(false);
 }
 
 void Graphics::showJoinWindow()
@@ -333,6 +336,17 @@ void Graphics::hideJoinWindow()
 {
 	sfgJoinWindow->Show(false);
 	this->initMainMenuControls();
+}
+
+/* Draws the Lobby.
+ *
+ * PRE:     
+ * POST:    Current HUD is displayed
+ * RETURNS: 
+ * NOTES:    */
+void Graphics::drawLobby(sf::RenderWindow& window)
+{
+	//window.draw();
 }
 
 /* Draws the HUD.

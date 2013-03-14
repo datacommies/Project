@@ -118,6 +118,7 @@ private:
    void initMainMenuControls();
    void drawHud(sf::RenderWindow& window);
    void drawMainMenu(sf::RenderWindow& window);
+   void drawLobby(sf::RenderWindow& window);
    void drawUnits(sf::RenderWindow& window);
    void drawMap(sf::RenderWindow& window);
    void initGameControls ();
