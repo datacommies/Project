@@ -25,7 +25,7 @@ public:
 	void setUId(const int id){ uid_ = id; }
 	int getUId(){ return uid_; }
 	void setPos(const Point pt){ pos.x = pt.x; pos.y = pt.y; }
-	Point getPos(){ return pos; }
+	int getPos(){ return pos; }
 	void setHP(const int HP){ hp = HP; }
 	int getHP(){ return hp; }
 	void setAtkdmg(const int dmg){ atkdmg = dmg; }
