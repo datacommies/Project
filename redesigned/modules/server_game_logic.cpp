@@ -32,6 +32,7 @@ ServerGameLogic::ServerGameLogic()
   c.position.x = 250;
   c.position.y = 200;
   teams[1].creeps.push_back(c);
+  initializeTeams();
 }
  
 
@@ -58,14 +59,14 @@ void ServerGameLogic::initializeCastles()
 
     // Team 0
     Castle castle1 = Castle(uid, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, wall, cid);
-    teams[0].towers[0] = castle1;
+    teams[0].towers.push_back(castle1);
 
     // Team 1
     uid = next_unit_id_++;
     pos.x = MAX_X; // TODO: MAX_X and MAX_Y will  be replaced later when we get map reading functionality working
     pos.y = MAX_Y; // TODO:
     Castle castle2 = Castle(uid, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, wall, cid);
-    teams[1].towers[0] = castle2;
+    teams[1].towers.push_back(castle1);
 }
 
 void ServerGameLogic::initializeCreeps()
@@ -76,6 +77,8 @@ void ServerGameLogic::initializeCreeps()
             
             int uid = next_unit_id_++;
             Point pos = Point();
+            pos.x = 500;
+            pos.y = 100*j;
             int hp = INIT_CREEP_HP;
             int atkdmg = INIT_CREEP_ATKDMG;
             int atkrng = INIT_CREEP_ATKRNG;
@@ -245,6 +248,8 @@ void ServerGameLogic::update()
 void ServerGameLogic::updateClients(int i)
 {
   signal(SIGALRM, updateClients);
+
+  //std::cout << "Update" <<std::endl;
   
   AiUpdate(gSGL->teams[0], gSGL->teams[1]);
 

@@ -40,6 +40,7 @@ ClientNetwork::~ClientNetwork()
  */
 bool ClientNetwork::connectToServer(std::string hostname, int port)
 {
+	cout << "connecting.." <<endl;
 	long connectsock;
 
 	struct sockaddr_in serv_addr;

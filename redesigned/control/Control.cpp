@@ -23,7 +23,7 @@ int ControlRun()
 	
 	AddStates(manager);
 	
-	while(manager.CheckState() != 0);
+	//while(manager.CheckState() != 0);
 	
 	return 0;
 }
