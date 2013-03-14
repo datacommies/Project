@@ -132,7 +132,7 @@ Controller::CheckController()
 	
 	if(_key != 0)
 	{
-		if(sf::Keyboard::isKeyPressed(_key))
+		if(sf::Keyboard::isKeyPressed((sf::Keyboard::Key)_key))
 		{
 			return _returnValue;
 		}
