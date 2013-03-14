@@ -1,5 +1,4 @@
 #include "control.h"
-#include "../control/Control.h"
 
 /* Constructor
  *
