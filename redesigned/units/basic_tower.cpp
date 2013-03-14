@@ -8,8 +8,8 @@
 
 using namespace std;
 
-BasicTower::BasicTower(const int& uid, Point pos, const int& hp, const int& atkdmg, const int& atkrng,
-            const int& atkspd, const int& percep, const int& atkcnt, const int& wall):
+BasicTower::BasicTower(int uid, Point pos, int hp, int atkdmg, int atkrng,
+            int atkspd, int percep, int atkcnt, int wall):
             Tower(uid, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, wall)
 {
     //validation
