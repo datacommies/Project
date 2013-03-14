@@ -65,6 +65,7 @@ void AddStates(ControlManager &manager)
 -- DESIGNER: John Payment
 --
 -- PROGRAMMER: John Payment
+--             Luke Tao
 --
 -- INTERFACE: ControlState MakeMenuState()
 --
@@ -177,6 +178,7 @@ ControlState MakePlayerState()
 -- DESIGNER: John Payment
 --
 -- PROGRAMMER: John Payment
+--             Luke Tao
 --
 -- INTERFACE: ControlState MakeBuilderState()
 --
@@ -215,6 +217,7 @@ ControlState MakeBuilderState()
 -- DESIGNER: John Payment
 --
 -- PROGRAMMER: John Payment
+--             Luke Tao
 --
 -- INTERFACE: ControlState MakeExitGameState()
 --
