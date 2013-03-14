@@ -3,6 +3,7 @@
 using namespace std;
 
 std::vector<int> pressedButtonIds;
+ClientGameLogic* _gameLogicPointer;
 
 /*-------------------------------------------------------------------------------------------------------------------- 
 -- FUNCTION: loadControlEvents

@@ -45,7 +45,7 @@ private:
 	int _key;
 	Button _buttonRECT;
 	void (*eventFunction)(void*);
-	
+	ClientGameLogic* _gameLogicPointer;
 };
 
 #endif
