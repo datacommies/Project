@@ -85,7 +85,8 @@ private:
    sf::Sprite tower_sprite;
 
    // SFGUI stuff
-   sfg::Window::Ptr sfgJoinWindow;
+   sfg::Desktop sfgDesktop; // The desktop is the top level object that all other SFGUI elements display on.
+   sfg::Window::Ptr sfgJoinWindow; // The "form" used for the join window.
    sfg::Entry::Ptr  sfgNameEntryBox;
    sfg::Entry::Ptr  sfgServerEntryBox;
    sfg::Entry::Ptr  sfgPortEntryBox;
@@ -107,6 +108,7 @@ private:
    void drawHealthBar(sf::RenderWindow& window, float x, float y, int health);
 
    // SFGUI Functions
+   void initDesktop();
    void initJoinWindow();
    void showJoinWindow();
    void hideJoinWindow();
