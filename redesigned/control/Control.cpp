@@ -134,36 +134,30 @@ ControlState MakePlayerState()
     sf::Font font;
 	ControlState playerState(true, 30);
 	
-	Button moveLeftPress(0, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Move Left");	
-	Controller moveLeft(0, sf::Keyboard::Left, moveLeftPress, CallMoveLeftEvent);
+	Button emptyButton(0, sf::Vector2f(0, 0), sf::Vector2f(0, 0), font, "");	
+	
+	Controller moveLeft(0, sf::Keyboard::Left, emptyButton, CallMoveLeftEvent);
 	playerState.AddController(moveLeft);
 	
-	Button moveRightPress(0, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Move Right");	
-	Controller moveRight(0, sf::Keyboard::Right, moveRightPress, CallMoveRightEvent);
+	Controller moveRight(0, sf::Keyboard::Right, emptyButton, CallMoveRightEvent);
 	playerState.AddController(moveRight);
 	
-	Button moveUpPress(0, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Move Up");	
-	Controller moveUp(0, sf::Keyboard::Up, moveUpPress, CallMoveUpEvent);
+	Controller moveUp(0, sf::Keyboard::Up, emptyButton, CallMoveUpEvent);
 	playerState.AddController(moveUp);
 	
-	Button moveDownPress(0, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Move Down");	
-	Controller moveDown(0, sf::Keyboard::Down, moveDownPress, CallMoveDownEvent);
+	Controller moveDown(0, sf::Keyboard::Down, emptyButton, CallMoveDownEvent);
 	playerState.AddController(moveDown);
 	
-	Button attackLeftPress(0, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Attack Left");	
-	Controller attackLeft(0, sf::Keyboard::Left, attackLeftPress, CallAttackLeftEvent);
+	Controller attackLeft(0, sf::Keyboard::Left, emptyButton, CallAttackLeftEvent);
 	playerState.AddController(attackLeft);
-	
-	Button attackRightPress(0, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Attack Right");	
-	Controller attackRight(0, sf::Keyboard::Right, attackRightPress, CallAttackRightEvent);
+		
+	Controller attackRight(0, sf::Keyboard::Right, emptyButton, CallAttackRightEvent);
 	playerState.AddController(attackRight);
 	
-	Button attackUpPress(0, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Attack Up");	
-	Controller attackUp(0, sf::Keyboard::Up, attackUpPress, CallAttackUpEvent);
+	Controller attackUp(0, sf::Keyboard::Up, emptyButton, CallAttackUpEvent);
 	playerState.AddController(attackUp);
 	
-	Button attackDownPress(0, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Attack Down");	
-	Controller attackDown(0, sf::Keyboard::Down, attackDownPress, CallAttackDownEvent);
+	Controller attackDown(0, sf::Keyboard::Down, emptyButton, CallAttackDownEvent);
 	playerState.AddController(attackDown);
 	
 	Button exitGameClick(31, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Exit Game");	
