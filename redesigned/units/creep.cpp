@@ -15,6 +15,7 @@ Creep::Creep(int uid, Point pos, int hp, int atkdmg, int atkrng,
     //validation
 }
 
+ifdef 1
 /*
 * Function to return the difference in two points. Used for movement. 
 */
@@ -72,6 +73,7 @@ void Creep::Move( Point pt ) {
          pCurrPoint.y += getDirection( pCurrPoint.y, pt.y )  * moveSpeed;
 }
 
+#endif
 string Creep::serializeCreep()
 {
     string s = MobileUnit::serializeMobileUnit();
