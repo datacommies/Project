@@ -23,8 +23,8 @@ ClientNetwork::ClientNetwork()
  */
 ClientNetwork::~ClientNetwork()
 {
-    shutdown(connectsock_, SHUT_RDWR);
-    close(connectsock_);
+    shutdown(connectsock, SHUT_RDWR);
+    close(connectsock);
 }
 
 /* Connects to a server with the specified hostname and port.
@@ -42,7 +42,6 @@ ClientNetwork::~ClientNetwork()
 bool ClientNetwork::connectToServer(std::string hostname, int port)
 {
 	cout << "connecting.." <<endl;
-	long connectsock; //TODO: this is local copy and not using the private class member
 
 	struct sockaddr_in serv_addr;
 	struct hostent *server;
@@ -66,7 +65,7 @@ bool ClientNetwork::connectToServer(std::string hostname, int port)
 	memset(&serv_addr, 0, sizeof(serv_addr));
 	serv_addr.sin_family = AF_INET;
 	memcpy((char *) &serv_addr.sin_addr.s_addr, (char*) server->h_addr,
-		server->h_length);
+			server->h_length);
 	serv_addr.sin_port = htons(port);
 
 	if (connect(connectsock, (struct sockaddr *) &serv_addr,
@@ -77,57 +76,17 @@ bool ClientNetwork::connectToServer(std::string hostname, int port)
 	}
 
 	std::cout << "I'M CONNECTEDDDDD!!!!! YEAAAAAAAAAAAAAAAAAAAAAAAA" << std::endl;
-	pthread_t recvreplyThread;
-	connectsock_ = connectsock;
+	recvReply();
+	return true;
+}
 
-
-	pthread_create (&recvreplyThread, NULL, recvReply, this); // start server input handler.
-
-
-
-
-/*
+void ClientNetwork::recvReply() {
 	while (true) {
-		header_t head;
+		header_t head = {0};
 		recv_complete(connectsock, &head, sizeof(head), 0);
 		cout << "Recv head size:" << head.size << endl;
 
 		// CREEP type contains a unit_t with the creep's attributes.
-		if (head.type == CREEP || head.type == CASTLE) {
-			unit_t u = {0};
-			CLIENT_UNIT c= {0};
-			//int headLength = head.size - sizeof(head);
-			cout << "Waiting for " << head.size - 
-			sizeof(head) << endl;
-			recv_complete(connectsock, ((char*)&u) + sizeof(header_t), head.size - sizeof(head), 0);
-			c.position.x = u.posx;
-			c.position.y = u.posy;
-			c.past_position = c.position;
-			c.health = u.health;
-			cout << "Creep health" << c.health << endl;
-			c.type = (UnitType)head.type;
-			gl->units.push_back(c);
-		} else if (head.type == MSG_CLEAR) {
-			gl->units.clear();
-		}
-	}
-
-	cout << "Done getting a unit" << endl;
-*/
-	return true;
-}
-
-void* ClientNetwork::recvReply(void* args) {
-
-	ClientNetwork* cn = (ClientNetwork*) args;
-
-	while (true) {
-		header_t head = {0};
-		recv_complete(cn->connectsock_, &head, sizeof(head), 0);
-		cout << "Recv head size:" << head.size << endl;
-
-		// CREEP type contains a unit_t with the creep's attributes.
-
 		switch (head.type) {
 
 			case TOWER:
@@ -146,19 +105,19 @@ void* ClientNetwork::recvReply(void* args) {
 				//int headLength = head.size - sizeof(head);
 				cout << "Waiting for " << head.size - 
 				sizeof(head) << endl;
-				recv_complete(cn->connectsock_, ((char*)&u) + sizeof(header_t), head.size - sizeof(head), 0);
+				recv_complete(connectsock, ((char*)&u) + sizeof(header_t), head.size - sizeof(head), 0);
 				c.position.x = u.posx;
 				c.position.y = u.posy;
 				c.past_position = c.position;
 				c.health = u.health;
 				cout << "Creep health" << c.health << endl;
 				c.type = (UnitType)head.type;
-				cn->gl->units.push_back(c);
+				gl->units.push_back(c);
 				break;
 			}
 
 			case MSG_CLEAR:
-				cn->gl->units.clear();
+				gl->units.clear();
 			break;
 		}
 

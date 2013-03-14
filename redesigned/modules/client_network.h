@@ -29,12 +29,9 @@ public:
    int sendRequest(int msg);
    bool connectToServer(std::string hostname, int port);
    ClientGameLogic* gl;
-
-
+   void recvReply();
 private:
-   long connectsock_;
-
-   static void* recvReply(void* args);
+   int connectsock;
 };
 
 #endif
