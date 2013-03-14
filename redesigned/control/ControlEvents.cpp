@@ -2,7 +2,6 @@
 #include "ControlEvents.h"
 using namespace std;
 
-ClientGameLogic* gameLogicPointer;
 std::vector<int> pressedButtonIds;
 
 /*-------------------------------------------------------------------------------------------------------------------- 
