@@ -311,7 +311,17 @@ void Graphics::drawMainMenu(sf::RenderWindow& window)
 
 void Graphics::drawHealthBar(sf::RenderWindow& window, float x, float y, int health)
 {
-	
+	sf::RectangleShape healthbar, health_bg;
+	healthbar.setFillColor(sf::Color(  0, 255,  0));
+	health_bg.setFillColor(sf::Color(255,   0,  0));
+	health_bg.setSize(sf::Vector2f( 25, 5));
+
+	health_bg.setPosition(x, y);
+	healthbar.setPosition(x, y);
+	healthbar.setSize(sf::Vector2f(min(max(health/4, 0), 100), 5));
+
+	window.draw(health_bg);
+	window.draw(healthbar);	
 }
 
 /* Draws all current units.
@@ -321,12 +331,7 @@ void Graphics::drawHealthBar(sf::RenderWindow& window, float x, float y, int hea
  * RETURNS: 
  * NOTES:    */
 void Graphics::drawUnits(sf::RenderWindow& window)
-{
-	sf::RectangleShape healthbar, health_bg;
-	healthbar.setFillColor(sf::Color(  0, 255,  0));
-	health_bg.setFillColor(sf::Color(255,   0,  0));
-	health_bg.setSize(sf::Vector2f( 25, 5));
-
+{	
 	for (std::vector<CLIENT_UNIT>::iterator unit = clientGameLogic_.units.begin(); unit != clientGameLogic_.units.end(); ++unit)
 	{
 		// Increment interpolation value, if there is a different between past and current positions.
@@ -340,25 +345,33 @@ void Graphics::drawUnits(sf::RenderWindow& window)
 			unit->inter_value = 0;
 		}
 		
-		if (unit->type == CASTLE) {
-			castle_sprite.setPosition(unit->position.x, unit->position.y);
-			health_bg.setPosition(unit->position.x, unit->position.y + castle_sprite.getTextureRect().height);
-			healthbar.setPosition(unit->position.x, unit->position.y + castle_sprite.getTextureRect().height);
-			healthbar.setSize(sf::Vector2f( min(max(unit->health/4, 0), 100), 5));
+		if (unit->type == CASTLE) 
+		{
+			castle_sprite.setPosition(unit->position.x, unit->position.y);			
 			window.draw(castle_sprite);
-		} else if (unit->type == CREEP) {
+			drawHealthBar(window, unit->position.x, unit->position.y + castle_sprite.getTextureRect().height, unit->health);
+		} 
+		else if (unit->type == CREEP) 
+		{
 			// Linear interpolation between a unit's past position and new position.
 			Point interpolated = Lerp(unit->past_position, unit->position, unit->inter_value);
 			// All drawable unit elements use the same interpolated position.
-			creep_sprite.setPosition(interpolated.x, interpolated.y);
-			health_bg.setPosition(interpolated.x, interpolated.y+25);
-			healthbar.setPosition(interpolated.x, interpolated.y+25);
-			healthbar.setSize(sf::Vector2f( min(max(unit->health/4, 0), 100), 5));
+			creep_sprite.setPosition(interpolated.x, interpolated.y);			
 			window.draw(creep_sprite);
+			drawHealthBar(window, interpolated.x, interpolated.y+25, unit->health);
 		}
-
-		window.draw(health_bg);
-		window.draw(healthbar);
+		else if (unit->type == TOWER)
+		{
+			tower_sprite.setPosition(unit->position.x, unit->position.y);			
+			window.draw(tower_sprite);
+			drawHealthBar(window, unit->position.x, unit->position.y + tower_sprite.getTextureRect().height, unit->health);
+		}
+		else if (unit->type == PLAYER)
+		{
+			player_sprite.setPosition(unit->position.x, unit->position.y);			
+			window.draw(player_sprite);
+			drawHealthBar(window, unit->position.x, unit->position.y + player_sprite.getTextureRect().height, unit->health);			
+		}
 	}
 }
 
@@ -383,4 +396,8 @@ void Graphics::loadImages(){
 	// Load the player texture.
     player_tex.loadFromFile("images/player.png");
 	player_sprite.setTexture(player_tex);
+
+	// Load the tower texture.
+	tower_tex.loadFromFile("images/tower.png");
+	tower_sprite.setTexture(tower_tex);
 }

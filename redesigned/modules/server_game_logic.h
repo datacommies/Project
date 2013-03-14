@@ -9,6 +9,14 @@
 #define INIT_CURRENCY 100
 #define INIT_HEALTH 100
 
+#define INIT_CASTLE_HP 70
+#define INIT_CASTLE_ATKDMG 5
+#define INIT_CASTLE_ATKRNG 7
+#define INIT_CASTLE_ATKSPD 1
+#define INIT_CASTLE_PERCEP 1
+#define INIT_CASTLE_ATKCNT 1
+#define INIT_CASTLE_WALL 2
+
 #define INIT_CREEP_HP 100
 #define INIT_CREEP_ATKDMG 5
 #define INIT_CREEP_ATKRNG 7
@@ -35,19 +43,14 @@
 #include <pthread.h>
  
 #include "../resource.h"
-//#include "ai.h"    
 
 #include <string>
 #include <queue>
+#include <map>
 #include "../team.h"
+#include "../units/unit.h"
  
 enum Command { Create, MovePlayer, MoveUnit, Attack };
- 
-/* Until Ai is available/fixed */
-class MyAi {
-    public: 
-        void update(Team &team1, Team &team2) {}
-};
  
 struct CommandData {
   Command cmd;
@@ -82,10 +85,95 @@ public:
  
 private:
    // Fields
-   static MyAi ai_;
    GameState gameState_;
-   pthread_t update_thread_;
    int next_unit_id_;
+
+   struct GameLogicMap {
+        
+        int max_x_;
+        int max_y_;
+
+        // Create a two dimensional grid player_ids .. 0 means the a position is empty
+        int **grid_; 
+
+        struct Location {
+                Point pos;
+                UnitType type;
+        };
+
+        // Store locatation for each player_id
+        std::map<int, Location> units_;
+
+        GameLogicMap(int max_x = MAX_X, int max_y = MAX_Y): max_x_(max_x), max_y_(max_y) {
+               grid_ = (int**) Malloc(sizeof(int*) * max_x);
+
+               for ( int x=0; x <= max_x; x++) {
+                  grid_[x] = (int*) Malloc(sizeof(int) * max_y);
+                  memset(&grid_[x], 0, sizeof(int) * max_y);
+                }
+        }
+        ~GameLogicMap() {
+               // Free memory
+               
+                for (int x=0; x<= max_x_; x++)
+                        free (grid_[x]);
+
+                free(grid_);
+        }
+        
+        // This builds everything based on the Team class
+        void build(Team &team) {
+                
+              reset();
+
+              for (std::vector<Creep>::iterator it = team.creeps.begin(); it != team.creeps.end(); ++it) {
+                Location location;
+
+                location.type = CREEP;
+                location.pos = it->getPos();
+                units_[it->id] = location;
+                grid_[location.pos.x][location.pos.y] = it->id;
+              }
+
+              for (std::vector<Tower>::iterator it = team.towers.begin(); it != team.towers.end(); ++it) {
+                Location location;
+
+                location.type = TOWER;
+                location.pos = it->getPos();
+                units_[it->id] = location;
+                grid_[location.pos.x][location.pos.y] = it->id;
+              }
+
+              for (std::vector<Player>::iterator it = team.players.begin(); it != team.players.end(); ++it) {
+                       
+                Location location;
+
+                location.type = PLAYER;
+                location.pos = it->getPos();
+                units_[it->id] = location;
+                grid_[location.pos.x][location.pos.y] = it->id;
+              }
+        }
+      
+        void reset() {
+                // Zero memory
+                for (int x=0; x<=max_x_; x++)
+                        memset(&grid_[x], 0, sizeof(int) * max_y_);
+        } 
+        
+        void * Malloc(size_t size) {
+               void * p;
+
+               p = malloc(size);
+               
+               if (p == NULL)
+                  fprintf(stderr, "Error calling malloc in %s line %d\n", __FILE__, __LINE__);
+
+                return p;
+        }
+
+
+   } tempMapTeam0, tempMapTeam1;
  
    // Functions
    void update();
