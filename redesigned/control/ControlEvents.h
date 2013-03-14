@@ -26,6 +26,6 @@ void CallBuildCreepEvent(void* value);
 void AddNewCalledButton(int id);
 bool getCalledButton(int id);
 
-ClientGameLogic* _gameLogicPointer;
+//ClientGameLogic* _gameLogicPointer;
 
 #endif
