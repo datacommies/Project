@@ -8,7 +8,14 @@
     #define INIT_CURRENCY 100
     #define INIT_HEALTH 100
 
-    #define DEFAULT_ATKDMG 5
+    #define INIT_CREEP_HP 100
+    #define INIT_CREEP_ATKDMG 5
+    #define INIT_CREEP_ATKRNG 7
+    #define INIT_CREEP_ATKSPD 1
+    #define INIT_CREEP_PERCEP 1
+    #define INIT_CREEP_ATKCNT 1
+    #define INIT_CREEP_SPD 1
+    #define INIT_MOVESPEED 1
      
     // This will come actually be read from the map
     #define MAX_X 100
@@ -87,10 +94,8 @@
        // Initializing the Game functions
        void initializeTeams();
        void initializeCastles();
-       
-       
-       
-       
+       void initializeCreeps();
+       void initializeTowers();
        
        static void setAlarm();
        static void updateClients(int i);
