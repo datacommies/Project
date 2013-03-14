@@ -18,7 +18,10 @@ using namespace std;
 --
 -- NOTES: Initializes the ControlManager class. The members does most of the functionality.
 ----------------------------------------------------------------------------------------------------------------------*/
-ControlManager::ControlManager() {}
+ControlManager::ControlManager() 
+:lastState(0)
+{
+}
 
 /*-------------------------------------------------------------------------------------------------------------------- 
 -- FUNCTION: AddNewState
@@ -116,7 +119,7 @@ void ControlManager::SetNewActiveState(ControlState * state)
 	if(state->getOverride() || !activeState->getOverride())
 	{
 		activeState->UnloadGUIs();
-		lastState = LAST_STATE;
+		lastState = 0;
 	} 
 	activeState = state;
 	activeState->LoadGUIs();
