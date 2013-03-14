@@ -64,7 +64,9 @@ void * init (void * in) {
 					if (button->rect.getGlobalBounds().contains(mouse)) {
 						// Join server button.
 						if (button->id == ID_JOIN){
+							g->clientGameLogic_.UIElements.clear();
 							g->showJoinWindow();
+							break;
 						}
 						else if (button->id == ID_TEST)
 						{
@@ -213,7 +215,8 @@ void Graphics::initJoinWindow(){
 	// Create join window using SFGUI
 	sfgJoinWindow = sfg::Window::Create( sfg::Window::TITLEBAR | sfg::Window::BACKGROUND | sfg::Window::RESIZE); // Make the window.
 	sfgJoinWindow->SetTitle(L"Join Game"); // Add a title to the window.
-	sfgJoinWindow->SetPosition(sf::Vector2f(400,400)); // Change the window position.
+	sfgJoinWindow->SetPosition(sf::Vector2f(100,100)); // Change the window position.
+	sfgJoinWindow->SetRequisition(sf::Vector2f(600, 600));
 	
 	// Create a box to hold all the controls.
 	sfgJoinBox = sfg::Box::Create(sfg::Box::VERTICAL);
@@ -254,9 +257,10 @@ void Graphics::initJoinWindow(){
 
 void Graphics::joinButtonHandler()
 {
-	cout << "Name:" << endl;//<< sfgNameEntryBox->GetText() << endl;
-	//cout << "Server:" << sfgServerEntryBox->GetText() << endl;
-	//cout << "Port:" << sfgPortEntryBox->GetText() << endl;
+	// NOTE* problem with this code right now, apparently GetText() returns a Color, when it should be a string.
+	cout << "Name:" << sfgNameEntryBox->GetText().toAnsiString() << endl;
+	cout << "Server:" << sfgServerEntryBox->GetText().toAnsiString() << endl;
+	cout << "Port:" << sfgPortEntryBox->GetText().toAnsiString() << endl;
 }
 
 void Graphics::showJoinWindow()
@@ -267,6 +271,7 @@ void Graphics::showJoinWindow()
 void Graphics::hideJoinWindow()
 {
 	sfgJoinWindow->Show(false);
+	this->initMainMenuControls();
 }
 
 /* Draws the HUD.
