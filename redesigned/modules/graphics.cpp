@@ -4,6 +4,7 @@
 #include <SFGUI/SFGUI.hpp>
 #include <unistd.h>
 #include <SFML/Graphics.hpp>
+#include <string>
 
 using namespace std;
 
@@ -188,7 +189,7 @@ void Graphics::initMainMenuControls()
  * NOTES:   Clears and Initializes the set of UIElements for In-game controls */
 void Graphics::initGameControls () {
 	clientGameLogic_.UIElements.clear();
-	
+
 	Button a(999,sf::Vector2f(020,570), sf::Vector2f(100,25), font, "Tower1");
 	Button b(998,sf::Vector2f(130,570), sf::Vector2f(100,25), font, "Tower2");
 	Button c(997,sf::Vector2f(240,570), sf::Vector2f(100,25), font, "Tower3");
@@ -210,17 +211,52 @@ void Graphics::initGameControls () {
 
 void Graphics::initJoinWindow(){
 	// Create join window using SFGUI
-	sfgJoinWindow = sfg::Window::Create( sfg::Window::TITLEBAR | sfg::Window::BACKGROUND ); // Make the window.
+	sfgJoinWindow = sfg::Window::Create( sfg::Window::TITLEBAR | sfg::Window::BACKGROUND | sfg::Window::RESIZE); // Make the window.
 	sfgJoinWindow->SetTitle(L"Join Game"); // Add a title to the window.
 	sfgJoinWindow->SetPosition(sf::Vector2f(400,400)); // Change the window position.
 	
-	// Create a button to close the join window.
-	sfgCloseJoinButton = sfg::Button::Create();
-	sfgCloseJoinButton->SetLabel("Yo");
+	// Create a box to hold all the controls.
+	sfgJoinBox = sfg::Box::Create(sfg::Box::VERTICAL);
 
-	// Add it to the join window and set a signal up.
-	sfgJoinWindow->Add(sfgCloseJoinButton);	
+	// Create all the labels.
+	sfgNameLabel = sfg::Label::Create("Name:");
+	sfgServerLabel = sfg::Label::Create("Server:");
+	sfgPortLabel = sfg::Label::Create("Port:");
+
+	// Create the entry boxes.
+	sfgNameEntryBox = sfg::Entry::Create();
+	sfgNameEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 80.
+	sfgServerEntryBox = sfg::Entry::Create();
+	sfgServerEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 80.
+	sfgPortEntryBox = sfg::Entry::Create();
+	sfgPortEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 80.
+
+	// Create a button to join a server and handle it's signal
+	sfgJoinButton = sfg::Button::Create("Join");
+	sfgJoinButton->GetSignal( sfg::Widget::OnLeftClick ).Connect(&Graphics::joinButtonHandler, this);
+
+	// Create a button to close the join window and handle it's signal
+	sfgCloseJoinButton = sfg::Button::Create("Close");
 	sfgCloseJoinButton->GetSignal( sfg::Widget::OnLeftClick ).Connect(&Graphics::hideJoinWindow, this);
+
+	// Add all the controls to the container.
+	sfgJoinBox->Pack(sfgNameLabel);
+	sfgJoinBox->Pack(sfgNameEntryBox);
+	sfgJoinBox->Pack(sfgServerLabel);
+	sfgJoinBox->Pack(sfgServerEntryBox);
+	sfgJoinBox->Pack(sfgPortLabel);
+	sfgJoinBox->Pack(sfgPortEntryBox);
+	sfgJoinBox->Pack(sfgJoinButton);
+	sfgJoinBox->Pack(sfgCloseJoinButton);
+
+	sfgJoinWindow->Add(sfgJoinBox);	
+}
+
+void Graphics::joinButtonHandler()
+{
+	cout << "Name:" << endl;//<< sfgNameEntryBox->GetText() << endl;
+	//cout << "Server:" << sfgServerEntryBox->GetText() << endl;
+	//cout << "Port:" << sfgPortEntryBox->GetText() << endl;
 }
 
 void Graphics::showJoinWindow()
