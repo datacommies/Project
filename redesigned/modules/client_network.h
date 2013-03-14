@@ -32,7 +32,9 @@ public:
 
 
 private:
-   int connectsock;
+   long connectsock_;
+
+   static void* recvReply(void* args);
 };
 
 #endif

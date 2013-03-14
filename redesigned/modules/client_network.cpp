@@ -14,6 +14,7 @@ using namespace std;
 ClientNetwork::ClientNetwork()
 {
    // TODO: create a thread and begin processing
+//gl = (ClientGameLogic*) malloc (sizeof(ClientGameLogic*));
 
 }
 
@@ -22,8 +23,8 @@ ClientNetwork::ClientNetwork()
  */
 ClientNetwork::~ClientNetwork()
 {
-    shutdown(connectsock, SHUT_RDWR);
-    close(connectsock);
+    shutdown(connectsock_, SHUT_RDWR);
+    close(connectsock_);
 }
 
 /* Connects to a server with the specified hostname and port.
@@ -41,12 +42,11 @@ ClientNetwork::~ClientNetwork()
 bool ClientNetwork::connectToServer(std::string hostname, int port)
 {
 	cout << "connecting.." <<endl;
-	long connectsock;
+	long connectsock; //TODO: this is local copy and not using the private class member
 
 	struct sockaddr_in serv_addr;
 	struct hostent *server;
 
-	//connect through TCP (for now at least)
 	connectsock = socket(AF_INET, SOCK_STREAM, 0); 
 
 	if (connectsock < 0) 
@@ -77,7 +77,16 @@ bool ClientNetwork::connectToServer(std::string hostname, int port)
 	}
 
 	std::cout << "I'M CONNECTEDDDDD!!!!! YEAAAAAAAAAAAAAAAAAAAAAAAA" << std::endl;
+	pthread_t recvreplyThread;
+	connectsock_ = connectsock;
 
+
+	pthread_create (&recvreplyThread, NULL, recvReply, this); // start server input handler.
+
+
+
+
+/*
 	while (true) {
 		header_t head;
 		recv_complete(connectsock, &head, sizeof(head), 0);
@@ -102,8 +111,52 @@ bool ClientNetwork::connectToServer(std::string hostname, int port)
 	}
 
 	cout << "Done getting a unit" << endl;
-
+*/
 	return true;
+}
+
+void* ClientNetwork::recvReply(void* args) {
+
+	ClientNetwork* cn = (ClientNetwork*) args;
+
+	while (true) {
+		header_t head = {0};
+		recv_complete(cn->connectsock_, &head, sizeof(head), 0);
+		cout << "Recv head size:" << head.size << endl;
+
+		// CREEP type contains a unit_t with the creep's attributes.
+
+		switch (head.type) {
+
+			case TOWER:
+			//FALL THROUGH
+
+			case CASTLE:
+			
+			
+
+			case CREEP:
+			//FALL THROUGH 
+
+			case PLAYER:
+				unit_t u = {0};
+				CLIENT_UNIT c= {0};
+				//int headLength = head.size - sizeof(head);
+				cout << "Waiting for " << head.size - 
+				sizeof(head) << endl;
+				recv_complete(cn->connectsock_, ((char*)&u) + sizeof(header_t), head.size - sizeof(head), 0);
+				c.position.x = u.posx;
+				c.position.y = u.posy;
+				c.past_position = c.position;
+				c.health = u.health;
+				cout << "Creep health" << c.health << endl;
+				c.type = (UnitType)head.type;
+				cn->gl->units.push_back(c);
+			break;
+		}
+
+		cout << "Done getting a unit" << endl;
+	}
 }
 
 /* Sends a create unit request to the server.

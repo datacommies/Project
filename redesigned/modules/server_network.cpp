@@ -135,6 +135,7 @@ void* ServerNetwork::handleInput(void* args)
 
 void* ServerNetwork::handleClient(void* args)
 {
+    //sendSerializedData(int teamIdx)
     cout << "Hello world!" << endl;
     ServerNetwork* thiz = (ServerNetwork*) args;
     //long client_ = (long)args;
