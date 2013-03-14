@@ -23,7 +23,7 @@ int ControlRun()
 	
 	AddStates(manager);
 	
-	//while(manager.CheckState() != 0);
+	while(manager.CheckState() != 0);
 	
 	return 0;
 }
@@ -65,6 +65,7 @@ void AddStates(ControlManager &manager)
 -- DESIGNER: John Payment
 --
 -- PROGRAMMER: John Payment
+--             Luke Tao
 --
 -- INTERFACE: ControlState MakeMenuState()
 --
@@ -78,11 +79,11 @@ ControlState MakeMenuState()
 	sf::Font font;
 	
 	Button startButton(11, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Start Lobby");	
-	Controller startLobby(LAST_STATE, (sf::Keyboard::Key) 0, startButton, CallEnterLobbyEvent);
+	Controller startLobby(MENU_ID, (sf::Keyboard::Key)0, startButton, CallEnterLobbyEvent);
 	menuState.AddController(startLobby);
 	
 	Button exitButton(12, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Exit Game");	
-	Controller exitGame(LAST_STATE, (sf::Keyboard::Key) 0, exitButton, CallExitGameEvent);
+	Controller exitGame(TERMINATE, (sf::Keyboard::Key)0, exitButton, CallExitGameEvent);
 	menuState.AddController(exitGame);
 	
 	return menuState;
@@ -134,36 +135,30 @@ ControlState MakePlayerState()
     sf::Font font;
 	ControlState playerState(true, 30);
 	
-	Button moveLeftPress(0, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Move Left");	
-	Controller moveLeft(0, sf::Keyboard::Left, moveLeftPress, CallMoveLeftEvent);
+	Button emptyButton(0, sf::Vector2f(0, 0), sf::Vector2f(0, 0), font, "");	
+	
+	Controller moveLeft(0, sf::Keyboard::Left, emptyButton, CallMoveLeftEvent);
 	playerState.AddController(moveLeft);
 	
-	Button moveRightPress(0, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Move Right");	
-	Controller moveRight(0, sf::Keyboard::Right, moveRightPress, CallMoveRightEvent);
+	Controller moveRight(0, sf::Keyboard::Right, emptyButton, CallMoveRightEvent);
 	playerState.AddController(moveRight);
 	
-	Button moveUpPress(0, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Move Up");	
-	Controller moveUp(0, sf::Keyboard::Up, moveUpPress, CallMoveUpEvent);
+	Controller moveUp(0, sf::Keyboard::Up, emptyButton, CallMoveUpEvent);
 	playerState.AddController(moveUp);
 	
-	Button moveDownPress(0, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Move Down");	
-	Controller moveDown(0, sf::Keyboard::Down, moveDownPress, CallMoveDownEvent);
+	Controller moveDown(0, sf::Keyboard::Down, emptyButton, CallMoveDownEvent);
 	playerState.AddController(moveDown);
 	
-	Button attackLeftPress(0, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Attack Left");	
-	Controller attackLeft(0, sf::Keyboard::Left, attackLeftPress, CallAttackLeftEvent);
+	Controller attackLeft(0, sf::Keyboard::Left, emptyButton, CallAttackLeftEvent);
 	playerState.AddController(attackLeft);
-	
-	Button attackRightPress(0, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Attack Right");	
-	Controller attackRight(0, sf::Keyboard::Right, attackRightPress, CallAttackRightEvent);
+		
+	Controller attackRight(0, sf::Keyboard::Right, emptyButton, CallAttackRightEvent);
 	playerState.AddController(attackRight);
 	
-	Button attackUpPress(0, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Attack Up");	
-	Controller attackUp(0, sf::Keyboard::Up, attackUpPress, CallAttackUpEvent);
+	Controller attackUp(0, sf::Keyboard::Up, emptyButton, CallAttackUpEvent);
 	playerState.AddController(attackUp);
 	
-	Button attackDownPress(0, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Attack Down");	
-	Controller attackDown(0, sf::Keyboard::Down, attackDownPress, CallAttackDownEvent);
+	Controller attackDown(0, sf::Keyboard::Down, emptyButton, CallAttackDownEvent);
 	playerState.AddController(attackDown);
 	
 	Button exitGameClick(31, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Exit Game");	
@@ -183,6 +178,7 @@ ControlState MakePlayerState()
 -- DESIGNER: John Payment
 --
 -- PROGRAMMER: John Payment
+--             Luke Tao
 --
 -- INTERFACE: ControlState MakeBuilderState()
 --
@@ -221,6 +217,7 @@ ControlState MakeBuilderState()
 -- DESIGNER: John Payment
 --
 -- PROGRAMMER: John Payment
+--             Luke Tao
 --
 -- INTERFACE: ControlState MakeExitGameState()
 --

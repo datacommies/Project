@@ -1,5 +1,4 @@
 #include "control.h"
-#include "../control/Control.h"
 
 /* Constructor
  *
@@ -12,5 +11,5 @@ Control::Control(ClientGameLogic& clientGameLogicModule)
 {
 	// TODO: create a thread
 	loadControlEvents(&clientGameLogicModule);
-	ControlRun();
+	//ControlRun();
 }

@@ -5,6 +5,7 @@
 #include "../modules/client_game_logic.h"
 
 void loadControlEvents(ClientGameLogic* gameLogic);
+ClientGameLogic* getGameLogic();
 
 void CallExitGameEvent(void* value);
 
