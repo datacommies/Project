@@ -55,7 +55,7 @@ void Unit::Attack(void) {
     if( attackCount++ < attackSpeed )
         return;
 
-    attackSpeed = 0;
+    attackCount = 0;
     if( hasWeakness( iElement, pTarget->iElement ) )
         pTarget->health -= attackDamage * 1.75;
     else if( hasStrength(iElement, pTarget->iElement) )
