@@ -15,3 +15,16 @@ BasicTower::BasicTower(const int& uid, Point pos, const int& hp, const int& atkd
     //validation
 }
 
+void BasicTower::Attack(void)
+{
+    if( attackCount++ < attackSpeed )
+        return;
+        
+    attackCount = 0;
+    pTarget->health -= attackDamage;
+
+    if( pTarget->health <= 0 ) {
+        // find new target
+    }
+}
+
