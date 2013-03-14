@@ -28,7 +28,6 @@ int Creep::getTargetDirection( int p1, int p2 ) {
 }
     
 
-#if 0
 /*
 * Check if we're at the next path point, if we are, update the path target.
 * If we can find an attackable target, attack or move towards them.
@@ -67,7 +66,7 @@ void Creep::Update( void ) {
         Rotate( *pPath );
     }
 }
-#endif
+
 string Creep::serializeCreep()
 {
     string s = MobileUnit::serializeMobileUnit();
