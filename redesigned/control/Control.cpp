@@ -75,11 +75,14 @@ void AddStates(ControlManager &manager)
 ControlState MakeMenuState()
 {
 	ControlState menuState(true, 10);
+	sf::Font font;
 	
-	Controller startLobby(startButton, startLobbyFunction);
+	Button startButton(11, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Start Lobby");	
+	Controller startLobby(LAST_STATE, (sf::Keyboard::Key) 0, startButton, CallEnterLobbyEvent);
 	menuState.AddController(startLobby);
 	
-	Controller exitGame(exitButton, exitGameFunction);
+	Button exitButton(12, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Exit Game");	
+	Controller exitGame(LAST_STATE, (sf::Keyboard::Key) 0, exitButton, CallExitGameEvent);
 	menuState.AddController(exitGame);
 	
 	return menuState;
@@ -128,33 +131,43 @@ ControlState MakeLobbyState()
 ----------------------------------------------------------------------------------------------------------------------*/
 ControlState MakePlayerState()
 {
+    sf::Font font;
 	ControlState playerState(true, 30);
 	
-	Controller moveLeft(0, sf::Keyboard::Left, NULL, CallMoveLeftEvent);
+	Button moveLeftPress(0, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Move Left");	
+	Controller moveLeft(0, sf::Keyboard::Left, moveLeftPress, CallMoveLeftEvent);
 	playerState.AddController(moveLeft);
 	
-	Controller moveRight(0, sf::Keyboard::Right, NULL, CallMoveRightEvent);
+	Button moveRightPress(0, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Move Right");	
+	Controller moveRight(0, sf::Keyboard::Right, moveRightPress, CallMoveRightEvent);
 	playerState.AddController(moveRight);
 	
-	Controller moveUp(0, sf::Keyboard::Up, NULL, CallMoveUpEvent);
+	Button moveUpPress(0, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Move Up");	
+	Controller moveUp(0, sf::Keyboard::Up, moveUpPress, CallMoveUpEvent);
 	playerState.AddController(moveUp);
 	
-	Controller moveDown(0, sf::Keyboard::Down, NULL, CallMoveDownEvent);
+	Button moveDownPress(0, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Move Down");	
+	Controller moveDown(0, sf::Keyboard::Down, moveDownPress, CallMoveDownEvent);
 	playerState.AddController(moveDown);
 	
-	Controller attackLeft(0, sf::Keyboard::Left, NULL, CallAttackLeftEvent);
+	Button attackLeftPress(0, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Attack Left");	
+	Controller attackLeft(0, sf::Keyboard::Left, attackLeftPress, CallAttackLeftEvent);
 	playerState.AddController(attackLeft);
 	
-	Controller attackRight(0, sf::Keyboard::Right, NULL, CallAttackRightEvent);
+	Button attackRightPress(0, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Attack Right");	
+	Controller attackRight(0, sf::Keyboard::Right, attackRightPress, CallAttackRightEvent);
 	playerState.AddController(attackRight);
 	
-	Controller attackUp(0, sf::Keyboard::Up, NULL, CallAttackUpEvent);
+	Button attackUpPress(0, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Attack Up");	
+	Controller attackUp(0, sf::Keyboard::Up, attackUpPress, CallAttackUpEvent);
 	playerState.AddController(attackUp);
 	
-	Controller attackDown(0, sf::Keyboard::Down, NULL, CallAttackDownEvent);
+	Button attackDownPress(0, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Attack Down");	
+	Controller attackDown(0, sf::Keyboard::Down, attackDownPress, CallAttackDownEvent);
 	playerState.AddController(attackDown);
 	
-	Controller exitGame(EXIT_MENU_ID, NULL, exitGameButton(), NULL);
+	Button exitGameClick(31, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Exit Game");	
+	Controller exitGame(EXIT_MENU_ID, (sf::Keyboard::Key) 0, exitGameClick, NULL);
 	playerState.AddController(exitGame);
 	
 	return playerState;
@@ -178,17 +191,22 @@ ControlState MakePlayerState()
 -- NOTES: This creates the builderState and loads it with all relevent Controllers
 ----------------------------------------------------------------------------------------------------------------------*/
 ControlState MakeBuilderState()
-{
+{   
+    sf::Font font;
+    
 	ControlState builderState(true, 40);
-	
-	Controller buildTower(0, sf::Keyboard::B, buildTowerButton(), CallBuildTowerEvent);
+    
+    Button buildTowerButton(41, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Build Tower");	
+	Controller buildTower(0, sf::Keyboard::B, buildTowerButton, CallBuildTowerEvent);
 	builderState.AddController(buildTower);
 	
-	Controller buildCreep(0, sf::Keyboard::C, buildCreepButton(), CallBuildCreepEvent);
+	Button buildCreepButton(42, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Build Creep");
+	Controller buildCreep(0, sf::Keyboard::C, buildCreepButton, CallBuildCreepEvent);
 	builderState.AddController(buildCreep);
 	
-	Controller exitGame(EXIT_MENU_ID, NULL, exitGameButton(), NULL);
-	playerState.AddController(exitGame);
+	Button exitGameButton(43, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Exit Game");
+	Controller exitGame(EXIT_MENU_ID, (sf::Keyboard::Key) 0, exitGameButton, NULL);
+	builderState.AddController(exitGame);
 	
 	return builderState;
 }
@@ -214,10 +232,14 @@ ControlState MakeExitGameState()
 {
 	ControlState exitState(false, 50);
 	
-	Controller returnToPreviousState(LAST_STATE, NULL, returnButton(), NULL);
+	sf::Font font;
+	Button returnButton(51, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Resume Game");
+	
+	Controller returnToPreviousState(LAST_STATE, (sf::Keyboard::Key) 0, returnButton, NULL);
 	exitState.AddController(returnToPreviousState);
 	
-	Controller exitGame(TERMINATE, NULL, exitButton(), CallExitGameEvent);
+	Button exitButton(52, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Exit");
+	Controller exitGame(TERMINATE, (sf::Keyboard::Key) 0, exitButton, CallExitGameEvent);
 	exitState.AddController(exitGame);
 	
 	return exitState;

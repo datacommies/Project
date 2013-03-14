@@ -46,6 +46,8 @@
 #define BUILD_TOWER 1337
 #define SPAWN_CREEP 1338
 
+class ControlManager;
+
 int ControlRun();
 
 void AddStates(ControlManager &manager);

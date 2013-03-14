@@ -24,13 +24,14 @@
 ----------------------------------------------------------------------------------------------------------------------*/
 
 #include "../resource.h"
+#include "ControlEvents.h"
 #include <vector>
 #include <SFML/Window.hpp>
 
 class Controller
 {
 public:
-	Controller(int returnValue, sf::Keyboard::Key key, Button buttonRect, void (*move_fp)(void));
+	Controller(int returnValue, sf::Keyboard::Key key, Button buttonRect, void (*move_fp)(void *));
 
 	int CheckController();
 
@@ -43,8 +44,8 @@ private:
 	int _returnValue;
 	int _key;
 	Button _buttonRECT;
-	
-	void (*eventFunction)(void);
+	ClientGameLogic* gameLogicPointer;
+	void (*eventFunction)(void*);
 	
 };
 

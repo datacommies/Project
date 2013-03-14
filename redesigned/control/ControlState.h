@@ -42,7 +42,7 @@ public:
 	int CheckControllers();
 
 	bool getOverride();
-	bool getIdentifier();
+	int getIdentifier();
 
 private:
 	bool _Override;

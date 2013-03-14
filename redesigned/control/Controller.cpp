@@ -24,7 +24,7 @@
 --
 -- NOTES: Constructor for Controller Class
 ----------------------------------------------------------------------------------------------------------------------*/
-Controller::Controller(int returnValue, sf::Keyboard::Key key, Button buttonRect, void (*move_fp)(void)) 
+Controller::Controller(int returnValue, sf::Keyboard::Key key, Button buttonRect, void (*move_fp)(void *)) 
 	:_returnValue(returnValue)
 	,_key(key)
 	,_buttonRECT(buttonRect)
@@ -73,8 +73,7 @@ Controller::LoadGui()
 --
 -- NOTES: Unloads the contained Button from the Graphics
 ----------------------------------------------------------------------------------------------------------------------*/
-void 
-Controller::UnloadGui()
+void Controller::UnloadGui()
 {
 	gameLogicPointer->UIElements.erase(_buttonRECT);
 }
@@ -99,7 +98,7 @@ Controller::UnloadGui()
 void 
 Controller::RunCommand()
 {
-	eventFunction();
+	//eventFunction(void *);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
@@ -133,10 +132,10 @@ Controller::CheckController()
 	
 	if(_key != 0)
 	{
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key))
-		{
-			return _returnValue;
-		}
+		//if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key))
+		//{
+			//return _returnValue;
+		//}
 	  
 	}
 
