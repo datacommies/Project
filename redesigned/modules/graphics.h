@@ -81,6 +81,8 @@ private:
    sf::Sprite castle_sprite;
    sf::Texture player_tex;
    sf::Sprite player_sprite;
+   sf::Texture tower_tex;
+   sf::Sprite tower_sprite;
 
    // SFGUI stuff
    sfg::Window::Ptr sfgJoinWindow;
