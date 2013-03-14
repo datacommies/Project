@@ -66,7 +66,7 @@ void ServerGameLogic::initializeCastles()
     pos.x = MAX_X; // TODO: MAX_X and MAX_Y will  be replaced later when we get map reading functionality working
     pos.y = MAX_Y; // TODO:
     Castle castle2 = Castle(uid, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, wall, cid);
-    teams[1].towers.push_back(castle1);
+    teams[1].towers.push_back(castle2);
 }
 
 void ServerGameLogic::initializeCreeps()
@@ -98,7 +98,24 @@ void ServerGameLogic::initializeCreeps()
 
 void ServerGameLogic::initializeTowers()
 {
-
+    for (int team_i=0; team_i<2; team_i++)
+        for (int j=0; j<INIT_NUM_TOWERS; j++) {
+            
+            int uid = next_unit_id_++;
+            Point pos = Point();
+            pos.x = 200;
+            pos.y = 50 + j;
+            int hp = INIT_TOWER_HP;
+            int atkdmg = INIT_TOWER_ATKDMG;
+            int atkrng = INIT_TOWER_ATKRNG;
+            int atkspd = INIT_TOWER_ATKSPD;
+            int percep = INIT_TOWER_PERCEP;
+            int atkcnt = INIT_TOWER_ATKCNT;
+            int wall = INIT_TOWER_WALL;
+            
+            Tower tower = Tower(uid, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, wall);
+            teams[team_i].towers.push_back(tower);
+        }
 }
 
 void ServerGameLogic::initializeTeams()
@@ -226,22 +243,29 @@ void ServerGameLogic::update()
   if (requestedCommands.empty())
     return;
  
-  CommandData newCommand = requestedCommands.front();
-  requestedCommands.pop();
+  // Take snap shot of queue at time0
+  // Only process the number of commands that were there at time0
+  int size_at_time0 = requestedCommands.size(); // <---- this is time0
+ 
+  for (int i=0; i<size_at_time0; i++) {
+ 
+      CommandData newCommand = requestedCommands.front();
+      requestedCommands.pop();
 
-  switch (newCommand.cmd) {
-    case Create:
-      updateCreate(newCommand);
-      break;
-    case Attack:
-      updateAttack(newCommand);
-      break;
-    case MovePlayer:
-      updateMovePlayer(newCommand);
-      break;
-    case MoveUnit:
-      updateMoveUnit(newCommand);
-      break;
+      switch (newCommand.cmd) {
+        case Create:
+          updateCreate(newCommand);
+          break;
+        case Attack:
+          updateAttack(newCommand);
+          break;
+        case MovePlayer:
+          updateMovePlayer(newCommand);
+          break;
+        case MoveUnit:
+          updateMoveUnit(newCommand);
+          break;
+      }
   }
 }
  

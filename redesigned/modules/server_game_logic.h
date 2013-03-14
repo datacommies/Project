@@ -5,6 +5,7 @@
 
 #define INIT_NUM_CREEPS 3
 #define INIT_TOWERS_START 4
+#define INIT_NUM_TOWERS 4
 #define INIT_CURRENCY 100
 #define INIT_HEALTH 100
 
@@ -16,6 +17,14 @@
 #define INIT_CREEP_ATKCNT 1
 #define INIT_CREEP_SPD 1
 #define INIT_MOVESPEED 1
+
+#define INIT_TOWER_HP 200
+#define INIT_TOWER_ATKDMG 7
+#define INIT_TOWER_ATKRNG 11
+#define INIT_TOWER_ATKSPD 2
+#define INIT_TOWER_PERCEP 23
+#define INIT_TOWER_ATKCNT 1
+#define INIT_TOWER_WALL 2 
  
 // This will come actually be read from the map
 #define MAX_X 100
@@ -25,7 +34,6 @@
 #include <stdlib.h>
 #include <pthread.h>
  
-
 #include "../resource.h"
 //#include "ai.h"    
 
@@ -52,8 +60,6 @@ struct CommandData {
  
 class ServerGameLogic
 {
- 
-  friend void *UpdateThreadFunc(void *p);
  
 public:
    // Constructors
@@ -86,10 +92,7 @@ private:
    void updateCreate(CommandData& command);
    void updateAttack(CommandData& command);
    void updateMovePlayer(CommandData& command);
-   void updateMoveUnit(CommandData& command);
- 
-   void startThread();
-   
+   void updateMoveUnit(CommandData& command);   
    
    // Initializing the Game functions
    void initializeTeams();
