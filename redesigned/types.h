@@ -25,14 +25,6 @@ enum {
     MSG_RESOURCE_UPDATE
 };
 
-// Use resouce UnitType instead!
-enum UnitTypes {
-	TYPE_CREEP,
-	TYPE_TOWER,
-	TYPE_PLAYER,
-	TYPE_CASTLE
-} ;
-
 // Common Message Header
 typedef struct {
     int type; //MSG_PLAYER_UPDATE for e.g.

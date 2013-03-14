@@ -17,7 +17,7 @@ public:
     void setWallArmour(const int& amount) { wallArmour_ = amount; }
     std::string serializeTower();
 
-    virtual UnitTypes getType() const { return TYPE_TOWER; }
+    virtual UnitType getType() const { return CASTLE; }
 	virtual size_t getSize() const { return Unit::getSize() + sizeof(tower_t); }
 	
 private:  

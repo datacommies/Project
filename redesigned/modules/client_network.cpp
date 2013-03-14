@@ -83,8 +83,8 @@ bool ClientNetwork::connectToServer(std::string hostname, int port)
 		recv_complete(connectsock, &head, sizeof(head), 0);
 		cout << "Recv head size:" << head.size << endl;
 
-		// TYPE_CREEP message has 
-		if (head.type == TYPE_CREEP) {
+		// CREEP type contains a unit_t with the creep's attributes.
+		if (head.type == CREEP || head.type == CASTLE) {
 			unit_t u = {0};
 			CLIENT_UNIT c= {0};
 			//int headLength = head.size - sizeof(head);
@@ -96,7 +96,7 @@ bool ClientNetwork::connectToServer(std::string hostname, int port)
 			c.past_position = c.position;
 			c.health = u.health;
 			cout << "Creep health" << c.health << endl;
-			c.type = CREEP;
+			c.type = (UnitType)head.type;
 			gl->units.push_back(c);
 		}
 	}

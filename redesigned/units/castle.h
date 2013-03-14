@@ -15,7 +15,7 @@ public:
 
 	std::string serializeCastle();
 
-	virtual UnitTypes getType() const { return TYPE_CASTLE; }
+	virtual UnitType getType() const { return CASTLE; }
 	virtual size_t getSize() const { return Tower::getSize(); }
 
     int getCID() const { return clientID_; } //no setter, should only be set once at start of game

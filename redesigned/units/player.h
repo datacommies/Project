@@ -20,7 +20,7 @@ public:
     virtual void Update(void);
     virtual void Move(void);
 
-    virtual UnitTypes getType() const { return TYPE_PLAYER; }
+    virtual UnitType getType() const { return PLAYER; }
 	virtual size_t getSize() const { return MobileUnit::getSize(); }
 
 private:   

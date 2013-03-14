@@ -27,6 +27,5 @@ string MobileUnit::serializeMobileUnit()
     m.speed = moveSpeed;
     m.direction = direction;
     s += string((char*)&m, sizeof(mobileunit_t));
-    cout  << "MobileUnit Serialized: |"  << s << "| size: " << s.size() << endl;
     return s;
 }

@@ -12,7 +12,7 @@ public:
   	void spawn(int num);  //also creep type? when we have a type
 	std::string serializeCreep();
 
-	virtual UnitTypes getType() const { return TYPE_CREEP; }
+	virtual UnitType getType() const { return CREEP; }
 	virtual size_t getSize() const { return MobileUnit::getSize(); }
 
 	Creep(int uid = 0, Point pos = Point(), int hp = 0, int atkdmg = 0, int atkrng = 0,

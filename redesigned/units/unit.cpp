@@ -157,6 +157,5 @@ string Unit::serializeUnit()
     u.attackSpeed = attackSpeed;
     u.perception = perception;
     u.attackCount = attackCount;
-    std::cout  << "Unit::ser health " << health << endl;
     return string((char*)&u, sizeof(unit_t));
 }
