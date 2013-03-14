@@ -278,8 +278,8 @@ void CallAttackDownEvent(void* value)
 ----------------------------------------------------------------------------------------------------------------------*/
 void CallBuildTowerEvent(void* value)
 {
-	int x = ((int)value)[0];
-	int y = ((int)value)[1];
+	int x = ((int *)value)[0];
+	int y = ((int *)value)[1];
 	Point location;
 	location.x = x;
 	location.y = y;
@@ -357,7 +357,7 @@ void AddNewCalledButton(int id)
 ----------------------------------------------------------------------------------------------------------------------*/
 bool getCalledButton(int id)
 {
-	for(vector<int>::iterator i = pressedButtonIds.front(); i != pressedButtonIds.back(); ++i)
+	for(vector<int>::iterator i = pressedButtonIds.begin(); i != pressedButtonIds.end(); ++i)
 	{
 		if(*i == id)
 		{

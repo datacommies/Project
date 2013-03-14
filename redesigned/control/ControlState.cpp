@@ -45,7 +45,7 @@ ControlState::ControlState(bool override, int identifier)
 void 
 ControlState::LoadGUIs()
 {
-	for(vector<Controller>::size_t i = 0; i < Controllers.size(); ++i)
+	for(vector<Controller>::size_type i = 0; i < Controllers.size(); ++i)
 	{
 		Controllers[i].LoadGui();
 	}
@@ -71,7 +71,7 @@ ControlState::LoadGUIs()
 void 
 ControlState::UnloadGUIs()
 {
-	for(vector<Controller>::size_t i = 0; i < Controllers.size(); ++i)
+	for(vector<Controller>::size_type i = 0; i < Controllers.size(); ++i)
 	{
 		Controllers[i].UnloadGui();
 	}
