@@ -23,7 +23,7 @@ int ControlRun()
 	
 	AddStates(manager);
 	
-	//while(manager.CheckState() != 0);
+	while(manager.CheckState() != 0);
 	
 	return 0;
 }
@@ -78,11 +78,11 @@ ControlState MakeMenuState()
 	sf::Font font;
 	
 	Button startButton(11, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Start Lobby");	
-	Controller startLobby(LAST_STATE, (sf::Keyboard::Key) 0, startButton, CallEnterLobbyEvent);
+	Controller startLobby(LAST_STATE, (sf::Keyboard::Key)0, startButton, CallEnterLobbyEvent);
 	menuState.AddController(startLobby);
 	
 	Button exitButton(12, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Exit Game");	
-	Controller exitGame(LAST_STATE, (sf::Keyboard::Key) 0, exitButton, CallExitGameEvent);
+	Controller exitGame(LAST_STATE, (sf::Keyboard::Key)0, exitButton, CallExitGameEvent);
 	menuState.AddController(exitGame);
 	
 	return menuState;
