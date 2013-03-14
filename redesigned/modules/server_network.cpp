@@ -4,6 +4,11 @@ using namespace std;
 
 // note: use of POSIX calls makes this platform-dependent
 
+// use a pointer to a ClientCtx to pass both "this" pointer and client socket.
+struct ClientCtx {
+    ServerNetwork * sn;
+    int client;
+};
 
 /* Constructor
  *
@@ -42,25 +47,27 @@ int ServerNetwork::initSock(int port)
 }
 
 void ServerNetwork::initNetwork()
-{
-
-    std::cout << "Entering initNetwork()..." << std::endl;
-    
+{    
     pthread_create (&uiThread_, NULL, handleInput, this); // start server input handler.
 
-    std::cout << "created handleInput thread..." << std::endl;
     socklen_t clientLength_ = sizeof(sockaddr_in);
     struct sockaddr_in clientAddr_ = {0};
-
+    int client = 0;
     // Listen for new connections, or until server socket is closed.
-    while (( client_ = accept(sock_, (struct sockaddr *) &clientAddr_, &clientLength_) ) > 0) { //return -1 now
+    while (( client = accept(sock_, (struct sockaddr *) &clientAddr_, &clientLength_) ) > 0) {
+
         std::cout << std::endl << "new connection." << std::endl;
         pthread_t thread;
-        pthread_create (&thread, NULL, handleClient, this); // TODO: use struct as parameter
+
+        // Setup context struct
+        ClientCtx * ctx = new ClientCtx;
+        ctx->sn = this;
+        ctx->client = client;
+
+        pthread_create (&thread, NULL, handleClient, ctx);
         threads_.push_back(thread);
-        clients_.push_back(client_);
+        clients_.push_back(client);
     }
-    std::cout << "Leaving initNetwork()... client_ has value " << client_<<  " " << std::endl;
 }
 
 /* Sends current game state to a client_.
@@ -135,24 +142,28 @@ void* ServerNetwork::handleInput(void* args)
 
 void* ServerNetwork::handleClient(void* args)
 {
-    cout << "Hello world!" << endl;
-    ServerNetwork* thiz = (ServerNetwork*) args;
-    //long client_ = (long)args;
+    cout << "Handling client!" << endl;
+    ClientCtx* ctx = (ClientCtx*)args;
+    ServerNetwork* thiz = (ServerNetwork*) ctx->sn;
+    int client_ = ctx->client;
+
     while (true) {
+        header_t clear = {MSG_CLEAR, 0};
+        send(client_, &clear, sizeof(header_t), 0);
         for (size_t i = 0; i < thiz->serverGameLogic_.teams[0].towers.size(); ++i)
         {
             string sc = thiz->serverGameLogic_.teams[0].towers[i].serializeTower();
-            send(thiz->client_, sc.data(), sc.size(), 0);
+            send(client_, sc.data(), sc.size(), 0);
         }
         for (size_t i = 0; i < thiz->serverGameLogic_.teams[0].creeps.size(); ++i)
         {
             string sc = thiz->serverGameLogic_.teams[0].creeps[i].serializeCreep();
-            send(thiz->client_, sc.data(), sc.size(), 0);
+            send(client_, sc.data(), sc.size(), 0);
         }
         for (size_t i = 0; i < thiz->serverGameLogic_.teams[1].creeps.size(); ++i)
         {
             string sc = thiz->serverGameLogic_.teams[1].creeps[i].serializeCreep();
-            send(thiz->client_, sc.data(), sc.size(), 0);
+            send(client_, sc.data(), sc.size(), 0);
         }
         sleep(1);
     }
@@ -161,8 +172,8 @@ void* ServerNetwork::handleClient(void* args)
     player_matchmaking_t player;
     
     // if client_ chooses to be a player, add them to player list
-    if (recv_complete(thiz->client_, &player, sizeof(player), 0) > 0) {
-        player.pid = thiz->client_; // cheap and easy way of assigning a unique player id.
+    if (recv_complete(client_, &player, sizeof(player), 0) > 0) {
+        player.pid = client_; // cheap and easy way of assigning a unique player id.
         player.name[PLAYER_NAME_SIZE-1] = 0;
         cout << "Player: " << player.name << " Team: " << player.team << endl;
         thiz->players_.push_back(player);
@@ -172,7 +183,7 @@ void* ServerNetwork::handleClient(void* args)
     for (size_t i = 0; i < thiz->players_.size(); i++) {
         thiz->players_[i].head.type = MSG_PLAYER_UPDATE;
         
-        send(thiz->client_, &thiz->players_[i], sizeof(player_matchmaking_t), 0);
+        send(client_, &thiz->players_[i], sizeof(player_matchmaking_t), 0);
     }
     //update_all_clients_(MSG_PLAYER_UPDATE);
     /*const char * data = sc.data();
@@ -183,7 +194,7 @@ void* ServerNetwork::handleClient(void* args)
     // Inform all other clients_ that this player has arrived.
     for (size_t i = 0; i < thiz->clients_.size(); ++i)
     {
-        if (thiz->clients_[i] != thiz->client_)
+        if (thiz->clients_[i] != client_)
             send(thiz->clients_[i], &player, sizeof(player_matchmaking_t), 0);
     }
     std::cout << "Sent current players_" << std::endl;
@@ -193,13 +204,13 @@ void* ServerNetwork::handleClient(void* args)
     m.head.type = MSG_MAPNAME;
     strcpy(m.value, "FirstMap");
     
-    send(thiz->client_, &m, sizeof(map_t), 0);
+    send(client_, &m, sizeof(map_t), 0);
     cout << "Send map name" << endl;
     
     // read commands
     while (1) {
         header_t head;
-        int n = recv_complete(thiz->client_, &head, sizeof(head), 0);
+        int n = recv_complete(client_, &head, sizeof(head), 0);
         
         if (n <= 0)
             break;
@@ -207,15 +218,15 @@ void* ServerNetwork::handleClient(void* args)
         if (head.type == MSG_CHAT) {
             char * buf = new char [head.size];
             memset(buf, 0, head.size);
-            recv_complete(thiz->client_, buf, head.size, 0);
+            recv_complete(client_, buf, head.size, 0);
             cout << "Got message:" << buf << "from client_" << endl;
             delete buf;
         }
     }
     
-    close(thiz->client_);
+    close(client_);
     thiz->players_.erase(std::remove(thiz->players_.begin(), thiz->players_.end(), player), thiz->players_.end());
-    thiz->clients_.erase(std::remove(thiz->clients_.begin(), thiz->clients_.end(), thiz->client_), thiz->clients_.end());
+    thiz->clients_.erase(std::remove(thiz->clients_.begin(), thiz->clients_.end(), client_), thiz->clients_.end());
     
     player.head.type = MSG_PLAYER_LEAVE;
     for (size_t i = 0; i < thiz->clients_.size(); ++i)

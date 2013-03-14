@@ -98,6 +98,8 @@ bool ClientNetwork::connectToServer(std::string hostname, int port)
 			cout << "Creep health" << c.health << endl;
 			c.type = (UnitType)head.type;
 			gl->units.push_back(c);
+		} else if (head.type == MSG_CLEAR) {
+			gl->units.clear();
 		}
 	}
 
