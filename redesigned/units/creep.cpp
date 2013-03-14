@@ -15,7 +15,7 @@ Creep::Creep(int uid, Point pos, int hp, int atkdmg, int atkrng,
     //validation
 }
 
-ifdef 1
+#if 1
 /*
 * Function to return the difference in two points. Used for movement. 
 */
@@ -46,7 +46,7 @@ void Creep::Update( Team& team ) {
     
     /* Search for Target. */
     if( pTarget == NULL ) {
-        FindTarget(team);
+        FindTarget(&team);
     if( pTarget != NULL && pSaved == NULL )
         pSaved = &position;
     
@@ -69,8 +69,8 @@ void Creep::Update( Team& team ) {
 }
 
 void Creep::Move( Point pt ) {
-         pCurrPoint.x += getDirection( pCurrPoint.x, pt.x ) * moveSpeed;
-         pCurrPoint.y += getDirection( pCurrPoint.y, pt.y )  * moveSpeed;
+         position.x += getTargetDirection( position.x, pt.x ) * moveSpeed;
+         position.y += getTargetDirection( position.y, pt.y ) * moveSpeed;
 }
 
 #endif

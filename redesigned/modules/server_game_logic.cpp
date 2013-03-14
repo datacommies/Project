@@ -21,7 +21,19 @@ ServerGameLogic * gSGL;
   ServerGameLogic::ServerGameLogic()
 : gameState_(LOBBY)
 {
+  PATH p;
+  Point a;
+  a.x = 0;
+  a.y = 0;
+  p.push_back(a);
+  a.x = 100;
+  a.y = 200;
+  p.push_back(a);
+  teams[0].paths.push_back(p);
+  teams[1].paths.push_back(p);
+
   Creep c;
+  c.pPath = &teams[1].paths[0][0];
   c.attackRange = 100;
   c.attackDamage = 10;
   c.health = 100;
@@ -33,7 +45,7 @@ ServerGameLogic * gSGL;
   c.position.x = 250;
   c.position.y = 200;
   teams[1].creeps.push_back(c);
-  initializeTeams();
+  //initializeTeams();
 }
 
 
