@@ -79,12 +79,42 @@ void ServerNetwork::initNetwork()
  * NOTES:   Current implementation is to refresh ALL data on each update. */
 bool ServerNetwork::sync(int clientId)
 {
-    /*for (size_t i = 0; i < clients_.size(); i++) {
-        for (size_t j = 0; j < players_.size(); j++) {
-            players_[j].head.type = message;
-            if (send(clients_[i], &players_[j], sizeof(player_matchmaking_t), 0) == -1)
-                return false;
-        }
+    /*//wrap into syncFirstTeam()
+    for (size_t i = 0; i < serverGameLogic_.teams[0].towers.size(); ++i)
+    {
+        string sc = serverGameLogic_.teams[0].towers[i].serializeTower();
+        send(client_, sc.data(), sc.size(), 0);
+    }
+
+    for (size_t i = 0; i < serverGameLogic_.teams[0].creeps.size(); ++i)
+    {
+        string sc = serverGameLogic_.teams[0].creeps[i].serializeCreep();
+        send(client_, sc.data(), sc.size(), 0);
+    }
+
+     for (size_t i = 0; i < serverGameLogic_.teams[0].players.size(); ++i)
+    {
+        string sc = serverGameLogic_.teams[0].players[i].serializePlayer();
+        send(client_, sc.data(), sc.size(), 0);
+    }
+
+    //wrap into syncSecondTeam()
+     for (size_t i = 0; i < serverGameLogic_.teams[1].towers.size(); ++i)
+    {
+        string sc = serverGameLogic_.teams[1].towers[i].serializeTower();
+        send(client_, sc.data(), sc.size(), 0);
+    }
+
+    for (size_t i = 0; i < serverGameLogic_.teams[1].creeps.size(); ++i)
+    {
+        string sc = serverGameLogic_.teams[1].creeps[i].serializeCreep();
+        send(client_, sc.data(), sc.size(), 0);
+    }
+    
+     for (size_t i = 0; i < serverGameLogic_.teams[1].players.size(); ++i)
+    {
+        string sc = serverGameLogic_.teams[1].players[i].serializePlayer();
+        send(client_, sc.data(), sc.size(), 0);
     }*/
     return true;
 }
