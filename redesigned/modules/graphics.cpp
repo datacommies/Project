@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <SFML/Graphics.hpp>
 #include <string>
-
+//test commit aliao
 using namespace std;
 
 #define ID_JOIN 100
@@ -307,6 +307,11 @@ void Graphics::drawMainMenu(sf::RenderWindow& window)
 	sf::Text title("Child's Play", font, 71);
 	title.setPosition(sf::Vector2f(200, 0));
 	window.draw(title);
+}
+
+void Graphics::drawHealthBar(sf::RenderWindow& window, float x, float y, int health)
+{
+	
 }
 
 /* Draws all current units.
