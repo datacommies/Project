@@ -33,7 +33,7 @@ int Creep::getTargetDirection( int p1, int p2 ) {
 * If we can find an attackable target, attack or move towards them.
 * If not, move along the path. 
 */
-void Creep::Update( void ) {
+void Creep::Update( Team team ) {
     /* Check if we are at the next path point.  */
     if( pPath->x == position.x && pPath->y == position.y ) {
         nextPoint();
@@ -45,7 +45,7 @@ void Creep::Update( void ) {
     
     /* Search for Target. */
     if( pTarget == NULL ) {
-        FindTarget();
+        FindTarget(team);
     if( pTarget != NULL && pSaved == NULL )
         pSaved = &position;
     
