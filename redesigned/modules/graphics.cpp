@@ -214,6 +214,7 @@ void Graphics::initGameControls () {
 
 void Graphics::initDesktop(){
 	sfgDesktop = sfg::Desktop();
+	sfgDesktop.SetProperty("Label", "FontSize", 22);
 	sfgDesktop.SetProperty("Entry", "FontSize", 22);
 }
 
@@ -231,7 +232,56 @@ void Graphics::initJoinWindow(){
 	sfgJoinBox = sfg::Box::Create(sfg::Box::VERTICAL);
 
 	// Create all the labels.
-	sfgNameLabel = sfg::Label::Create("Name:");
+	sfgNameLabel = sfg::Label::Create("User Name:");
+	sfgServerLabel = sfg::Label::Create("Server:");
+	sfgPortLabel = sfg::Label::Create("Port:");
+
+	// Create the entry boxes.
+	sfgNameEntryBox = sfg::Entry::Create();
+	sfgNameEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 120.
+	sfgServerEntryBox = sfg::Entry::Create();
+	sfgServerEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 120.
+	sfgPortEntryBox = sfg::Entry::Create();
+	sfgPortEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 120.
+
+	// Create a button to join a server and handle it's signal
+	sfgJoinButton = sfg::Button::Create("Join");
+	sfgJoinButton->GetSignal( sfg::Widget::OnLeftClick ).Connect(&Graphics::joinButtonHandler, this);
+
+	// Create a button to close the join window and handle it's signal
+	sfgCloseJoinButton = sfg::Button::Create("Close");
+	sfgCloseJoinButton->GetSignal( sfg::Widget::OnLeftClick ).Connect(&Graphics::hideJoinWindow, this);
+
+	// Add all the controls to the container.
+	sfgJoinBox->Pack(sfgNameLabel);
+	sfgJoinBox->Pack(sfgNameEntryBox);
+	sfgJoinBox->Pack(sfgServerLabel);
+	sfgJoinBox->Pack(sfgServerEntryBox);
+	sfgJoinBox->Pack(sfgPortLabel);
+	sfgJoinBox->Pack(sfgPortEntryBox);
+	sfgJoinBox->Pack(sfgJoinButton);
+	sfgJoinBox->Pack(sfgCloseJoinButton);
+
+	sfgJoinWindow->Add(sfgJoinBox);
+
+	sfgDesktop.Add(sfgJoinWindow);
+}
+
+void Graphics::initLobbyWindow(){
+	// Clear all other windows present in the desktop before adding this window.
+	sfgDesktop.RemoveAll();
+
+	// Create join window using SFGUI
+	sfgJoinWindow = sfg::Window::Create(sfg::Window::BACKGROUND); // Make the window.
+	//sfgJoinWindow->SetTitle(L"Join Game"); // Add a title to the window.
+	sfgJoinWindow->SetPosition(sf::Vector2f(200,200)); // Change the window position.
+	sfgJoinWindow->SetRequisition(sf::Vector2f(400, 400));
+	
+	// Create a box to hold all the controls.
+	sfgJoinBox = sfg::Box::Create(sfg::Box::VERTICAL);
+
+	// Create all the labels.
+	sfgNameLabel = sfg::Label::Create("User Name:");
 	sfgServerLabel = sfg::Label::Create("Server:");
 	sfgPortLabel = sfg::Label::Create("Port:");
 
