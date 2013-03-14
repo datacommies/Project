@@ -39,7 +39,7 @@ public:
 	void UnloadGui();
 	
 private:
-	void RunCommand();
+	virtual void RunCommand();
 	
 	int _returnValue;
 	int _key;

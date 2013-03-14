@@ -107,6 +107,8 @@ bool ClientNetwork::connectToServer(std::string hostname, int port)
 			cout << "Creep health" << c.health << endl;
 			c.type = (UnitType)head.type;
 			gl->units.push_back(c);
+		} else if (head.type == MSG_CLEAR) {
+			gl->units.clear();
 		}
 	}
 
@@ -140,7 +142,7 @@ void* ClientNetwork::recvReply(void* args) {
 
 			case PLAYER:
 				unit_t u = {0};
-				CLIENT_UNIT c= {0};
+				CLIENT_UNIT c = {0};
 				//int headLength = head.size - sizeof(head);
 				cout << "Waiting for " << head.size - 
 				sizeof(head) << endl;
@@ -152,6 +154,10 @@ void* ClientNetwork::recvReply(void* args) {
 				cout << "Creep health" << c.health << endl;
 				c.type = (UnitType)head.type;
 				cn->gl->units.push_back(c);
+				break;
+
+			case MSG_CLEAR:
+				cn->gl->units.clear();
 			break;
 		}
 

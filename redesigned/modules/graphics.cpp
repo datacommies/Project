@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <SFML/Graphics.hpp>
 #include <string>
-//test commit aliao
+
 using namespace std;
 
 #define ID_JOIN 100
@@ -41,7 +41,8 @@ void * init (void * in) {
 	// Go to the main menu first upon entering the game.
 	g->initMainMenuControls();
 
-	// Initialize the SFGUI join server widget and hide it on startup.
+	// Initialize the SFGUI window and make it display the join window by default
+	g->initDesktop();
 	g->initJoinWindow();
 	g->hideJoinWindow();
 
@@ -53,7 +54,7 @@ void * init (void * in) {
 		while (window.pollEvent(event)) {
 			
 			// Handle SFGUI events.
-			g->sfgJoinWindow->HandleEvent(event);
+			g->sfgDesktop.HandleEvent(event);
 
 			// If a mouse button was pressed, find out where we clicked.
 			if (event.type == sf::Event::MouseButtonPressed){
@@ -91,7 +92,7 @@ void * init (void * in) {
 		}
  		
  		// Update the sfgui test window
- 		g->sfgJoinWindow->Update( 0.f );
+ 		g->sfgDesktop.Update( 0.f );
 		
 		window.clear();
 
@@ -211,28 +212,37 @@ void Graphics::initGameControls () {
 	clientGameLogic_.UIElements.insert(h);
 }
 
+void Graphics::initDesktop(){
+	sfgDesktop = sfg::Desktop();
+	sfgDesktop.SetProperty("Label", "FontSize", 22);
+	sfgDesktop.SetProperty("Entry", "FontSize", 22);
+}
+
 void Graphics::initJoinWindow(){
+	// Clear all other windows present in the desktop before adding this window.
+	sfgDesktop.RemoveAll();
+
 	// Create join window using SFGUI
-	sfgJoinWindow = sfg::Window::Create( sfg::Window::TITLEBAR | sfg::Window::BACKGROUND | sfg::Window::RESIZE); // Make the window.
-	sfgJoinWindow->SetTitle(L"Join Game"); // Add a title to the window.
-	sfgJoinWindow->SetPosition(sf::Vector2f(100,100)); // Change the window position.
-	sfgJoinWindow->SetRequisition(sf::Vector2f(600, 600));
+	sfgJoinWindow = sfg::Window::Create(sfg::Window::BACKGROUND); // Make the window.
+	//sfgJoinWindow->SetTitle(L"Join Game"); // Add a title to the window.
+	sfgJoinWindow->SetPosition(sf::Vector2f(200,200)); // Change the window position.
+	sfgJoinWindow->SetRequisition(sf::Vector2f(400, 400));
 	
 	// Create a box to hold all the controls.
 	sfgJoinBox = sfg::Box::Create(sfg::Box::VERTICAL);
 
 	// Create all the labels.
-	sfgNameLabel = sfg::Label::Create("Name:");
+	sfgNameLabel = sfg::Label::Create("User Name:");
 	sfgServerLabel = sfg::Label::Create("Server:");
 	sfgPortLabel = sfg::Label::Create("Port:");
 
 	// Create the entry boxes.
 	sfgNameEntryBox = sfg::Entry::Create();
-	sfgNameEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 80.
+	sfgNameEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 120.
 	sfgServerEntryBox = sfg::Entry::Create();
-	sfgServerEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 80.
+	sfgServerEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 120.
 	sfgPortEntryBox = sfg::Entry::Create();
-	sfgPortEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 80.
+	sfgPortEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 120.
 
 	// Create a button to join a server and handle it's signal
 	sfgJoinButton = sfg::Button::Create("Join");
@@ -252,7 +262,58 @@ void Graphics::initJoinWindow(){
 	sfgJoinBox->Pack(sfgJoinButton);
 	sfgJoinBox->Pack(sfgCloseJoinButton);
 
-	sfgJoinWindow->Add(sfgJoinBox);	
+	sfgJoinWindow->Add(sfgJoinBox);
+
+	sfgDesktop.Add(sfgJoinWindow);
+}
+
+void Graphics::initLobbyWindow(){
+	// Clear all other windows present in the desktop before adding this window.
+	sfgDesktop.RemoveAll();
+
+	// Create join window using SFGUI
+	sfgJoinWindow = sfg::Window::Create(sfg::Window::BACKGROUND); // Make the window.
+	//sfgJoinWindow->SetTitle(L"Join Game"); // Add a title to the window.
+	sfgJoinWindow->SetPosition(sf::Vector2f(200,200)); // Change the window position.
+	sfgJoinWindow->SetRequisition(sf::Vector2f(400, 400));
+	
+	// Create a box to hold all the controls.
+	sfgJoinBox = sfg::Box::Create(sfg::Box::VERTICAL);
+
+	// Create all the labels.
+	sfgNameLabel = sfg::Label::Create("User Name:");
+	sfgServerLabel = sfg::Label::Create("Server:");
+	sfgPortLabel = sfg::Label::Create("Port:");
+
+	// Create the entry boxes.
+	sfgNameEntryBox = sfg::Entry::Create();
+	sfgNameEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 120.
+	sfgServerEntryBox = sfg::Entry::Create();
+	sfgServerEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 120.
+	sfgPortEntryBox = sfg::Entry::Create();
+	sfgPortEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 120.
+
+	// Create a button to join a server and handle it's signal
+	sfgJoinButton = sfg::Button::Create("Join");
+	sfgJoinButton->GetSignal( sfg::Widget::OnLeftClick ).Connect(&Graphics::joinButtonHandler, this);
+
+	// Create a button to close the join window and handle it's signal
+	sfgCloseJoinButton = sfg::Button::Create("Close");
+	sfgCloseJoinButton->GetSignal( sfg::Widget::OnLeftClick ).Connect(&Graphics::hideJoinWindow, this);
+
+	// Add all the controls to the container.
+	sfgJoinBox->Pack(sfgNameLabel);
+	sfgJoinBox->Pack(sfgNameEntryBox);
+	sfgJoinBox->Pack(sfgServerLabel);
+	sfgJoinBox->Pack(sfgServerEntryBox);
+	sfgJoinBox->Pack(sfgPortLabel);
+	sfgJoinBox->Pack(sfgPortEntryBox);
+	sfgJoinBox->Pack(sfgJoinButton);
+	sfgJoinBox->Pack(sfgCloseJoinButton);
+
+	sfgJoinWindow->Add(sfgJoinBox);
+
+	sfgDesktop.Add(sfgJoinWindow);
 }
 
 void Graphics::joinButtonHandler()
@@ -311,7 +372,17 @@ void Graphics::drawMainMenu(sf::RenderWindow& window)
 
 void Graphics::drawHealthBar(sf::RenderWindow& window, float x, float y, int health)
 {
-	
+	sf::RectangleShape healthbar, health_bg;
+	healthbar.setFillColor(sf::Color(  0, 255,  0));
+	health_bg.setFillColor(sf::Color(255,   0,  0));
+	health_bg.setSize(sf::Vector2f( 25, 5));
+
+	health_bg.setPosition(x, y);
+	healthbar.setPosition(x, y);
+	healthbar.setSize(sf::Vector2f(min(max(health/4, 0), 100), 5));
+
+	window.draw(health_bg);
+	window.draw(healthbar);	
 }
 
 /* Draws all current units.
@@ -321,12 +392,7 @@ void Graphics::drawHealthBar(sf::RenderWindow& window, float x, float y, int hea
  * RETURNS: 
  * NOTES:    */
 void Graphics::drawUnits(sf::RenderWindow& window)
-{
-	sf::RectangleShape healthbar, health_bg;
-	healthbar.setFillColor(sf::Color(  0, 255,  0));
-	health_bg.setFillColor(sf::Color(255,   0,  0));
-	health_bg.setSize(sf::Vector2f( 25, 5));
-
+{	
 	for (std::vector<CLIENT_UNIT>::iterator unit = clientGameLogic_.units.begin(); unit != clientGameLogic_.units.end(); ++unit)
 	{
 		// Increment interpolation value, if there is a different between past and current positions.
@@ -340,25 +406,33 @@ void Graphics::drawUnits(sf::RenderWindow& window)
 			unit->inter_value = 0;
 		}
 		
-		if (unit->type == CASTLE) {
-			castle_sprite.setPosition(unit->position.x, unit->position.y);
-			health_bg.setPosition(unit->position.x, unit->position.y + castle_sprite.getTextureRect().height);
-			healthbar.setPosition(unit->position.x, unit->position.y + castle_sprite.getTextureRect().height);
-			healthbar.setSize(sf::Vector2f( min(max(unit->health/4, 0), 100), 5));
+		if (unit->type == CASTLE) 
+		{
+			castle_sprite.setPosition(unit->position.x, unit->position.y);			
 			window.draw(castle_sprite);
-		} else if (unit->type == CREEP) {
+			drawHealthBar(window, unit->position.x, unit->position.y + castle_sprite.getTextureRect().height, unit->health);
+		} 
+		else if (unit->type == CREEP) 
+		{
 			// Linear interpolation between a unit's past position and new position.
 			Point interpolated = Lerp(unit->past_position, unit->position, unit->inter_value);
 			// All drawable unit elements use the same interpolated position.
-			creep_sprite.setPosition(interpolated.x, interpolated.y);
-			health_bg.setPosition(interpolated.x, interpolated.y+25);
-			healthbar.setPosition(interpolated.x, interpolated.y+25);
-			healthbar.setSize(sf::Vector2f( min(max(unit->health/4, 0), 100), 5));
+			creep_sprite.setPosition(interpolated.x, interpolated.y);			
 			window.draw(creep_sprite);
+			drawHealthBar(window, interpolated.x, interpolated.y+25, unit->health);
 		}
-
-		window.draw(health_bg);
-		window.draw(healthbar);
+		else if (unit->type == TOWER)
+		{
+			tower_sprite.setPosition(unit->position.x, unit->position.y);			
+			window.draw(tower_sprite);
+			drawHealthBar(window, unit->position.x, unit->position.y + tower_sprite.getTextureRect().height, unit->health);
+		}
+		else if (unit->type == PLAYER)
+		{
+			player_sprite.setPosition(unit->position.x, unit->position.y);			
+			window.draw(player_sprite);
+			drawHealthBar(window, unit->position.x, unit->position.y + player_sprite.getTextureRect().height, unit->health);			
+		}
 	}
 }
 
@@ -383,4 +457,8 @@ void Graphics::loadImages(){
 	// Load the player texture.
     player_tex.loadFromFile("images/player.png");
 	player_sprite.setTexture(player_tex);
+
+	// Load the tower texture.
+	tower_tex.loadFromFile("images/tower.png");
+	tower_sprite.setTexture(tower_tex);
 }

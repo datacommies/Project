@@ -22,7 +22,8 @@ enum {
     MSG_CREEP_CREATE,
     MSG_CREEP_REMOVE, //creeps dying
     MSG_CREEP_UPDATE,
-    MSG_RESOURCE_UPDATE
+    MSG_RESOURCE_UPDATE,
+    MSG_CLEAR
 };
 
 // Common Message Header

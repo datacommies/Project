@@ -15,3 +15,17 @@ BasicTower::BasicTower(const int& uid, Point pos, const int& hp, const int& atkd
     //validation
 }
 
+void BasicTower::Attack(void)
+{
+    // check if we can attack
+    if( attackCount++ < attackSpeed )
+        return;
+        
+    attackCount = 0;
+    pTarget->health -= attackDamage;
+    
+    // check if target is dead or in range (might have to call this at start of
+    // function instead)
+    CheckTarget();
+}
+
