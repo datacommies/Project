@@ -67,6 +67,11 @@ void Creep::Update( Team& team ) {
     }
 }
 
+void Creep::Move( Point pt ) {
+         pCurrPoint.x += getDirection( pCurrPoint.x, pt.x ) * moveSpeed;
+         pCurrPoint.y += getDirection( pCurrPoint.y, pt.y )  * moveSpeed;
+}
+
 string Creep::serializeCreep()
 {
     string s = MobileUnit::serializeMobileUnit();
