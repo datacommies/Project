@@ -1,0 +1,8 @@
+#include "resource.h"
+#include "units/tower.h"
+
+int main(){
+	Point* p;
+	Tower t(123, p, 1, 1,1,1,1,1,1);
+	return 0;
+}
