@@ -7,7 +7,7 @@
  * RETURNS: 
  * NOTES:   Creates a thread and starts running the module */
 ClientGameLogic::ClientGameLogic(ClientNetwork& clientNetwork)
-   : clientNetwork_(clientNetwork), gameState_(LOBBY)
+   : clientNetwork_(clientNetwork), gameState_(MAIN_MENU)
 {
    // TODO: create a thread and begin processing
    /*CLIENT_UNIT test = {0};
@@ -35,6 +35,10 @@ ClientGameLogic::ClientGameLogic(ClientNetwork& clientNetwork)
 
 void ClientGameLogic::start () {
    gameState_ = IN_GAME;
+}
+
+void ClientGameLogic::join () {
+   gameState_ = LOBBY;
 }
 
 /* Sends a create unit request to network module.

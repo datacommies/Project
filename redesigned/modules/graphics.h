@@ -85,7 +85,9 @@ private:
    sf::Sprite tower_sprite;
 
    // SFGUI stuff
-   sfg::Window::Ptr sfgJoinWindow;
+   sfg::Desktop sfgDesktop; // The desktop is the top level object that all other SFGUI elements display on.
+   
+   sfg::Window::Ptr sfgJoinWindow; // The "form" used for the join window.
    sfg::Entry::Ptr  sfgNameEntryBox;
    sfg::Entry::Ptr  sfgServerEntryBox;
    sfg::Entry::Ptr  sfgPortEntryBox;
@@ -96,10 +98,27 @@ private:
    sfg::Label::Ptr sfgServerLabel;
    sfg::Label::Ptr sfgPortLabel;
 
+   sfg::Window::Ptr sfgLobbyWindow; // The form used for the lobby.
+   sfg::Box::Ptr teamOneBox;
+   sfg::Label::Ptr teamOneLabel;
+   sfg::Button::Ptr playerOneOneButton;
+   sfg::Button::Ptr playerOneTwoButton;
+   sfg::Button::Ptr playerOneThreeButton;
+   sfg::Button::Ptr playerOneFourButton;
+   sfg::Button::Ptr playerOneFiveButton;
+   sfg::Box::Ptr teamTwoBox;
+   sfg::Label::Ptr teamTwoLabel;
+   sfg::Button::Ptr playerTwoOneButton;
+   sfg::Button::Ptr playerTwoTwoButton;
+   sfg::Button::Ptr playerTwoThreeButton;
+   sfg::Button::Ptr playerTwoFourButton;
+   sfg::Button::Ptr playerTwoFiveButton;
+
    // Functions
    void initMainMenuControls();
    void drawHud(sf::RenderWindow& window);
    void drawMainMenu(sf::RenderWindow& window);
+   void drawLobby(sf::RenderWindow& window);
    void drawUnits(sf::RenderWindow& window);
    void drawMap(sf::RenderWindow& window);
    void initGameControls ();
@@ -107,10 +126,12 @@ private:
    void drawHealthBar(sf::RenderWindow& window, float x, float y, int health);
 
    // SFGUI Functions
+   void initDesktop();
    void initJoinWindow();
    void showJoinWindow();
    void hideJoinWindow();
    void joinButtonHandler();
+   void initLobbyWindow();
 
    friend void * init (void *);
 };

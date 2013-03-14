@@ -29,8 +29,7 @@ public:
    int sendRequest(int msg);
    bool connectToServer(std::string hostname, int port);
    ClientGameLogic* gl;
-
-
+   void recvReply();
 private:
    int connectsock;
 };

@@ -17,14 +17,15 @@ BasicTower::BasicTower(int uid, Point pos, int hp, int atkdmg, int atkrng,
 
 void BasicTower::Attack(void)
 {
+    // check if we can attack
     if( attackCount++ < attackSpeed )
         return;
         
     attackCount = 0;
     pTarget->health -= attackDamage;
-
-    if( pTarget->health <= 0 ) {
-        // find new target
-    }
+    
+    // check if target is dead or in range (might have to call this at start of
+    // function instead)
+    CheckTarget();
 }
 

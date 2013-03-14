@@ -24,6 +24,7 @@ public:
    void updateUnits(CLIENT_UNIT unit);
    GameState getCurrentState();
    void start ();
+   void join ();
    bool createUnit(UnitType type, Point location);
    bool movePlayer(Direction direction);
    bool attack(Direction direction);
