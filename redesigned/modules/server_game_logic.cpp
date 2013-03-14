@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <errno.h>
 
+#define NOT_FOUND 2
 
 ServerGameLogic * gSGL;
 
@@ -95,7 +96,8 @@ void ServerGameLogic::initializeCreeps()
       int spd = INIT_CREEP_SPD;
       Direction direct = Direction();
       Point *path=NULL;
-      int movespeed = INIT_MOVESPEED; 
+      int movespeed = INIT_CREEP_MOVESPEED;
+      
 
       Creep creep = Creep(uid, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, spd, direct, path, movespeed);
       teams[team_i].creeps.push_back(creep);
@@ -219,9 +221,10 @@ std::vector<Unit>::iterator ServerGameLogic::findUnit(std::vector<Unit>::iterato
 
 /*
  * PRE:  Maps are current
- * RETURNS: 0 - Team 1
- 1 - Team 2
- 2 - Not Found
+ * RETURNS: 
+ * 0 - Team 1
+ * 1 - Team 2
+ * 2 - Not Found
  */
 int ServerGameLogic::WhichTeam(int id) {
 
@@ -237,22 +240,94 @@ int ServerGameLogic::WhichTeam(int id) {
 
 void ServerGameLogic::updateCreate(CommandData& command)
 {
+/*
+  // PlayerId, type, location
+  
+  int x = command.location.x;
+  int y = command.location.y;
 
+
+  if ( !(teams[0].isAlive() && teams[1].isAlive()) ) {
+	fprintf(stderr, "Game is already over!! file: %s line %d\n", __FILE__, __LINE__);
+	return;
+  }
+
+  if ( (team_no = WhichTeam(command.playerID) == NOT_FOUND) ) {
+        fprintf(stderr, "playerID not found file: %s line %d\n", __FILE__, __LINE__);:
+	return;
+  }
+  
+  if ( x > MapTeam0_.max_x_ || y > MapTeam0_.max_y_ ) {
+     fprintf(stderr, "x: %d, y: %d out of range: %s line %d\n", x, y, __FILE__, __LINE__);:
+     return; 
+  }
+
+  if ( MapTeam0_.grid_[x][y] + MapTeam1_.grid[x][y] != 0 )
+     return; // If sum doesn't equal zero then position is already occupied 
+
+  // Create Unit
+  int id = next_unit_id++;
+
+  switch (command.type) {
+     case CREEP:
+
+        Creep creep = Creep(id, command.location, INIT_CREEP_HP, UNIT_CREEP_ATKDMG, ATKRNG, ATKSPD, 
+				INIT_CREEP_PERCEP, INIT_CREEP_ATKCNT, INIT_CREEP_SPD, Direction(), NULL, INIT_CREEP_MOVESPEED);
+        teams[team_no].creeps.push_back(creep);
+	break;
+      
+     case TOWER:
+
+        Tower tower = Tower(id, command.location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
+				INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);
+	teams[team_no].towers.push_back(tower);
+        break;
+
+     default;
+        fprintf(stderr, "Unknown type %s line:%d\n" __FILE__, __LINE);
+        return;
+  }
+  
+  // Update the our map 
+  GameLogicMap *gameMap = team_no == 0 ? MapTeam0_ : MapTeam1_;
+  Location location;
+  location.pos  = command.location;
+  location.type = command.type;
+  gameMap->units_[id] = location;
+  gameMap->grid_[x][y] = id;
+  */
 }
 
 void ServerGameLogic::updateAttack(CommandData& command)
 {
+
+/*
+
+  if ( !(team[0].isAlive() && team[1].isAlive()) ) 	
+	return;
+
+  
+*/
 
 }
 
 void ServerGameLogic::updateMovePlayer(CommandData& command)
 {
 
+/*
+
+  if ( !(team[0].isAlive() && team[1].isAlive()) ) 	
+	return;
+
+*/
 }
 
 void ServerGameLogic::updateMoveUnit(CommandData& command)
 {
-
+/*
+  if ( !(team[0].isAlive() && team[1].isAlive()) ) 	
+	return;
+*/
 }
 
 /* Processes all waiting commands.
