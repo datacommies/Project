@@ -5,6 +5,7 @@
 #include "../modules/client_game_logic.h"
 
 void loadControlEvents(ClientGameLogic* gameLogic);
+ClientGameLogic* getGameLogic();
 
 void CallExitGameEvent(void* value);
 
@@ -25,7 +26,5 @@ void CallBuildCreepEvent(void* value);
 
 void AddNewCalledButton(int id);
 bool getCalledButton(int id);
-
-//ClientGameLogic* _gameLogicPointer;
 
 #endif

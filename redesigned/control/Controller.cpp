@@ -53,7 +53,7 @@ Controller::Controller(int returnValue, sf::Keyboard::Key key, Button buttonRect
 void 
 Controller::LoadGui()
 {
-	_gameLogicPointer->UIElements.insert(_buttonRECT);
+	getGameLogic()->UIElements.insert(_buttonRECT);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
@@ -75,7 +75,7 @@ Controller::LoadGui()
 ----------------------------------------------------------------------------------------------------------------------*/
 void Controller::UnloadGui()
 {
-	_gameLogicPointer->UIElements.erase(_buttonRECT);
+	getGameLogic()->UIElements.erase(_buttonRECT);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 

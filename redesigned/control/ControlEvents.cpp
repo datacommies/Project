@@ -29,6 +29,28 @@ void loadControlEvents(ClientGameLogic* gameLogic)
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
+-- FUNCTION: getGameLogic
+--
+-- DATE: 2013/03/14
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: John Payment
+--
+-- PROGRAMMER: John Payment
+--
+-- INTERFACE: ClientGameLogic* getGameLogic()
+--
+-- RETURNS: A pointer to ClientGameLogic which is used to call events
+--
+-- NOTES: Gets a pointer to gameLogic
+----------------------------------------------------------------------------------------------------------------------*/
+ClientGameLogic* getGameLogic()
+{
+	return _gameLogicPointer;
+}
+
+/*-------------------------------------------------------------------------------------------------------------------- 
 -- FUNCTION: CallExitGameEvent
 --
 -- DATE: 2013/03/11
