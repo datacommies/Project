@@ -109,7 +109,7 @@ ControlState MakeMenuState()
 ControlState MakeLobbyState()
 {
 	ControlState lobbyState(true, 20);
-		
+	sf::Font font;	
 	
 	Button joinButton(21, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Join Game");	
 	Controller joinGame(0, (sf::Keyboard::Key)0, joinButton, NULL);
