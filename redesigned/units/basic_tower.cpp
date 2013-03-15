@@ -23,9 +23,5 @@ void BasicTower::Attack(void)
         
     attackCount = 0;
     pTarget->health -= attackDamage;
-    
-    // check if target is dead or in range (might have to call this at start of
-    // function instead)
-    CheckTarget();
 }
 

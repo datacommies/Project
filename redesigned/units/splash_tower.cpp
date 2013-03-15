@@ -17,6 +17,7 @@ SplashTower::SplashTower(	int uid, Point pos, int hp, int atkdmg, int atkrng,
 {
     //validation
 }
+
 /*
  * Attack damages pTarget and then goes through enemy units and players. If
  * they are in range (near pTarget), then they are also damaged.
@@ -54,8 +55,4 @@ void SplashTower::Attack(void)
             team->players[i].health -= splashDamage;
         }
     }
-    
-    // check if target is dead or in range (might have to call this at start of
-    // function instead)
-    CheckTarget();
 }
