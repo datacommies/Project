@@ -12,6 +12,7 @@ class Unit
 public:
     
     int id; //unit id
+    int team;
     Point position;
     int health;
     int iElement;

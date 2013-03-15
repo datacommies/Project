@@ -103,6 +103,7 @@ void ClientNetwork::recvReply() {
 					c.past_position = c.position;
 					c.health = u.health;
 					c.type = u.unit_type;
+					c.team = u.team;
 					pthread_mutex_lock( &gl->unit_mutex );
 					printf("Adding unit!\n");
 					gl->units.push_back(c);
@@ -120,6 +121,8 @@ void ClientNetwork::recvReply() {
 					c.past_position = c.position;
 					c.health = u.health;
 					c.type = u.unit_type;
+					c.team = u.team;
+					printf("creep team %d", c.team);
 					pthread_mutex_lock( &gl->unit_mutex );
 					gl->units.push_back(c);
 					pthread_mutex_unlock( &gl->unit_mutex );

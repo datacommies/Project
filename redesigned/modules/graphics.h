@@ -131,6 +131,7 @@ private:
    void drawMap(sf::RenderWindow& window);
    void initGameControls ();
    void loadImages();
+   void drawTeamCircle(sf::RenderWindow& window, int team, float x, float y);
    void drawHealthBar(sf::RenderWindow& window, float x, float y, int health);
    void drawCurrency(sf::RenderWindow& window);
 
