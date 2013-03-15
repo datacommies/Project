@@ -3,8 +3,9 @@
 
 #include "../resource.h"
 #include "../modules/client_game_logic.h"
+#include "../modules/graphics.h"
 
-void loadControlEvents(ClientGameLogic* gameLogic);
+void loadControlEvents(ClientGameLogic* gameLogic, Graphics* graphics);
 ClientGameLogic* getGameLogic();
 
 void CallExitGameEvent(void* value);
