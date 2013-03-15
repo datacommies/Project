@@ -4,6 +4,7 @@ using namespace std;
 
 std::vector<int> pressedButtonIds;
 ClientGameLogic* _gameLogicPointer;
+Graphics* _graphicsPointer;
 
 /*-------------------------------------------------------------------------------------------------------------------- 
 -- FUNCTION: loadControlEvents
@@ -23,9 +24,10 @@ ClientGameLogic* _gameLogicPointer;
 --
 -- NOTES: Gets a pointer to gameLogic
 ----------------------------------------------------------------------------------------------------------------------*/
-void loadControlEvents(ClientGameLogic* gameLogic)
+void loadControlEvents(ClientGameLogic* gameLogic, Graphics* graphics)
 {
 	_gameLogicPointer = gameLogic;
+	_graphicsPointer  = graphics;
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
@@ -49,7 +51,27 @@ ClientGameLogic* getGameLogic()
 {
 	return _gameLogicPointer;
 }
-
+/*-------------------------------------------------------------------------------------------------------------------- 
+-- FUNCTION: getGameLogic
+--
+-- DATE: 2013/03/14
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: John Payment
+--
+-- PROGRAMMER: Jesse Wright
+--
+-- INTERFACE: Graphics* getGraphicsObj()
+--
+-- RETURNS: A pointer to Graphics which will in turn give us a reference to the window.
+--
+-- NOTES: Gets a pointer to graphics
+----------------------------------------------------------------------------------------------------------------------*/
+Graphics* getGraphicsObj()
+{
+	return _graphicsPointer;
+}
 /*-------------------------------------------------------------------------------------------------------------------- 
 -- FUNCTION: CallExitGameEvent
 --
