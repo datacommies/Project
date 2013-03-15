@@ -240,9 +240,10 @@ int ServerGameLogic::WhichTeam(int id) {
 
 void ServerGameLogic::updateCreate(CommandData& command)
 {
-/*
   // PlayerId, type, location
-  
+
+  int team_no;
+
   int x = command.location.x;
   int y = command.location.y;
 
@@ -253,49 +254,48 @@ void ServerGameLogic::updateCreate(CommandData& command)
   }
 
   if ( (team_no = WhichTeam(command.playerID) == NOT_FOUND) ) {
-        fprintf(stderr, "playerID not found file: %s line %d\n", __FILE__, __LINE__);:
+        fprintf(stderr, "playerID not found file: %s line %d\n", __FILE__, __LINE__);
 	return;
   }
   
   if ( x > MapTeam0_.max_x_ || y > MapTeam0_.max_y_ ) {
-     fprintf(stderr, "x: %d, y: %d out of range: %s line %d\n", x, y, __FILE__, __LINE__);:
+     fprintf(stderr, "x: %d, y: %d out of range: %s line %d\n", x, y, __FILE__, __LINE__);
      return; 
   }
 
-  if ( MapTeam0_.grid_[x][y] + MapTeam1_.grid[x][y] != 0 )
+  if ( MapTeam0_.grid_[x][y] + MapTeam1_.grid_[x][y] != 0 )
      return; // If sum doesn't equal zero then position is already occupied 
 
   // Create Unit
-  int id = next_unit_id++;
+  int id = next_unit_id_++;
 
   switch (command.type) {
      case CREEP:
-
-        Creep creep = Creep(id, command.location, INIT_CREEP_HP, UNIT_CREEP_ATKDMG, ATKRNG, ATKSPD, 
-				INIT_CREEP_PERCEP, INIT_CREEP_ATKCNT, INIT_CREEP_SPD, Direction(), NULL, INIT_CREEP_MOVESPEED);
-        teams[team_no].creeps.push_back(creep);
-	break;
-      
+        {
+          Creep creep = Creep(id, command.location, INIT_CREEP_HP, INIT_CREEP_ATKDMG, INIT_CREEP_ATKRNG, INIT_CREEP_ATKSPD, 
+                                  INIT_CREEP_PERCEP, INIT_CREEP_ATKCNT, INIT_CREEP_SPD, Direction(), NULL, INIT_CREEP_MOVESPEED);
+          teams[team_no].creeps.push_back(creep);
+          break;
+        }
      case TOWER:
-
-        Tower tower = Tower(id, command.location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
+        {
+          Tower tower = Tower(id, command.location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
 				INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);
-	teams[team_no].towers.push_back(tower);
-        break;
-
-     default;
-        fprintf(stderr, "Unknown type %s line:%d\n" __FILE__, __LINE);
+          teams[team_no].towers.push_back(tower);
+          break;
+        }
+     default:
+        fprintf(stderr, "Unknown type %s line:%d\n" __FILE__, __LINE__);
         return;
   }
   
   // Update the our map 
-  GameLogicMap *gameMap = team_no == 0 ? MapTeam0_ : MapTeam1_;
+  GameLogicMap *gameMap = team_no == 0 ? &MapTeam0_ : &MapTeam1_;
   Location location;
   location.pos  = command.location;
   location.type = command.type;
   gameMap->units_[id] = location;
   gameMap->grid_[x][y] = id;
-  */
 }
 
 void ServerGameLogic::updateAttack(CommandData& command)
