@@ -104,6 +104,14 @@ typedef struct {
     int direction;
 } mobileunit_t;
 
+typedef struct $
+{
+    header_t head;
+    UnitType unit;
+    int posx, posy;
+} request_create_t;
+
+
 
 bool operator == (const player_matchmaking_t& a, const player_matchmaking_t& b);
 void error (const char *msg);
