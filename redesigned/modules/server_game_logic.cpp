@@ -47,6 +47,7 @@ ServerGameLogic * gSGL;
   c.position.y = 200;
   c.moveSpeed = 1;
   teams[1].creeps.push_back(c);
+  initializeCastles();
   //initializeTeams();
 }
 
@@ -95,7 +96,7 @@ void ServerGameLogic::initializeCreeps()
       int atkcnt = INIT_CREEP_ATKCNT;
       int spd = INIT_CREEP_SPD;
       Direction direct = Direction();
-      Point *path=NULL;
+      Point *path= &teams[1].paths[0][0];;
       int movespeed = INIT_CREEP_MOVESPEED;
 
 

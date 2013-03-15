@@ -84,21 +84,32 @@ void ClientNetwork::recvReply() {
 	while (true) {
 		header_t head = {0};
 		recv_complete(connectsock, &head, sizeof(head), 0);
-		cout << "Recv head size:" << head.size << endl;
 
 		// CREEP type contains a unit_t with the creep's attributes.
 		switch (head.type) {
 
-			case TOWER:
 			//FALL THROUGH
-
-			case CASTLE:
+			case TOWER:
+			case CASTLE: {
+				unit_t u = {0};
+				tower_t t = {0};
+				CLIENT_UNIT c = {0};
+				//int headLength = head.size - sizeof(head);
+				recv_complete(connectsock, ((char*)&u) + sizeof(header_t), sizeof(unit_t) - sizeof(header_t), 0);
+				recv_complete(connectsock, &t, sizeof(t), 0);
+				c.position.x = u.posx;
+				c.position.y = u.posy;
+				c.past_position = c.position;
+				c.health = u.health;
+				c.type = (UnitType)head.type;
+				pthread_mutex_lock( &gl->unit_mutex );
+				gl->units.push_back(c);
+				pthread_mutex_unlock( &gl->unit_mutex );
 			
+			break;
+			}
 			
-
 			case CREEP:
-			//FALL THROUGH 
-
 			case PLAYER: {
 				unit_t u = {0};
 				mobileunit_t mu = {0};
@@ -111,7 +122,6 @@ void ClientNetwork::recvReply() {
 				c.past_position = c.position;
 				c.health = u.health;
 				c.type = (UnitType)head.type;
-				cout << "Creep type " << head.type << endl;
 				pthread_mutex_lock( &gl->unit_mutex );
 				gl->units.push_back(c);
 				pthread_mutex_unlock( &gl->unit_mutex );
@@ -124,8 +134,6 @@ void ClientNetwork::recvReply() {
 				pthread_mutex_unlock( &gl->unit_mutex );
 			break;
 		}
-
-		cout << "Done getting a unit" << endl;
 	}
 }
 

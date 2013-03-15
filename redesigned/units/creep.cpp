@@ -10,7 +10,7 @@ using namespace std;
 Creep::Creep(int uid, Point pos, int hp, int atkdmg, int atkrng,
          int atkspd, int percep, int atkcnt, int spd, Direction direct,
          Point* path, int movespeed): MobileUnit(uid, pos, hp, atkdmg, atkrng, atkspd,
-         percep, atkcnt,spd, direct), pPath(path)
+         percep, atkcnt,spd, direct), pPath(path), pSaved(NULL)
 {
     //validation
 }
