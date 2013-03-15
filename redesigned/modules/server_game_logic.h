@@ -9,7 +9,7 @@
 #define INIT_CURRENCY 100
 #define INIT_HEALTH 100
 
-#define INIT_CASTLE_HP 70
+#define INIT_CASTLE_HP 100
 #define INIT_CASTLE_ATKDMG 5
 #define INIT_CASTLE_ATKRNG 7
 #define INIT_CASTLE_ATKSPD 1
@@ -35,8 +35,8 @@
 #define INIT_TOWER_WALL 2 
 
 // This will come actually be read from the map
-#define MAX_X 1000
-#define MAX_Y 1000
+#define MAX_X 500
+#define MAX_Y 500
 
 #include <stdio.h>
 #include <stdlib.h>

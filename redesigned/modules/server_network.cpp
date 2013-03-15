@@ -77,9 +77,9 @@ void ServerNetwork::initNetwork()
  * RETURNS: true on success
  *          false on fail
  * NOTES:   Current implementation is to refresh ALL data on each update. */
-bool ServerNetwork::sync(int clientId)
+bool ServerNetwork::sync(int client_)
 {
-    /*//wrap into syncFirstTeam()
+    //wrap into syncFirstTeam()
     for (size_t i = 0; i < serverGameLogic_.teams[0].towers.size(); ++i)
     {
         string sc = serverGameLogic_.teams[0].towers[i].serializeTower();
@@ -92,11 +92,11 @@ bool ServerNetwork::sync(int clientId)
         send(client_, sc.data(), sc.size(), 0);
     }
 
-     for (size_t i = 0; i < serverGameLogic_.teams[0].players.size(); ++i)
+    /*for (size_t i = 0; i < serverGameLogic_.teams[0].players.size(); ++i)
     {
         string sc = serverGameLogic_.teams[0].players[i].serializePlayer();
         send(client_, sc.data(), sc.size(), 0);
-    }
+    }*/
 
     //wrap into syncSecondTeam()
      for (size_t i = 0; i < serverGameLogic_.teams[1].towers.size(); ++i)
@@ -111,7 +111,7 @@ bool ServerNetwork::sync(int clientId)
         send(client_, sc.data(), sc.size(), 0);
     }
     
-     for (size_t i = 0; i < serverGameLogic_.teams[1].players.size(); ++i)
+    /*for (size_t i = 0; i < serverGameLogic_.teams[1].players.size(); ++i)
     {
         string sc = serverGameLogic_.teams[1].players[i].serializePlayer();
         send(client_, sc.data(), sc.size(), 0);
@@ -181,21 +181,7 @@ void* ServerNetwork::handleClient(void* args)
         header_t clear = {MSG_CLEAR, 0};
         if (send(client_, &clear, sizeof(header_t), 0) < 1)
             break;
-        for (size_t i = 0; i < thiz->serverGameLogic_.teams[0].towers.size(); ++i)
-        {
-            string sc = thiz->serverGameLogic_.teams[0].towers[i].serializeTower();
-            send(client_, sc.data(), sc.size(), 0);
-        }
-        for (size_t i = 0; i < thiz->serverGameLogic_.teams[0].creeps.size(); ++i)
-        {
-            string sc = thiz->serverGameLogic_.teams[0].creeps[i].serializeCreep();
-            send(client_, sc.data(), sc.size(), 0);
-        }
-        for (size_t i = 0; i < thiz->serverGameLogic_.teams[1].creeps.size(); ++i)
-        {
-            string sc = thiz->serverGameLogic_.teams[1].creeps[i].serializeCreep();
-            send(client_, sc.data(), sc.size(), 0);
-        }
+        thiz->sync(client_);
         usleep(100000);
     }
 

@@ -102,6 +102,7 @@ void ClientNetwork::recvReply() {
 				c.past_position = c.position;
 				c.health = u.health;
 				c.type = (UnitType)head.type;
+				printf("Tower: x: %d, y: %d, health: %d\n", u.posx, u.posy, u.health);
 				pthread_mutex_lock( &gl->unit_mutex );
 				gl->units.push_back(c);
 				pthread_mutex_unlock( &gl->unit_mutex );

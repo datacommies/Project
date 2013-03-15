@@ -61,8 +61,8 @@ void ServerGameLogic::initializeCastles()
 
   int uid = next_unit_id_++;
   Point pos;
-  pos.x = 0;
-  pos.y = 0;
+  pos.x = 10;
+  pos.y = 10;
 
   // Team 0
   Castle castle1 = Castle(uid, pos, INIT_CASTLE_HP, INIT_CASTLE_ATKDMG, INIT_CASTLE_ATKRNG, INIT_CASTLE_ATKSPD,
