@@ -112,12 +112,16 @@ void ClientNetwork::recvReply() {
 				c.health = u.health;
 				cout << "Creep health" << c.health << endl;
 				c.type = (UnitType)head.type;
+				pthread_mutex_lock( &gl->unit_mutex );
 				gl->units.push_back(c);
+				pthread_mutex_unlock( &gl->unit_mutex );
 				break;
 			}
 
 			case MSG_CLEAR:
+				pthread_mutex_lock( &gl->unit_mutex );
 				gl->units.clear();
+				pthread_mutex_unlock( &gl->unit_mutex );
 			break;
 		}
 
