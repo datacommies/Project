@@ -7,6 +7,7 @@
 
 void loadControlEvents(ClientGameLogic* gameLogic, Graphics* graphics);
 ClientGameLogic* getGameLogic();
+Graphics* getGraphicsObj();
 
 void CallExitGameEvent(void* value);
 

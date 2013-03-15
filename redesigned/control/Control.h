@@ -30,6 +30,7 @@
 
 #include "../resource.h"
 #include "Controller.h"
+#include "BuildController.h"
 #include "ControlState.h"
 #include "ControlManager.h"
 #include "ControlEvents.h"
