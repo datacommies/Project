@@ -143,7 +143,19 @@ void ClientNetwork::recvReply() {
  * NOTES:   No validation performed here. */
 bool ClientNetwork::createUnit(int playerId, UnitType type, Point location)
 {
+	//TODO: Not using playtypeerID at all!
+
+
 	// Create request and send via connectsock
+	request_create_t request;
+
+	request.head.type = MSG_REQUEST_CREATE;
+	request.head.size = sizeof(request_create_t);
+	request.unit = type;
+	request.posx = location.x;
+	request.posy = location.y;
+
+	send(connectsock, &request, sizeof(request_create_t), 0);
    return false;
 }
 
@@ -156,7 +168,14 @@ bool ClientNetwork::createUnit(int playerId, UnitType type, Point location)
  * NOTES:   No validation performed here. */
 bool ClientNetwork::movePlayer(int playerId, Direction direction)
 {
-   return false;
+	request_player_move_t request;
+
+	request.head.type = MSG_REQUEST_PLAYER_MOVE;
+	request.head.size = sizeof(request_player_move_t);
+	request.direction = direction;
+	send(connectsock, &request, sizeof(request_player_move_t), 0);
+
+	return false;
 }
 
 /* Sends an attack request to the server.
@@ -181,9 +200,5 @@ bool ClientNetwork::attack(int playerId, Direction direction)
  */
 int ClientNetwork::sendRequest(int msg)
 {
-    /* DANGER: not tested. Use but no warranties guaranteed.
-    int res = send(connectsock, &msg, sizeof(int), 0);
-
-    return res;*/
     return 1;
 }

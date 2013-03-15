@@ -170,13 +170,98 @@ void* ServerNetwork::handleInput(void* args)
     return NULL;
 }
 
+void* ServerNetwork::handleClientRequest(void* args)
+{
+    
+
+
+/*typedef struct $
+{
+    header_t head;
+    UnitType unit;
+    int posx, posy;
+} request_create_t;
+
+typedef struct {
+    int type; //MSG_PLAYER_UPDATE for e.g.
+    int size; //sizeof(player_matchmakcing_t) for eg.
+} header_t;
+
+enum UnitType
+{
+   PLAYER,
+   CREEP,
+   TOWER,
+   CASTLE
+};
+
+enum {
+    MSG_MAPNAME,            // Update everyone's mapname
+    MSG_START,              // It's time to start the game!
+    MSG_PLAYER_UPDATE, // Update a client's players container.
+    MSG_PLAYER_JOIN,
+    MSG_PLAYER_LEAVE,
+    MSG_CHAT,                // A chat message has been generated
+    MSG_CREATE_UNIT,
+    MSG_UPDATE_UNIT,
+    MSG_RESOURCE_UPDATE,
+    MSG_REQUEST_CREATE,
+    MSG_REQUEST_PLAYER_MOVE,
+    MSG_CLEAR
+};
+
+*/
+    ClientCtx* ctx = (ClientCtx*)args;
+    ServerNetwork* thiz = (ServerNetwork*) ctx->sn;
+    int client_ = ctx->client;
+
+     while (1) {
+
+        request_create_t rc;
+        //header_t head;
+        
+        cout << "Going to get a head" <<endl;
+        int n = recv_complete(client_, &rc.head, sizeof(header_t), 0);
+        
+        if (n <= 0)
+            break;
+
+        cout << "Got a head" <<endl;
+
+        switch(rc.head.type){
+            case MSG_REQUEST_CREATE:
+                int x = recv_complete(client_, ((char*)&rc)+sizeof(header_t), sizeof(request_create_t) - sizeof(header_t), 0);
+
+                if (x <= 0)
+                    break;
+
+                Point loc;
+                loc.x = rc.posx;
+                loc.y = rc.posy;
+                thiz->serverGameLogic_.receiveCreateUnitCommand(client_, rc.unit, loc);
+            break;
+
+       }
+        
+        
+
+    }
+
+    return NULL;
+}
+
+
 void* ServerNetwork::handleClient(void* args)
 {
     cout << "Handling client!" << endl;
     ClientCtx* ctx = (ClientCtx*)args;
     ServerNetwork* thiz = (ServerNetwork*) ctx->sn;
     int client_ = ctx->client;
+
     // Create client request handler thread.
+    pthread_create (&thiz->crThread_, NULL, handleClientRequest, args); // start server input handler.
+
+
     while (true) {
         header_t clear = {MSG_CLEAR, 0};
         if (send(client_, &clear, sizeof(header_t), 0) < 1)
@@ -185,6 +270,7 @@ void* ServerNetwork::handleClient(void* args)
         usleep(100000);
     }
 
+    /*
     // Add this player first
     player_matchmaking_t player;
     
@@ -203,10 +289,11 @@ void* ServerNetwork::handleClient(void* args)
         send(client_, &thiz->players_[i], sizeof(player_matchmaking_t), 0);
     }
     //update_all_clients_(MSG_PLAYER_UPDATE);
-    /*const char * data = sc.data();
+    //const char * data = sc.data();
     header_t * head = (header_t*)&data;
     cout << head->type << endl;*/
 
+    /*
     player.head.type = MSG_PLAYER_UPDATE;
     // Inform all other clients_ that this player has arrived.
     for (size_t i = 0; i < thiz->clients_.size(); ++i)
@@ -253,6 +340,7 @@ void* ServerNetwork::handleClient(void* args)
     
     cout << endl << "client_ disconnected." << endl << "server> ";
     cout.flush();
+    */
     
     return NULL;
 }
@@ -273,7 +361,7 @@ int recv_complete (int sockfd, void *buf, size_t len, int flags) {
         result = recv (sockfd, (char*)buf + bytesRead, len - bytesRead, flags);
         
         if (result < 1) {
-            cerr << ("recasdfasdfsadfv") << endl;
+            cerr << ("Error in handleRequest() recv()") << endl;
             return result;
         }
         
