@@ -146,7 +146,8 @@ string Unit::serializeUnit()
     
     unit_t u;
     
-    u.head.type = getType();
+    u.head.type = MSG_CREATE_UNIT;
+    u.unit_type = getType();
     u.head.size = getSize();
     u.id = id;
     u.posx = position.x;

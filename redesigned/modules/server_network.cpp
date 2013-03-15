@@ -176,7 +176,7 @@ void* ServerNetwork::handleClient(void* args)
     ClientCtx* ctx = (ClientCtx*)args;
     ServerNetwork* thiz = (ServerNetwork*) ctx->sn;
     int client_ = ctx->client;
-
+    // Create client request handler thread.
     while (true) {
         header_t clear = {MSG_CLEAR, 0};
         if (send(client_, &clear, sizeof(header_t), 0) < 1)
