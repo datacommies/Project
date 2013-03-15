@@ -43,8 +43,6 @@ void * init (void * in) {
 
 	// Initialize the SFGUI window and make it display the join window by default
 	g->initDesktop();
-	g->initJoinWindow();
-	g->hideJoinWindow();
 
 	// Main loop for the graphics thread.
 	while (window.isOpen()) {
@@ -66,6 +64,7 @@ void * init (void * in) {
 						// Join server button.
 						if (button->id == ID_JOIN){
 							g->clientGameLogic_.UIElements.clear();
+							g->initJoinWindow();
 							g->showJoinWindow();
 							break;
 						}
@@ -220,12 +219,8 @@ void Graphics::initDesktop(){
 }
 
 void Graphics::initJoinWindow(){
-	// Clear all other windows present in the desktop before adding this window.
-	sfgDesktop.RemoveAll();
-
 	// Create join window using SFGUI
 	sfgJoinWindow = sfg::Window::Create(sfg::Window::BACKGROUND); // Make the window.
-	//sfgJoinWindow->SetTitle(L"Join Game"); // Add a title to the window.
 	sfgJoinWindow->SetPosition(sf::Vector2f(200,200)); // Change the window position.
 	sfgJoinWindow->SetRequisition(sf::Vector2f(400, 400));
 	
@@ -269,61 +264,146 @@ void Graphics::initJoinWindow(){
 }
 
 void Graphics::initLobbyWindow(){
-	// Clear all other windows present in the desktop before adding this window.
-	sfgDesktop.RemoveAll();
-
-	// Create join window using SFGUI
-	sfgJoinWindow = sfg::Window::Create(sfg::Window::BACKGROUND); // Make the window.
-	//sfgJoinWindow->SetTitle(L"Join Game"); // Add a title to the window.
-	sfgJoinWindow->SetPosition(sf::Vector2f(200,200)); // Change the window position.
-	sfgJoinWindow->SetRequisition(sf::Vector2f(400, 400));
+	// Create lobby window using SFGUI.
+	sfgLobbyWindow = sfg::Window::Create(sfg::Window::BACKGROUND); // Make the window.
+	sfgLobbyWindow->SetPosition(sf::Vector2f(100, 225)); // Change the window position.
+	sfgLobbyWindow->SetRequisition(sf::Vector2f(600, 350));
 	
-	// Create a box to hold all the controls.
-	sfgJoinBox = sfg::Box::Create(sfg::Box::VERTICAL);
+	// Create a parent box to hold all the subboxes.
+	sfgLobbyBox = sfg::Box::Create(sfg::Box::HORIZONTAL);
+
+	// Create the subboxes to divide the screen.
+	sfgLeftLobbyBox = sfg::Box::Create(sfg::Box::VERTICAL);
+	sfgMiddleLobbyBox = sfg::Box::Create(sfg::Box::VERTICAL);
+	sfgRightLobbyBox = sfg::Box::Create(sfg::Box::VERTICAL);
 
 	// Create all the labels.
-	sfgNameLabel = sfg::Label::Create("User Name:");
-	sfgServerLabel = sfg::Label::Create("Server:");
-	sfgPortLabel = sfg::Label::Create("Port:");
+	unassignedPlayersLabel = sfg::Label::Create("Unassigned Players:");
+	unassignedPlayersList = sfg::Label::Create("NeedsVector\nGordon\nG-Man\nD0g\nAlyx");
+	teamOneLabel = sfg::Label::Create("Team One");
+	teamTwoLabel = sfg::Label::Create("Team Two");
 
-	// Create the entry boxes.
-	sfgNameEntryBox = sfg::Entry::Create();
-	sfgNameEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 120.
-	sfgServerEntryBox = sfg::Entry::Create();
-	sfgServerEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 120.
-	sfgPortEntryBox = sfg::Entry::Create();
-	sfgPortEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 120.
+	// Create the team selection buttons.
+	playerOneOneButton = sfg::Button::Create("Player 1");
+	playerOneTwoButton = sfg::Button::Create("Player 2");
+	playerOneThreeButton = sfg::Button::Create("Player 3");
+	playerOneFourButton = sfg::Button::Create("Player 4");
+	playerOneFiveButton = sfg::Button::Create("Player 5");
+	playerTwoOneButton = sfg::Button::Create("Player 1");
+	playerTwoTwoButton = sfg::Button::Create("Player 2");
+	playerTwoThreeButton = sfg::Button::Create("Player 3");
+	playerTwoFourButton = sfg::Button::Create("Player 4");
+	playerTwoFiveButton = sfg::Button::Create("Player 5");
 
-	// Create a button to join a server and handle it's signal
-	sfgJoinButton = sfg::Button::Create("Join");
-	sfgJoinButton->GetSignal( sfg::Widget::OnLeftClick ).Connect(&Graphics::joinButtonHandler, this);
+	playerOneOneButton->GetSignal(sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 11);
+	playerOneTwoButton->GetSignal(sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 12);
+	playerOneThreeButton->GetSignal(sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 13);
+	playerOneFourButton->GetSignal(sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 14);
+	playerOneFiveButton->GetSignal(sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 15);
+	playerTwoOneButton->GetSignal(sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 21);
+	playerTwoTwoButton->GetSignal(sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 22);
+	playerTwoThreeButton->GetSignal(sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 23);
+	playerTwoFourButton->GetSignal(sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 24);
+	playerTwoFiveButton->GetSignal(sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 25);
 
-	// Create a button to close the join window and handle it's signal
-	sfgCloseJoinButton = sfg::Button::Create("Close");
-	sfgCloseJoinButton->GetSignal( sfg::Widget::OnLeftClick ).Connect(&Graphics::hideJoinWindow, this);
+	// Create the start game / exit buttons.
+	startGameButton = sfg::Button::Create("Start Game");
+	startGameButton->GetSignal( sfg::Widget::OnLeftClick ).Connect(&Graphics::startGame, this);
+	exitLobbyButton = sfg::Button::Create("Exit Lobby");
+	exitLobbyButton->GetSignal( sfg::Widget::OnLeftClick ).Connect(&Graphics::exitLobby, this);
 
 	// Add all the controls to the container.
-	sfgJoinBox->Pack(sfgNameLabel);
-	sfgJoinBox->Pack(sfgNameEntryBox);
-	sfgJoinBox->Pack(sfgServerLabel);
-	sfgJoinBox->Pack(sfgServerEntryBox);
-	sfgJoinBox->Pack(sfgPortLabel);
-	sfgJoinBox->Pack(sfgPortEntryBox);
-	sfgJoinBox->Pack(sfgJoinButton);
-	sfgJoinBox->Pack(sfgCloseJoinButton);
+	sfgMiddleLobbyBox->Pack(unassignedPlayersLabel);
+	sfgMiddleLobbyBox->Pack(unassignedPlayersList);
+	sfgMiddleLobbyBox->Pack(startGameButton);
+	sfgMiddleLobbyBox->Pack(exitLobbyButton);
+	sfgLeftLobbyBox->Pack(teamOneLabel);
+	sfgLeftLobbyBox->Pack(playerOneOneButton);
+	sfgLeftLobbyBox->Pack(playerOneTwoButton);
+	sfgLeftLobbyBox->Pack(playerOneThreeButton);
+	sfgLeftLobbyBox->Pack(playerOneFourButton);
+	sfgLeftLobbyBox->Pack(playerOneFiveButton);
+	sfgRightLobbyBox->Pack(teamTwoLabel);
+	sfgRightLobbyBox->Pack(playerTwoOneButton);
+	sfgRightLobbyBox->Pack(playerTwoTwoButton);
+	sfgRightLobbyBox->Pack(playerTwoThreeButton);
+	sfgRightLobbyBox->Pack(playerTwoFourButton);
+	sfgRightLobbyBox->Pack(playerTwoFiveButton);
 
-	sfgJoinWindow->Add(sfgJoinBox);
+	sfgLobbyBox->Pack(sfgLeftLobbyBox);
+	sfgLobbyBox->Pack(sfgMiddleLobbyBox);
+	sfgLobbyBox->Pack(sfgRightLobbyBox);
 
-	sfgDesktop.Add(sfgJoinWindow);
+	sfgLobbyWindow->Add(sfgLobbyBox);
+
+	sfgDesktop.Add(sfgLobbyWindow);
+}
+
+void Graphics::takeRole()
+{
+	switch((long) this)
+	{
+		case 11:
+		// This causes a seg fault because we passed in an integer as a pointer to the "graphics" object
+			//playerOneOneButton->SetLabel("Ouch");
+			cout << "T11" << endl;
+			break;
+		case 12:
+			cout << "T12" << endl;
+			break;
+		case 13:
+			cout << "T13" << endl;
+			break;
+		case 14:
+			cout << "T14" << endl;
+			break;
+		case 15:
+			cout << "T15" << endl;
+			break;
+		case 21:
+			cout << "T21" << endl;
+			break;
+		case 22:
+			cout << "T22" << endl;
+			break;
+		case 23:
+			cout << "T23" << endl;
+			break;
+		case 24:
+			cout << "T24" << endl;
+			break;
+		case 25:
+			cout << "T25" << endl;
+			break;
+	}
+}
+
+void Graphics::startGame()
+{
+	// todo: actually start the game
+	cout << "start the game!" << endl;
+}
+
+void Graphics::exitLobby()
+{
+	sfgLobbyWindow->Show(false);
+
+	// todo: actually exit the session and go back to main screen.
+	clientGameLogic_.exit();
+
+	this->initMainMenuControls();
 }
 
 void Graphics::joinButtonHandler()
 {
-	// NOTE* problem with this code right now, apparently GetText() returns a Color, when it should be a string.
+	// todo: actually connect to the game rather than just printing the strings.
 	cout << "Name:" << sfgNameEntryBox->GetText().toAnsiString() << endl;
 	cout << "Server:" << sfgServerEntryBox->GetText().toAnsiString() << endl;
 	cout << "Port:" << sfgPortEntryBox->GetText().toAnsiString() << endl;
+
 	clientGameLogic_.join();
+	initLobbyWindow();
+
 	sfgJoinWindow->Show(false);
 }
 
