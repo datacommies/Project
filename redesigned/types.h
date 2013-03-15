@@ -104,12 +104,18 @@ typedef struct {
     int direction;
 } mobileunit_t;
 
-typedef struct $
+typedef struct
 {
     header_t head;
     UnitType unit;
     int posx, posy;
 } request_create_t;
+
+typedef struct 
+{
+    header_t head;
+    Direction direction;
+} request_player_move_t;
 
 
 

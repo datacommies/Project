@@ -15,6 +15,13 @@ using namespace std;
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 800
 
+inline string to_string(int num)
+{
+	stringstream ss; 
+	ss << num; 	
+	return ss.str();
+}
+
 /* Graphics Thread entry point
  *
  * PRE:     
@@ -104,6 +111,7 @@ void * init (void * in) {
 			g->drawMap(window);
 			g->drawUnits(window);
 			g->drawHud(window);
+			g->drawCurrency(window);
 			sf::Text state("In Game", g->font, 20);
 			window.draw(state);
 		}
@@ -530,6 +538,21 @@ void Graphics::drawUnits(sf::RenderWindow& window)
 		}
 	}
 	pthread_mutex_unlock( &clientGameLogic_.unit_mutex );
+}
+
+void Graphics::drawCurrency(sf::RenderWindow& window)
+{
+	sf::RectangleShape currencyBox;
+
+	currencyBox.setPosition(100, 0);
+	currencyBox.setSize(sf::Vector2f(150, 20));
+	currencyBox.setFillColor(sf::Color(0, 0, 0));
+
+	window.draw(currencyBox);
+
+	sf::Text currencyText(to_string(clientGameLogic_.currency), font, 20);
+	currencyText.setPosition(100, 0);
+	window.draw(currencyText);
 }
 
 void Graphics::loadImages(){
