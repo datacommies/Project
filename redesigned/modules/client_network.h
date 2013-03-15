@@ -30,6 +30,8 @@ public:
    bool connectToServer(std::string hostname, int port);
    ClientGameLogic* gl;
    void recvReply();
+
+   void behnamspartyfunction();
 private:
    int connectsock;
 };

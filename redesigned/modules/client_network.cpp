@@ -81,6 +81,13 @@ bool ClientNetwork::connectToServer(std::string hostname, int port)
 }
 
 void ClientNetwork::recvReply() {
+	//TEST
+	Point p;
+	p.x = 50;
+	p.y = 100;
+	createUnit(0, TOWER, p);
+	//////////////////////
+
 	while (true) {
 		header_t head = {0};
 		recv_complete(connectsock, &head, sizeof(head), 0);
