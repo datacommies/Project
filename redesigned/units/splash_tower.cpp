@@ -48,7 +48,7 @@ void SplashTower::Attack(void)
     for (size_t i = 0; i < team->players.size(); ++i)
     {
         // if player is in range and is alive and is not our target (to prevent hitting one target twice)
-        if( inRange( pTarget->getPos(), team->players[i].getPos(), perception )
+        if( inRange( pTarget->getPos(), team->players[i].getPos(), splashRange )
         && team->players[i].health > 0
         && pTarget->id != team->players[i].id ) 
         {
