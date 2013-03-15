@@ -13,6 +13,7 @@ Creep::Creep(int uid, Point pos, int hp, int atkdmg, int atkrng,
          percep, atkcnt,spd, direct), pPath(path), pSaved(NULL)
 {
     //validation
+    //psaved is initialized to NULL so that the game doesn't crash!
 }
 
 #if 1
