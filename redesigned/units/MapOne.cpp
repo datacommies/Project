@@ -5,22 +5,25 @@
 #include "Point.h"
 
 class MapOne{
+    Point castle1;
+    Point castle2;
+    PATH topOne, midOne, botOne;
+    PATH topTwo, midTwo, botTwo;
     
+    //initializes castle positions and paths for each team
+    //these still need to be assigned to a team object somehow
+    //should probably be changed to use the MAPWIDTH/MAPHEIGHT defines
+    //do we want default player spawn positions?
     void initMap(){
-        //these points are using the map size values defined in resource.h
-
         //team 1 castle position, top left corner
-        Point castle1;
         castle1.x = 0;
         castle1.y = 0;
 
         //team 2 castle position, bottom right corner
-        Point castle2;
         castle2.x = 500;
         castle2.y = 500;
 
         //*** team 1 paths ***
-        PATH topOne, midOne, botOne;
         Point a;
 
         a.x = 30; //castle icon is 25x25
@@ -54,8 +57,8 @@ class MapOne{
         midOne.push_back(a);
         //*** end of team 1 paths ***
 
+
         //*** team 2 paths ***
-        PATH topTwo, midTwo, botTwo;
         Point b;
 
         b.x = 500;
