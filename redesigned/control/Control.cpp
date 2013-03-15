@@ -193,7 +193,7 @@ ControlState MakeBuilderState()
 	ControlState builderState(true, 40);
     
     Button buildTowerButton(41, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Build Tower");	
-	Controller buildTower(0, sf::Keyboard::B, buildTowerButton, CallBuildTowerEvent);
+	BuildController buildTower(0, sf::Keyboard::B, buildTowerButton, CallBuildTowerEvent);
 	builderState.AddController(buildTower);
 	
 	Button buildCreepButton(42, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Build Creep");

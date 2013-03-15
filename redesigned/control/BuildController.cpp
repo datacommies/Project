@@ -1,6 +1,13 @@
 #include "BuildController.h"
 #include "ControlEvents.h"
 #include "../modules/graphics.h"
+
+BuildController::BuildController(int returnValue, sf::Keyboard::Key key, Button buttonRect, void (*move_fp)(void *))
+	:Controller(returnValue, key, buttonRect, move_fp)
+{
+	
+}
+
 /*-------------------------------------------------------------------------------------------------------------------- 
 -- FUNCTION: RunCommand
 --
@@ -19,7 +26,7 @@
 -- NOTES: Polymorphic function used for giving coordinates to the event
 ----------------------------------------------------------------------------------------------------------------------*/
 void 
-Controller::RunCommand()
+BuildController::RunCommand()
 {
 	Graphics* graphics;
 	int position[2];
@@ -27,16 +34,16 @@ Controller::RunCommand()
 	position[1] = 1; // Y coordinate
 	graphics = getGraphicsObj(); // get the graphics object so we can get the window
 	
-	while(true) // not sure if this is the best idea. Maybe we don't need the loop?
+	while(!sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 	{
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
 			sf::Vector2i localPosition = sf::Mouse::getPosition( *(graphics->window) );
 			position[0] = localPosition.x;
 			position[1] = localPosition.y;
+			
+			eventFunction((void*)position);
 			break;
 		}
 	}
-	
-	eventFunction((void*)position);
 }

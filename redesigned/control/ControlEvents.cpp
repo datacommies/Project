@@ -72,6 +72,7 @@ Graphics* getGraphicsObj()
 {
 	return _graphicsPointer;
 }
+
 /*-------------------------------------------------------------------------------------------------------------------- 
 -- FUNCTION: CallExitGameEvent
 --
