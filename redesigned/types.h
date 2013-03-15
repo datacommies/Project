@@ -16,13 +16,11 @@ enum {
     MSG_PLAYER_JOIN,
     MSG_PLAYER_LEAVE,
     MSG_CHAT,                // A chat message has been generated
-    MSG_TOWER_CREATE,
-    MSG_TOWER_REMOVE,
-    MSG_TOWER_UPDATE,
-    MSG_CREEP_CREATE,
-    MSG_CREEP_REMOVE, //creeps dying
-    MSG_CREEP_UPDATE,
+    MSG_CREATE_UNIT,
+    MSG_UPDATE_UNIT,
     MSG_RESOURCE_UPDATE,
+    MSG_REQUEST_CREATE,
+    MSG_REQUEST_PLAYER_MOVE,
     MSG_CLEAR
 };
 
@@ -90,6 +88,7 @@ typedef struct {
 typedef struct {
     header_t head;
     int id; //unit id
+    UnitType unit_type;
     int posx, posy;
     int health;
     //int iElement;
