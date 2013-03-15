@@ -29,7 +29,7 @@ public:
 private:
     std::vector<player_matchmaking_t> players_;
     std::vector<int> clients_;       // client_ sockets
-    pthread_t uiThread_;
+    pthread_t uiThread_, crThread_;
     int sock_;
     std::vector<pthread_t> threads_; // client_ handler threads_.
     
@@ -41,6 +41,7 @@ private:
     void error(const char *);
     
     static void* handleClient(void*);
+    static void* handleClientRequest(void* args);
     void handleRequests();
     
     
