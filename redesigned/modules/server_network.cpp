@@ -187,6 +187,7 @@ void* ServerNetwork::handleClient(void* args)
         }
         for (size_t i = 0; i < thiz->serverGameLogic_.teams[0].creeps.size(); ++i)
         {
+            cout << "creep type: " <<  thiz->serverGameLogic_.teams[0].creeps[i].getType() <<endl;
             string sc = thiz->serverGameLogic_.teams[0].creeps[i].serializeCreep();
             send(client_, sc.data(), sc.size(), 0);
         }

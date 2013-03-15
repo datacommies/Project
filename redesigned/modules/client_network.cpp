@@ -101,17 +101,17 @@ void ClientNetwork::recvReply() {
 
 			case PLAYER: {
 				unit_t u = {0};
+				mobileunit_t mu = {0};
 				CLIENT_UNIT c = {0};
 				//int headLength = head.size - sizeof(head);
-				cout << "Waiting for " << head.size - 
-				sizeof(head) << endl;
-				recv_complete(connectsock, ((char*)&u) + sizeof(header_t), head.size - sizeof(head), 0);
+				recv_complete(connectsock, ((char*)&u) + sizeof(header_t), sizeof(unit_t) - sizeof(header_t), 0);
+				recv_complete(connectsock, &mu, sizeof(mu), 0);
 				c.position.x = u.posx;
 				c.position.y = u.posy;
 				c.past_position = c.position;
 				c.health = u.health;
-				cout << "Creep health" << c.health << endl;
 				c.type = (UnitType)head.type;
+				cout << "Creep type " << head.type << endl;
 				pthread_mutex_lock( &gl->unit_mutex );
 				gl->units.push_back(c);
 				pthread_mutex_unlock( &gl->unit_mutex );
