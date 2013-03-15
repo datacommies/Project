@@ -81,59 +81,73 @@ bool ClientNetwork::connectToServer(std::string hostname, int port)
 }
 
 void ClientNetwork::recvReply() {
+	//TEST
+	for(int i = 0 ; i < 6 ; i++){
+		Point p;
+		p.x = 50;
+		p.y = 100;
+		createUnit(0, TOWER, p);
+	}
+
+	for (int i = 0; i < 6 ; i ++){
+		Direction d = DOWN;
+		movePlayer(0, d);
+
+	}
+	//////////////////////
+
 	while (true) {
 		header_t head = {0};
 		recv_complete(connectsock, &head, sizeof(head), 0);
 
 		// CREEP type contains a unit_t with the creep's attributes.
-		switch (head.type) {
-
-			//FALL THROUGH
-			case TOWER:
-			case CASTLE: {
-				unit_t u = {0};
-				tower_t t = {0};
-				CLIENT_UNIT c = {0};
-				//int headLength = head.size - sizeof(head);
-				recv_complete(connectsock, ((char*)&u) + sizeof(header_t), sizeof(unit_t) - sizeof(header_t), 0);
-				recv_complete(connectsock, &t, sizeof(t), 0);
-				c.position.x = u.posx;
-				c.position.y = u.posy;
-				c.past_position = c.position;
-				c.health = u.health;
-				c.type = (UnitType)head.type;
-				printf("Tower: x: %d, y: %d, health: %d\n", u.posx, u.posy, u.health);
-				pthread_mutex_lock( &gl->unit_mutex );
-				gl->units.push_back(c);
-				pthread_mutex_unlock( &gl->unit_mutex );
-			
-			break;
-			}
-			
-			case CREEP:
-			case PLAYER: {
-				unit_t u = {0};
-				mobileunit_t mu = {0};
-				CLIENT_UNIT c = {0};
-				//int headLength = head.size - sizeof(head);
-				recv_complete(connectsock, ((char*)&u) + sizeof(header_t), sizeof(unit_t) - sizeof(header_t), 0);
-				recv_complete(connectsock, &mu, sizeof(mu), 0);
-				c.position.x = u.posx;
-				c.position.y = u.posy;
-				c.past_position = c.position;
-				c.health = u.health;
-				c.type = (UnitType)head.type;
-				pthread_mutex_lock( &gl->unit_mutex );
-				gl->units.push_back(c);
-				pthread_mutex_unlock( &gl->unit_mutex );
+		if (head.type == MSG_CREATE_UNIT) {
+			unit_t u = {0};
+			recv_complete(connectsock, ((char*)&u) + sizeof(header_t), sizeof(unit_t) - sizeof(header_t), 0);
+			printf("Unit: x: %d, y: %d, health: %d\n", u.posx, u.posy, u.health);
+			switch (u.unit_type) {
+				//FALL THROUGH
+				case TOWER:
+				case CASTLE: {
+					tower_t t = {0};
+					CLIENT_UNIT c = {0};
+					//int headLength = head.size - sizeof(head);
+					recv_complete(connectsock, &t, sizeof(t), 0);
+					c.position.x = u.posx;
+					c.position.y = u.posy;
+					c.past_position = c.position;
+					c.health = u.health;
+					c.type = u.unit_type;
+					c.team = u.team;
+					pthread_mutex_lock( &gl->unit_mutex );
+					printf("Adding unit!\n");
+					gl->units.push_back(c);
+					pthread_mutex_unlock( &gl->unit_mutex );
 				break;
+				}
+				
+				case CREEP:
+				case PLAYER: {
+					mobileunit_t mu = {0};
+					CLIENT_UNIT c = {0};
+					recv_complete(connectsock, &mu, sizeof(mu), 0);
+					c.position.x = u.posx;
+					c.position.y = u.posy;
+					c.past_position = c.position;
+					c.health = u.health;
+					c.type = u.unit_type;
+					c.team = u.team;
+					printf("creep team %d", c.team);
+					pthread_mutex_lock( &gl->unit_mutex );
+					gl->units.push_back(c);
+					pthread_mutex_unlock( &gl->unit_mutex );
+					break;
+				}
 			}
-
-			case MSG_CLEAR:
-				pthread_mutex_lock( &gl->unit_mutex );
-				gl->units.clear();
-				pthread_mutex_unlock( &gl->unit_mutex );
-			break;
+		} else if (head.type == MSG_CLEAR) {
+			pthread_mutex_lock( &gl->unit_mutex );
+			gl->units.clear();
+			pthread_mutex_unlock( &gl->unit_mutex );
 		}
 	}
 }
@@ -147,6 +161,19 @@ void ClientNetwork::recvReply() {
  * NOTES:   No validation performed here. */
 bool ClientNetwork::createUnit(int playerId, UnitType type, Point location)
 {
+	//TODO: Not using playtypeerID at all!
+
+
+	// Create request and send via connectsock
+	request_create_t request;
+
+	request.head.type = MSG_REQUEST_CREATE;
+	request.head.size = sizeof(request_create_t);
+	request.unit = type;
+	request.posx = location.x;
+	request.posy = location.y;
+
+	send(connectsock, &request, sizeof(request_create_t), 0);
    return false;
 }
 
@@ -159,7 +186,14 @@ bool ClientNetwork::createUnit(int playerId, UnitType type, Point location)
  * NOTES:   No validation performed here. */
 bool ClientNetwork::movePlayer(int playerId, Direction direction)
 {
-   return false;
+	request_player_move_t request;
+
+	request.head.type = MSG_REQUEST_PLAYER_MOVE;
+	request.head.size = sizeof(request_player_move_t);
+	request.direction = direction;
+	send(connectsock, &request, sizeof(request_player_move_t), 0);
+
+	return false;
 }
 
 /* Sends an attack request to the server.
@@ -184,9 +218,5 @@ bool ClientNetwork::attack(int playerId, Direction direction)
  */
 int ClientNetwork::sendRequest(int msg)
 {
-    /* DANGER: not tested. Use but no warranties guaranteed.
-    int res = send(connectsock, &msg, sizeof(int), 0);
-
-    return res;*/
     return 1;
 }

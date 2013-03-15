@@ -9,20 +9,24 @@
 #define PLAYER_NAME_SIZE 32
 #define MAP_NAME_SIZE  64
 
-enum {
+enum { // MESSAGE TYPES
+    // LOBBY
     MSG_MAPNAME,            // Update everyone's mapname
     MSG_START,              // It's time to start the game!
     MSG_PLAYER_UPDATE, // Update a client's players container.
     MSG_PLAYER_JOIN,
     MSG_PLAYER_LEAVE,
     MSG_CHAT,                // A chat message has been generated
-    MSG_TOWER_CREATE,
-    MSG_TOWER_REMOVE,
-    MSG_TOWER_UPDATE,
-    MSG_CREEP_CREATE,
-    MSG_CREEP_REMOVE, //creeps dying
-    MSG_CREEP_UPDATE,
+    
+    // SERVER -> CLIENT
+    MSG_CREATE_UNIT,
+    MSG_UPDATE_UNIT,
     MSG_RESOURCE_UPDATE,
+    
+    // CLIENT -> SERVER
+    MSG_REQUEST_CREATE,
+    MSG_REQUEST_PLAYER_MOVE,
+    
     MSG_CLEAR
 };
 
@@ -90,8 +94,10 @@ typedef struct {
 typedef struct {
     header_t head;
     int id; //unit id
+    UnitType unit_type;
     int posx, posy;
     int health;
+    int team;
     //int iElement;
     int attackDamage;//damage that the unit deals per hit
     int attackRange; //distance that the unit can successfully attack
@@ -104,6 +110,20 @@ typedef struct {
     int speed;
     int direction;
 } mobileunit_t;
+
+typedef struct
+{
+    header_t head;
+    UnitType unit;
+    int posx, posy;
+} request_create_t;
+
+typedef struct 
+{
+    header_t head;
+    Direction direction;
+} request_player_move_t;
+
 
 
 bool operator == (const player_matchmaking_t& a, const player_matchmaking_t& b);

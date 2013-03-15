@@ -416,7 +416,7 @@ void ServerGameLogic::setAlarm()
 
 
 /*
- * To test this class use  g++ -DTESTCLASS -pthread -Wall server_game_logic.cpp
+ * To test this class use  g++ -DTESTCLASS -pthread -Wall server_game_logic.cpp ../build/units/*.o
  */
 #ifdef TESTCLASS
 int main() {

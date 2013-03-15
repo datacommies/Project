@@ -10,8 +10,3 @@ Castle::Castle(int uid, Point pos, int hp, int atkdmg, int atkrng,
 {
 //    validation
 }
-
-string Castle::serializeCastle()
-{
-    return 0;
-}
