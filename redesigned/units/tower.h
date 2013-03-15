@@ -5,6 +5,15 @@
 #include "../types.h"
 #include "unit.h"
 
+
+/*
+    please fix this class so that it is using members
+    inherited from it's base classes
+    for example: unit has an ID, but you're creating another
+    id in here
+
+    there are so many of these :/
+*/
 class Tower : public Unit
 {
 private:

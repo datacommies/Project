@@ -88,6 +88,7 @@ bool ServerNetwork::sync(int client_)
 
     for (size_t i = 0; i < serverGameLogic_.teams[0].creeps.size(); ++i)
     {
+        serverGameLogic_.teams[0].creeps[i].team = 0;
         string sc = serverGameLogic_.teams[0].creeps[i].serializeCreep();
         send(client_, sc.data(), sc.size(), 0);
     }
@@ -107,6 +108,7 @@ bool ServerNetwork::sync(int client_)
 
     for (size_t i = 0; i < serverGameLogic_.teams[1].creeps.size(); ++i)
     {
+        serverGameLogic_.teams[1].creeps[i].team = 1;
         string sc = serverGameLogic_.teams[1].creeps[i].serializeCreep();
         send(client_, sc.data(), sc.size(), 0);
     }

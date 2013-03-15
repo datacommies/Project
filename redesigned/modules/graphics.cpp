@@ -487,6 +487,21 @@ void Graphics::drawHealthBar(sf::RenderWindow& window, float x, float y, int hea
 	window.draw(healthbar);	
 }
 
+/* Draws a circle around the unit to identify which team the unit is on
+ *
+ * PRE:     
+ * POST:    All current units are displayed
+ * RETURNS: 
+ * NOTES:    */
+void Graphics::drawTeamCircle (sf::RenderWindow& window, int team, float x, float y) {
+	sf::CircleShape cs(25/2);
+	cs.setPosition(x, y);
+	cs.setFillColor(sf::Color::Transparent);
+	cs.setOutlineColor(sf::Color(team == 0 ? 255 : 0, 0, team == 0 ? 0 : 255));
+	cs.setOutlineThickness(2.0f);
+	window.draw(cs);
+}
+
 /* Draws all current units.
  *
  * PRE:     
@@ -520,7 +535,8 @@ void Graphics::drawUnits(sf::RenderWindow& window)
 			// Linear interpolation between a unit's past position and new position.
 			Point interpolated = Lerp(unit->past_position, unit->position, unit->inter_value);
 			// All drawable unit elements use the same interpolated position.
-			creep_sprite.setPosition(interpolated.x, interpolated.y);			
+			drawTeamCircle(window, unit->team, interpolated.x, interpolated.y);
+			creep_sprite.setPosition(interpolated.x, interpolated.y);
 			window.draw(creep_sprite);
 			drawHealthBar(window, interpolated.x, interpolated.y+25, unit->health);
 		}
@@ -534,7 +550,7 @@ void Graphics::drawUnits(sf::RenderWindow& window)
 		{
 			player_sprite.setPosition(unit->position.x, unit->position.y);			
 			window.draw(player_sprite);
-			drawHealthBar(window, unit->position.x, unit->position.y + player_sprite.getTextureRect().height, unit->health);			
+			drawHealthBar(window, unit->position.x, unit->position.y + player_sprite.getTextureRect().height, unit->health);
 		}
 	}
 	pthread_mutex_unlock( &clientGameLogic_.unit_mutex );
