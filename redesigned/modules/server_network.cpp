@@ -195,7 +195,7 @@ void* ServerNetwork::handleClient(void* args)
             string sc = thiz->serverGameLogic_.teams[1].creeps[i].serializeCreep();
             send(client_, sc.data(), sc.size(), 0);
         }
-        sleep(1);
+        usleep(100000);
     }
 
     // Add this player first

@@ -10,6 +10,7 @@ ClientGameLogic::ClientGameLogic(ClientNetwork& clientNetwork)
    : clientNetwork_(clientNetwork), gameState_(MAIN_MENU)
 {
    clientNetwork_.gl = this;
+   unit_mutex = PTHREAD_MUTEX_INITIALIZER;
 }
 
 void ClientGameLogic::start () {

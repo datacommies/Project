@@ -407,6 +407,7 @@ void Graphics::drawHealthBar(sf::RenderWindow& window, float x, float y, int hea
  * NOTES:    */
 void Graphics::drawUnits(sf::RenderWindow& window)
 {	
+	pthread_mutex_lock( &clientGameLogic_.unit_mutex );
 	for (std::vector<CLIENT_UNIT>::iterator unit = clientGameLogic_.units.begin(); unit != clientGameLogic_.units.end(); ++unit)
 	{
 		// Increment interpolation value, if there is a different between past and current positions.
@@ -448,6 +449,7 @@ void Graphics::drawUnits(sf::RenderWindow& window)
 			drawHealthBar(window, unit->position.x, unit->position.y + player_sprite.getTextureRect().height, unit->health);			
 		}
 	}
+	pthread_mutex_unlock( &clientGameLogic_.unit_mutex );
 }
 
 void Graphics::loadImages(){

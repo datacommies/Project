@@ -10,6 +10,7 @@
 class ClientGameLogic
 {
 public:
+   pthread_mutex_t unit_mutex;
    // Constructor
    ClientGameLogic(ClientNetwork& clientNetwork);
 
