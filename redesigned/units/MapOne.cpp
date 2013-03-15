@@ -1,10 +1,8 @@
-#ifndef MAPONE_H
-#define MAPONE_H
-
 #include "../resource.h"
 #include "Point.h"
 
 class MapOne{
+public:
     Point castle1;
     Point castle2;
     PATH topOne, midOne, botOne;
@@ -92,6 +90,5 @@ class MapOne{
         midTwo.push_back(b);
         //*** end of team 2 paths ***
     }   
+private:
 };
-
-#endif
