@@ -395,7 +395,7 @@ void ServerGameLogic::setAlarm()
   tout_val.it_interval.tv_sec = 0;
   tout_val.it_interval.tv_usec = 0;
   tout_val.it_value.tv_sec = 0;
-  tout_val.it_value.tv_usec = INTERVAL*10; /* set time for interval (1/30th of a second) */
+  tout_val.it_value.tv_usec = INTERVAL; /* set time for interval (1/30th of a second) */
   result = setitimer(ITIMER_REAL, &tout_val,0);
 
   if (result != 0)
