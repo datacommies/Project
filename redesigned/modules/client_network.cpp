@@ -82,10 +82,18 @@ bool ClientNetwork::connectToServer(std::string hostname, int port)
 
 void ClientNetwork::recvReply() {
 	//TEST
-	Point p;
-	p.x = 50;
-	p.y = 100;
-	createUnit(0, TOWER, p);
+	for(int i = 0 ; i < 6 ; i++){
+		Point p;
+		p.x = 50;
+		p.y = 100;
+		createUnit(0, TOWER, p);
+	}
+
+	for (int i = 0; i < 6 ; i ++){
+		Direction d = DOWN;
+		movePlayer(0, d);
+
+	}
 	//////////////////////
 
 	while (true) {
