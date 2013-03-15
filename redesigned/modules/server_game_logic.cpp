@@ -247,7 +247,6 @@ int ServerGameLogic::WhichTeam(int id) {
 
 void ServerGameLogic::updateCreate(CommandData& command)
 {
-  /*
   // Passed in command: PlayerId, type, location
 
   int team_no;
@@ -266,13 +265,13 @@ void ServerGameLogic::updateCreate(CommandData& command)
     return;
   }
 
-  if ( x > MapTeam0_.max_x_ || y > MapTeam0_.max_y_ ) {
+  if (mapTeams_[0].isValidPos(command.location)) {
     fprintf(stderr, "x: %d, y: %d out of range: %s line %d\n", x, y, __FILE__, __LINE__);
     return; 
   }
 
-  if ( MapTeam0_.grid_[x][y] + MapTeam1_.grid_[x][y] != 0 )
-    return; // If sum doesn't equal zero then position is already occupied 
+  if ( mapBoth_.grid_[x][y] != 0 )
+    return; // position is already occupied 
 
   // Create Unit
   int id = next_unit_id_++;
@@ -293,17 +292,16 @@ void ServerGameLogic::updateCreate(CommandData& command)
         break;
       }
     default:
-      fprintf(stderr, "Unknown type %s line:%d\n" __FILE__, __LINE__);
+      fprintf(stderr, "Unknown type %s line:%d\n", __FILE__, __LINE__);
       return;
   }
 
   // Update the our map 
-  GameLogicMap *gameMap = team_no == 0 ? &MapTeam0_ : &MapTeam1_;
   Location location;
   location.pos  = command.location;
   location.type = command.type;
-  gameMap->units_[id] = location;
-  gameMap->grid_[x][y] = id;
+  mapTeams_[team_no].units_[id] = location;
+  mapTeams_[team_no].grid_[x][y] = id;
 }
 
 void ServerGameLogic::updateAttack(CommandData& command)
@@ -323,7 +321,6 @@ void ServerGameLogic::updateAttack(CommandData& command)
   }
 
   // Attack!!
-*/
 }
 
 void ServerGameLogic::updateMovePlayer(CommandData& command)
@@ -354,9 +351,9 @@ void ServerGameLogic::update()
   if (requestedCommands.empty())
     return;
 
-  //Update maps... maps become incorrect as AI does its job
-  //MapTeam0_.build(teams[0]);
-  //MapTeam1_.build(teams[1]);
+  mapTeams_[0].build(teams[0]);
+  mapTeams_[1].build(teams[1]);
+  mapBoth_.merge(mapTeams_[0], mapTeams_[1]);
 
   // Take snap shot of queue at time0
   // Only process the number of commands that were there at time0
