@@ -219,20 +219,28 @@ enum {
 
      while (1) {
 
-        request_create_t rc;
-        //header_t head;
         
+        header_t head;
+
+
         cout << "Going to get a head" <<endl;
-        int n = recv_complete(client_, &rc.head, sizeof(header_t), 0);
-        
+        int n = recv_complete(client_, &head, sizeof(header_t), 0);
+
         if (n <= 0)
             break;
 
         cout << "Got a head" <<endl;
 
-        switch(rc.head.type){
+        int x = 0; 
+
+        switch(head.type){
+
+             
+
             case MSG_REQUEST_CREATE:
-                int x = recv_complete(client_, ((char*)&rc)+sizeof(header_t), sizeof(request_create_t) - sizeof(header_t), 0);
+                request_create_t rc;
+                rc.head = head;
+                x = recv_complete(client_, ((char*)&rc)+sizeof(header_t), sizeof(request_create_t) - sizeof(header_t), 0);
 
                 if (x <= 0)
                     break;
@@ -241,6 +249,21 @@ enum {
                 loc.x = rc.posx;
                 loc.y = rc.posy;
                 thiz->serverGameLogic_.receiveCreateUnitCommand(client_, rc.unit, loc);
+            break;
+
+            case MSG_REQUEST_PLAYER_MOVE:
+                request_player_move_t rpm;
+                rpm.head = head;
+                x = recv_complete(client_, ((char*) &rpm) + sizeof(header_t), sizeof(request_player_move_t) - sizeof(header_t), 0);
+
+                if (x <=0)
+                    break;
+
+                Direction dir = rpm.direction;
+
+                cout << "Direction: " << dir << endl;
+                thiz->serverGameLogic_.receiveMovePlayerCommand(client_, dir);
+                
             break;
 
        }

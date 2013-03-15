@@ -9,18 +9,24 @@
 #define PLAYER_NAME_SIZE 32
 #define MAP_NAME_SIZE  64
 
-enum {
+enum { // MESSAGE TYPES
+    // LOBBY
     MSG_MAPNAME,            // Update everyone's mapname
     MSG_START,              // It's time to start the game!
     MSG_PLAYER_UPDATE, // Update a client's players container.
     MSG_PLAYER_JOIN,
     MSG_PLAYER_LEAVE,
     MSG_CHAT,                // A chat message has been generated
+    
+    // SERVER -> CLIENT
     MSG_CREATE_UNIT,
     MSG_UPDATE_UNIT,
     MSG_RESOURCE_UPDATE,
+    
+    // CLIENT -> SERVER
     MSG_REQUEST_CREATE,
     MSG_REQUEST_PLAYER_MOVE,
+    
     MSG_CLEAR
 };
 
