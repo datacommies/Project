@@ -9,28 +9,8 @@
 ClientGameLogic::ClientGameLogic(ClientNetwork& clientNetwork)
    : clientNetwork_(clientNetwork), gameState_(MAIN_MENU)
 {
-   // TODO: create a thread and begin processing
-   /*CLIENT_UNIT test = {0};
-   test.health = 100;
-   test.position.x = 100;
-   test.position.y = 100;
-   test.past_position = test.position;
-   test.type = CREEP;
-   units.push_back(test);
-
-   test.position.x = 200;
-   test.position.y = 100;
-   test.past_position = test.position;
-   units.push_back(test);
-
-   test.health = 100;
-   test.position.x = 10;
-   test.position.y = 10;
-   test.past_position = test.position;
-   test.type = CASTLE;
-   units.push_back(test);*/
-
    clientNetwork_.gl = this;
+   unit_mutex = PTHREAD_MUTEX_INITIALIZER;
 }
 
 void ClientGameLogic::start () {
@@ -97,6 +77,7 @@ bool ClientGameLogic::attack(Direction direction)
  * NOTES:   Any teardown should be performed here (eg. notify server). */
 void ClientGameLogic::exit()
 {
+   gameState_ = MAIN_MENU;
 }
 
 GameState ClientGameLogic::getCurrentState() {

@@ -99,6 +99,14 @@ private:
    sfg::Label::Ptr sfgPortLabel;
 
    sfg::Window::Ptr sfgLobbyWindow; // The form used for the lobby.
+   sfg::Box::Ptr sfgLobbyBox;
+   sfg::Box::Ptr sfgLeftLobbyBox;
+   sfg::Box::Ptr sfgMiddleLobbyBox;
+   sfg::Box::Ptr sfgRightLobbyBox;
+   sfg::Button::Ptr startGameButton;
+   sfg::Button::Ptr exitLobbyButton;
+   sfg::Label::Ptr unassignedPlayersLabel;
+   sfg::Label::Ptr unassignedPlayersList;
    sfg::Box::Ptr teamOneBox;
    sfg::Label::Ptr teamOneLabel;
    sfg::Button::Ptr playerOneOneButton;
@@ -132,6 +140,9 @@ private:
    void hideJoinWindow();
    void joinButtonHandler();
    void initLobbyWindow();
+   void startGame();
+   void exitLobby();
+   void takeRole();
 
    friend void * init (void *);
 };

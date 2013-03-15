@@ -70,7 +70,7 @@ void Creep::Update( Team& team ) {
 
 void Creep::Move( Point pt ) {
          position.x += getTargetDirection( position.x, pt.x ) * moveSpeed;
-         position.y += getTargetDirection( position.y, pt.y )  * moveSpeed;
+         position.y += getTargetDirection( position.y, pt.y ) * moveSpeed;
 }
 
 #endif
