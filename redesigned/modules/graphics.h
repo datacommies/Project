@@ -132,6 +132,7 @@ private:
    void initGameControls ();
    void loadImages();
    void drawHealthBar(sf::RenderWindow& window, float x, float y, int health);
+   void drawCurrency(sf::RenderWindow& window);
 
    // SFGUI Functions
    void initDesktop();
