@@ -228,6 +228,10 @@ std::vector<Unit>::iterator ServerGameLogic::findUnit(std::vector<Unit>::iterato
  */
 int ServerGameLogic::WhichTeam(int id) {
 
+  return 0;
+
+  /*
+
   if (MapTeam0_.units_.find(id) != MapTeam0_.units_.end())
     return 0;
 
@@ -235,11 +239,14 @@ int ServerGameLogic::WhichTeam(int id) {
     return 1;
 
   return 2;
+
+  */
 }
 
 
 void ServerGameLogic::updateCreate(CommandData& command)
 {
+  /*
   // Passed in command: PlayerId, type, location
 
   int team_no;
@@ -315,7 +322,7 @@ void ServerGameLogic::updateAttack(CommandData& command)
   }
 
   // Attack!!
-
+*/
 }
 
 void ServerGameLogic::updateMovePlayer(CommandData& command)
@@ -347,8 +354,8 @@ void ServerGameLogic::update()
     return;
 
   //Update maps... maps become incorrect as AI does its job
-  MapTeam0_.build(teams[0]);
-  MapTeam1_.build(teams[1]);
+  //MapTeam0_.build(teams[0]);
+  //MapTeam1_.build(teams[1]);
 
   // Take snap shot of queue at time0
   // Only process the number of commands that were there at time0
@@ -364,7 +371,7 @@ void ServerGameLogic::update()
         updateCreate(newCommand);
         break;
       case Attack:
-        updateAttack(newCommand);
+        //updateAttack(newCommand);
         break;
       case MovePlayer:
         updateMovePlayer(newCommand);

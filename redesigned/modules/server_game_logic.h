@@ -95,6 +95,7 @@ class ServerGameLogic
       UnitType type;
     };
 
+    /*
     struct GameLogicMap {
 
       int max_x_;
@@ -108,6 +109,11 @@ class ServerGameLogic
       std::map<int, Location> units_;
 
       GameLogicMap(int max_x = MAX_X, int max_y = MAX_Y): max_x_(max_x), max_y_(max_y) {
+
+        printf("Inside constructor.....\n");
+        return;
+
+
         grid_ = (int**) Malloc(sizeof(int*) * max_x);
 
         for ( int x=0; x <= max_x; x++) {
@@ -177,7 +183,7 @@ class ServerGameLogic
 
 
     } MapTeam0_, MapTeam1_;
-
+*/
     // Functions
     void update();
     void updateCreate(CommandData& command);
