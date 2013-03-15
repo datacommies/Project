@@ -77,6 +77,7 @@ bool ClientGameLogic::attack(Direction direction)
  * NOTES:   Any teardown should be performed here (eg. notify server). */
 void ClientGameLogic::exit()
 {
+   gameState_ = MAIN_MENU;
 }
 
 GameState ClientGameLogic::getCurrentState() {
