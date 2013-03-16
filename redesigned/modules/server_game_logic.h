@@ -35,12 +35,17 @@
 #define INIT_TOWER_WALL 2 
 
 // This will come actually be read from the map
+#ifndef TESTCLASS
 #define MAX_X 500
 #define MAX_Y 500
+#else
+#define MAX_X 20 
+#define MAX_Y 20
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <pthread.h>
+//#include <pthread.h>
 
 #include "../resource.h"
 

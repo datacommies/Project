@@ -19,7 +19,7 @@ ServerGameLogic * gSGL;
  * RETURNS:
  * NOTES:   Creates a thread and starts running the module */
   ServerGameLogic::ServerGameLogic()
-: gameState_(LOBBY)
+: gameState_(LOBBY), next_unit_id_(1)
 {
   PATH p;
   Point a;
@@ -32,6 +32,7 @@ ServerGameLogic * gSGL;
   teams[0].paths.push_back(p);
   teams[1].paths.push_back(p);
 
+#ifndef TESTCLASS
   Creep c;
   c.pPath = &teams[1].paths[0][0];
   c.attackRange = 100;
@@ -49,6 +50,7 @@ ServerGameLogic * gSGL;
   teams[1].creeps.push_back(c);
   initializeCastles();
   //initializeTeams();
+#endif
 }
 
 
@@ -61,8 +63,8 @@ void ServerGameLogic::initializeCastles()
 
   int uid = next_unit_id_++;
   Point pos;
-  pos.x = 10;
-  pos.y = 10;
+  pos.x = 0;
+  pos.y = 0;
 
   // Team 0
   Castle castle1 = Castle(uid, pos, INIT_CASTLE_HP, INIT_CASTLE_ATKDMG, INIT_CASTLE_ATKRNG, INIT_CASTLE_ATKSPD,
@@ -76,6 +78,21 @@ void ServerGameLogic::initializeCastles()
   Castle castle2 = Castle(uid, pos, INIT_CASTLE_HP, INIT_CASTLE_ATKDMG, INIT_CASTLE_ATKRNG, INIT_CASTLE_ATKSPD,
       INIT_CASTLE_PERCEP, INIT_CASTLE_ATKCNT, INIT_CASTLE_WALL, 1);
   teams[1].towers.push_back(castle2);
+
+#ifdef TESTCLASS
+
+  printf("Castle 2 position..x: %d y: %d\n", castle2.getPos().x, castle2.getPos().y);
+
+  mapTeams_[0].build(teams[0]);
+  mapTeams_[1].build(teams[1]);
+
+  printf("Team 0\n");
+  mapTeams_[0].printGrid();
+  printf("Team 1\n");
+  mapTeams_[1].printGrid();
+
+  exit(0);
+#endif
 }
 
 void ServerGameLogic::initializeCreeps()
@@ -86,8 +103,16 @@ void ServerGameLogic::initializeCreeps()
 
       int uid = next_unit_id_++;
       Point pos = Point();
-      pos.x = 500;
-      pos.y = 100*j;
+      
+      if (team_i == 0) {
+        pos.x = 5 + j;
+        pos.y = 5 + j;
+      }
+      else {
+        pos.x = MAX_X -5 - j;
+        pos.y = MAX_Y -5 - j;
+      }
+
       int hp = INIT_CREEP_HP;
       int atkdmg = INIT_CREEP_ATKDMG;
       int atkrng = INIT_CREEP_ATKRNG;
@@ -96,13 +121,11 @@ void ServerGameLogic::initializeCreeps()
       int atkcnt = INIT_CREEP_ATKCNT;
       int spd = INIT_CREEP_SPD;
       Direction direct = Direction();
-      Point *path= &teams[1].paths[0][0];;
+      Point *path= &teams[1].paths[0][0];
       int movespeed = INIT_CREEP_MOVESPEED;
-
 
       Creep creep = Creep(uid, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, spd, direct, path, movespeed);
       teams[team_i].creeps.push_back(creep);
-
     }
 }
 
@@ -113,8 +136,16 @@ void ServerGameLogic::initializeTowers()
 
       int uid = next_unit_id_++;
       Point pos = Point();
-      pos.x = 200;
-      pos.y = 50 + j;
+
+      if (team_i == 0) {
+        pos.x = 15 + j;
+        pos.y = 15 + j;
+      }
+      else {
+        pos.x = MAX_X -15 - j;
+        pos.y = MAX_Y -15 - j;
+      }
+
       int hp = INIT_TOWER_HP;
       int atkdmg = INIT_TOWER_ATKDMG;
       int atkrng = INIT_TOWER_ATKRNG;
@@ -145,6 +176,9 @@ void ServerGameLogic::startGame()
 {
   gSGL = this;
   setAlarm();
+#ifdef TESTCLASS
+  initializeTeams();
+#endif
 }
 
 /* Receive and queue a create unit command from a client.
@@ -229,21 +263,14 @@ std::vector<Unit>::iterator ServerGameLogic::findUnit(std::vector<Unit>::iterato
  */
 int ServerGameLogic::WhichTeam(int id) {
 
-  return 0;
-
-  /*
-
-  if (MapTeam0_.units_.find(id) != MapTeam0_.units_.end())
+  if (mapTeams_[0].units_.find(id) != mapTeams_[0].units_.end())
     return 0;
 
-  if (MapTeam1_.units_.find(id) != MapTeam1_.units_.end())
+  if (mapTeams_[1].units_.find(id) != mapTeams_[1].units_.end())
     return 1;
 
   return 2;
-
-  */
 }
-
 
 void ServerGameLogic::updateCreate(CommandData& command)
 {
@@ -348,12 +375,15 @@ void ServerGameLogic::updateMoveUnit(CommandData& command)
  *          Nice to have: send a fail message if command is invalid */
 void ServerGameLogic::update()
 {      
-  if (requestedCommands.empty())
-    return;
 
   mapTeams_[0].build(teams[0]);
   mapTeams_[1].build(teams[1]);
   mapBoth_.merge(mapTeams_[0], mapTeams_[1]);
+
+  //mapBoth_.printGrid();
+
+  if (requestedCommands.empty())
+    return;
 
   // Take snap shot of queue at time0
   // Only process the number of commands that were there at time0
@@ -387,7 +417,9 @@ void ServerGameLogic::updateClients(int i)
 
   //std::cout << "Update" <<std::endl;
 
+#ifndef TESTCLASS
   AiUpdate(gSGL->teams[0], gSGL->teams[1]);
+#endif
 
   gSGL->update();
 
@@ -415,9 +447,7 @@ void ServerGameLogic::setAlarm()
 }
 
 
-/*
- * To test this class use  g++ -DTESTCLASS -pthread -Wall server_game_logic.cpp ../build/units/*.o
- */
+// To test this class use  g++ -DTESTCLASS -g -Wall server_game_logic.cpp ../build/units/*.o
 #ifdef TESTCLASS
 int main() {
 
