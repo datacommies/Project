@@ -13,7 +13,11 @@ using namespace std;
 #define ID_TEST 999
 
 #define WINDOW_WIDTH 800
-#define WINDOW_HEIGHT 800
+#define WINDOW_HEIGHT 700
+#define BUTTON_WIDTH  100
+#define BUTTON_HEIGHT 25
+#define ROW1 620
+#define ROW2 665
 
 inline string to_string(int num)
 {
@@ -200,14 +204,21 @@ void Graphics::initMainMenuControls()
  * NOTES:   Clears and Initializes the set of UIElements for In-game controls */
 void Graphics::initGameControls () {
 	clientGameLogic_.UIElements.clear();
-
-	Button a(999,sf::Vector2f(020,570), sf::Vector2f(100,25), font, "Tower1");
-	Button b(998,sf::Vector2f(130,570), sf::Vector2f(100,25), font, "Tower2");
-	Button c(997,sf::Vector2f(240,570), sf::Vector2f(100,25), font, "Tower3");
-	Button d(996,sf::Vector2f(350,570), sf::Vector2f(100,25), font, "Creep1");
-	Button e(995,sf::Vector2f(460,570), sf::Vector2f(100,25), font, "Creep2");
-	Button f(994,sf::Vector2f(570,570), sf::Vector2f(100,25), font, "Creep3");
-	Button h(ID_QUIT,sf::Vector2f(680,570), sf::Vector2f(100,25),  font, "Quit");
+	int button[] = { 20, 130, 240, 350, 460, 570, 680 };
+	
+	// First row of buttons
+	Button a(999,sf::Vector2f(button[0],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Tower1");
+	Button b(998,sf::Vector2f(button[1],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Tower2");
+	Button c(997,sf::Vector2f(button[2],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Tower3");
+	Button d(996,sf::Vector2f(button[3],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Creep1");
+	Button e(995,sf::Vector2f(button[4],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Creep2");
+	Button f(994,sf::Vector2f(button[5],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Creep3");
+	Button h(ID_QUIT,sf::Vector2f(button[6],ROW2), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT),  font, "Quit");
+	
+	// Second row of buttons.
+	Button i(993,sf::Vector2f(button[0],ROW2), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "HiPath");
+	Button j(992,sf::Vector2f(button[1],ROW2), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "MidPath");
+	Button k(991,sf::Vector2f(button[2],ROW2), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "LowPath");
 	
 	a.rect.setFillColor(sf::Color(255, 0, 0));
 	
@@ -218,6 +229,9 @@ void Graphics::initGameControls () {
 	clientGameLogic_.UIElements.insert(e);
 	clientGameLogic_.UIElements.insert(f);
 	clientGameLogic_.UIElements.insert(h);
+	clientGameLogic_.UIElements.insert(i);
+	clientGameLogic_.UIElements.insert(j);
+	clientGameLogic_.UIElements.insert(k);
 }
 
 void Graphics::initDesktop(){
