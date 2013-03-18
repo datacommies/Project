@@ -12,7 +12,7 @@ Unit::Unit(int uid, Point pos, int hp, int atkdmg,
            attackSpeed(atkspd), perception(percep), attackCount(atkcnt), pTarget(NULL)
 {
     //any required validation
-
+    printf("Inside unit constructor, x:%d y:%d\n", position.x, position.y);
 }
 
 /*

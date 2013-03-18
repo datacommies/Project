@@ -77,6 +77,9 @@ void ServerGameLogic::initializeCastles()
       INIT_CASTLE_PERCEP, INIT_CASTLE_ATKCNT, INIT_CASTLE_WALL, 0);
   teams[0].towers.push_back(castle1);
 
+  Point p = castle1.getPos();
+  printf("Castle 1 position..x: %d y: %d\n", p.x, p.y);
+  
   // Team 1
   uid = next_unit_id_++;
   pos.x = MAX_X; // TODO: MAX_X and MAX_Y will  be replaced later when we get map reading functionality working
@@ -87,7 +90,9 @@ void ServerGameLogic::initializeCastles()
 
 #ifdef TESTCLASS
 
-  printf("Castle 2 position..x: %d y: %d\n", castle2.getPos().x, castle2.getPos().y);
+  p = castle2.getPos();
+
+  printf("Castle 2 position..x: %d y: %d\n", p.x, p.y);
 
   mapTeams_[0].build(teams[0]);
   mapTeams_[1].build(teams[1]);
