@@ -10,7 +10,7 @@ class Team;
 class Unit
 {
 public:
-    
+    Team * enemy; // other team for splash damage calculations
     int id; //unit id
     int team;
     Point position;
