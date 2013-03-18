@@ -229,6 +229,7 @@ void Graphics::initGameControls () {
 	clientGameLogic_.UIElements.insert(e);
 	clientGameLogic_.UIElements.insert(f);
 	clientGameLogic_.UIElements.insert(h);
+	
 	clientGameLogic_.UIElements.insert(i);
 	clientGameLogic_.UIElements.insert(j);
 	clientGameLogic_.UIElements.insert(k);
