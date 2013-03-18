@@ -109,6 +109,27 @@ ControlState MakeMenuState()
 ControlState MakeLobbyState()
 {
 	ControlState lobbyState(true, 20);
+	sf::Font font;	
+	
+	Button joinButton(21, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Join Game");	
+	Controller joinGame(0, (sf::Keyboard::Key)0, joinButton, NULL);
+	lobbyState.AddController(joinGame);
+	
+	Button builderButton(22, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Builder");	
+	Controller builderRole(0, (sf::Keyboard::Key)0, builderButton, NULL);
+	lobbyState.AddController(builderRole);
+	
+	Button playerButton(23, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Player");	
+	Controller playerRole(0, (sf::Keyboard::Key)0, playerButton, NULL);
+	lobbyState.AddController(playerRole);
+	
+	Button switchTeamButton(24, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Switch Team");	
+	Controller switchTeam(0, (sf::Keyboard::Key)0, switchTeamButton, NULL);
+	lobbyState.AddController(switchTeam);
+	
+	Button exitButton(25, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Exit Game");	
+	Controller exitGame(TERMINATE, (sf::Keyboard::Key)0, exitButton, CallExitGameEvent);
+	lobbyState.AddController(exitGame);
 	
 	return lobbyState;
 }
@@ -193,7 +214,7 @@ ControlState MakeBuilderState()
 	ControlState builderState(true, 40);
     
     Button buildTowerButton(41, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Build Tower");	
-	Controller buildTower(0, sf::Keyboard::B, buildTowerButton, CallBuildTowerEvent);
+	BuildController buildTower(0, sf::Keyboard::B, buildTowerButton, CallBuildTowerEvent);
 	builderState.AddController(buildTower);
 	
 	Button buildCreepButton(42, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Build Creep");

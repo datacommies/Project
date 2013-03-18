@@ -7,9 +7,10 @@ class QuickTower : public Tower
 {
 public:
 
-    QuickTower(const int& uid, Point pos, const int& hp, const int& atkdmg, const int& atkrng,
-          const int& atkspd, const int& percep, const int& atkcnt, const int& wall);
-
+    QuickTower(int uid, Point pos, int hp, int atkdmg, int atkrng,
+          int atkspd, int percep, int atkcnt, int wall);
+    
+    virtual void Attack(void);
 	
 private:  
 };

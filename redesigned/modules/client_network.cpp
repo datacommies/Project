@@ -14,6 +14,7 @@ using namespace std;
 ClientNetwork::ClientNetwork()
 {
    // TODO: create a thread and begin processing
+//gl = (ClientGameLogic*) malloc (sizeof(ClientGameLogic*));
 
 }
 
@@ -41,12 +42,10 @@ ClientNetwork::~ClientNetwork()
 bool ClientNetwork::connectToServer(std::string hostname, int port)
 {
 	cout << "connecting.." <<endl;
-	long connectsock;
 
 	struct sockaddr_in serv_addr;
 	struct hostent *server;
 
-	//connect through TCP (for now at least)
 	connectsock = socket(AF_INET, SOCK_STREAM, 0); 
 
 	if (connectsock < 0) 
@@ -66,7 +65,7 @@ bool ClientNetwork::connectToServer(std::string hostname, int port)
 	memset(&serv_addr, 0, sizeof(serv_addr));
 	serv_addr.sin_family = AF_INET;
 	memcpy((char *) &serv_addr.sin_addr.s_addr, (char*) server->h_addr,
-		server->h_length);
+			server->h_length);
 	serv_addr.sin_port = htons(port);
 
 	if (connect(connectsock, (struct sockaddr *) &serv_addr,
@@ -77,33 +76,80 @@ bool ClientNetwork::connectToServer(std::string hostname, int port)
 	}
 
 	std::cout << "I'M CONNECTEDDDDD!!!!! YEAAAAAAAAAAAAAAAAAAAAAAAA" << std::endl;
+	recvReply();
+	return true;
+}
 
-	while (true) {
-		header_t head;
-		recv_complete(connectsock, &head, sizeof(head), 0);
-		cout << "Recv head size:" << head.size << endl;
-
-		// CREEP type contains a unit_t with the creep's attributes.
-		if (head.type == CREEP || head.type == CASTLE) {
-			unit_t u = {0};
-			CLIENT_UNIT c= {0};
-			//int headLength = head.size - sizeof(head);
-			cout << "Waiting for " << head.size - 
-			sizeof(head) << endl;
-			recv_complete(connectsock, ((char*)&u) + sizeof(header_t), head.size - sizeof(head), 0);
-			c.position.x = u.posx;
-			c.position.y = u.posy;
-			c.past_position = c.position;
-			c.health = u.health;
-			cout << "Creep health" << c.health << endl;
-			c.type = (UnitType)head.type;
-			gl->units.push_back(c);
-		}
+void ClientNetwork::recvReply() {
+	//TEST
+	for(int i = 0 ; i < 6 ; i++){
+		Point p;
+		p.x = 50;
+		p.y = 100;
+		createUnit(0, TOWER, p);
 	}
 
-	cout << "Done getting a unit" << endl;
+	for (int i = 0; i < 6 ; i ++){
+		Direction d = DOWN;
+		movePlayer(0, d);
 
-	return true;
+	}
+	//////////////////////
+
+	while (true) {
+		header_t head = {0};
+		recv_complete(connectsock, &head, sizeof(head), 0);
+
+		// CREEP type contains a unit_t with the creep's attributes.
+		if (head.type == MSG_CREATE_UNIT) {
+			unit_t u = {0};
+			recv_complete(connectsock, ((char*)&u) + sizeof(header_t), sizeof(unit_t) - sizeof(header_t), 0);
+			printf("Unit: x: %d, y: %d, health: %d\n", u.posx, u.posy, u.health);
+			switch (u.unit_type) {
+				//FALL THROUGH
+				case TOWER:
+				case CASTLE: {
+					tower_t t = {0};
+					CLIENT_UNIT c = {0};
+					//int headLength = head.size - sizeof(head);
+					recv_complete(connectsock, &t, sizeof(t), 0);
+					c.position.x = u.posx;
+					c.position.y = u.posy;
+					c.past_position = c.position;
+					c.health = u.health;
+					c.type = u.unit_type;
+					c.team = u.team;
+					pthread_mutex_lock( &gl->unit_mutex );
+					printf("Adding unit!\n");
+					gl->units.push_back(c);
+					pthread_mutex_unlock( &gl->unit_mutex );
+				break;
+				}
+				
+				case CREEP:
+				case PLAYER: {
+					mobileunit_t mu = {0};
+					CLIENT_UNIT c = {0};
+					recv_complete(connectsock, &mu, sizeof(mu), 0);
+					c.position.x = u.posx;
+					c.position.y = u.posy;
+					c.past_position = c.position;
+					c.health = u.health;
+					c.type = u.unit_type;
+					c.team = u.team;
+					printf("creep team %d", c.team);
+					pthread_mutex_lock( &gl->unit_mutex );
+					gl->units.push_back(c);
+					pthread_mutex_unlock( &gl->unit_mutex );
+					break;
+				}
+			}
+		} else if (head.type == MSG_CLEAR) {
+			pthread_mutex_lock( &gl->unit_mutex );
+			gl->units.clear();
+			pthread_mutex_unlock( &gl->unit_mutex );
+		}
+	}
 }
 
 /* Sends a create unit request to the server.
@@ -115,6 +161,19 @@ bool ClientNetwork::connectToServer(std::string hostname, int port)
  * NOTES:   No validation performed here. */
 bool ClientNetwork::createUnit(int playerId, UnitType type, Point location)
 {
+	//TODO: Not using playtypeerID at all!
+
+
+	// Create request and send via connectsock
+	request_create_t request;
+
+	request.head.type = MSG_REQUEST_CREATE;
+	request.head.size = sizeof(request_create_t);
+	request.unit = type;
+	request.posx = location.x;
+	request.posy = location.y;
+
+	send(connectsock, &request, sizeof(request_create_t), 0);
    return false;
 }
 
@@ -127,7 +186,14 @@ bool ClientNetwork::createUnit(int playerId, UnitType type, Point location)
  * NOTES:   No validation performed here. */
 bool ClientNetwork::movePlayer(int playerId, Direction direction)
 {
-   return false;
+	request_player_move_t request;
+
+	request.head.type = MSG_REQUEST_PLAYER_MOVE;
+	request.head.size = sizeof(request_player_move_t);
+	request.direction = direction;
+	send(connectsock, &request, sizeof(request_player_move_t), 0);
+
+	return false;
 }
 
 /* Sends an attack request to the server.
@@ -152,9 +218,5 @@ bool ClientNetwork::attack(int playerId, Direction direction)
  */
 int ClientNetwork::sendRequest(int msg)
 {
-    /* DANGER: not tested. Use but no warranties guaranteed.
-    int res = send(connectsock, &msg, sizeof(int), 0);
-
-    return res;*/
     return 1;
 }

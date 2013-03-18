@@ -1,5 +1,6 @@
 /*
  * Quick tower targets one unit and fires rapidly at it; Low damage tower.
+ * Essentially a faster firing version of basic tower.
  * - Basic implementation
 */
 #include "quick_tower.h"
@@ -8,10 +9,19 @@
 
 using namespace std;
 
-QuickTower::QuickTower(const int& uid, Point pos, const int& hp, const int& atkdmg, const int& atkrng,
-            const int& atkspd, const int& percep, const int& atkcnt, const int& wall):
+QuickTower::QuickTower(int uid, Point pos, int hp, int atkdmg, int atkrng,
+            int atkspd, int percep, int atkcnt, int wall):
             Tower(uid, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, wall)
 {
     //validation
 }
 
+void QuickTower::Attack(void)
+{
+    // check if we can attack
+    if( attackCount++ < attackSpeed )
+        return;
+        
+    attackCount = 0;
+    pTarget->health -= attackDamage;
+}

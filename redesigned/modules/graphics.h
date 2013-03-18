@@ -99,6 +99,14 @@ private:
    sfg::Label::Ptr sfgPortLabel;
 
    sfg::Window::Ptr sfgLobbyWindow; // The form used for the lobby.
+   sfg::Box::Ptr sfgLobbyBox;
+   sfg::Box::Ptr sfgLeftLobbyBox;
+   sfg::Box::Ptr sfgMiddleLobbyBox;
+   sfg::Box::Ptr sfgRightLobbyBox;
+   sfg::Button::Ptr startGameButton;
+   sfg::Button::Ptr exitLobbyButton;
+   sfg::Label::Ptr unassignedPlayersLabel;
+   sfg::Label::Ptr unassignedPlayersList;
    sfg::Box::Ptr teamOneBox;
    sfg::Label::Ptr teamOneLabel;
    sfg::Button::Ptr playerOneOneButton;
@@ -118,11 +126,14 @@ private:
    void initMainMenuControls();
    void drawHud(sf::RenderWindow& window);
    void drawMainMenu(sf::RenderWindow& window);
+   void drawLobby(sf::RenderWindow& window);
    void drawUnits(sf::RenderWindow& window);
    void drawMap(sf::RenderWindow& window);
    void initGameControls ();
    void loadImages();
+   void drawTeamCircle(sf::RenderWindow& window, int team, float x, float y);
    void drawHealthBar(sf::RenderWindow& window, float x, float y, int health);
+   void drawCurrency(sf::RenderWindow& window);
 
    // SFGUI Functions
    void initDesktop();
@@ -131,6 +142,9 @@ private:
    void hideJoinWindow();
    void joinButtonHandler();
    void initLobbyWindow();
+   void startGame();
+   void exitLobby();
+   void takeRole();
 
    friend void * init (void *);
 };

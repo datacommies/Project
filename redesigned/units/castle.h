@@ -13,8 +13,6 @@ public:
     Castle(int uidzz, Point pos, int hp, int atkdmg, int atkrng,
            int atkspd, int percep, int atkcnt, int wall, int cid);
 
-	std::string serializeCastle();
-
 	virtual UnitType getType() const { return CASTLE; }
 	virtual size_t getSize() const { return Tower::getSize(); }
 

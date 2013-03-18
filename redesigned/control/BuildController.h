@@ -1,5 +1,5 @@
-#ifndef CONTROLLER_H
-#define CONTROLLER_H
+#ifndef BUILD_CONTROLLER_H
+#define BUILD_CONTROLLER_H
 /*--------------------------------------------------------------------------------------------------------------------
 -- CLASS: BuildController
 --
@@ -11,7 +11,7 @@
 --
 -- DESIGNER: John Payment
 --
--- PROGRAMMER: 
+-- PROGRAMMER: John Payment
 --
 -- NOTES: This class is extended from Controller and used for the purpose of getting coordinates when building a building
 -- 
@@ -22,7 +22,10 @@
 class BuildController : public Controller
 {
 public:
-private:
+	BuildController(int returnValue, sf::Keyboard::Key key, Button buttonRect, void (*move_fp)(void *));
+
+protected:
+	void RunCommand();
 };
 
 #endif

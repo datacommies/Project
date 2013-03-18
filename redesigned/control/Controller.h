@@ -38,7 +38,7 @@ public:
 	void LoadGui();
 	void UnloadGui();
 	
-private:
+protected:
 	virtual void RunCommand();
 	
 	int _returnValue;

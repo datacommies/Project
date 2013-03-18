@@ -10,15 +10,6 @@ MobileUnit::MobileUnit(int uid, Point pos, int hp, int atkdmg, int atkrng,
     //validation
 }
 
-/*
-* Move the current point towards the target point based on Speed. 
-* this is what the creep move should be, not the mobile units
-*
-void MobileUnit::Move( Point pt ) {
-    //position.x += getDirection( position.x, pt.x ) * moveSpeed;
-    //position.y += getDirection( position.y, pt.y )  * moveSpeed;
-}*/
-
 string MobileUnit::serializeMobileUnit()
 {
     string s = Unit::serializeUnit();

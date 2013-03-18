@@ -10,11 +10,13 @@ using namespace std;
 Creep::Creep(int uid, Point pos, int hp, int atkdmg, int atkrng,
          int atkspd, int percep, int atkcnt, int spd, Direction direct,
          Point* path, int movespeed): MobileUnit(uid, pos, hp, atkdmg, atkrng, atkspd,
-         percep, atkcnt,spd, direct), pPath(path)
+         percep, atkcnt,spd, direct), pPath(path), pSaved(NULL)
 {
     //validation
+    //psaved is initialized to NULL so that the game doesn't crash!
 }
 
+#if 1
 /*
 * Function to return the difference in two points. Used for movement. 
 */
@@ -28,13 +30,12 @@ int Creep::getTargetDirection( int p1, int p2 ) {
 }
     
 
-#if 0
 /*
 * Check if we're at the next path point, if we are, update the path target.
 * If we can find an attackable target, attack or move towards them.
 * If not, move along the path. 
 */
-void Creep::Update( void ) {
+void Creep::Update( Team& team ) {
     /* Check if we are at the next path point.  */
     if( pPath->x == position.x && pPath->y == position.y ) {
         nextPoint();
@@ -46,7 +47,7 @@ void Creep::Update( void ) {
     
     /* Search for Target. */
     if( pTarget == NULL ) {
-        FindTarget();
+        FindTarget(&team);
     if( pTarget != NULL && pSaved == NULL )
         pSaved = &position;
     
@@ -67,6 +68,12 @@ void Creep::Update( void ) {
         Rotate( *pPath );
     }
 }
+
+void Creep::Move( Point pt ) {
+         position.x += getTargetDirection( position.x, pt.x ) * moveSpeed;
+         position.y += getTargetDirection( position.y, pt.y ) * moveSpeed;
+}
+
 #endif
 string Creep::serializeCreep()
 {
