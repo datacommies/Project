@@ -8,9 +8,19 @@
 
 using namespace std;
 
+// Button IDs
 #define ID_JOIN 100
 #define ID_QUIT 101
 #define ID_TEST 999
+#define BUILDTOWER_1 300
+#define BUILDTOWER_2 301
+#define BUILDTOWER_3 302
+#define BUILDCREEP_1 350
+#define BUILDCREEP_2 351
+#define BUILDCREEP_3 352
+#define SELECTLOPATH 400
+#define SELECTMIDPATH 401
+#define SELECTHIPATH 402
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 700
@@ -79,17 +89,44 @@ void * init (void * in) {
 							g->showJoinWindow();
 							break;
 						}
-						else if (button->id == ID_TEST)
-						{
+						else if (button->id == ID_TEST){
 							g->initGameControls();
 							g->clientGameLogic_.start();
 							break; // Must break out now, initGameControls invalidates the iterators.
 						}
 						// Quit button.
-						else if (button->id == ID_QUIT) {
+						else if (button->id == ID_QUIT){
 							window.close();
 							exit(0);
 						}
+						else if (button->id == BUILDTOWER_1) {
+
+						}
+						else if (button->id == BUILDTOWER_2) {
+
+						}
+						else if (button->id == BUILDTOWER_3) {
+
+						}
+						else if (button->id == BUILDCREEP_1) {
+
+						}
+						else if (button->id == BUILDCREEP_2) {
+
+						}
+						else if (button->id == BUILDCREEP_3) {
+
+						}
+						else if (button->id == SELECTLOPATH) {
+
+						}
+						else if (button->id == SELECTMIDPATH) {
+
+						}
+						else if (button->id == SELECTHIPATH) {
+
+						}
+
 						//AddNewCalledButton(button->id);
 					}
 				}
@@ -181,6 +218,13 @@ Graphics::Graphics(ClientGameLogic& clientGameLogic)
    	pthread_create(&t, NULL, init, (void*)this);
 }
 
+/* Constructor
+ *
+ * PRE:     
+ * POST:    Clears the SFML screen of all UI components and then adds the Main Menu Buttons.
+ * RETURNS:	
+ * NOTES:   This can be called at any time to draw the new buttons.
+ */
 void Graphics::initMainMenuControls()
 {
 	// Clear all the UI buttons previous
@@ -204,21 +248,23 @@ void Graphics::initMainMenuControls()
  * NOTES:   Clears and Initializes the set of UIElements for In-game controls */
 void Graphics::initGameControls () {
 	clientGameLogic_.UIElements.clear();
+
+	// Coordinates for columns of buttons
 	int button[] = { 20, 130, 240, 350, 460, 570, 680 };
 	
 	// First row of buttons
-	Button a(999,sf::Vector2f(button[0],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Tower1");
-	Button b(998,sf::Vector2f(button[1],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Tower2");
-	Button c(997,sf::Vector2f(button[2],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Tower3");
-	Button d(996,sf::Vector2f(button[3],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Creep1");
-	Button e(995,sf::Vector2f(button[4],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Creep2");
-	Button f(994,sf::Vector2f(button[5],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Creep3");
+	Button a(BUILDTOWER_1,sf::Vector2f(button[0],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Tower1");
+	Button b(BUILDTOWER_2,sf::Vector2f(button[1],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Tower2");
+	Button c(BUILDTOWER_3,sf::Vector2f(button[2],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Tower3");
+	Button d(BUILDCREEP_1,sf::Vector2f(button[3],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Creep1");
+	Button e(BUILDCREEP_2,sf::Vector2f(button[4],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Creep2");
+	Button f(BUILDCREEP_3,sf::Vector2f(button[5],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Creep3");
 	Button h(ID_QUIT,sf::Vector2f(button[6],ROW2), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT),  font, "Quit");
 	
 	// Second row of buttons.
-	Button i(993,sf::Vector2f(button[0],ROW2), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "HiPath");
-	Button j(992,sf::Vector2f(button[1],ROW2), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "MidPath");
-	Button k(991,sf::Vector2f(button[2],ROW2), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "LowPath");
+	Button i(SELECTHIPATH,sf::Vector2f(button[0],ROW2), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "HiPath");
+	Button j(SELECTMIDPATH,sf::Vector2f(button[1],ROW2), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "MidPath");
+	Button k(SELECTLOPATH,sf::Vector2f(button[2],ROW2), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "LowPath");
 	
 	a.rect.setFillColor(sf::Color(255, 0, 0));
 	
