@@ -25,7 +25,8 @@ enum UnitType
    PLAYER,
    CREEP,
    TOWER,
-   CASTLE
+   CASTLE,
+   PROJECTILE
 };
 
 
