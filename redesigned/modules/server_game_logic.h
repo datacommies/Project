@@ -179,9 +179,9 @@ class ServerGameLogic
       void printGrid() {
 
         int x, y;
-        for (x=0; x<max_x_; x++) {
-          for (y=0; y<max_y_; y++)
-            printf("%d ", grid_[x][y]);
+        for (x=0; x<=max_x_; x++) {
+          for (y=0; y<=max_y_; y++)
+            printf("%2d ", grid_[x][y]);
           printf("\n");
         }
       }

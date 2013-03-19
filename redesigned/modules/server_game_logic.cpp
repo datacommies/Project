@@ -97,12 +97,18 @@ void ServerGameLogic::initializeCastles()
   mapTeams_[0].build(teams[0]);
   mapTeams_[1].build(teams[1]);
 
+  printf("Castle 2 id %d\n", castle2.id);
+
   printf("Team 0\n");
   mapTeams_[0].printGrid();
   printf("Team 1\n");
   mapTeams_[1].printGrid();
 
-  exit(0);
+  //mapBoth_.merge(mapTeams_[0], mapTeams_[1]);
+
+  //printf("Both\n");
+  //mapBoth_.printGrid();
+
 #endif
 }
 
@@ -389,7 +395,14 @@ void ServerGameLogic::update()
 
   mapTeams_[0].build(teams[0]);
   mapTeams_[1].build(teams[1]);
-  mapBoth_.merge(mapTeams_[0], mapTeams_[1]);
+
+
+  printf("team 0\n");
+  mapTeams_[0].printGrid();
+  printf("team 1\n");
+  mapTeams_[1].printGrid();
+
+  //mapBoth_.merge(mapTeams_[0], mapTeams_[1]);
 
   //mapBoth_.printGrid();
 
