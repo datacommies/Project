@@ -397,10 +397,12 @@ void ServerGameLogic::update()
   mapTeams_[1].build(teams[1]);
 
 
+#ifdef DTESTCLASS
   printf("team 0\n");
   mapTeams_[0].printGrid();
   printf("team 1\n");
   mapTeams_[1].printGrid();
+#endif
 
   //mapBoth_.merge(mapTeams_[0], mapTeams_[1]);
 
