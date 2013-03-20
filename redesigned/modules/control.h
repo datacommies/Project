@@ -11,10 +11,11 @@ class Control
 {
 public:
    // Constructors
-   Control(ClientGameLogic& clientGameLogicModule);
+   Control(ClientGameLogic& clientGameLogicModule, Graphics& graphics);
 private:
    // Module references
    ClientGameLogic& clientGameLogicModule_;
+   Graphics& graphicsModule_;
 };
 
 #endif
