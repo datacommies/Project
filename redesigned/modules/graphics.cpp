@@ -44,135 +44,7 @@ inline string to_string(int num)
  * NOTES:   Graphics init and main loop  
 */
 void * init (void * in) {
-<<<<<<< HEAD
-	// Pointer to the Graphics instance is passed through the thread create argument.
-	Graphics* g = (Graphics *)in;
-	
-	g->loadImages();
 
-	// Create window for client and assign it as the window for the graphics object.
-	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Client");
-	g->window = &window;
-	
-	// We have to do this because we don't use SFML to draw.
-	window.resetGLStates();
-
-	// Create an sfgui object. Needs to be done before other SFGUI calls.
-	sfg::SFGUI sfgui;
-
-	// Go to the main menu first upon entering the game.
-	g->initMainMenuControls();
-
-	// Initialize the SFGUI window and make it display the join window by default
-	g->initDesktop();
-
-	// Main loop for the graphics thread.
-	while (window.isOpen()) {
-		sf::Event event;
-
-		// Check to see if there is an event on the stack. If so, enter the while loop (pollEvent call doesn't block).
-		while (window.pollEvent(event)) {
-			
-			// Handle SFGUI events.
-			g->sfgDesktop.HandleEvent(event);
-
-			// If a mouse button was pressed, find out where we clicked.
-			if (event.type == sf::Event::MouseButtonPressed){
-				sf::Vector2f mouse = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-				// Iterate through the buttons and check each button to see if we clicked within in.
-				for (std::set<Button>::iterator button = g->clientGameLogic_.UIElements.begin(); button != g->clientGameLogic_.UIElements.end(); ++button) {
-					// If we clicked within the button, check to see which button it was by ID.
-					if (button->rect.getGlobalBounds().contains(mouse)) {
-						// Join server button.
-						if (button->id == ID_JOIN){
-							g->clientGameLogic_.UIElements.clear();
-							g->initJoinWindow();
-							g->showJoinWindow();
-							break;
-						}
-						else if (button->id == ID_TEST){
-							//g->initGameControls();
-							g->clientGameLogic_.start();
-							break; // Must break out now, initGameControls invalidates the iterators.
-						}
-						// Quit button.
-						else if (button->id == ID_QUIT){
-							window.close();
-							exit(0);
-						}
-						else if (button->id == BUILDTOWER_1) {
-
-						}
-						else if (button->id == BUILDTOWER_2) {
-
-						}
-						else if (button->id == BUILDTOWER_3) {
-
-						}
-						else if (button->id == BUILDCREEP_1) {
-
-						}
-						else if (button->id == BUILDCREEP_2) {
-
-						}
-						else if (button->id == BUILDCREEP_3) {
-
-						}
-						else if (button->id == SELECTLOPATH) {
-
-						}
-						else if (button->id == SELECTMIDPATH) {
-
-						}
-						else if (button->id == SELECTHIPATH) {
-
-						}
-
-						//AddNewCalledButton(button->id);
-					}
-				}
-			}
-			// Close the application if requested.
-			else if (event.type == sf::Event::Closed){
-				window.close();
-				exit(0);
-			}
-		}
- 		
- 		// Update the sfgui test window
- 		g->sfgDesktop.Update( 0.f );
-		
-		window.clear();
-
-		// Check to see which state the game is in and act accordingly.
-		if (g->clientGameLogic_.getCurrentState() == MAIN_MENU) {
-			g->drawMainMenu(window);
-		} else if (g->clientGameLogic_.getCurrentState() == LOBBY) {
-			g->drawLobby(window);
-		} else if (g->clientGameLogic_.getCurrentState() == IN_GAME) {
-			g->drawMap(window);
-			g->drawUnits(window);
-			g->drawHud(window);
-			g->drawCurrency(window);
-			sf::Text state("In Game", g->font, 20);
-			window.draw(state);
-		}
-
-		// Iterate through the buttons and draw them one by one.
-		for (std::set<Button>::iterator button = g->clientGameLogic_.UIElements.begin(); button != g->clientGameLogic_.UIElements.end(); ++button)
-		{
-			Button b = *button;
-			b.draw(window);
-		}
-
-		// Display test windows.
-		sfgui.Display(window);
-
-		window.display();
-	}
-
-	return NULL;
-=======
     // Pointer to the Graphics instance is passed through the thread create argument.
     Graphics* g = (Graphics *)in;
     
@@ -300,7 +172,7 @@ void * init (void * in) {
     }
 
     return NULL;
->>>>>>> 8d22cae3fba3605b833f968240f5b4f26d74f800
+
 }
 
 // Pick default system font with font config.
@@ -377,43 +249,8 @@ void Graphics::initMainMenuControls()
  * RETURNS: 
  * NOTES:   Clears and Initializes the set of UIElements for In-game controls */
 void Graphics::initGameControls () {
-<<<<<<< HEAD
-	clientGameLogic_.UIElements.clear();
-    
-=======
     clientGameLogic_.UIElements.clear();
-
-    // Coordinates for columns of buttons
-    int button[] = { 20, 130, 240, 350, 460, 570, 680 };
     
-    // First row of buttons
-    Button a(BUILDTOWER_1,sf::Vector2f(button[0],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Tower1");
-    Button b(BUILDTOWER_2,sf::Vector2f(button[1],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Tower2");
-    Button c(BUILDTOWER_3,sf::Vector2f(button[2],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Tower3");
-    Button d(BUILDCREEP_1,sf::Vector2f(button[3],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Creep1");
-    Button e(BUILDCREEP_2,sf::Vector2f(button[4],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Creep2");
-    Button f(BUILDCREEP_3,sf::Vector2f(button[5],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Creep3");
-    Button h(ID_QUIT,sf::Vector2f(button[6],ROW2), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT),  font, "Quit");
-    
-    // Second row of buttons.
-    Button i(SELECTHIPATH,sf::Vector2f(button[0],ROW2), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "HiPath");
-    Button j(SELECTMIDPATH,sf::Vector2f(button[1],ROW2), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "MidPath");
-    Button k(SELECTLOPATH,sf::Vector2f(button[2],ROW2), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "LowPath");
-    
-    a.rect.setFillColor(sf::Color(255, 0, 0));
-    
-    clientGameLogic_.UIElements.insert(a);
-    clientGameLogic_.UIElements.insert(b);
-    clientGameLogic_.UIElements.insert(c);
-    clientGameLogic_.UIElements.insert(d);
-    clientGameLogic_.UIElements.insert(e);
-    clientGameLogic_.UIElements.insert(f);
-    clientGameLogic_.UIElements.insert(h);
-    
-    clientGameLogic_.UIElements.insert(i);
-    clientGameLogic_.UIElements.insert(j);
-    clientGameLogic_.UIElements.insert(k);
->>>>>>> 8d22cae3fba3605b833f968240f5b4f26d74f800
 }
 
 /* Initializes sfgDesktop. ALL SFGUI objects will sit ontop of this. We need this because it's the only way to do
