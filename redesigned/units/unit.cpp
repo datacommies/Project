@@ -1,3 +1,23 @@
+/*------------------------------------------------------------------------------
+-- FILE:        unit.cpp
+--
+-- DATE:        2013/03/11
+--
+-- MAINTAINERS: Chris Porter, Nick Raposo, Cody Rossiter
+--
+-- FUNCTIONS:   inRange
+--              hasWeakness
+--              hasStrength
+--              Attack
+--              FindTarget
+--              CheckTarget
+--              Update
+--              Rotate
+--              serializeUnit
+--
+-- DESCRIPTION: File contains implementation for the Unit class. Unit will be
+--              a base class that Tower and MobileUnit inherit from. 
+------------------------------------------------------------------------------*/
 #include "unit.h"
 #include <string>
 #include <vector>
