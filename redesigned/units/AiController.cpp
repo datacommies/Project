@@ -4,8 +4,8 @@
 
 AI Controller
 
-can you please put a quick explaination of how this works?
-why loop through team 1's creeps and then call Update one team 2?
+Loops through each teams units and passes the enemy team into the update function for
+targeting enemy units.
 
 */
 
