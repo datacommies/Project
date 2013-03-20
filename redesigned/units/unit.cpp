@@ -15,16 +15,33 @@ Unit::Unit(int uid, Point pos, int hp, int atkdmg,
     printf("Inside unit constructor, x:%d y:%d\n", position.x, position.y);
 }
 
-/*
-* Using the a^2 + b^2 = c^2 formula to calculate if the target is within a circle.
-*/
+/*------------------------------------------------------------------------------
+-- FUNCTION:    inRange
+--
+-- DATE:        2013/03/11
+--
+-- DESIGNER:    Chris Porter, Nick Raposo
+-- PROGRAMMER:  Chris Porter, Nick Raposo, Cody Rossiter
+--
+-- INTERFACE:   bool inRange(Point p1, Point p2, int distance)
+--
+-- RETURNS:     boolean: If the target is out of range 
+--                       (target distance > distance) return false, otherwise, 
+--                       return true
+--
+-- DESCRIPTION: Function uses the Pythagorean Theorem to calculate the
+--              the targets distance. 
+------------------------------------------------------------------------------*/
 bool Unit::inRange(Point p1, Point p2, int distance) {
-     if( sqrt( (double) /* Square Rooting the entire thing. */
-                pow( (double)abs( p1.x - p2.x ), 2 )    /* a^2; the adj si\de. */
-                + pow( (double)abs( p1.y - p2.y ), 2 ) /* add b^2; the opp side.*/
-            ) > distance ) /* And checking if it's larger than the distance.*/
-            return false;
-     return true;
+    double a = pow(abs(p1.x - p2.x), 2);
+    double b = pow(abs(p1.y - p2.y), 2);
+    
+    if (sqrt(a + b) > distance)
+    {
+        return false;
+    }
+    
+    return true;
 }
 
 /*
