@@ -179,9 +179,9 @@ class ServerGameLogic
       void printGrid() {
 
         int x, y;
-        for (x=0; x<max_x_; x++) {
-          for (y=0; y<max_y_; y++)
-            printf("%d ", grid_[x][y]);
+        for (y=0; y<=max_y_; y++) {
+          for (x=0; x<=max_x_; x++)
+            printf("%2d ", grid_[x][y]);
           printf("\n");
         }
       }
@@ -196,6 +196,10 @@ class ServerGameLogic
 
       bool isValidPos(Point pos)
       {
+
+        //fprintf(stderr, "isValidPos(): max x: %d, max y: %d\n", max_x_, max_y_);
+
+
         return (pos.x >= 0 && pos.x <= max_x_) && (pos.y >= 0 && pos.y <= max_y_);
       }
 
@@ -269,7 +273,7 @@ class ServerGameLogic
     void initializeTowers();
 
     static void setAlarm();
-    static void updateClients(int i);
+    static void updateTimer(int i);
 
     // teams, players, creeps, etc..
     std::vector<Unit>::iterator findUnit(std::vector<Unit>::iterator first, std::vector<Unit>::iterator end, int playerID);

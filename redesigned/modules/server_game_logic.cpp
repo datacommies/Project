@@ -56,6 +56,8 @@ ServerGameLogic * gSGL;
   teams[1].creeps.push_back(c);
   initializeCastles();
   //initializeTeams();
+
+  startGame();
 #endif
 }
 
@@ -77,6 +79,9 @@ void ServerGameLogic::initializeCastles()
       INIT_CASTLE_PERCEP, INIT_CASTLE_ATKCNT, INIT_CASTLE_WALL, 0);
   teams[0].towers.push_back(castle1);
 
+  Point p = castle1.getPos();
+  printf("Castle 1 position..x: %d y: %d\n", p.x, p.y);
+  
   // Team 1
   uid = next_unit_id_++;
   pos.x = MAX_X; // TODO: MAX_X and MAX_Y will  be replaced later when we get map reading functionality working
@@ -87,17 +92,25 @@ void ServerGameLogic::initializeCastles()
 
 #ifdef TESTCLASS
 
-  printf("Castle 2 position..x: %d y: %d\n", castle2.getPos().x, castle2.getPos().y);
+  p = castle2.getPos();
+
+  printf("Castle 2 position..x: %d y: %d\n", p.x, p.y);
 
   mapTeams_[0].build(teams[0]);
   mapTeams_[1].build(teams[1]);
+
+  printf("Castle 2 id %d\n", castle2.id);
 
   printf("Team 0\n");
   mapTeams_[0].printGrid();
   printf("Team 1\n");
   mapTeams_[1].printGrid();
 
-  exit(0);
+  //mapBoth_.merge(mapTeams_[0], mapTeams_[1]);
+
+  //printf("Both\n");
+  //mapBoth_.printGrid();
+
 #endif
 }
 
@@ -111,12 +124,12 @@ void ServerGameLogic::initializeCreeps()
       Point pos = Point();
       
       if (team_i == 0) {
-        pos.x = 5 + j;
-        pos.y = 5 + j;
+        pos.x = 1 + INIT_NUM_TOWERS + j;
+        pos.y = 1;
       }
       else {
-        pos.x = MAX_X -5 - j;
-        pos.y = MAX_Y -5 - j;
+        pos.x = MAX_X - INIT_NUM_TOWERS - j - 1;
+        pos.y = MAX_Y - 1;
       }
 
       int hp = INIT_CREEP_HP;
@@ -144,12 +157,12 @@ void ServerGameLogic::initializeTowers()
       Point pos = Point();
 
       if (team_i == 0) {
-        pos.x = 15 + j;
-        pos.y = 15 + j;
+        pos.x = 1 + j;
+        pos.y = 2;
       }
       else {
-        pos.x = MAX_X -15 - j;
-        pos.y = MAX_Y -15 - j;
+        pos.x = MAX_X -j;
+        pos.y = MAX_Y - 2;
       }
 
       int hp = INIT_TOWER_HP;
@@ -170,6 +183,13 @@ void ServerGameLogic::initializeTeams()
   initializeCastles();
   initializeCreeps();
   initializeTowers();
+
+#ifdef TESTCLASS
+  mapTeams_[0].build(teams[0]);
+  mapTeams_[1].build(teams[1]);
+  mapBoth_.merge(mapTeams_[0], mapTeams_[1]);
+  mapBoth_.printGrid();
+#endif
 }
 
 /* Starts the game.
@@ -182,9 +202,9 @@ void ServerGameLogic::startGame()
 {
   gSGL = this;
   setAlarm();
-#ifdef TESTCLASS
+//#ifdef TESTCLASS
   initializeTeams();
-#endif
+//#endif
 }
 
 /* Receive and queue a create unit command from a client.
@@ -299,6 +319,7 @@ void ServerGameLogic::updateCreate(CommandData& command)
   }
 
   if (mapTeams_[0].isValidPos(command.location)) {
+    fprintf(stderr, "max x: %d max y: %d\n", MAX_X, MAX_Y);
     fprintf(stderr, "x: %d, y: %d out of range: %s line %d\n", x, y, __FILE__, __LINE__);
     return; 
   }
@@ -384,7 +405,16 @@ void ServerGameLogic::update()
 
   mapTeams_[0].build(teams[0]);
   mapTeams_[1].build(teams[1]);
-  mapBoth_.merge(mapTeams_[0], mapTeams_[1]);
+
+
+#ifdef DTESTCLASS
+  printf("team 0\n");
+  mapTeams_[0].printGrid();
+  printf("team 1\n");
+  mapTeams_[1].printGrid();
+#endif
+
+  //mapBoth_.merge(mapTeams_[0], mapTeams_[1]);
 
   //mapBoth_.printGrid();
 
@@ -405,7 +435,7 @@ void ServerGameLogic::update()
         updateCreate(newCommand);
         break;
       case Attack:
-        //updateAttack(newCommand);
+        updateAttack(newCommand);
         break;
       case MovePlayer:
         updateMovePlayer(newCommand);
@@ -417,9 +447,9 @@ void ServerGameLogic::update()
   }
 }
 
-void ServerGameLogic::updateClients(int i)
+void ServerGameLogic::updateTimer(int i)
 {
-  signal(SIGALRM, updateClients);
+  signal(SIGALRM, updateTimer);
 
   //std::cout << "Update" <<std::endl;
 
@@ -448,7 +478,7 @@ void ServerGameLogic::setAlarm()
   if (result != 0)
     fprintf(stderr, "Error calling setitimer error %d in %s line %d\n", errno, __FILE__, __LINE__);
 
-  signal(SIGALRM, updateClients); /* set the Alarm signal capture */
+  signal(SIGALRM, updateTimer); /* set the Alarm signal capture */
 
 }
 
