@@ -41,6 +41,20 @@
 #define PLAYER_ID    30
 #define BUILDER_ID   40
 #define EXIT_MENU_ID 50
+#define BUILDTOWER_1 300
+#define BUILDTOWER_2 301
+#define BUILDTOWER_3 302
+#define BUILDCREEP_1 350
+#define BUILDCREEP_2 351
+#define BUILDCREEP_3 352
+#define SELECTLOPATH 400
+#define SELECTMIDPATH 401
+#define SELECTHIPATH 402
+#define ID_QUIT 101
+#define BUTTON_WIDTH  100
+#define BUTTON_HEIGHT 25
+#define ROW1 620
+#define ROW2 665
 
 #define TERMINATE    10000
 

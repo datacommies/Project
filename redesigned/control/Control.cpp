@@ -210,20 +210,50 @@ ControlState MakePlayerState()
 ControlState MakeBuilderState()
 {   
     sf::Font font;
+    int button[] = { 20, 130, 240, 350, 460, 570, 680 };
     
 	ControlState builderState(true, 40);
-    
-    Button buildTowerButton(41, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Build Tower");	
-	BuildController buildTower(0, sf::Keyboard::B, buildTowerButton, CallBuildTowerEvent);
-	builderState.AddController(buildTower);
 	
-	Button buildCreepButton(42, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Build Creep");
-	Controller buildCreep(0, sf::Keyboard::C, buildCreepButton, CallBuildCreepEvent);
-	builderState.AddController(buildCreep);
+	//Creating builder buttons
+    Button buildTowerButton1(BUILDTOWER_1,sf::Vector2f(button[0],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Tower1");
+	Button buildTowerButton2(BUILDTOWER_2,sf::Vector2f(button[1],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Tower2");
+	Button buildTowerButton3(BUILDTOWER_3,sf::Vector2f(button[2],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Tower3");
 	
-	Button exitGameButton(43, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Exit Game");
+	//building buttons		
+	BuildController buildTower1(0, sf::Keyboard::B, buildTowerButton1, CallBuildTowerEvent);
+	BuildController buildTower2(0, sf::Keyboard::B, buildTowerButton2, CallBuildTowerEvent);
+	BuildController buildTower3(0, sf::Keyboard::B, buildTowerButton3, CallBuildTowerEvent);
+	
+	//Adding building tower buttons to controller
+	builderState.AddController(buildTower1);
+	builderState.AddController(buildTower2);
+	builderState.AddController(buildTower3);
+	
+	
+	//Creating creep buttons
+	Button buildCreepButton1(BUILDCREEP_1,sf::Vector2f(button[3],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Creep1");
+	Button buildCreepButton2(BUILDCREEP_2,sf::Vector2f(button[4],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Creep2");
+	Button buildCreepButton3(BUILDCREEP_3,sf::Vector2f(button[5],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Creep3");
+	
+	//creep buttons
+	Controller buildCreep1(0, sf::Keyboard::C, buildCreepButton1, CallBuildCreepEvent);
+	Controller buildCreep2(0, sf::Keyboard::C, buildCreepButton2, CallBuildCreepEvent);
+	Controller buildCreep3(0, sf::Keyboard::C, buildCreepButton3, CallBuildCreepEvent);
+	
+	//Adding creep buttons to controller
+	builderState.AddController(buildCreep1);
+	builderState.AddController(buildCreep2);
+	builderState.AddController(buildCreep3);
+	
+	//Exit game buttons
+	Button exitGameButton(ID_QUIT,sf::Vector2f(button[6],ROW2), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT),  font, "Quit");
 	Controller exitGame(EXIT_MENU_ID, (sf::Keyboard::Key) 0, exitGameButton, NULL);
 	builderState.AddController(exitGame);
+	
+	//Path Buttons
+	Button hiPathButton(SELECTHIPATH,sf::Vector2f(button[0],ROW2), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "HiPath");
+	Button midPathButton(SELECTMIDPATH,sf::Vector2f(button[1],ROW2), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "MidPath");
+	Button loPathButton(SELECTLOPATH,sf::Vector2f(button[2],ROW2), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "LowPath");
 	
 	return builderState;
 }

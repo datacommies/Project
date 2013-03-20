@@ -90,7 +90,7 @@ void * init (void * in) {
 							break;
 						}
 						else if (button->id == ID_TEST){
-							g->initGameControls();
+							//g->initGameControls();
 							g->clientGameLogic_.start();
 							break; // Must break out now, initGameControls invalidates the iterators.
 						}
@@ -248,37 +248,7 @@ void Graphics::initMainMenuControls()
  * NOTES:   Clears and Initializes the set of UIElements for In-game controls */
 void Graphics::initGameControls () {
 	clientGameLogic_.UIElements.clear();
-
-	// Coordinates for columns of buttons
-	int button[] = { 20, 130, 240, 350, 460, 570, 680 };
-	
-	// First row of buttons
-	Button a(BUILDTOWER_1,sf::Vector2f(button[0],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Tower1");
-	Button b(BUILDTOWER_2,sf::Vector2f(button[1],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Tower2");
-	Button c(BUILDTOWER_3,sf::Vector2f(button[2],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Tower3");
-	Button d(BUILDCREEP_1,sf::Vector2f(button[3],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Creep1");
-	Button e(BUILDCREEP_2,sf::Vector2f(button[4],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Creep2");
-	Button f(BUILDCREEP_3,sf::Vector2f(button[5],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Creep3");
-	Button h(ID_QUIT,sf::Vector2f(button[6],ROW2), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT),  font, "Quit");
-	
-	// Second row of buttons.
-	Button i(SELECTHIPATH,sf::Vector2f(button[0],ROW2), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "HiPath");
-	Button j(SELECTMIDPATH,sf::Vector2f(button[1],ROW2), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "MidPath");
-	Button k(SELECTLOPATH,sf::Vector2f(button[2],ROW2), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "LowPath");
-	
-	a.rect.setFillColor(sf::Color(255, 0, 0));
-	
-	clientGameLogic_.UIElements.insert(a);
-	clientGameLogic_.UIElements.insert(b);
-	clientGameLogic_.UIElements.insert(c);
-	clientGameLogic_.UIElements.insert(d);
-	clientGameLogic_.UIElements.insert(e);
-	clientGameLogic_.UIElements.insert(f);
-	clientGameLogic_.UIElements.insert(h);
-	
-	clientGameLogic_.UIElements.insert(i);
-	clientGameLogic_.UIElements.insert(j);
-	clientGameLogic_.UIElements.insert(k);
+    
 }
 
 void Graphics::initDesktop(){
