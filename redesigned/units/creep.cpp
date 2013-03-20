@@ -16,14 +16,13 @@ Creep::Creep(int uid, Point pos, int hp, int atkdmg, int atkrng,
     //psaved is initialized to NULL so that the game doesn't crash!
 }
 
-#if 1
 /*
 * Function to return the difference in two points. Used for movement. 
 */
-int Creep::getTargetDirection( int p1, int p2 ) {
-    if( p1 < p2 ) /*Target is below or right. */
+int Creep::getTargetDirection(int p1, int p2) {
+    if(p1 < p2) /*Target is below or right. */
         return 1;
-    else if ( p1 > p2 )  /* Target is above or left. */
+    else if (p1 > p2)  /* Target is above or left. */
         return -1;
     else /* Target on the same level. */
         return 0;
@@ -35,50 +34,50 @@ int Creep::getTargetDirection( int p1, int p2 ) {
 * If we can find an attackable target, attack or move towards them.
 * If not, move along the path. 
 */
-void Creep::Update( Team& team ) {
+void Creep::Update(Team& team) {
     /* Check if we are at the next path point.  */
-    if( pPath->x == position.x && pPath->y == position.y ) {
+    if(pPath->x == position.x && pPath->y == position.y) {
         nextPoint();
     }
     
     /*If we have a Target check their stats. */
-    if( pTarget != NULL ) 
+    if(pTarget != NULL) 
         CheckTarget();
     
     /* Search for Target. */
-    if( pTarget == NULL ) {
+    if(pTarget == NULL) {
         FindTarget(&team);
-    if( pTarget != NULL && pSaved == NULL )
+    if(pTarget != NULL && pSaved == NULL)
         pSaved = &position;
     
     }
     
     /* If we found a new Target. */
-    if( pTarget != NULL ) {
-        if( inRange( position, pTarget->position, attackRange ) )
+    if(pTarget != NULL){
+        if(inRange(position, pTarget->position, attackRange))
             Attack();
         else 
-            Move( pTarget->getPos() );
-        Rotate( pTarget->getPos() );
-    } else { /*No target. Move along path. */
-        if( pSaved == 0 )
-            Move( *pPath );
+            Move(pTarget->getPos());
+        Rotate(pTarget->getPos());
+    }
+    else
+    { /*No target. Move along path. */
+        if(pSaved == 0)
+            Move(*pPath);
         else
-            Move( *pSaved );
+            Move(*pSaved);
         Rotate( *pPath );
     }
 }
 
 void Creep::Move( Point pt ) {
-         position.x += getTargetDirection( position.x, pt.x ) * moveSpeed;
-         position.y += getTargetDirection( position.y, pt.y ) * moveSpeed;
+    position.x += getTargetDirection(position.x, pt.x) * moveSpeed;
+    position.y += getTargetDirection(position.y, pt.y) * moveSpeed;
 }
 
-#endif
 string Creep::serializeCreep()
 {
     string s = MobileUnit::serializeMobileUnit();
-    
     return s;
 }
 
