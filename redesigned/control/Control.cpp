@@ -17,15 +17,16 @@
 --
 -- NOTES: This is the main Control function that powers the Control Module
 ----------------------------------------------------------------------------------------------------------------------*/
-int ControlRun()
+void ControlRun(void* vp)
 {
 	ControlManager manager;
 	
 	AddStates(manager);
 	
-	while(manager.CheckState() != 0);
+	while(manager.CheckState() != 0)
+	    sleep(1);
 	
-	return 0;
+	//return 0;
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
