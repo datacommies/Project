@@ -378,6 +378,7 @@ void CallBuildCreepEvent(void* value)
 ----------------------------------------------------------------------------------------------------------------------*/
 void AddNewCalledButton(int id)
 {
+	std::cout << "Added new button call back" << std::endl;
 	pressedButtonIds.push_back(id);
 }
 

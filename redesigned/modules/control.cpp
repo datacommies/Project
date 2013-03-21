@@ -22,7 +22,7 @@ Control::Control(ClientGameLogic& clientGameLogicModule, Graphics& graphics)
 	//sf::Thread Thread(&ControlRun);
 	//Thread.launch();
 	
-	//result = pthread_create(&thread, NULL, ControlRun, NULL);
+	result = pthread_create(&thread, NULL, ControlRun, NULL);
 	//if(result)
 	//{
 	    

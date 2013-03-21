@@ -43,7 +43,7 @@ ControlManager::ControlManager()
 void ControlManager::AddNewState(ControlState state)
 {
 	StateCollection.push_back(state);
-	if(StateCollection.size() > 1)
+	if(StateCollection.size() > 0)
 	{
 		activeState = &(StateCollection[0]);
 	}

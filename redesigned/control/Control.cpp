@@ -26,8 +26,6 @@ void* ControlRun(void* vp)
 	while(manager.CheckState() != 0)
 	    sleep(1);
 
-	std::cout << "Hello World" << std::endl;
-	
 	//return 0;
 }
 
@@ -81,7 +79,7 @@ ControlState MakeMenuState()
 	ControlState menuState(true, 10);
 	sf::Font font;
 	
-	Button startButton(11, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Start Lobby");	
+	Button startButton(11, sf::Vector2f(200,200), sf::Vector2f(200,40), font, "Start Lobby");
 	Controller startLobby(MENU_ID, (sf::Keyboard::Key)0, startButton, CallEnterLobbyEvent);
 	menuState.AddController(startLobby);
 	
