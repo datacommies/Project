@@ -24,13 +24,13 @@ ControlState::ControlState(bool override, int identifier)
 {
 
 }
-
+/*
 ControlState::ControlState(const ControlState& cs)
 : _Override(cs._Override) ,_Identifier(cs._Identifier), Controllers(cs.Controllers)
 {
 
 }
-	
+*/	
 /*-------------------------------------------------------------------------------------------------------------------- 
 -- FUNCTION: LoadGUIs
 --
