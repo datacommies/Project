@@ -19,7 +19,8 @@ using namespace std;
 -- NOTES: Initializes the ControlManager class. The members does most of the functionality.
 ----------------------------------------------------------------------------------------------------------------------*/
 ControlManager::ControlManager() 
-:lastState(0), StateCollection()
+:lastState(0)
+,StateCollection()
 {
 }
 
@@ -46,6 +47,8 @@ void ControlManager::AddNewState(ControlState state)
 	if(StateCollection.size() > 0)
 	{
 		activeState = &(StateCollection[0]);
+		activeState->UnloadGUIs();
+		activeState->LoadGUIs();
 	}
 }
 

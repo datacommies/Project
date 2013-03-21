@@ -26,7 +26,7 @@ void* ControlRun(void* vp)
 	while(manager.CheckState() != 0)
 	    sleep(1);
 
-	//return 0;
+	return NULL;
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
@@ -83,8 +83,6 @@ ControlState MakeMenuState()
 	Controller startLobby(MENU_ID, (sf::Keyboard::Key)0, startButton, CallEnterLobbyEvent);
 	menuState.AddController(startLobby);
 	
-	startLobby.LoadGui();
-
 	Button exitButton(12, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Exit Game");	
 	Controller exitGame(TERMINATE, (sf::Keyboard::Key)0, exitButton, CallExitGameEvent);
 	menuState.AddController(exitGame);
