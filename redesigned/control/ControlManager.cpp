@@ -19,7 +19,7 @@ using namespace std;
 -- NOTES: Initializes the ControlManager class. The members does most of the functionality.
 ----------------------------------------------------------------------------------------------------------------------*/
 ControlManager::ControlManager() 
-:lastState(0)
+:lastState(0), StateCollection()
 {
 }
 
@@ -43,9 +43,9 @@ ControlManager::ControlManager()
 void ControlManager::AddNewState(ControlState state)
 {
 	StateCollection.push_back(state);
-	if(StateCollection.size() == 1)
+	if(StateCollection.size() > 1)
 	{
-		activeState = &StateCollection[0];
+		activeState = &(StateCollection[0]);
 	}
 }
 

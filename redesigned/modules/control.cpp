@@ -15,10 +15,10 @@ Control::Control(ClientGameLogic& clientGameLogicModule, Graphics& graphics)
 	//loadControlEvents(&clientGameLogicModule);
 	//ControlRun();
 	//XInitThreads();
-	//pthread_t thread;
-	//int result;
+	pthread_t thread;
+	int result;
 	
-	//loadControlEvents(&clientGameLogicModule, &graphicsModule_);
+	loadControlEvents(&clientGameLogicModule, &graphicsModule_);
 	//sf::Thread Thread(&ControlRun);
 	//Thread.launch();
 	

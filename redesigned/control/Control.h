@@ -63,7 +63,7 @@
 
 class ControlManager;
 
-void ControlRun(void* vp);
+void * ControlRun(void* vp);
 
 void AddStates(ControlManager &manager);
 ControlState MakeMenuState();

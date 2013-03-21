@@ -17,7 +17,7 @@
 --
 -- NOTES: This is the main Control function that powers the Control Module
 ----------------------------------------------------------------------------------------------------------------------*/
-void ControlRun(void* vp)
+void* ControlRun(void* vp)
 {
 	ControlManager manager;
 	
@@ -25,6 +25,8 @@ void ControlRun(void* vp)
 	
 	while(manager.CheckState() != 0)
 	    sleep(1);
+
+	std::cout << "Hello World" << std::endl;
 	
 	//return 0;
 }
@@ -83,6 +85,8 @@ ControlState MakeMenuState()
 	Controller startLobby(MENU_ID, (sf::Keyboard::Key)0, startButton, CallEnterLobbyEvent);
 	menuState.AddController(startLobby);
 	
+	startLobby.LoadGui();
+
 	Button exitButton(12, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Exit Game");	
 	Controller exitGame(TERMINATE, (sf::Keyboard::Key)0, exitButton, CallExitGameEvent);
 	menuState.AddController(exitGame);
