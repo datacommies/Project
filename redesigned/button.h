@@ -30,9 +30,11 @@ struct Button {
   }
 
   void init (sf::Font& f) {
+    if (!inited) {
       label.setString(text);
       label.setFont(f);
       inited = true;
+    }
   }
 
   void draw (sf::RenderWindow& win) {

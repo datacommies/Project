@@ -37,9 +37,9 @@ class ControlManager
         void SetNewActiveState(ControlState * state);
         
     private:
-        std::vector<ControlState> StateCollection;
-        ControlState * activeState;
         int lastState;
+        ControlState * activeState;
+        std::vector<ControlState> StateCollection;
 };
 
 #endif
