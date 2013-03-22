@@ -17,7 +17,7 @@
 --
 -- NOTES: This is the main Control function that powers the Control Module
 ----------------------------------------------------------------------------------------------------------------------*/
-void ControlRun(void* vp)
+void* ControlRun(void* vp)
 {
 	ControlManager manager;
 	
@@ -25,8 +25,8 @@ void ControlRun(void* vp)
 	
 	while(manager.CheckState() != 0)
 	    sleep(1);
-	
-	//return 0;
+
+	return NULL;
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
@@ -79,7 +79,7 @@ ControlState MakeMenuState()
 	ControlState menuState(true, 10);
 	sf::Font font;
 	
-	Button startButton(11, sf::Vector2f(20,20), sf::Vector2f(40,40), font, "Start Lobby");	
+	Button startButton(11, sf::Vector2f(200,200), sf::Vector2f(200,40), font, "Start Lobby");
 	Controller startLobby(MENU_ID, (sf::Keyboard::Key)0, startButton, CallEnterLobbyEvent);
 	menuState.AddController(startLobby);
 	

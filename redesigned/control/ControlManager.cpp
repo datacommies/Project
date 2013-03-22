@@ -20,6 +20,7 @@ using namespace std;
 ----------------------------------------------------------------------------------------------------------------------*/
 ControlManager::ControlManager() 
 :lastState(0)
+,StateCollection()
 {
 }
 
@@ -43,9 +44,11 @@ ControlManager::ControlManager()
 void ControlManager::AddNewState(ControlState state)
 {
 	StateCollection.push_back(state);
-	if(StateCollection.size() == 1)
+	if(StateCollection.size() > 0)
 	{
-		activeState = &StateCollection[0];
+		activeState = &(StateCollection[0]);
+		activeState->UnloadGUIs();
+		activeState->LoadGUIs();
 	}
 }
 

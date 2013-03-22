@@ -18,11 +18,10 @@
 
 using namespace std;
 
-MultiShotTower::MultiShotTower(	int uid, Point pos, int hp, int atkdmg, int atkrng,
-int atkspd, int percep, int atkcnt, int wall,
-Team * t, int mulsdmg, int mulsrng):
+MultiShotTower::MultiShotTower(int uid, Point pos, int hp, int atkdmg, int atkrng,
+int atkspd, int percep, int atkcnt, int wall, Team * t):
 Tower(uid, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, wall)
-,team(t), multiShotDamage(mulsdmg), multiShotRange(mulsrng)
+,team(t)
 {
     //validation
 }
@@ -42,47 +41,29 @@ Tower(uid, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, wall)
 --  
 -- 
 ------------------------------------------------------------------------------*/
-void MultiShotTower::Attack(void)
+void MultiShotTower::Attack(Team* team)
 {
+    Unit* tempTarget;
     /* check if we can attack */
-    if( attackCount++ < attackSpeed )
+    if(attackCount++ < attackSpeed)
         return;
 
     /* reset attackCount and damage pTargetd */
     attackCount = 0;
     pTarget->health -= attackDamage;
-    
-    
-     /* check for nearby creeps & damage them */
-     for (size_t i = 0; i < team->creeps.size(); ++i)
-     {
-             // repeat three times 
-             for(int j = 1; j < 3; j++)
-             {
-                  /* if creep is in range AND is alive AND is not our target (to prevent hitting one target twice) */
-                  if( inRange( pTarget->getPos(), team->creeps[i].getPos(), multiShotRange )
-                  && team->creeps[i].health > 0 && pTarget->id != team->creeps[i].id )
-                  {
-                      team->creeps[i].health -= multiShotDamage;
-                  }
-	    }
-     }
 
-     /* check for nearby players & damage them */
-     for (size_t i = 0; i < team->players.size(); ++i)
-     {
-         // repeat three times 
-         for(int j = 1; j < 3; j++)
-         {
-               /* if player is in range AND is alive AND is not our target (to prevent hitting one target twice) */
-               if( inRange( pTarget->getPos(), team->players[i].getPos(), multiShotRange )
-               && team->players[i].health > 0
-               && pTarget->id != team->players[i].id )
-               {
-                    team->players[i].health -= multiShotDamage;
-               }
-         }
-     }
-    
-    
+    // repeat three times 
+    for(int j = 1; j < 3; j++)
+    {
+        /* check for nearby creeps & damage them */
+        for (size_t i = 0; i < team->creeps.size(); ++i)
+        {
+            /* if creep is in range AND is alive AND is not our target (to prevent hitting one target twice) */
+            if( inRange( pTarget->getPos(), team->creeps[i].getPos(), attackRange )
+                && team->creeps[i].health > 0 && pTarget->id != team->creeps[i].id )
+            {
+                team->creeps[i].health -= attackDamage;
+            }
+        }
+    }     
 }

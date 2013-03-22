@@ -20,11 +20,17 @@ using namespace std;
 ----------------------------------------------------------------------------------------------------------------------*/
 ControlState::ControlState(bool override, int identifier)
 :_Override(override)
-,_Identifier(identifier)
+,_Identifier(identifier), Controllers()
 {
-	
+
 }
-	
+/*
+ControlState::ControlState(const ControlState& cs)
+: _Override(cs._Override) ,_Identifier(cs._Identifier), Controllers(cs.Controllers)
+{
+
+}
+*/	
 /*-------------------------------------------------------------------------------------------------------------------- 
 -- FUNCTION: LoadGUIs
 --

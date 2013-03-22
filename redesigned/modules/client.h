@@ -20,7 +20,7 @@ private:
    ClientNetwork clientNetwork_;
    ClientGameLogic clientGameLogic_;
    Graphics graphics_;
-   Control control_;
+   Control* control_;
 };
 
 #endif

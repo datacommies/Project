@@ -1,3 +1,4 @@
+#include "control.h"
 #include "graphics.h"
 #include <fontconfig/fontconfig.h>
 #include <iostream>
@@ -83,6 +84,7 @@ void * init (void * in) {
                 for (std::set<Button>::iterator button = g->clientGameLogic_.UIElements.begin(); button != g->clientGameLogic_.UIElements.end(); ++button) {
                     // If we clicked within the button, check to see which button it was by ID.
                     if (button->rect.getGlobalBounds().contains(mouse)) {
+                        Control::get()->AddNewCalledButton(button->id);
                         // Join server button.
                         if (button->id == ID_JOIN){
                             g->clientGameLogic_.UIElements.clear();
@@ -162,6 +164,7 @@ void * init (void * in) {
         for (std::set<Button>::iterator button = g->clientGameLogic_.UIElements.begin(); button != g->clientGameLogic_.UIElements.end(); ++button)
         {
                 Button b = *button;
+                b.init(g->font);
                 b.draw(window);
         }
 
@@ -230,16 +233,16 @@ Graphics::Graphics(ClientGameLogic& clientGameLogic)
 void Graphics::initMainMenuControls()
 {
     // Clear all the UI buttons previous
-    clientGameLogic_.UIElements.clear();
+    //clientGameLogic_.UIElements.clear();
 
     // Create buttons for the menu screen and add them to the list of UI elements.
     Button a(ID_TEST, sf::Vector2f(250,300), sf::Vector2f(300,50), font, "                Test Game");
     Button b(ID_JOIN, 	   sf::Vector2f(250,400), sf::Vector2f(300,50), font, "               Join Game");
     Button c(ID_QUIT,  sf::Vector2f(250,500), sf::Vector2f(300,50), font, "                     Quit");
 
-    clientGameLogic_.UIElements.insert(a);
-    clientGameLogic_.UIElements.insert(b);
-    clientGameLogic_.UIElements.insert(c);
+    //clientGameLogic_.UIElements.insert(a);
+    //clientGameLogic_.UIElements.insert(b);
+    //clientGameLogic_.UIElements.insert(c);
 }
 
 /* Init Game controls
@@ -389,16 +392,16 @@ void Graphics::initLobbyWindow(){
     playerTwoFourButton = sfg::Button::Create("Player 4");
     playerTwoFiveButton = sfg::Button::Create("Player 5");
 
-    playerOneOneButton->GetSignal(sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 11);
-    playerOneTwoButton->GetSignal(sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 12);
+    playerOneOneButton->GetSignal  (sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 11);
+    playerOneTwoButton->GetSignal  (sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 12);
     playerOneThreeButton->GetSignal(sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 13);
-    playerOneFourButton->GetSignal(sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 14);
-    playerOneFiveButton->GetSignal(sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 15);
-    playerTwoOneButton->GetSignal(sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 21);
-    playerTwoTwoButton->GetSignal(sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 22);
+    playerOneFourButton->GetSignal (sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 14);
+    playerOneFiveButton->GetSignal (sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 15);
+    playerTwoOneButton->GetSignal  (sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 21);
+    playerTwoTwoButton->GetSignal  (sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 22);
     playerTwoThreeButton->GetSignal(sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 23);
-    playerTwoFourButton->GetSignal(sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 24);
-    playerTwoFiveButton->GetSignal(sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 25);
+    playerTwoFourButton->GetSignal (sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 24);
+    playerTwoFiveButton->GetSignal (sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 25);
 
     // Create the start game / exit buttons.
     startGameButton = sfg::Button::Create("Start Game");
