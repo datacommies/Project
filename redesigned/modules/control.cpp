@@ -10,7 +10,7 @@ Control* Control::_Control = NULL;
 /*-------------------------------------------------------------------------------------------------------------------- 
 -- FUNCTION: get
 --
--- DATE: 2013/03/11
+-- DATE: 2013/03/21
 --
 -- REVISIONS: (Date and Description)
 --
@@ -29,7 +29,7 @@ Control::get()
 {
 	if(_Control == NULL)
 	{
-		_Control = new _Control();
+		_Control = new Control();
 	}
 	
 	return _Control;
@@ -38,7 +38,7 @@ Control::get()
 /*-------------------------------------------------------------------------------------------------------------------- 
 -- FUNCTION: Control
 --
--- DATE: 2013/03/11
+-- DATE: 2013/03/21
 --
 -- REVISIONS: (Date and Description)
 --
@@ -54,7 +54,9 @@ Control::get()
 ----------------------------------------------------------------------------------------------------------------------*/
 Control::Control()
 :_buttonIDs()
-,__keys()
+,_keys()
+,_clientGameLogicModule(NULL)
+,_graphicsModule(NULL)
 {
 	// Constructor
 }
@@ -62,7 +64,7 @@ Control::Control()
 /*-------------------------------------------------------------------------------------------------------------------- 
 -- FUNCTION: LoadGameLogic
 --
--- DATE: 2013/03/11
+-- DATE: 2013/03/21
 --
 -- REVISIONS: (Date and Description)
 --
@@ -71,14 +73,14 @@ Control::Control()
 -- PROGRAMMER: John Payment
 --
 -- INTERFACE: void LoadGameLogic(ClientGameLogic& clientGameLogicModule)
---                 ClientGameLogic& clientGameLogicModule - Reference to the GameLogicModule
+--                 ClientGameLogic* clientGameLogicModule - Pointer to the GameLogicModule
 --
 -- RETURNS: void
 --
 -- NOTES: Gets a reference to the GameLogic for Wrapper Functions
 ----------------------------------------------------------------------------------------------------------------------*/
 void 
-Control::LoadGameLogic(ClientGameLogic& clientGameLogicModule)
+Control::LoadGameLogic(ClientGameLogic* clientGameLogicModule)
 {
 	_clientGameLogicModule = clientGameLogicModule;
 }
@@ -86,7 +88,7 @@ Control::LoadGameLogic(ClientGameLogic& clientGameLogicModule)
 /*-------------------------------------------------------------------------------------------------------------------- 
 -- FUNCTION: LoadGraphics
 --
--- DATE: 2013/03/11
+-- DATE: 2013/03/21
 --
 -- REVISIONS: (Date and Description)
 --
@@ -94,15 +96,15 @@ Control::LoadGameLogic(ClientGameLogic& clientGameLogicModule)
 --
 -- PROGRAMMER: John Payment
 --
--- INTERFACE: void LoadGraphics(Graphics& graphicsModule)
---                 Graphics& graphicsModule - Reference to the Graphics
+-- INTERFACE: void LoadGraphics(Graphics* graphicsModule)
+--                 Graphics& graphicsModule - Pointer to the Graphics
 --
 -- RETURNS: void
 --
 -- NOTES: Gets a reference to the Graphics for a few Wrapper Functions
 ----------------------------------------------------------------------------------------------------------------------*/
 void 
-Control::LoadGraphics(Graphics& graphicsModule)
+Control::LoadGraphics(Graphics* graphicsModule)
 {
 	_graphicsModule = graphicsModule;
 }
@@ -183,7 +185,12 @@ Control::RunAllButtons()
 		// Case for each Button ID
 		switch(_buttonIDs[i])
 		{
+			case 0:
+				break;
 			// Need to define cases for Buttons
+			default:
+			break;
+				// Does nothing but gets rid of annoying warnings
 		}
 	}
 	
@@ -242,9 +249,12 @@ Control::RunAllKeys()
 			case sf::Keyboard::S :
 				CallAttackEvent(DOWN);
 				break;
-			case sf::Keyboard:Escape: :
+			case sf::Keyboard::Escape :
 				CallExitGameEvent();
 				break;
+			default:
+				break;
+				// Does nothing but gets rid of annoying warnings
 		}
 	}
 	
@@ -308,17 +318,17 @@ Control::CallEnterLobbyEvent()
 --
 -- PROGRAMMER: John Payment
 --
--- INTERFACE: void CallMoveDownEvent(int direction)
---            int direction - The direction that you want to move in. Please you the #DEFINE directions only
+-- INTERFACE: void CallMoveDownEvent(Direction direction)
+--            Direction direction - The direction that you want to move in.
 --
 -- RETURNS: void
 --
 -- NOTES: Calls the event for Moving when in player mode.
 ----------------------------------------------------------------------------------------------------------------------*/
 void 
-Control::CallMoveEvent(int direction)
+Control::CallMoveEvent(Direction direction)
 {
-	_gameLogicPointer->movePlayer(direction);
+	_clientGameLogicModule->movePlayer(direction);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
@@ -332,17 +342,17 @@ Control::CallMoveEvent(int direction)
 --
 -- PROGRAMMER: John Payment
 --
--- INTERFACE: void CallAttackLeftEvent(int direction)
---            int direction - The direction that you want to move in. Please you the #DEFINE directions only
+-- INTERFACE: void CallAttackLeftEvent(Direction direction)
+--            Direction direction - The direction that you want to attack in.
 --
 -- RETURNS: void
 --
 -- NOTES: Calls the event for attacking when in player mode.
 ----------------------------------------------------------------------------------------------------------------------*/
 void 
-Control::CallAttackEvent(int direction)
+Control::CallAttackEvent(Direction direction)
 {
-	_gameLogicPointer->attack(direction);
+	_clientGameLogicModule->attack(direction);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
@@ -370,7 +380,7 @@ Control::CallBuildTowerEvent()
 	location.x = 0;
 	location.y = 0;
 	
-	_gameLogicPointer->createUnit(TOWER, location);
+	_clientGameLogicModule->createUnit(TOWER, location);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
@@ -397,5 +407,5 @@ Control::CallBuildCreepEvent()
 	location.x = 0;
 	location.y = 0;
 	
-	_gameLogicPointer->createUnit(CREEP, location);
+	_clientGameLogicModule->createUnit(CREEP, location);
 }

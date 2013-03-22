@@ -8,8 +8,10 @@
  * RETURNS: 
  * NOTES:    */
 Client::Client()
-   : clientNetwork_(), clientGameLogic_(clientNetwork_), graphics_(clientGameLogic_), control_(clientGameLogic_, graphics_) 
+   : clientNetwork_(), clientGameLogic_(clientNetwork_), graphics_(clientGameLogic_), control_(Control::get()) 
 { 
+   control_->LoadGameLogic(&clientGameLogic_);
+   control_->LoadGraphics(&graphics_);
    run();
 }
 

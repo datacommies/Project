@@ -84,7 +84,7 @@ void * init (void * in) {
                 for (std::set<Button>::iterator button = g->clientGameLogic_.UIElements.begin(); button != g->clientGameLogic_.UIElements.end(); ++button) {
                     // If we clicked within the button, check to see which button it was by ID.
                     if (button->rect.getGlobalBounds().contains(mouse)) {
-                        AddNewCalledButton(button->id);
+                        Control::get()->AddNewCalledButton(button->id);
                         // Join server button.
                         if (button->id == ID_JOIN){
                             g->clientGameLogic_.UIElements.clear();
