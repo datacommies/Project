@@ -232,16 +232,16 @@ Graphics::Graphics(ClientGameLogic& clientGameLogic)
 void Graphics::initMainMenuControls()
 {
     // Clear all the UI buttons previous
-    //clientGameLogic_.UIElements.clear();
+    clientGameLogic_.UIElements.clear();
 
     // Create buttons for the menu screen and add them to the list of UI elements.
     Button a(ID_TEST, sf::Vector2f(250,300), sf::Vector2f(300,50), font, "                Test Game");
     Button b(ID_JOIN, 	   sf::Vector2f(250,400), sf::Vector2f(300,50), font, "               Join Game");
     Button c(ID_QUIT,  sf::Vector2f(250,500), sf::Vector2f(300,50), font, "                     Quit");
 
-    //clientGameLogic_.UIElements.insert(a);
-    //clientGameLogic_.UIElements.insert(b);
-    //clientGameLogic_.UIElements.insert(c);
+    clientGameLogic_.UIElements.insert(a);
+    clientGameLogic_.UIElements.insert(b);
+    clientGameLogic_.UIElements.insert(c);
 }
 
 /* Init Game controls
@@ -252,8 +252,7 @@ void Graphics::initMainMenuControls()
  * NOTES:   Clears and Initializes the set of UIElements for In-game controls */
 void Graphics::initGameControls () {
     clientGameLogic_.UIElements.clear();
-    
-    sf::Font font;
+
     int button[] = { 20, 130, 240, 350, 460, 570, 680 };
     
     // First row of buttons
