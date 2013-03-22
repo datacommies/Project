@@ -102,7 +102,7 @@ void ClientNetwork::recvReply() {
 
 		// CREEP type contains a unit_t with the creep's attributes.
 		if (head.type == MSG_CREATE_UNIT) {
-			unit_t u = {0};
+			unit_t u = {{0}, 0};
 			recv_complete(connectsock, ((char*)&u) + sizeof(header_t), sizeof(unit_t) - sizeof(header_t), 0);
 			printf("Unit: x: %d, y: %d, health: %d\n", u.posx, u.posy, u.health);
 			switch (u.unit_type) {
@@ -143,6 +143,8 @@ void ClientNetwork::recvReply() {
 					pthread_mutex_unlock( &gl->unit_mutex );
 					break;
 				}
+				default:
+				    break;
 			}
 		} else if (head.type == MSG_CLEAR) {
 			pthread_mutex_lock( &gl->unit_mutex );
