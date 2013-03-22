@@ -164,7 +164,6 @@ void * init (void * in) {
         for (std::set<Button>::iterator button = g->clientGameLogic_.UIElements.begin(); button != g->clientGameLogic_.UIElements.end(); ++button)
         {
                 Button b = *button;
-                b.init(g->font);
                 b.draw(window);
         }
 
