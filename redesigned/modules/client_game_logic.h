@@ -26,7 +26,8 @@ public:
    GameState getCurrentState();
    void start ();
    void join ();
-   bool createUnit(UnitType type, Point location);
+   bool createTower(UnitType type, Point location);
+   bool createCreep(UnitType type, int laneID);
    bool movePlayer(Direction direction);
    bool attack(Direction direction);
    void exit();

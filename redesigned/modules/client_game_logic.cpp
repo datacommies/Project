@@ -13,7 +13,6 @@ ClientGameLogic::ClientGameLogic(ClientNetwork& clientNetwork)
    //unit_mutex = PTHREAD_MUTEX_INITIALIZER; // only allowed for declaration-initialization.
    pthread_mutex_init(&unit_mutex, NULL);
 }
-
 void ClientGameLogic::start () {
    gameState_ = IN_GAME;
 }
@@ -29,14 +28,32 @@ void ClientGameLogic::join () {
  * RETURNS: true if request was sent
  *          false if no request was sent
  * NOTES:   Partial validation is to be performed here (eg. sufficient funds, valid placement). Additional validation will be performed server side. */
-bool ClientGameLogic::createUnit(UnitType type, Point location)
+bool ClientGameLogic::createTower(UnitType type, Point location)
 {
-   // TODO: validation
+   // TODO: validation of location
 
    clientNetwork_.createUnit(this->playerId, type, location);
    
    return true;
 }
+
+/* Sends a create unit request to network module.
+ *
+ * PRE:     
+ * POST:    Request has been sent to the network module (not directly to server) 
+ * RETURNS: true if request was sent
+ *          false if no request was sent
+ * NOTES:   Partial validation is to be performed here (eg. sufficient funds, valid placement). Additional validation will be performed server side. */
+bool ClientGameLogic::createCreep(UnitType type, int laneID)
+{
+   // TODO: Need a function that will call the creation on the server side, 
+   //just like the build tower function above.
+
+   //clientNetwork_.createUnit(this->playerId, type, location);
+   
+   return true;
+}
+
 
 /* Sends a move player (self) request to network module.
  *

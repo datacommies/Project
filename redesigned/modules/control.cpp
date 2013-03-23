@@ -1,6 +1,4 @@
 #include "control.h"
-#include "pthread.h"
-#include <X11/Xlib.h>
 #include <SFML/System.hpp>
 
 using namespace std;
@@ -165,6 +163,7 @@ Control::AddNewCalledKey(sf::Keyboard::Key key)
 -- DATE: 2013/03/21
 --
 -- REVISIONS: (Date and Description)
+--          Jesse Wright: added button id's to the switch statements. 
 --
 -- DESIGNER: John Payment
 --
@@ -177,6 +176,7 @@ Control::AddNewCalledKey(sf::Keyboard::Key key)
 -- NOTES: Checks every ID stored in the buttonID collection against a list of IDs. Calls a Wrapper function for each hit.
 --        Then it empties the collection.
 ----------------------------------------------------------------------------------------------------------------------*/
+
 void 
 Control::RunAllButtons()
 {
@@ -186,8 +186,31 @@ Control::RunAllButtons()
 		switch(_buttonIDs[i])
 		{
 			case 0:
-				break;
+		    break;
 			// Need to define cases for Buttons
+			case BUILDTOWER_1:
+			     CallUnitTypeCreationEvent(TOWER_ONE);
+			break;
+			case BUILDTOWER_2:
+			     CallUnitTypeCreationEvent(TOWER_TWO);
+			break;    
+			case BUILDTOWER_3:
+			     CallUnitTypeCreationEvent(TOWER_THREE); 
+			break;    
+			case BUILDCREEP_1:
+			     CallUnitTypeCreationEvent(CREEP_ONE);
+			 break;   
+			case BUILDCREEP_2:
+			    CallUnitTypeCreationEvent(CREEP_TWO);	
+			 break;  
+			case BUILDCREEP_3:
+		        CallUnitTypeCreationEvent(CREEP_THREE);
+		    break;   
+			case SELECTLOPATH:	  
+			case SELECTMIDPATH:
+			case SELECTHIPATH:
+			    currentLane_ = _buttonIDs[i] - SELECTLOPATH;
+			break;
 			default:
 			break;
 				// Does nothing but gets rid of annoying warnings
@@ -356,56 +379,75 @@ Control::CallAttackEvent(Direction direction)
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
--- FUNCTION: CallBuildTowerEvent
+-- FUNCTION: CallUnitTypeCreationEvent
 --
 -- DATE: 2013/03/11
 --
 -- REVISIONS: (Date and Description)
+--          Jesse Wright: Changed fucntion to take a Unit type so we can have a
+--                        more generic function for creating units in the game.
+--                        simply checks the unit type and calls the correct
+--                        game logic function.
 --
 -- DESIGNER: John Payment
 --
--- PROGRAMMER: John Payment
+-- PROGRAMMER: John Payment, Jesse Wright
 --
--- INTERFACE: void CallBuildTowerEvent()
+-- INTERFACE: Control::CallUnitTypeCreationEvent(UnitType unit_type)
 --
 -- RETURNS: void
 --
--- NOTES: Calls the event building a tower after finding the desired position.
+-- NOTES: Calls the event correct event function for 
 ----------------------------------------------------------------------------------------------------------------------*/
 void 
-Control::CallBuildTowerEvent()
+Control::CallUnitTypeCreationEvent(UnitType unit_type)
 {
 	// Need to define how to get tower build co-ordinates
-	Point location;
-	location.x = 0;
-	location.y = 0;
+	switch(unit_type)
+	{
+	    case TOWER_ONE:
+	    case TOWER_TWO:
+	    case TOWER_THREE:
+	        _clientGameLogicModule->createTower(unit_type, getTowerPlacement());
+	    break;
+	    case CREEP_ONE:
+	    case CREEP_TWO:
+	    case CREEP_THREE:
+	        _clientGameLogicModule->createCreep(unit_type, GetCurrentLane());
+	    break;
+	    case PLAYER:
+		case PROJECTILE:
+		case CREEP:         // these aren't doing anything, but get rid of
+		case TOWER:         // warnings
+		case CASTLE:
+		break;
+	}
 	
-	_clientGameLogicModule->createUnit(TOWER, location);
 }
-
 /*-------------------------------------------------------------------------------------------------------------------- 
--- FUNCTION: CallBuildCreepEvent
+-- FUNCTION: getTowerPlacement
 --
 -- DATE: 2013/03/11
 --
 -- REVISIONS: (Date and Description)
+
 --
--- DESIGNER: John Payment
+-- DESIGNER: 
 --
--- PROGRAMMER: John Payment
+-- PROGRAMMER: 
 --
--- INTERFACE: void CallBuildCreepEvent()
+-- INTERFACE: Control::getTowerPlacement()
 --
 -- RETURNS: void
 --
--- NOTES: Calls the event for building a Creep
+-- NOTES: This will be called after the player has clicked a tower button and is waiting for the field click.
 ----------------------------------------------------------------------------------------------------------------------*/
-void 
-Control::CallBuildCreepEvent()
+Point
+Control::getTowerPlacement()
 {
-	Point location;
-	location.x = 0;
-	location.y = 0;
-	
-	_clientGameLogicModule->createUnit(CREEP, location);
+    Point temp;
+    temp.x = 0;
+    temp.y = 0;
+    return temp;
 }
+

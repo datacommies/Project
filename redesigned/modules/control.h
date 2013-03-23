@@ -32,32 +32,10 @@
 #include "client_game_logic.h"
 #include "graphics.h"
 #include <vector>
-/*
-#define LAST_STATE   1
-#define MENU_ID      10 
-#define LOBBY_ID     20
-#define PLAYER_ID    30
-#define BUILDER_ID   40
-#define EXIT_MENU_ID 50
-#define BUILDTOWER_1 300
-#define BUILDTOWER_2 301
-#define BUILDTOWER_3 302
-#define BUILDCREEP_1 350
-#define BUILDCREEP_2 351
-#define BUILDCREEP_3 352
-#define SELECTLOPATH 400
-#define SELECTMIDPATH 401
-#define SELECTHIPATH 402
-#define ID_QUIT 101
-#define BUTTON_WIDTH  100
-#define BUTTON_HEIGHT 25
-#define ROW1 620
-#define ROW2 665
-*/
+
 #define TERMINATE    10000
 
-#define BUILD_TOWER 1337
-#define SPAWN_CREEP 1338
+
 
 class ClientGameLogic;
 
@@ -82,6 +60,8 @@ public:
 	// Functions for Running Control Events
 	void RunAllButtons();
 	void RunAllKeys();
+	// Get For currentLane variable
+	int GetCurrentLane(){return currentLane_;};
 private:
 	// Static Reference for Singleton Class
 	static Control* _Control;
@@ -102,8 +82,10 @@ private:
 
 	void CallAttackEvent(Direction direction);
 
-	void CallBuildTowerEvent();
-	void CallBuildCreepEvent();
+	void CallUnitTypeCreationEvent(UnitType ttype);
+	Point getTowerPlacement();
+	
+	int currentLane_;
 };
 
 #endif

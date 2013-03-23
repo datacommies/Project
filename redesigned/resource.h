@@ -10,6 +10,20 @@
 #define MAPWIDTH  500 //TODO: change placeholder value
 #define MAPHEIGHT 500 //TODO: change placeholder value
 
+// Button IDs
+#define ID_JOIN 100
+#define ID_QUIT 101
+#define ID_TEST 999
+#define BUILDTOWER_1 300
+#define BUILDTOWER_2 301
+#define BUILDTOWER_3 302
+#define BUILDCREEP_1 350
+#define BUILDCREEP_2 351
+#define BUILDCREEP_3 352
+#define SELECTLOPATH 400
+#define SELECTMIDPATH 401
+#define SELECTHIPATH 402
+
 // Enums ----------------------------------------------------------------------
 
 enum Direction
@@ -24,11 +38,16 @@ enum UnitType
 {
    PLAYER,
    CREEP,
+   CREEP_ONE,
+   CREEP_TWO,
+   CREEP_THREE,
    TOWER,
+   TOWER_ONE,
+   TOWER_TWO,
+   TOWER_THREE,
    CASTLE,
    PROJECTILE
 };
-
 
 enum GameState
 {

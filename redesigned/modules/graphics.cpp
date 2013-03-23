@@ -6,22 +6,9 @@
 #include <unistd.h>
 #include <SFML/Graphics.hpp>
 #include <string>
+#include "../resource.h"
 
 using namespace std;
-
-// Button IDs
-#define ID_JOIN 100
-#define ID_QUIT 101
-#define ID_TEST 999
-#define BUILDTOWER_1 300
-#define BUILDTOWER_2 301
-#define BUILDTOWER_3 302
-#define BUILDCREEP_1 350
-#define BUILDCREEP_2 351
-#define BUILDCREEP_3 352
-#define SELECTLOPATH 400
-#define SELECTMIDPATH 401
-#define SELECTHIPATH 402
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 700

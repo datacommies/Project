@@ -1,4 +1,3 @@
-
 #include "ControlEvents.h"
 using namespace std;
 
@@ -329,7 +328,7 @@ void CallBuildTowerEvent(void* value)
 	location.x = x;
 	location.y = y;
 	
-	_gameLogicPointer->createUnit(TOWER, location);
+	//_gameLogicPointer->createUnit(TOWER, location);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
@@ -355,7 +354,7 @@ void CallBuildCreepEvent(void* value)
 	location.x = 0;
 	location.y = 0;
 	
-	_gameLogicPointer->createUnit(CREEP, location);
+	//_gameLogicPointer->createUnit(CREEP, location);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
