@@ -30,7 +30,17 @@ void ClientGameLogic::join () {
  * NOTES:   Partial validation is to be performed here (eg. sufficient funds, valid placement). Additional validation will be performed server side. */
 bool ClientGameLogic::createTower(UnitType type, Point location)
 {
-   // TODO: validation of location
+   // TODO: validation
+
+   //validate currency
+   //confirm that we currently have enough currency to build that tower
+   //mutex to access the currency?
+   //where is the currency stored? team?
+   //pass team into create unit, switch based on unit type?
+
+   //validate location
+   //if the location you are attempting to build a tower at
+   //is not currently occupied and is not impassible terrain
 
    clientNetwork_.createUnit(this->playerId, type, location);
    
@@ -48,6 +58,9 @@ bool ClientGameLogic::createCreep(UnitType type, int laneID)
 {
    // TODO: Need a function that will call the creation on the server side, 
    //just like the build tower function above.
+
+   //should there be a delay between creep creation to ensure that they don't spawn 
+   //on top of eachother? I don't know how we wanted that to work...?
 
    //clientNetwork_.createUnit(this->playerId, type, location);
    
