@@ -1,14 +1,17 @@
 #include "AiController.h"
 #include "../team.h"
-/*
-
-AI Controller
-
-Loops through each teams units and passes the enemy team into the update function for
-targeting enemy units.
-
-*/
-
+/*------------------------------------------------------------------------------
+-- FILE:        AiConroller.cpp
+--
+-- DATE:        2013/03/11
+--
+-- MAINTAINERS: Nick Raposo
+--
+-- FUNCTIONS:   AiUpdate(Team&, Team&)
+--
+-- DESCRIPTION: Runs 1 "Turn" of AI. Every creep, tower, and projectile gets
+--		an Update() called on it.
+------------------------------------------------------------------------------*/
 void AiUpdate(Team& team1, Team& team2)
 {
 
