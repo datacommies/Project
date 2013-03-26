@@ -412,6 +412,8 @@ Control::CallUnitTypeCreationEvent(UnitType unit_type)
 	    case TOWER_TWO:
 	    case TOWER_THREE:
 	        _clientGameLogicModule->createTower(unit_type, GetTowerPlacement());
+	        towerPlacement_.x = -1;
+	        towerPlacement_.y = -1;
 	    break;
 	    case CREEP_ONE:
 	    case CREEP_TWO:
