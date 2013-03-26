@@ -445,7 +445,8 @@ Control::CallUnitTypeCreationEvent(UnitType unit_type)
 --
 -- RETURNS: void
 --
--- NOTES: This will be called after the player has clicked a tower button and is waiting for the field click.
+-- NOTES: This will be called after the player has clicked a tower button and is waiting for the field click. Sets the
+-- towerPlacement variable in Control so we can pass it to game logic.
 ----------------------------------------------------------------------------------------------------------------------*/
 void
 Control::SetTowerPlacement(Point p)
