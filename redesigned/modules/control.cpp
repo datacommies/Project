@@ -55,11 +55,11 @@ Control::Control()
 ,_keys()
 ,_clientGameLogicModule(NULL)
 ,_graphicsModule(NULL)
+,_currentLane(-1)
 {
 	// Constructor
-	currentLane_ = -1;
-	towerPlacement_.x = -1;
-	towerPlacement_.y = -1;
+	_towerPlacement.x = -1;
+	_towerPlacement.y = -1;
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
@@ -212,7 +212,7 @@ Control::RunAllButtons()
 			case SELECTLOPATH:	  
 			case SELECTMIDPATH:
 			case SELECTHIPATH:
-			    currentLane_ = _buttonIDs[i] - SELECTLOPATH;
+			    _currentLane = _buttonIDs[i] - SELECTLOPATH;
 			break;
 			default:
 			break;
@@ -412,8 +412,8 @@ Control::CallUnitTypeCreationEvent(UnitType unit_type)
 	    case TOWER_TWO:
 	    case TOWER_THREE:
 	        _clientGameLogicModule->createTower(unit_type, GetTowerPlacement());
-	        towerPlacement_.x = -1;
-	        towerPlacement_.y = -1;
+	        _towerPlacement.x = -1;
+	        _towerPlacement.y = -1;
 	    break;
 	    case CREEP_ONE:
 	    case CREEP_TWO:
@@ -429,19 +429,66 @@ Control::CallUnitTypeCreationEvent(UnitType unit_type)
 	}
 	
 }
+
 /*-------------------------------------------------------------------------------------------------------------------- 
--- FUNCTION: SetTowerPlacement
+-- FUNCTION: GetCurrentLane
 --
--- DATE: 2013/03/11
+-- DATE: 2013/03/20
 --
 -- REVISIONS: (Date and Description)
-
 --
 -- DESIGNER: Jesse Wright
 --
 -- PROGRAMMER: Jesse Wright
 --
--- INTERFACE: void Control::SetTowerPlacement(Point p)
+-- INTERFACE: void GetCurrentLane()
+--
+-- RETURNS: Integer indicating whihc lane is the current building lane
+--
+-- NOTES: Returns the Current lane integer
+----------------------------------------------------------------------------------------------------------------------*/
+int 
+Control::GetCurrentLane()
+{
+	return _currentLane;
+}
+
+/*-------------------------------------------------------------------------------------------------------------------- 
+-- FUNCTION: GetTowerPlacement
+--
+-- DATE: 2013/03/20
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: Jesse Wright
+--
+-- PROGRAMMER: Jesse Wright
+--
+-- INTERFACE: void GetTowerPlacement()
+--
+-- RETURNS: Point indicating where a tower willbe placed
+--
+-- NOTES: Returns the TowerPlacement point
+----------------------------------------------------------------------------------------------------------------------*/
+Point 
+Control::GetTowerPlacement()
+{
+	return _towerPlacement;
+}
+
+/*-------------------------------------------------------------------------------------------------------------------- 
+-- FUNCTION: SetTowerPlacement
+--
+-- DATE: 2013/03/20
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: Jesse Wright
+--
+-- PROGRAMMER: Jesse Wright
+--
+-- INTERFACE: void SetTowerPlacement(Point p)
+--                 Point p - The point the tower is to be placed in
 --
 -- RETURNS: void
 --
@@ -451,6 +498,6 @@ Control::CallUnitTypeCreationEvent(UnitType unit_type)
 void
 Control::SetTowerPlacement(Point p)
 {
-    towerPlacement_ = p;
+    _towerPlacement = p;
 }
 
