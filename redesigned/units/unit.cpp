@@ -38,7 +38,7 @@ Unit::Unit(int uid, Point pos, int hp, int atkdmg,
 
 Unit::Unit(int uid, int side, Point pos, int hp, int atkdmg,
            int atkrng, int atkspd, int percep, int atkcnt):
-           id(uid), position(pos), team(side), health(hp), attackDamage(atkdmg), attackRange(atkrng),
+           id(uid) team(side), position(pos), health(hp), attackDamage(atkdmg), attackRange(atkrng),
            attackSpeed(atkspd), perception(percep), attackCount(atkcnt), pTarget(NULL)
 {
     //any required validation
