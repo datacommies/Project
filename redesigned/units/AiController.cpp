@@ -1,5 +1,3 @@
-#include "AiController.h"
-#include "../team.h"
 /*------------------------------------------------------------------------------
 -- FILE:        AiConroller.cpp
 --
@@ -12,6 +10,9 @@
 -- DESCRIPTION: Runs 1 "Turn" of AI. Every creep, tower, and projectile gets
 --		an Update() called on it.
 ------------------------------------------------------------------------------*/
+#include "AiController.h"
+#include "../team.h"
+
 void AiUpdate(Team& team1, Team& team2)
 {
 
