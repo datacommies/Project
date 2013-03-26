@@ -5,15 +5,7 @@
 --
 -- MAINTAINERS: Cody Rossiter
 --
--- FUNCTIONS:   inRange
---              hasWeakness
---              hasStrength
---              Attack
---              FindTarget
---              CheckTarget
---              Update
---              Rotate
---              serializeUnit
+-- FUNCTIONS:   Attack
 --
 -- DESCRIPTION: File contains implementation for the SplashTower class.
 --              SplashTower inherits from Tower.
