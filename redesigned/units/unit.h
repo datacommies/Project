@@ -11,10 +11,10 @@ class Unit
 {
 public:
     int id; //unit id
-    int team;
-    Point position;
-    int health;
-    int iElement;
+    int team; //the team the unit is on 
+    Point position; //the units team
+    int health; //the current health amount
+    int iElement; //units element, fire/water etc.
     int attackDamage;//damage that the unit deals per hit
     int attackRange; //distance that the unit can successfully attack
     int attackSpeed; //the speed which the attack counter has to hit in order to initiate an attack
