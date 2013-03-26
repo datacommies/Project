@@ -24,6 +24,13 @@ ElectroTower::ElectroTower(int uid, Point pos, int hp, int atkdmg, int atkrng,
     //validation
 }
 
+ElectroTower::ElectroTower(int uid, int side, Point pos, int hp, int atkdmg, 
+    int atkrng, int atkspd, int percep, int atkcnt, int wall):
+    Tower(uid, side, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, wall)
+{
+    //validation
+}
+
 void ElectroTower::Attack(Team* team)
 {
    if( attackCount++ < attackSpeed )
