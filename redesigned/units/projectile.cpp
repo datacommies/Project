@@ -1,3 +1,16 @@
+/*------------------------------------------------------------------------------
+-- FILE:        projectile.cpp
+--
+-- DATE:        2013/03/11
+--
+-- MAINTAINERS: Nick Raposo
+--
+-- FUNCTIONS:   Attack
+--              Update
+--              Move            
+--
+-- DESCRIPTION: Base implementation, not complete.
+------------------------------------------------------------------------------*/
 #include "projectile.h"
 #include "unit.h"
 #include "creep.h"
