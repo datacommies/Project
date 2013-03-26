@@ -21,9 +21,9 @@ using namespace std;
 
 SplashTower::SplashTower(	int uid, Point pos, int hp, int atkdmg, int atkrng,
 							int atkspd, int percep, int atkcnt, int wall,
-							Team * t, int spldmg, int splrng):
+							int spldmg, int splrng):
 				Tower(uid, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, wall)
-				     ,team(t), splashDamage(spldmg), splashRange(splrng)
+				     , splashDamage(spldmg), splashRange(splrng)
 {
     //validation
 }
@@ -44,7 +44,7 @@ SplashTower::SplashTower(	int uid, Point pos, int hp, int atkdmg, int atkrng,
 --              players. If they are in splash damage range (near pTarget), then
 --              they are also damaged.
 ------------------------------------------------------------------------------*/
-void SplashTower::Attack(void)
+void SplashTower::Attack(Team * team)
 {
     /* check if we can attack */
     if( attackCount++ < attackSpeed )
@@ -76,5 +76,38 @@ void SplashTower::Attack(void)
         {
             team->players[i].health -= splashDamage;
         }
+    }
+}
+/*------------------------------------------------------------------------------
+-- FUNCTION:    Update
+--
+-- DATE:        2013/03/12
+--
+-- DESIGNER:    Chris Porter, Nick Raposo, Cody Rossiter
+-- PROGRAMMER:  Chris Porter, Nick Raposo, Cody Rossiter
+--
+-- INTERFACE:   void SplashTower::Update(Team& team)
+--
+-- RETURNS:     void
+--
+-- DESCRIPTION: Function takes in team is used in finding and attacking targets.
+--              If tower has a target, check to see if it is still alive and in
+--              range. If tower does not have a target, find one. And if tower
+--              has a target and they are in range, attack the target.
+------------------------------------------------------------------------------*/
+void SplashTower::Update(Team& team) {
+
+    /* If we have a Target, check their status. */
+    if( pTarget != NULL )
+        CheckTarget();
+
+    /* Search for Target. */
+    if( pTarget == NULL )
+        FindTarget(&team);
+
+    /* If we found a new Target, and they are in range.. */
+    if( pTarget != NULL ) {
+        Attack(&team);
+        Rotate( pTarget->getPos() );
     }
 }
