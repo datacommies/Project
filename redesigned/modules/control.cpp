@@ -4,6 +4,8 @@
 using namespace std;
 
 Control* Control::_Control = NULL;
+int next_to_build = 0;
+
 
 /*-------------------------------------------------------------------------------------------------------------------- 
 -- FUNCTION: get
@@ -179,7 +181,6 @@ Control::AddNewCalledKey(sf::Keyboard::Key key)
 -- NOTES: Checks every ID stored in the buttonID collection against a list of IDs. Calls a Wrapper function for each hit.
 --        Then it empties the collection.
 ----------------------------------------------------------------------------------------------------------------------*/
-
 void 
 Control::RunAllButtons()
 {
@@ -192,22 +193,28 @@ Control::RunAllButtons()
 		    break;
 			// Need to define cases for Buttons
 			case BUILDTOWER_1:
-			     CallUnitTypeCreationEvent(TOWER_ONE);
+                next_to_build = TOWER_ONE;
+			    cout << "Setting next to build tower one!" << endl;
 			break;
 			case BUILDTOWER_2:
-			     CallUnitTypeCreationEvent(TOWER_TWO);
+                next_to_build = TOWER_TWO;
+			    cout << "Setting next to build tower two!" << endl;
 			break;    
 			case BUILDTOWER_3:
-			     CallUnitTypeCreationEvent(TOWER_THREE); 
+                next_to_build = TOWER_THREE;
+			    cout << "Setting next to build tower three!" << endl;
 			break;    
 			case BUILDCREEP_1:
-			     CallUnitTypeCreationEvent(CREEP_ONE);
+                next_to_build = CREEP_ONE;
+			    cout << "Setting next to build creep one!" << endl;
 			 break;   
 			case BUILDCREEP_2:
-			    CallUnitTypeCreationEvent(CREEP_TWO);	
+                next_to_build = CREEP_TWO;
+			    cout << "Setting next to build creep two!" << endl;	
 			 break;  
 			case BUILDCREEP_3:
-		        CallUnitTypeCreationEvent(CREEP_THREE);
+                next_to_build = CREEP_THREE;
+			    cout << "Setting next to build creep three!" << endl;
 		    break;   
 			case SELECTLOPATH:	  
 			case SELECTMIDPATH:
@@ -220,7 +227,7 @@ Control::RunAllButtons()
 		}
 	}
 	
-	_keys.clear();
+	_buttonIDs.clear();
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
@@ -392,9 +399,9 @@ Control::CallAttackEvent(Direction direction)
 --                        simply checks the unit type and calls the correct
 --                        game logic function.
 --
--- DESIGNER: John Payment
+-- DESIGNER: Jesse Wright
 --
--- PROGRAMMER: John Payment, Jesse Wright
+-- PROGRAMMER: Jesse Wright
 --
 -- INTERFACE: Control::CallUnitTypeCreationEvent(UnitType unit_type)
 --
@@ -412,8 +419,6 @@ Control::CallUnitTypeCreationEvent(UnitType unit_type)
 	    case TOWER_TWO:
 	    case TOWER_THREE:
 	        _clientGameLogicModule->createTower(unit_type, GetTowerPlacement());
-	        _towerPlacement.x = -1;
-	        _towerPlacement.y = -1;
 	    break;
 	    case CREEP_ONE:
 	    case CREEP_TWO:
@@ -496,8 +501,14 @@ Control::GetTowerPlacement()
 -- towerPlacement variable in Control so we can pass it to game logic.
 ----------------------------------------------------------------------------------------------------------------------*/
 void
-Control::SetTowerPlacement(Point p)
+Control::MouseCallback(Point p)
 {
     _towerPlacement = p;
+
+    if (next_to_build != 0)
+        CallUnitTypeCreationEvent((UnitType)next_to_build);
+    next_to_build = 0;
 }
+
+
 

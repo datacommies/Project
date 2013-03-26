@@ -78,8 +78,7 @@ void * init (void * in) {
                             g->initJoinWindow();
                             g->showJoinWindow();
                             break;
-                        }
-                        else if (button->id == ID_TEST){
+                        } else if (button->id == ID_TEST){
                             g->initGameControls();
                             g->clientGameLogic_.start();
                             break; // Must break out now, initGameControls invalidates the iterators.
@@ -89,35 +88,8 @@ void * init (void * in) {
                             window.close();
                             exit(0);
                         }
-                        else if (button->id == BUILDTOWER_1) {
-
-                        }
-                        else if (button->id == BUILDTOWER_2) {
-
-                        }
-                        else if (button->id == BUILDTOWER_3) {
-
-                        }
-                        else if (button->id == BUILDCREEP_1) {
-
-                        }
-                        else if (button->id == BUILDCREEP_2) {
-
-                        }
-                        else if (button->id == BUILDCREEP_3) {
-
-                        }
-                        else if (button->id == SELECTLOPATH) {
-
-                        }
-                        else if (button->id == SELECTMIDPATH) {
-
-                        }
-                        else if (button->id == SELECTHIPATH) {
-
-                        }
-
-                        //AddNewCalledButton(button->id);
+                        
+                        Control::get()->RunAllButtons();
                     }
                 }
             }
