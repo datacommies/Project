@@ -7,15 +7,14 @@
 class SplashTower : public Tower
 {
 public:
-    Team * team;            // other team for splash damage calculations
     int    splashDamage;
     int    splashRange;  // Range in which we can damage other units   
     
     SplashTower(int uid, Point pos, int hp, int atkdmg, int atkrng,
-				int atkspd, int percep, int atkcnt, int wall, Team * t,
-				int spldmg, int splrng);
+				int atkspd, int percep, int atkcnt, int wall, int spldmg, int splrng);
     
-    virtual void Attack(void);
+    virtual void Attack(Team * team);
+    void Update(Team&);
 	
 private:  
 };
