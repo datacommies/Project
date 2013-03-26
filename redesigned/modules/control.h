@@ -60,10 +60,12 @@ public:
 	// Functions for Running Control Events
 	void RunAllButtons();
 	void RunAllKeys();
+	
 	// Get For currentLane variable
-	int GetCurrentLane(){return currentLane_;}
-	Point GetTowerPlacement(){return towerPlacement_;}
+	int GetCurrentLane();
+	Point GetTowerPlacement();
 	void SetTowerPlacement(Point p);
+	
 private:
 	// Static Reference for Singleton Class
 	static Control* _Control;
@@ -87,8 +89,8 @@ private:
 	void CallUnitTypeCreationEvent(UnitType ttype);
 	
 	
-	int currentLane_;
-	Point towerPlacement_;
+	int _currentLane;
+	Point _towerPlacement;
 };
 
 #endif

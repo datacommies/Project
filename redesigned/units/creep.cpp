@@ -1,3 +1,17 @@
+/*------------------------------------------------------------------------------
+-- FILE:        creep.cpp
+--
+-- DATE:        2013/03/11
+--
+-- MAINTAINERS: Chris Porter, Nick Raposo
+--
+-- FUNCTIONS:   getTargetDirection
+--              Update
+--              Move            
+--
+-- DESCRIPTION: Base functions for creeps. Movement, updating and target
+--                direction.
+------------------------------------------------------------------------------*/
 #include "unit.h"
 #include "creep.h"
 #include <iostream>
