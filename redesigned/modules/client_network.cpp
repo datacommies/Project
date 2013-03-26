@@ -104,7 +104,6 @@ void ClientNetwork::recvReply() {
 		if (head.type == MSG_CREATE_UNIT) {
 			unit_t u = {{0}, 0};
 			recv_complete(connectsock, ((char*)&u) + sizeof(header_t), sizeof(unit_t) - sizeof(header_t), 0);
-			printf("Unit: x: %d, y: %d, health: %d\n", u.posx, u.posy, u.health);
 			switch (u.unit_type) {
 				//FALL THROUGH
 				case TOWER:
@@ -120,7 +119,6 @@ void ClientNetwork::recvReply() {
 					c.type = u.unit_type;
 					c.team = u.team;
 					pthread_mutex_lock( &gl->unit_mutex );
-					printf("Adding unit!\n");
 					gl->units.push_back(c);
 					pthread_mutex_unlock( &gl->unit_mutex );
 				break;
@@ -137,7 +135,6 @@ void ClientNetwork::recvReply() {
 					c.health = u.health;
 					c.type = u.unit_type;
 					c.team = u.team;
-					printf("creep team %d", c.team);
 					pthread_mutex_lock( &gl->unit_mutex );
 					gl->units.push_back(c);
 					pthread_mutex_unlock( &gl->unit_mutex );

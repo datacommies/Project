@@ -6,6 +6,7 @@
 #include "units/player.h"
 #include "units/creep.h"
 #include "units/tower.h"
+#include "units/projectile.h"
 
 class Team
 {
@@ -14,6 +15,7 @@ public:
    std::vector<Tower> towers;
    std::vector<Player> players;
    std::vector<PATH> paths;
+   std::vector<Projectile> projectiles;
    int currency;
    int teamId;
 

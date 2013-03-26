@@ -318,7 +318,7 @@ void ServerGameLogic::updateCreate(CommandData& command)
     return;
   }
 
-  if (mapTeams_[0].isValidPos(command.location)) {
+  if (!mapTeams_[0].isValidPos(command.location)) {
     fprintf(stderr, "max x: %d max y: %d\n", MAX_X, MAX_Y);
     fprintf(stderr, "x: %d, y: %d out of range: %s line %d\n", x, y, __FILE__, __LINE__);
     return; 
@@ -338,7 +338,9 @@ void ServerGameLogic::updateCreate(CommandData& command)
         teams[team_no].creeps.push_back(creep);
         break;
       }
+    case CASTLE:
     case TOWER:
+    case TOWER_ONE:
       {
         Tower tower = Tower(id, command.location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
             INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);

@@ -64,8 +64,7 @@ public:
 	// Get For currentLane variable
 	int GetCurrentLane();
 	Point GetTowerPlacement();
-	void SetTowerPlacement(Point p);
-	
+	void MouseCallback(Point p);
 private:
 	// Static Reference for Singleton Class
 	static Control* _Control;

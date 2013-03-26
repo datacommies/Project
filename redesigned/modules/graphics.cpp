@@ -67,10 +67,13 @@ void * init (void * in) {
             // If a mouse button was pressed, find out where we clicked.
             if (event.type == sf::Event::MouseButtonPressed){
                 sf::Vector2f mouse = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+                
+                bool consumed = false;
                 // Iterate through the buttons and check each button to see if we clicked within in.
                 for (std::set<Button>::iterator button = g->clientGameLogic_.UIElements.begin(); button != g->clientGameLogic_.UIElements.end(); ++button) {
                     // If we clicked within the button, check to see which button it was by ID.
                     if (button->rect.getGlobalBounds().contains(mouse)) {
+                        consumed = true;
                         Control::get()->AddNewCalledButton(button->id);
                         // Join server button.
                         if (button->id == ID_JOIN){
@@ -78,8 +81,7 @@ void * init (void * in) {
                             g->initJoinWindow();
                             g->showJoinWindow();
                             break;
-                        }
-                        else if (button->id == ID_TEST){
+                        } else if (button->id == ID_TEST){
                             g->initGameControls();
                             g->clientGameLogic_.start();
                             break; // Must break out now, initGameControls invalidates the iterators.
@@ -89,36 +91,17 @@ void * init (void * in) {
                             window.close();
                             exit(0);
                         }
-                        else if (button->id == BUILDTOWER_1) {
-
-                        }
-                        else if (button->id == BUILDTOWER_2) {
-
-                        }
-                        else if (button->id == BUILDTOWER_3) {
-
-                        }
-                        else if (button->id == BUILDCREEP_1) {
-
-                        }
-                        else if (button->id == BUILDCREEP_2) {
-
-                        }
-                        else if (button->id == BUILDCREEP_3) {
-
-                        }
-                        else if (button->id == SELECTLOPATH) {
-
-                        }
-                        else if (button->id == SELECTMIDPATH) {
-
-                        }
-                        else if (button->id == SELECTHIPATH) {
-
-                        }
-
-                        //AddNewCalledButton(button->id);
+                        
+                        Control::get()->RunAllButtons();
                     }
+                }
+                // No one consumed the mouse click, pass it on to control.
+                if (!consumed) {
+                    consumed = true;
+                    Point p;
+                    p.x = mouse.x;
+                    p.y = mouse.y;
+                    Control::get()->MouseCallback(p);
                 }
             }
             // Close the application if requested.
