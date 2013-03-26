@@ -1,3 +1,15 @@
+/*------------------------------------------------------------------------------
+-- FILE:        electro_tower.cpp
+--
+-- DATE:        2013/03/11
+--
+-- MAINTAINERS: Nick Raposo
+--
+-- FUNCTIONS:   Attack
+--              Update          
+--
+-- DESCRIPTION: Base function for electric attacks to target multiple units.
+------------------------------------------------------------------------------*/
 #include "electro_tower.h"
 #include "unit.h"
 #include <string>
