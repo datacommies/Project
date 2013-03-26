@@ -4,6 +4,7 @@
 -- DATE:        2013/03/12
 --
 -- MAINTAINERS: Cody Rossiter
+--		Kevin Tangeman - 26/Mar/2013 - added team variable "side"
 --
 -- FUNCTIONS:   Attack
 --
@@ -23,6 +24,14 @@ BasicTower::BasicTower(int uid, Point pos, int hp, int atkdmg, int atkrng,
 {
     //validation
 }
+
+BasicTower::BasicTower(int uid, int side, Point pos, int hp, int atkdmg, int atkrng,
+            int atkspd, int percep, int atkcnt, int wall):
+            Tower(uid, side, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, wall)
+{
+    //validation
+}
+
 /*------------------------------------------------------------------------------
 -- FUNCTION:    Attack
 --
