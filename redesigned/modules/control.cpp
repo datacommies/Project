@@ -57,6 +57,9 @@ Control::Control()
 ,_graphicsModule(NULL)
 {
 	// Constructor
+	currentLane_ = -1;
+	towerPlacement_.x = -1;
+	towerPlacement_.y = -1;
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
@@ -408,7 +411,7 @@ Control::CallUnitTypeCreationEvent(UnitType unit_type)
 	    case TOWER_ONE:
 	    case TOWER_TWO:
 	    case TOWER_THREE:
-	        _clientGameLogicModule->createTower(unit_type, getTowerPlacement());
+	        _clientGameLogicModule->createTower(unit_type, GetTowerPlacement());
 	    break;
 	    case CREEP_ONE:
 	    case CREEP_TWO:
@@ -425,29 +428,26 @@ Control::CallUnitTypeCreationEvent(UnitType unit_type)
 	
 }
 /*-------------------------------------------------------------------------------------------------------------------- 
--- FUNCTION: getTowerPlacement
+-- FUNCTION: SetTowerPlacement
 --
 -- DATE: 2013/03/11
 --
 -- REVISIONS: (Date and Description)
 
 --
--- DESIGNER: 
+-- DESIGNER: Jesse Wright
 --
--- PROGRAMMER: 
+-- PROGRAMMER: Jesse Wright
 --
--- INTERFACE: Control::getTowerPlacement()
+-- INTERFACE: void Control::SetTowerPlacement(Point p)
 --
 -- RETURNS: void
 --
 -- NOTES: This will be called after the player has clicked a tower button and is waiting for the field click.
 ----------------------------------------------------------------------------------------------------------------------*/
-Point
-Control::getTowerPlacement()
+void
+Control::SetTowerPlacement(Point p)
 {
-    Point temp;
-    temp.x = 0;
-    temp.y = 0;
-    return temp;
+    towerPlacement_ = p;
 }
 
