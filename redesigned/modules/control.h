@@ -62,8 +62,8 @@ public:
 	void RunAllKeys();
 	
 	// Get For currentLane variable
-	int GetCurrentLane()
-	Point GetTowerPlacement()
+	int GetCurrentLane();
+	Point GetTowerPlacement();
 	void SetTowerPlacement(Point p);
 	
 private:
