@@ -67,10 +67,13 @@ void * init (void * in) {
             // If a mouse button was pressed, find out where we clicked.
             if (event.type == sf::Event::MouseButtonPressed){
                 sf::Vector2f mouse = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+                
+                bool consumed = false;
                 // Iterate through the buttons and check each button to see if we clicked within in.
                 for (std::set<Button>::iterator button = g->clientGameLogic_.UIElements.begin(); button != g->clientGameLogic_.UIElements.end(); ++button) {
                     // If we clicked within the button, check to see which button it was by ID.
                     if (button->rect.getGlobalBounds().contains(mouse)) {
+                        consumed = true;
                         Control::get()->AddNewCalledButton(button->id);
                         // Join server button.
                         if (button->id == ID_JOIN){
@@ -91,6 +94,14 @@ void * init (void * in) {
                         
                         Control::get()->RunAllButtons();
                     }
+                }
+                // No one consumed the mouse click, pass it on to control.
+                if (!consumed) {
+                    consumed = true;
+                    Point p;
+                    p.x = mouse.x;
+                    p.y = mouse.y;
+                    Control::get()->MouseCallback(p);
                 }
             }
             // Close the application if requested.
