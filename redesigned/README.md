@@ -3,7 +3,7 @@ To Do:
 
 Graphics
 --------
-* Draw team-colored background circle to identify which units are on which team
+* ~~Draw team-colored background circle to identify which units are on which team~~ Done
 
 Network
 -------
