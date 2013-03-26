@@ -11,6 +11,13 @@ Tower::Tower(int uid, Point pos, int hp, int atkdmg, int atkrng,
     //validation
 }
 
+Tower::Tower(int uid, int side, Point pos, int hp, int atkdmg, int atkrng,
+            int atkspd, int percep, int atkcnt, int wall):
+            Unit(uid, side, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt), wallArmour_(wall)
+{
+    //validation
+}
+
 string Tower::serializeTower(){
     string s;
     s = Unit::serializeUnit();

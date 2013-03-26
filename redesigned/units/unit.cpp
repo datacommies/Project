@@ -35,6 +35,16 @@ Unit::Unit(int uid, Point pos, int hp, int atkdmg,
     printf("Inside unit constructor, x:%d y:%d\n", position.x, position.y);
 }
 
+
+Unit::Unit(int uid, int side, Point pos, int hp, int atkdmg,
+           int atkrng, int atkspd, int percep, int atkcnt):
+           id(uid), position(pos), team(side), health(hp), attackDamage(atkdmg), attackRange(atkrng),
+           attackSpeed(atkspd), perception(percep), attackCount(atkcnt), pTarget(NULL)
+{
+    //any required validation
+    printf("Inside unit constructor, x:%d y:%d\n", position.x, position.y);
+}
+
 /*------------------------------------------------------------------------------
 -- FUNCTION:    inRange
 --
