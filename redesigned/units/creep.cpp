@@ -1,9 +1,5 @@
-#include "unit.h"
-#include "creep.h"
-#include <iostream>
-#include <string>
 /*------------------------------------------------------------------------------
--- FILE:        unit.cpp
+-- FILE:        creep.cpp
 --
 -- DATE:        2013/03/11
 --
@@ -16,6 +12,10 @@
 -- DESCRIPTION: Base functions for creeps. Movement, updating and target
 --                direction.
 ------------------------------------------------------------------------------*/
+#include "unit.h"
+#include "creep.h"
+#include <iostream>
+#include <string>
 #include <vector>
 #include <math.h>
 
