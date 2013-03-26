@@ -10,6 +10,13 @@ Player::Player(int uid, Point pos, int hp, int atkdmg, int atkrng,
     //validation
 }
 
+Player::Player(int uid, int cid, Point pos, int hp, int atkdmg, int atkrng,
+               int atkspd, int percep, int atkcnt, int spd, Direction direct)
+               : MobileUnit(uid, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, spd, direct), clientID(clientID)
+{
+    //validation
+}
+
 void Player::Attack(){
     //1) based on the units direction, check for enemy units
     //2) based on the players attack type, determine which enemies would be hit
