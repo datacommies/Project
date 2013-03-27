@@ -115,7 +115,7 @@ typedef struct
 {
     header_t head;
     UnitType unit;
-    int posx, posy;
+    int posx, posy, path;
 } request_create_t;
 
 typedef struct 
