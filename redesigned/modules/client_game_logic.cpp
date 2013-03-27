@@ -42,7 +42,7 @@ bool ClientGameLogic::createTower(UnitType type, Point location)
    //if the location you are attempting to build a tower at
    //is not currently occupied and is not impassible terrain
 
-   clientNetwork_.createUnit(this->playerId, type, location);
+   clientNetwork_.createUnit(this->playerId, type, location, 2); //hardcoded path = 2 (last parameter)
    
    return true;
 }
