@@ -16,7 +16,6 @@ Game Logic
 * Implement currency
 * Define default values for each type of class (health, attack speed, etc.)
 * Everything to do with human-controlled players
+* Win/lose scenario (endgame)
 
-Control
--------
-* ???
+(Feel free to add anything if you see fit)
