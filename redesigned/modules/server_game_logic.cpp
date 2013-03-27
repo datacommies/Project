@@ -38,6 +38,7 @@ ServerGameLogic * gSGL;
   teams[0].paths.push_back(p);
   teams[1].paths.push_back(p);
 
+#if 0
 #ifndef TESTCLASS
   Creep c;
   c.pPath = &teams[1].paths[0][0];
@@ -58,6 +59,7 @@ ServerGameLogic * gSGL;
   //initializeTeams();
 
   startGame();
+#endif
 #endif
 }
 

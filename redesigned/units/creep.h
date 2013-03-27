@@ -15,11 +15,16 @@ public:
 	virtual UnitType getType() const { return CREEP; }
 	virtual size_t getSize() const { return MobileUnit::getSize(); }
 
-	Creep(int uid = 0, Point pos = Point(), int hp = 0, int atkdmg = 0, int atkrng = 0,
+	Creep(int uid, Point pos, int hp = 0, int atkdmg = 0, int atkrng = 0,
           int atkspd = 0, int percep = 0, int atkcnt = 0, int spd = 0, Direction direct = Direction(),
           Point* path=NULL, int movespeed = 0); 
           
           //assuming psaved does not need to be initialized when creep is created
+
+
+	Creep(int uid, int side, Point pos, Point* path, int hp = 100, int atkdmg = 10, int atkrng = 10,
+             int atkspd = 10, int percep = 10, int atkcnt = 30, int movespeed = 10,
+             Direction direct = Direction());
 
 	//bad
 	//Creep(): pPath( 0 ), pSaved( 0 ), moveSpeed( 0 ){}

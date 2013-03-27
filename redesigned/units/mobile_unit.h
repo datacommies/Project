@@ -15,6 +15,9 @@ public:
     MobileUnit(int uid, Point pos, int hp, int atkdmg, int atkrng,
         	   int atkspd, int percep, int atkcnt, int spd, Direction direct);
 
+    MobileUnit(int uid, int side, Point pos, int hp=100, int atkdmg=0, int atkrng=0,
+         int atkspd=0, int percep=0, int atkcnt=0, int movespeed = 10, Direction direct = UP);
+
     void    setDirection(Direction newDirect) { direction = newDirect; }
 	void	setSpeed(int newSpeed) { moveSpeed = newSpeed; }
     int     getSpeed(){ return moveSpeed; }
