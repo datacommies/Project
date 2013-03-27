@@ -22,7 +22,7 @@ public:
    ~ClientNetwork();
 
    // Functions
-   bool createUnit(int playerId, UnitType type, Point location);
+   bool createUnit(int playerId, UnitType type, Point location, int path);
    bool movePlayer(int playerId, Direction direction);
    bool attack(int playerId, Direction direction);
 
