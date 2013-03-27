@@ -86,7 +86,7 @@ void ClientNetwork::recvReply() {
 		Point p;
 		p.x = 50;
 		p.y = 100;
-		createUnit(0, TOWER, p);
+		createUnit(0, TOWER, p , 2); //hardcoded path = 2 (last parameter)
 	}
 
 	for (int i = 0; i < 6 ; i ++){
@@ -158,7 +158,7 @@ void ClientNetwork::recvReply() {
  * RETURNS: true on success
  *          false on fail
  * NOTES:   No validation performed here. */
-bool ClientNetwork::createUnit(int playerId, UnitType type, Point location)
+bool ClientNetwork::createUnit(int playerId, UnitType type, Point location, int path)
 {
 	//TODO: Not using playtypeerID at all!
 
@@ -171,6 +171,7 @@ bool ClientNetwork::createUnit(int playerId, UnitType type, Point location)
 	request.unit = type;
 	request.posx = location.x;
 	request.posy = location.y;
+	request.path = path;
 
 	send(connectsock, &request, sizeof(request_create_t), 0);
    return false;
