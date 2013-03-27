@@ -5,6 +5,8 @@
 
 using namespace std;
 
+player_matchmaking_t empty = {{0, 0}, "Empty", 0, 0, 0, false};
+
 /* Constructor
  *
  * PRE:
@@ -45,6 +47,7 @@ bool ClientNetwork::connectToServer(std::string hostname, int port)
 
 	struct sockaddr_in serv_addr;
 	struct hostent *server;
+	long n;
 
 	connectsock = socket(AF_INET, SOCK_STREAM, 0); 
 
@@ -76,11 +79,27 @@ bool ClientNetwork::connectToServer(std::string hostname, int port)
 	}
 
 	std::cout << "I'M CONNECTEDDDDD!!!!! YEAAAAAAAAAAAAAAAAAAAAAAAA" << std::endl;
+
+	player_matchmaking_t p = {{0, 0}, {0}, 0, 0, 0, false};
+    //TODO: get user's name from GUI. Hardcode for now.
+    strcpy(p.name, "Behnam");
+    p.team = 0;
+    p.role = 0;
+    p.ready = false;
+
+    if ((n = write(connectsock, &p, sizeof(p))) < 0)
+    {
+    	std::cerr << "ERROR writing to socket" << std::endl;
+    	return false;
+    }
+
 	recvReply();
 	return true;
 }
 
 void ClientNetwork::recvReply() {
+	long n;
+
 	//TEST
 	for(int i = 0 ; i < 6 ; i++){
 		Point p;
@@ -147,7 +166,30 @@ void ClientNetwork::recvReply() {
 			pthread_mutex_lock( &gl->unit_mutex );
 			gl->units.clear();
 			pthread_mutex_unlock( &gl->unit_mutex );
-		}
+		} else if (head.type == MSG_PLAYER_UPDATE) {
+			player_matchmaking_t p;
+            p.head = head;
+            n = recv_complete(connectsock, ((char*)&p) + sizeof(head), sizeof(p) - sizeof(head), 0);
+
+            player_update(&p);    
+		} else if (head.type == MSG_PLAYER_LEAVE) {
+            player_matchmaking_t p;
+            p.head = head;
+            n = recv_complete(connectsock, ((char*)&p) + sizeof(head), sizeof(p) - sizeof(head), 0);
+
+            player_leave(&p);
+        } else if (head.type == MSG_MAPNAME) {
+            //n = recv_complete(connectsock, ((char*)&m + sizeof(head)), sizeof(map_t) - sizeof(head), 0);
+            char m[MAP_NAME_SIZE] = {0};
+            if ((n = recv_complete(connectsock, m, MAP_NAME_SIZE, 0)) > 0)
+                msg_mapname(m);
+        } else if (head.type == MSG_CHAT) {
+            char * m = (char *) malloc (head.size);
+            n = recv_complete(connectsock, m, head.size, 0);
+            m[n] = 0;
+            msg_chat(m);
+            free(m);
+        }
 	}
 }
 
@@ -219,4 +261,42 @@ bool ClientNetwork::attack(int playerId, Direction direction)
 int ClientNetwork::sendRequest(int msg)
 {
     return 1;
+}
+
+void ClientNetwork::player_update (player_matchmaking_t * p) {
+    printf("Player: %s\t" "Team: %d\t"
+        "Role: %d\t" "Ready: %s\n",
+        p->name, p->team,
+        p->role, (p->ready ? "yes" : "no"));
+
+    if (p->team == 1)
+        team_l[p->role] = *p;
+    else if (p->team == 2)
+        team_r[p->role] = *p;
+    else 
+        waiting.push_back(*p);
+}
+
+void ClientNetwork::player_leave (player_matchmaking_t * p) {
+    printf("Player Left: %s\n", p->name);
+
+    // Remove player from the waiting list.
+    if (p->team == 0) {
+        waiting.erase(std::remove(waiting.begin(), waiting.end(), *p), waiting.end());
+    } else {
+        // Remove the player from the team arrays.
+        if (p->team == 1){
+            memcpy(team_l+p->role, &empty, sizeof(player_matchmaking_t));
+        } else if (p->team == 2) {
+            memcpy(team_r+p->role, &empty, sizeof(player_matchmaking_t));
+        }
+    }
+}
+
+void ClientNetwork::msg_mapname (char * map) {
+    printf("Got map name: %s\n", map);
+}
+
+void ClientNetwork::msg_chat (char * text) {
+    printf("message: %s\n", text);
 }

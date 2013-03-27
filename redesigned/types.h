@@ -133,4 +133,3 @@ int recv_complete (int sockfd, void *buf, size_t len, int flags);
 int send_chat ( int client, const std::string & body );
 
 #endif
-
