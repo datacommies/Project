@@ -8,7 +8,7 @@
 class Castle : public Tower
 {
 public:
-    int clientID_; 
+    int clientID_; //id of the client/player, likely the socket #
 
     Castle(int uid, Point pos, int hp, int atkdmg, int atkrng,
         int atkspd, int percep, int atkcnt, int wall, int cid);

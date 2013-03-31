@@ -11,6 +11,7 @@ Tower::Tower(int uid, Point pos, int hp, int atkdmg, int atkrng,
 {
     //validation
 }
+
 /*------------------------------------------------------------------------------
 -- FUNCTION:    Creep - constructor
 --
