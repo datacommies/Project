@@ -58,7 +58,7 @@ MobileUnit::MobileUnit(int uid, int side, Point pos, int hp, int atkdmg, int atk
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:    serializeUnit
+-- FUNCTION:    serializeMobileUnit
 --
 -- DATE:        2013/03/11
 --
@@ -69,7 +69,7 @@ MobileUnit::MobileUnit(int uid, int side, Point pos, int hp, int atkdmg, int atk
 --
 -- RETURNS:     string, the serialized Unit
 --
--- DESCRIPTION: Converts the Unit classes members into one string to be sent over
+-- DESCRIPTION: Converts the MobileUnit classes members into one string to be sent over
 -- the network between client and server. 
 ------------------------------------------------------------------------------*/
 string MobileUnit::serializeMobileUnit()

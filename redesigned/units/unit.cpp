@@ -133,8 +133,7 @@ void Unit::Attack(void) {
         pTarget->health -= attackDamage;
 
     if( pTarget->health <= 0 ) {
-        //the game class does not exist, foos!
-        //Game::removeUnit( pTarget, pTarget->iTeam );
+        //remove the unit from containers, any other necessary deletion
     }
 }
 
@@ -179,7 +178,6 @@ void Unit::CheckTarget(void) {
     /* Or Target is out of range.  */
     else if (inRange(position, pTarget->getPos(), perception) == false )
         pTarget = NULL;
-    
 }
 
 /*

@@ -128,6 +128,21 @@ void Creep::Move( Point pt ) {
     position.y += getTargetDirection(position.y, pt.y) * moveSpeed;
 }
 
+/*------------------------------------------------------------------------------
+-- FUNCTION:    serializeCreep
+--
+-- DATE:        2013/03/11
+--
+-- DESIGNER:    Behnam Bastami, Aaron Lee
+-- PROGRAMMER:  Behnam Bastami, Aaron Lee, David Czech
+--
+-- INTERFACE:   Unit::serializeUnit()
+--
+-- RETURNS:     string, the serialized Unit
+--
+-- DESCRIPTION: Converts the Creep classes members into one string to be sent over
+-- the network between client and server.  Uses the mobile unit serialize function.
+------------------------------------------------------------------------------*/
 string Creep::serializeCreep()
 {
     string s = MobileUnit::serializeMobileUnit();

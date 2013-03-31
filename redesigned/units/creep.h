@@ -9,6 +9,7 @@
 class Creep : public MobileUnit
 {
 public: 
+    //what is spawn? call ctor mutliple times?
   	void spawn(int num);  //also creep type? when we have a type
 	std::string serializeCreep();
 
@@ -18,18 +19,13 @@ public:
 	Creep(int uid, Point pos, int hp = 0, int atkdmg = 0, int atkrng = 0,
           int atkspd = 0, int percep = 0, int atkcnt = 0, int spd = 0, Direction direct = Direction(),
           Point* path=NULL, int movespeed = 0); 
-          
-          //assuming psaved does not need to be initialized when creep is created
-
+             
 
 	Creep(int uid, int side, Point pos, Point* path, int hp = 100, int atkdmg = 10, int atkrng = 10,
              int atkspd = 10, int percep = 10, int atkcnt = 30, int movespeed = 10,
              Direction direct = Direction());
 
-	//bad
-	//Creep(): pPath( 0 ), pSaved( 0 ), moveSpeed( 0 ){}
-
-	//Creep(const Creep&);
+	
 	void	setPath(Point *pt)	{ pPath = pt; }
 	void	nextPoint(void)	{ pPath++; }
 	void	savePoint(Point &pt)	{ pSaved = &pt; }
@@ -37,14 +33,10 @@ public:
 	int		getTargetDirection(int, int);
 	void	setTarget(Unit &newTarget) { pTarget = &newTarget; }
 	void    Update( Team& team );
+	bool    hasWeakness(int, int);
 
-
-	//virtual void	CheckTarget(void) {}
-	//virtual void	FindTarget(void) {}
-	bool			hasWeakness(int, int);
-
-	Point	*	pPath;
-	Point	*	pSaved;
+	Point	*	pPath; //contains all points for the creeps path
+	Point	*	pSaved; //user to save the point the creep is at when it's AI diverges it from the set path
 
 
 private:
