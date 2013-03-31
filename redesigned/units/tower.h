@@ -18,7 +18,7 @@ class Tower : public Unit
 {
 private:
 public:
-    int wallArmour_;
+    int wallArmour_; //reduces damage somehow?
     Tower(int uid, Point pos, int hp, int atkdmg, int atkrng,
           int atkspd, int percep, int atkcnt, int wall);
 	
