@@ -9,8 +9,8 @@ class MobileUnit : public Unit
 {
 public:
     int moveSpeed;   //the speed which a unit can move. ex. (it can move 1 square per 30 frames)
-    Direction direction;
-    int moveCounter;
+    Direction direction; //direction the unit is facing or moving
+    int moveCounter; //counter until the unit is allowed to move, setting it to 30 would = move once per second
    
     MobileUnit(int uid, Point pos, int hp, int atkdmg, int atkrng,
         	   int atkspd, int percep, int atkcnt, int spd, Direction direct);

@@ -3,7 +3,21 @@
 
 using namespace std;
 
-//old constructor
+/*------------------------------------------------------------------------------
+-- FILE:        mobile_unit.cpp
+--
+-- DATE:        March 11, 2013
+--
+-- MAINTAINERS: Callum Styan
+--
+-- FUNCTIONS:   MobileUnit constructor
+--              serializeUnit
+--
+-- DESCRIPTION: File contains implementation for the Mobile Unit class. Mobile Unit 
+--              will be a base class that Creep and Player inherit from. 
+------------------------------------------------------------------------------*/
+
+//old constructor - Callum
 MobileUnit::MobileUnit(int uid, Point pos, int hp, int atkdmg, int atkrng,
                        int atkspd, int percep, int atkcnt, int spd, Direction direct):
                        Unit(uid, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt), moveSpeed(spd), direction(direct)
@@ -21,10 +35,10 @@ MobileUnit::MobileUnit(int uid, Point pos, int hp, int atkdmg, int atkrng,
 -- PROGRAMMER:  Callum Styan
 --
 -- INTERFACE:   MobileUnit(int uid, int side, Point pos, int hp=100, int atkdmg=0, int atkrng=0,
-                           int atkspd=0, int percep=0, int atkcnt=0, int movespeed = 10, 
-                           Direction direct = UP)
+--                         int atkspd=0, int percep=0, int atkcnt=0, int movespeed = 10, 
+--                         Direction direct = UP)
 --
--- RETURNS:     MobileUnit
+-- RETURNS:     a new MobileUnit
 --
 -- DESCRIPTION: Creates a new MobileUnit object.  Default values are given.
 --              
@@ -43,6 +57,21 @@ MobileUnit::MobileUnit(int uid, int side, Point pos, int hp, int atkdmg, int atk
     //validation?
 }
 
+/*------------------------------------------------------------------------------
+-- FUNCTION:    serializeUnit
+--
+-- DATE:        2013/03/11
+--
+-- DESIGNER:    Behnam Bastami, Aaron Lee
+-- PROGRAMMER:  Behnam Bastami, Aaron Lee, David Czech
+--
+-- INTERFACE:   Unit::serializeUnit()
+--
+-- RETURNS:     string, the serialized Unit
+--
+-- DESCRIPTION: Converts the Unit classes members into one string to be sent over
+-- the network between client and server. 
+------------------------------------------------------------------------------*/
 string MobileUnit::serializeMobileUnit()
 {
     string s = Unit::serializeUnit();

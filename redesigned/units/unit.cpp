@@ -3,7 +3,7 @@
 --
 -- DATE:        2013/03/11
 --
--- MAINTAINERS: Callum Styan, Nick Raposo, Behnam Bastami
+-- MAINTAINERS: Callum Styan, Nick Raposo, Cody Rossiter, Behnam Bastami
 --
 -- FUNCTIONS:   Unit constructor
 --              inRange
