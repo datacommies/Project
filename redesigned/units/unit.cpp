@@ -3,9 +3,10 @@
 --
 -- DATE:        2013/03/11
 --
--- MAINTAINERS: Chris Porter, Nick Raposo, Cody Rossiter
+-- MAINTAINERS: Callum Styan, Nick Raposo, Behnam Bastami
 --
--- FUNCTIONS:   inRange
+-- FUNCTIONS:   Unit constructor
+--              inRange
 --              hasWeakness
 --              hasStrength
 --              Attack
@@ -26,6 +27,8 @@
 
 using namespace std;
 
+
+//old constructor - Callum
 Unit::Unit(int uid, Point pos, int hp, int atkdmg,
            int atkrng, int atkspd, int percep, int atkcnt):
            id(uid), position(pos), health(hp), attackDamage(atkdmg), attackRange(atkrng),
@@ -35,7 +38,23 @@ Unit::Unit(int uid, Point pos, int hp, int atkdmg,
     printf("Inside unit constructor, x:%d y:%d\n", position.x, position.y);
 }
 
-
+/*------------------------------------------------------------------------------
+-- FUNCTION:    Unit constructor
+--
+-- DATE:        March 26, 2013
+--
+-- DESIGNER:    Callum Styan, Steve Lo
+-- PROGRAMMER:  Callum Styan, Steve Lo
+--
+-- INTERFACE:   Unit::Unit(int uid, int side, Point pos, int hp, int atkdmg,
+--                         int atkrng, int atkspd, int percep, int atkcnt)
+--
+-- RETURNS:     a new Unit object
+--
+-- DESCRIPTION: Builds a new Unit
+--
+-- NOTES: all parameters after Point pos
+------------------------------------------------------------------------------*/
 Unit::Unit(int uid, int side, Point pos, int hp, int atkdmg,
            int atkrng, int atkspd, int percep, int atkcnt):
            id(uid), team(side), position(pos), health(hp), attackDamage(atkdmg), attackRange(atkrng),
@@ -73,6 +92,9 @@ bool Unit::inRange(Point p1, Point p2, int distance) {
     
     return true;
 }
+
+//Everything below here, except serialize, is AI code, will probably be need to be
+//over ridden in the player class once we write that
 
 /*
 * Used to check if the target has a weakness to the Unit's element.
@@ -187,7 +209,21 @@ float Unit::Rotate(Point pt) {
     return atan2( (float)position.y - pt.y, (float)position.x - pt.x );
 }
 
-
+/*------------------------------------------------------------------------------
+-- FUNCTION:    serializeUnit
+--
+-- DATE:        2013/03/11
+--
+-- DESIGNER:    Behnam Bastami, Aaron Lee
+-- PROGRAMMER:  Behnam Bastami, Aaron Lee, David Czech
+--
+-- INTERFACE:   Unit::serializeUnit()
+--
+-- RETURNS:     string, the serialized Unit
+--
+-- DESCRIPTION: Converts the Unit classes members into one string to be sent over
+-- the network between client and server. 
+------------------------------------------------------------------------------*/
 string Unit::serializeUnit()
 {
     unit_t u;

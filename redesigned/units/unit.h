@@ -3,7 +3,6 @@
 
 #include "../resource.h"
 #include "../types.h"
-//#include "../team.h"
 
 class Team;
 
