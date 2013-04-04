@@ -46,6 +46,14 @@ public:
    void msg_mapname (char * map);
    void msg_chat (char * text);
 
+   void sendReady () {
+      player_matchmaking_t p = {{MSG_PLAYER_UPDATE, sizeof(player_matchmaking_t)}, {0}, 0, 0, 0, false};
+      strcpy(p.name, "Test");
+      p.role = 0;
+      p.ready = true;
+      send(connectsock, &p, sizeof(player_matchmaking_t), 0);
+   }
+
 private:
    int connectsock;
 

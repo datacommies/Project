@@ -450,7 +450,7 @@ void Graphics::takeRole()
     }
 }
 
-/* Button handler for starting the game
+/* Button handler for starting the game: set our ready state and inform the server
  *
  * PRE:     Lobby window is initialized
  * POST:    game will have started
@@ -459,8 +459,9 @@ void Graphics::takeRole()
  */
 void Graphics::startGame()
 {
-    // todo: actually start the game
     cout << "start the game!" << endl;
+    clientGameLogic_.ready();
+    sfgLobbyWindow->Show(false);
 }
 
 /* Closes the lobby SFGUI window and redraws the main menu.

@@ -100,21 +100,6 @@ bool ClientNetwork::connectToServer(std::string hostname, int port)
 void ClientNetwork::recvReply() {
 	long n;
 
-	//TEST
-	for(int i = 0 ; i < 6 ; i++){
-		Point p;
-		p.x = 50;
-		p.y = 100;
-		createUnit(0, TOWER, p , 2); //hardcoded path = 2 (last parameter)
-	}
-
-	for (int i = 0; i < 6 ; i ++){
-		Direction d = DOWN;
-		movePlayer(0, d);
-
-	}
-	//////////////////////
-
 	while (true) {
 		header_t head = {0};
 		recv_complete(connectsock, &head, sizeof(head), 0);
@@ -189,6 +174,9 @@ void ClientNetwork::recvReply() {
             m[n] = 0;
             msg_chat(m);
             free(m);
+        } else if (head.type == MSG_START) {
+        	cout << "Game started!" << endl;
+            gl->start();
         }
 	}
 }

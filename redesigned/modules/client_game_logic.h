@@ -31,7 +31,13 @@ public:
    bool movePlayer(Direction direction);
    bool attack(Direction direction);
    void exit();
-private:   
+   
+   // 
+   // required because theres no reference to clientNetwork.
+   void ready() {
+      clientNetwork_.sendReady();
+   }
+private:
    // Module References
    ClientNetwork& clientNetwork_;
 

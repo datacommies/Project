@@ -180,16 +180,12 @@ void* ServerNetwork::handleInput(void* args)
 
 void* ServerNetwork::handleClientRequest(void* args)
 {
-    
     ClientCtx* ctx = (ClientCtx*)args;
     ServerNetwork* thiz = (ServerNetwork*) ctx->sn;
     int client_ = ctx->client;
 
      while (1) {
-
-        
         header_t head;
-
 
         cout << "Going to get a head" <<endl;
         int n = recv_complete(client_, &head, sizeof(header_t), 0);
@@ -247,7 +243,6 @@ void* ServerNetwork::handleClient(void* args)
 
     // Create client request handler thread.
     pthread_create (&thiz->crThread_, NULL, handleClientRequest, args); // start server input handler.
-
 
     while (true) {
         header_t clear = {MSG_CLEAR, 0};
@@ -366,7 +361,13 @@ void * ServerNetwork::handle_client_lobby(void * ctx)
             bool start = true;
             recv_complete(client, ((char *) &player) + sizeof(header_t), sizeof(player_matchmaking_t) - sizeof(header_t), 0);
             
-            //TODO: validate all the things in pmt
+            for (size_t i = 0; i < players_.size(); ++i) {
+                if (players_[i].pid == client) {
+                    // Validate and update player info.
+                    players_[i].ready = player.ready;
+                }
+
+            }
 
             for (size_t i = 0; i < clients_.size(); ++i)
             {
