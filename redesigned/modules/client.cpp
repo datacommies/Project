@@ -23,9 +23,9 @@ Client::Client()
  * NOTES:    */
 void Client::run()
 {
-    clientNetwork_.connectToServer("localhost",4545);
-    
-	while (true){
+	while (clientGameLogic_.getCurrentState() != LOBBY) {
 		sleep(1);
 	}
+
+	clientNetwork_.connectToServer("localhost", 4545);
 }

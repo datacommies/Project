@@ -81,17 +81,17 @@ bool ClientNetwork::connectToServer(std::string hostname, int port)
 	std::cout << "I'M CONNECTEDDDDD!!!!! YEAAAAAAAAAAAAAAAAAAAAAAAA" << std::endl;
 
 	player_matchmaking_t p = {{0, 0}, {0}, 0, 0, 0, false};
-    //TODO: get user's name from GUI. Hardcode for now.
-    strcpy(p.name, "Behnam");
-    p.team = 0;
-    p.role = 0;
-    p.ready = false;
+	//TODO: get user's name from GUI. Hardcode for now.
+	strcpy(p.name, "Behnam");
+	p.team = 0;
+	p.role = 0;
+	p.ready = false;
 
-    if ((n = write(connectsock, &p, sizeof(p))) < 0)
-    {
-    	std::cerr << "ERROR writing to socket" << std::endl;
-    	return false;
-    }
+	if ((n = write(connectsock, &p, sizeof(p))) < 0)
+	{
+		std::cerr << "ERROR writing to socket" << std::endl;
+		return false;
+	}
 
 	recvReply();
 	return true;

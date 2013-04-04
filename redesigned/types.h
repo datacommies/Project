@@ -124,8 +124,6 @@ typedef struct
     Direction direction;
 } request_player_move_t;
 
-
-
 bool operator == (const player_matchmaking_t& a, const player_matchmaking_t& b);
 void error (const char *msg);
 int server (int port = 4545);
