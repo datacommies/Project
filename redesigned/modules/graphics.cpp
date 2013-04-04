@@ -32,7 +32,7 @@ inline string to_string(int num)
  * NOTES:   Graphics init and main loop  
 */
 void * init (void * in) {
-
+    bool controls_init = false;
     // Pointer to the Graphics instance is passed through the thread create argument.
     Graphics* g = (Graphics *)in;
     
@@ -122,6 +122,11 @@ void * init (void * in) {
         } else if (g->clientGameLogic_.getCurrentState() == LOBBY) {
             //go to lobby
         } else if (g->clientGameLogic_.getCurrentState() == IN_GAME) {
+            if (!controls_init) {
+                controls_init = true;
+                g->initGameControls();
+            }
+
             g->drawMap(window);
             g->drawUnits(window);
             g->drawHud(window);

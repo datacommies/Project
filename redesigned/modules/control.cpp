@@ -503,6 +503,8 @@ Control::GetTowerPlacement()
 void
 Control::MouseCallback(Point p)
 {
+    p.x -= 25;
+    p.y -= 25;
     _towerPlacement = p;
 
     if (next_to_build != 0)
