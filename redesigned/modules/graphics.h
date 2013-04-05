@@ -107,20 +107,14 @@ private:
    sfg::Button::Ptr exitLobbyButton;
    sfg::Label::Ptr unassignedPlayersLabel;
    sfg::Label::Ptr unassignedPlayersList;
+   
    sfg::Box::Ptr teamOneBox;
    sfg::Label::Ptr teamOneLabel;
-   sfg::Button::Ptr playerOneOneButton;
-   sfg::Button::Ptr playerOneTwoButton;
-   sfg::Button::Ptr playerOneThreeButton;
-   sfg::Button::Ptr playerOneFourButton;
-   sfg::Button::Ptr playerOneFiveButton;
+   sfg::Button::Ptr leftPlayers[5];
+   
    sfg::Box::Ptr teamTwoBox;
    sfg::Label::Ptr teamTwoLabel;
-   sfg::Button::Ptr playerTwoOneButton;
-   sfg::Button::Ptr playerTwoTwoButton;
-   sfg::Button::Ptr playerTwoThreeButton;
-   sfg::Button::Ptr playerTwoFourButton;
-   sfg::Button::Ptr playerTwoFiveButton;
+   sfg::Button::Ptr rightPlayers[5];
 
    // Functions
    void initMainMenuControls();

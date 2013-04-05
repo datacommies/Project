@@ -120,7 +120,19 @@ void * init (void * in) {
         if (g->clientGameLogic_.getCurrentState() == MAIN_MENU) {
             g->drawMainMenu(window);
         } else if (g->clientGameLogic_.getCurrentState() == LOBBY) {
-            //go to lobby
+            // Check if connected and display lobby, or else show "connecting..." message.
+            for (int i=0; i < 5; i++){
+                //cout << g->clientGameLogic_.clientNetwork_.team_l[i].name << endl;
+                //cout << g->clientGameLogic_.clientNetwork_.team_r[i].name << endl;
+            }
+            string unassigned;
+            for (size_t i = 0; i < g->clientGameLogic_.clientNetwork_.waiting.size(); ++i)
+            {
+                unassigned += g->clientGameLogic_.clientNetwork_.waiting[i].name;
+                unassigned += "\n";
+            }
+            g->unassignedPlayersList->SetText(unassigned);
+
         } else if (g->clientGameLogic_.getCurrentState() == IN_GAME) {
             if (!controls_init) {
                 controls_init = true;
@@ -140,16 +152,6 @@ void * init (void * in) {
         {
                 Button b = *button;
                 b.draw(window);
-        }
-
-        for (int i=0; i < 5; i++){
-            cout << g->clientGameLogic_.clientNetwork_.team_l[i].name << endl;
-            cout << g->clientGameLogic_.clientNetwork_.team_r[i].name << endl;
-        }
-
-        for (int i = 0; i < g->clientGameLogic_.clientNetwork_.waiting.size(); ++i)
-        {
-            cout << g->clientGameLogic_.clientNetwork_.waiting[i].name << endl;
         }
 
         // Display test windows.
@@ -364,27 +366,14 @@ void Graphics::initLobbyWindow(){
     teamTwoLabel = sfg::Label::Create("Team Two");
 
     // Create the team selection buttons.
-    playerOneOneButton = sfg::Button::Create("Player 1");
-    playerOneTwoButton = sfg::Button::Create("Player 2");
-    playerOneThreeButton = sfg::Button::Create("Player 3");
-    playerOneFourButton = sfg::Button::Create("Player 4");
-    playerOneFiveButton = sfg::Button::Create("Player 5");
-    playerTwoOneButton = sfg::Button::Create("Player 1");
-    playerTwoTwoButton = sfg::Button::Create("Player 2");
-    playerTwoThreeButton = sfg::Button::Create("Player 3");
-    playerTwoFourButton = sfg::Button::Create("Player 4");
-    playerTwoFiveButton = sfg::Button::Create("Player 5");
-
-    playerOneOneButton->GetSignal  (sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 11);
-    playerOneTwoButton->GetSignal  (sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 12);
-    playerOneThreeButton->GetSignal(sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 13);
-    playerOneFourButton->GetSignal (sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 14);
-    playerOneFiveButton->GetSignal (sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 15);
-    playerTwoOneButton->GetSignal  (sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 21);
-    playerTwoTwoButton->GetSignal  (sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 22);
-    playerTwoThreeButton->GetSignal(sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 23);
-    playerTwoFourButton->GetSignal (sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 24);
-    playerTwoFiveButton->GetSignal (sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) 25);
+    for (int i = 0; i < 5; ++i)
+    {
+        leftPlayers[i] = sfg::Button::Create("Player 1");
+        leftPlayers[i]->GetSignal  (sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) (11+i));
+        
+        rightPlayers[i] = sfg::Button::Create("Player 1");
+        rightPlayers[i]->GetSignal  (sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) (21+i));
+    }
 
     // Create the start game / exit buttons.
     startGameButton = sfg::Button::Create("Start Game");
@@ -398,18 +387,11 @@ void Graphics::initLobbyWindow(){
     sfgMiddleLobbyBox->Pack(startGameButton);
     sfgMiddleLobbyBox->Pack(exitLobbyButton);
     sfgLeftLobbyBox->Pack(teamOneLabel);
-    sfgLeftLobbyBox->Pack(playerOneOneButton);
-    sfgLeftLobbyBox->Pack(playerOneTwoButton);
-    sfgLeftLobbyBox->Pack(playerOneThreeButton);
-    sfgLeftLobbyBox->Pack(playerOneFourButton);
-    sfgLeftLobbyBox->Pack(playerOneFiveButton);
     sfgRightLobbyBox->Pack(teamTwoLabel);
-    sfgRightLobbyBox->Pack(playerTwoOneButton);
-    sfgRightLobbyBox->Pack(playerTwoTwoButton);
-    sfgRightLobbyBox->Pack(playerTwoThreeButton);
-    sfgRightLobbyBox->Pack(playerTwoFourButton);
-    sfgRightLobbyBox->Pack(playerTwoFiveButton);
-
+    for (int i = 0; i < 5; ++i) {
+        sfgLeftLobbyBox->Pack(leftPlayers[i]);
+        sfgRightLobbyBox->Pack(rightPlayers[i]);
+    }
     sfgLobbyBox->Pack(sfgLeftLobbyBox);
     sfgLobbyBox->Pack(sfgMiddleLobbyBox);
     sfgLobbyBox->Pack(sfgRightLobbyBox);

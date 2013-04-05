@@ -22,10 +22,8 @@ Server::Server()
  */
 void Server::run()
 {
-
     serverGameLogic_.startGame();
-    signal(SIGPIPE, SIG_IGN); 
+    signal(SIGPIPE, SIG_IGN); // Ignore sigpipe so server doesn't abort when a client disconnects.
     serverNetwork_.initSock();
     serverNetwork_.initNetwork();
-
 }
