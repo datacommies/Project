@@ -184,7 +184,10 @@ void* ServerNetwork::handleClientRequest(void* args)
     ServerNetwork* thiz = (ServerNetwork*) ctx->sn;
     int client_ = ctx->client;
 
-     while (1) {
+    //Player p;
+    //thiz->serverGameLogic_.teams[0].players.push_back(p);
+
+    while (1) {
         header_t head;
 
         cout << "Going to get a head" <<endl;
@@ -226,9 +229,7 @@ void* ServerNetwork::handleClientRequest(void* args)
                 thiz->serverGameLogic_.receiveMovePlayerCommand(client_, dir);
                 
             break;
-
        }
-
     }
 
     return NULL;

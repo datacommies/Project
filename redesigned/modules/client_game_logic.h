@@ -37,9 +37,9 @@ public:
    void ready() {
       clientNetwork_.sendReady();
    }
-private:
    // Module References
    ClientNetwork& clientNetwork_;
+private:
 
    // Fields
    GameState gameState_;

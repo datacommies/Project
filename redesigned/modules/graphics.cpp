@@ -142,6 +142,16 @@ void * init (void * in) {
                 b.draw(window);
         }
 
+        for (int i=0; i < 5; i++){
+            cout << g->clientGameLogic_.clientNetwork_.team_l[i].name << endl;
+            cout << g->clientGameLogic_.clientNetwork_.team_r[i].name << endl;
+        }
+
+        for (int i = 0; i < g->clientGameLogic_.clientNetwork_.waiting.size(); ++i)
+        {
+            cout << g->clientGameLogic_.clientNetwork_.waiting[i].name << endl;
+        }
+
         // Display test windows.
         sfgui.Display(window);
 

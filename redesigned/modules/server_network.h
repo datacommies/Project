@@ -32,22 +32,22 @@ public:
     void * handle_client_lobby(void *);
 
 private:
-    std::vector<player_matchmaking_t> players_;
+    int sock_;
     std::vector<int> clients_;       // client_ sockets
     pthread_t uiThread_, crThread_;
-    int sock_;
     std::vector<pthread_t> threads_; // client_ handler threads_.
-    
-   // Module references
-   ServerGameLogic& serverGameLogic_;
+    std::vector<player_matchmaking_t> players_;
 
-   // Functions
-   bool sync(int); // TODO: clientId is a placeholder. May be a socket or something else
-   void error(const char *);
+    // Module references
+    ServerGameLogic& serverGameLogic_;
+
+    // Functions
+    bool sync(int); // TODO: clientId is a placeholder. May be a socket or something else
+    void error(const char *);
     
-  static void* handleClient(void*);
-  static void* handleClientRequest(void* args);
-  void handleRequests();
+    static void* handleClient(void*);
+    static void* handleClientRequest(void* args);
+    void handleRequests();
 };
 
 int recv_complete(int,void*,size_t,int);

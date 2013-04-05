@@ -511,6 +511,3 @@ Control::MouseCallback(Point p)
         CallUnitTypeCreationEvent((UnitType)next_to_build);
     next_to_build = 0;
 }
-
-
-

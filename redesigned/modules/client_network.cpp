@@ -83,6 +83,7 @@ bool ClientNetwork::connectToServer(std::string hostname, int port)
 	player_matchmaking_t p = {{0, 0}, {0}, 0, 0, 0, false};
 	//TODO: get user's name from GUI. Hardcode for now.
 	strcpy(p.name, "Behnam");
+	p.name[0] = 'a' + (rand() % (int)('z' - 'a' + 1));
 	p.team = 0;
 	p.role = 0;
 	p.ready = false;
