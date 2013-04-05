@@ -689,12 +689,12 @@ void Graphics::drawEndGameScreen(sf::RenderWindow& window)
     endGameScreen.setPosition(100, 100);
     endGameScreen.setSize(sf::Vector2f(WINDOW_WIDTH - 200, WINDOW_HEIGHT - 300));
     endGameScreen.setFillColor(clientGameLogic_.getCurrentState() == WON_GAME ? sf::Color(0, 200, 0) : sf::Color(200, 0, 0));    
-
-    sf::Text currencyText(clientGameLogic_.getCurrentState() == WON_GAME ? "YOU WIN!" : "YOU LOSE!", font, 80);
-    currencyText.setPosition(200, 200);
-
     window.draw(endGameScreen);
-    window.draw(currencyText);
+    
+    sf::Text endGameText(clientGameLogic_.getCurrentState() == WON_GAME ? "YOU WIN!" : "YOU LOSE!", font, 80);
+    endGameText.setPosition(200, 200);
+    
+    window.draw(endGameText);
 }
 
 /* Loads all the images that are used by the game
