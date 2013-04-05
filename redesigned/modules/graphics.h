@@ -128,6 +128,7 @@ private:
    void drawTeamCircle(sf::RenderWindow& window, int team, float x, float y);
    void drawHealthBar(sf::RenderWindow& window, float x, float y, int health);
    void drawCurrency(sf::RenderWindow& window);
+   void drawEndGameScreen(sf::RenderWindow& window);
 
    // SFGUI Functions
    void initDesktop();

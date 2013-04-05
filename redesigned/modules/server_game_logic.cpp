@@ -449,6 +449,9 @@ void ServerGameLogic::update()
         break;
     }
   }
+  
+  
+  gameState_ = WON_GAME;
 }
 
 void ServerGameLogic::updateTimer(int i)

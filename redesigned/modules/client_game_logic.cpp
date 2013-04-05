@@ -112,5 +112,5 @@ void ClientGameLogic::exit()
 }
 
 GameState ClientGameLogic::getCurrentState() {
-   return gameState_;
+   return gameState_;   
 }

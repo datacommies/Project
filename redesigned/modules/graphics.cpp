@@ -116,7 +116,7 @@ void * init (void * in) {
         
         window.clear();
 
-        // Check to see which state the game is in and act accordingly.
+        // Check to see which state the game is in and act accordingly.        
         if (g->clientGameLogic_.getCurrentState() == MAIN_MENU) {
             g->drawMainMenu(window);
         } else if (g->clientGameLogic_.getCurrentState() == LOBBY) {
@@ -133,7 +133,7 @@ void * init (void * in) {
             }
             g->unassignedPlayersList->SetText(unassigned);
 
-        } else if (g->clientGameLogic_.getCurrentState() == IN_GAME) {
+        } else if (g->clientGameLogic_.getCurrentState() == IN_GAME || g->clientGameLogic_.getCurrentState() == WON_GAME || g->clientGameLogic_.getCurrentState() == LOST_GAME) {
             if (!controls_init) {
                 controls_init = true;
                 g->initGameControls();
@@ -143,8 +143,12 @@ void * init (void * in) {
             g->drawUnits(window);
             g->drawHud(window);
             g->drawCurrency(window);
+
+            if (g->clientGameLogic_.getCurrentState() == WON_GAME || g->clientGameLogic_.getCurrentState() == LOST_GAME)
+                g->drawEndGameScreen(window);
+
             sf::Text state("In Game", g->font, 20);
-            window.draw(state);
+            window.draw(state);            
         }
 
         // Iterate through the buttons and draw them one by one.
@@ -668,6 +672,28 @@ void Graphics::drawCurrency(sf::RenderWindow& window)
 
     sf::Text currencyText(to_string(clientGameLogic_.currency), font, 20);
     currencyText.setPosition(100, 0);
+    window.draw(currencyText);
+}
+
+/* Draws the end of game screen
+ *
+ * PRE:     
+ * POST:    End of game message is drawn
+ * RETURNS: 
+ * NOTES:    
+ */
+void Graphics::drawEndGameScreen(sf::RenderWindow& window)
+{
+    sf::RectangleShape endGameScreen;
+
+    endGameScreen.setPosition(100, 100);
+    endGameScreen.setSize(sf::Vector2f(WINDOW_WIDTH - 200, WINDOW_HEIGHT - 300));
+    endGameScreen.setFillColor(clientGameLogic_.getCurrentState() == WON_GAME ? sf::Color(0, 200, 0) : sf::Color(200, 0, 0));    
+
+    sf::Text currencyText(clientGameLogic_.getCurrentState() == WON_GAME ? "YOU WIN!" : "YOU LOSE!", font, 80);
+    currencyText.setPosition(200, 200);
+
+    window.draw(endGameScreen);
     window.draw(currencyText);
 }
 

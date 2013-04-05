@@ -53,7 +53,9 @@ enum GameState
 {
    MAIN_MENU,
    LOBBY,
-   IN_GAME
+   IN_GAME,
+   WON_GAME,
+   LOST_GAME
 };
 
 // Structs --------------------------------------------------------------------
