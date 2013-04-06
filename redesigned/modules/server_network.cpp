@@ -200,6 +200,7 @@ void* ServerNetwork::handleClientRequest(void* args)
 
         int x = 0; 
 
+        Point loc;
         switch(head.type){
             case MSG_REQUEST_CREATE:
                 request_create_t rc;
@@ -209,7 +210,7 @@ void* ServerNetwork::handleClientRequest(void* args)
                 if (x <= 0)
                     break;
 
-                Point loc;
+                //Point loc;
                 loc.x = rc.posx;
                 loc.y = rc.posy;
                 thiz->serverGameLogic_.receiveCreateUnitCommand(client_, rc.unit, loc);
