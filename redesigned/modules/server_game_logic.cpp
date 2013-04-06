@@ -180,11 +180,24 @@ void ServerGameLogic::initializeTowers()
     }
 }
 
+/* Sets all teams' initial currency.
+ *
+ * PRE:     2 teams exist
+ * POST:    The currency of all teams has been set to an initial value
+ * RETURNS:
+ * NOTES:    */
+void ServerGameLogic::initializeCurrency()
+{
+  for (int team_i=0; team_i<2; team_i++)
+    teams[team_i].currency = INIT_CURRENCY;
+}
+
 void ServerGameLogic::initializeTeams()
 {
   initializeCastles();
   initializeCreeps();
   initializeTowers();
+  initializeCurrency();
 
 #ifdef TESTCLASS
   mapTeams_[0].build(teams[0]);
@@ -449,9 +462,6 @@ void ServerGameLogic::update()
         break;
     }
   }
-  
-  
-  gameState_ = WON_GAME;
 }
 
 void ServerGameLogic::updateTimer(int i)

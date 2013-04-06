@@ -271,6 +271,7 @@ class ServerGameLogic
     void initializeCastles();
     void initializeCreeps();
     void initializeTowers();
+    void initializeCurrency();
 
     static void setAlarm();
     static void updateTimer(int i);
