@@ -111,6 +111,6 @@ void ClientGameLogic::exit()
    gameState_ = MAIN_MENU;
 }
 
-GameState ClientGameLogic::getCurrentState() {
-   return gameState_;   
+GameState ClientGameLogic::getCurrentState() {   
+   return gameState_;      
 }

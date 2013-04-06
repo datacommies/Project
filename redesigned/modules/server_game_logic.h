@@ -4,7 +4,6 @@
 #define INTERVAL 33333
 
 #define INIT_NUM_CREEPS 3
-#define INIT_TOWERS_START 4
 #define INIT_NUM_TOWERS 4
 #define INIT_CURRENCY 100
 #define INIT_HEALTH 100
@@ -35,6 +34,8 @@
 #define INIT_TOWER_ATKCNT 1
 #define INIT_TOWER_WALL 2 
 #define TOWER_COST 100
+
+#define PATH_COUNT 1
 
 // This will come actually be read from the map
 #ifndef TESTCLASS
@@ -67,6 +68,7 @@ struct CommandData {
   UnitType type;
   Point location;
   Direction direction;
+  int pathID;
 };
 
 class ServerGameLogic
@@ -85,7 +87,7 @@ class ServerGameLogic
 
     // Functions
     void startGame();
-    void receiveCreateUnitCommand(int playerId, UnitType type, Point location);
+    void receiveCreateUnitCommand(int playerId, UnitType type, Point location, int pathId = 0);
     void receiveMovePlayerCommand(int playerId, Direction direction);
     void receiveMoveUnitCommand(int unitId, Direction direction);
     void receiveAttackCommand(int playerId, Direction direction);
@@ -274,8 +276,9 @@ class ServerGameLogic
     void initializeCreeps();
     void initializeTowers();
     void initializeCurrency();
+    void initializePaths();
 
-    void createCreep(int team_no, Point location);
+    void createCreep(int team_no, Point location, int path_no = 0);
     void createTower(int team_no, Point location);
 
     static void setAlarm();

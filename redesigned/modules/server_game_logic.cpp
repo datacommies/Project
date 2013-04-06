@@ -131,7 +131,7 @@ void ServerGameLogic::initializeCreeps()
         pos.y = MAX_Y - 1;
       }
 
-      createCreep(team_i, pos);
+      createCreep(team_i, pos, j % PATH_COUNT);
     }
 }
 
@@ -166,14 +166,19 @@ void ServerGameLogic::initializeCurrency()
     teams[team_i].currency = INIT_CURRENCY;
 }
 
+void ServerGameLogic::initializePaths()
+{  
+}
+
 void ServerGameLogic::initializeTeams()
 {
+  initializePaths(); // Must be done before initializing creeps
   initializeCastles();
   initializeCreeps();
   initializeTowers();
   initializeCurrency();
 
-#ifdef TESTCLASS
+#ifdef TESTCLASS  
   mapTeams_[0].build(teams[0]);
   mapTeams_[1].build(teams[1]);
   mapBoth_.merge(mapTeams_[0], mapTeams_[1]);
@@ -202,14 +207,15 @@ void ServerGameLogic::startGame()
  * POST:    Command has been queued.
  * RETURNS:
  * NOTES:   No validation is performed here. */
-void ServerGameLogic::receiveCreateUnitCommand(int playerId, UnitType type, Point location)
+void ServerGameLogic::receiveCreateUnitCommand(int playerId, UnitType type, Point location, int pathId)
 {
   CommandData newCommand;
-
+  
   newCommand.cmd = Create;
   newCommand.playerID = playerId;
   newCommand.type = type;
   newCommand.location = location;
+  newCommand.pathID = pathId;
 
   requestedCommands.push(newCommand);
 }
@@ -316,13 +322,11 @@ void ServerGameLogic::updateCreate(CommandData& command)
   if ( mapBoth_.grid_[x][y] != 0 )
     return; // position is already occupied 
 
-  // Create Unit
-  int id = next_unit_id_++;
-
+  // Create Unit  
   switch (command.type) {
     case CREEP:
       {
-        createCreep(team_no, command.location);        
+        createCreep(team_no, command.location, command.pathID);        
         break;
       }
     case CASTLE:
@@ -341,8 +345,8 @@ void ServerGameLogic::updateCreate(CommandData& command)
   Location location;
   location.pos  = command.location;
   location.type = command.type;
-  mapTeams_[team_no].units_[id] = location;
-  mapTeams_[team_no].grid_[x][y] = id;
+  mapTeams_[team_no].units_[next_unit_id_] = location;
+  mapTeams_[team_no].grid_[x][y] = next_unit_id_;
 }
 
 void ServerGameLogic::updateAttack(CommandData& command)
@@ -477,7 +481,7 @@ void ServerGameLogic::setAlarm()
  * RETURNS:
  * NOTES:   
  */
-void ServerGameLogic::createCreep(int team_no, Point location)
+void ServerGameLogic::createCreep(int team_no, Point location, int path_no)
 {  
   int uid = next_unit_id_++;
   
@@ -489,7 +493,7 @@ void ServerGameLogic::createCreep(int team_no, Point location)
   int atkcnt = INIT_CREEP_ATKCNT;
   int spd = INIT_CREEP_SPD;
   Direction direct = Direction();
-  Point *path= &teams[team_no].paths[0][0];
+  Point *path= &teams[team_no].paths[path_no % PATH_COUNT][0];
   int movespeed = INIT_CREEP_MOVESPEED;
 
   // Add creep to team
