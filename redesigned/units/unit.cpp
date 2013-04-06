@@ -3,7 +3,8 @@
 --
 -- DATE:        2013/03/11
 --
--- MAINTAINERS: Callum Styan, Nick Raposo, Cody Rossiter, Behnam Bastami
+-- MAINTAINERS: Callum Styan, Nick Raposo, Cody Rossiter, Behnam Bastami, 
+-- 				Chris Porter
 --
 -- FUNCTIONS:   Unit constructor
 --              inRange
@@ -95,9 +96,20 @@ bool Unit::inRange(Point p1, Point p2, int distance) {
 //Everything below here, except serialize, is AI code, will probably be need to be
 //over ridden in the player class once we write that
 
-/*
-* Used to check if the target has a weakness to the Unit's element.
-*/
+/*------------------------------------------------------------------------------
+-- FUNCTION:    hasWeakness
+--
+-- DATE:        2013/04/05
+--
+-- DESIGNER:    Chris Porter
+-- PROGRAMMER:  Chris Porter
+--
+-- INTERFACE:   bool hasWeakness(int iAttack, int iTarget) 
+--
+-- RETURNS:     bool: returns true if they are weaker.
+--
+-- DESCRIPTION: Checks if a current unit has an advantage over the target. 
+------------------------------------------------------------------------------*/
 bool Unit::hasWeakness(int iAttack, int iTarget) {
     /*if(iAttack == iTarget + 1 % ELEMENT_COUNT)
         return true;
@@ -105,9 +117,20 @@ bool Unit::hasWeakness(int iAttack, int iTarget) {
 	return false;
 }
 
-/*
-* Used to check if the target has a weakness to the Unit's element.
-*/
+/*------------------------------------------------------------------------------
+-- FUNCTION:    hasStrength
+--
+-- DATE:        2013/04/05
+--
+-- DESIGNER:    Chris Porter
+-- PROGRAMMER:  Chris Porter
+--
+-- INTERFACE:   bool hasStrength(int iAttack, int iTarget) 
+--
+-- RETURNS:     bool: returns true if they are stronger.
+--
+-- DESCRIPTION: Checks if a unit has an advantage over the current. 
+------------------------------------------------------------------------------*/
 bool Unit::hasStrength(int iAttack, int iTarget) {
     /*if(iAttack == iTarget - 1 % ELEMENT_COUNT)
         return true;
@@ -115,10 +138,23 @@ bool Unit::hasStrength(int iAttack, int iTarget) {
 	return false;
 }
 
-/*
-* Attacks the current target. If it has a weakness, it will apply a 75% damage bonus.
-* QUESTION - If we attack a element we have a weakness against, do we do LESS damage? 
-*/
+/*------------------------------------------------------------------------------
+-- FUNCTION:    Attack
+--
+-- DATE:        2013/04/05
+--
+-- DESIGNER:    Chris Porter
+-- PROGRAMMER:  Chris Porter
+--
+-- INTERFACE:   void Attack(void)
+--
+-- RETURNS:     void 
+--
+-- DESCRIPTION: Attack will attempt to attack the target. If they the target
+--				has a weakness to the current unit's element, it will do a 
+--				bonus 75% damage. If they are a weaker type, they will do only
+--				25% their base damage. Otherwise, they will do 100% their damage.
+------------------------------------------------------------------------------*/
 void Unit::Attack(void) {
     if( attackCount++ < attackSpeed )
         return;
@@ -136,10 +172,21 @@ void Unit::Attack(void) {
     }
 }
 
-/*
-* Finds the next target, will loop through all enemies until one target is found.
-* TODO - Add priority. ( Attack players over creeps )
-*/
+/*------------------------------------------------------------------------------
+-- FUNCTION:    Find Target
+--
+-- DATE:        2013/04/05
+--
+-- DESIGNER:    Chris Porter
+-- PROGRAMMER:  Chris Porter
+--
+-- INTERFACE:   void FindTarget(Team *team)
+--
+-- RETURNS:     void 
+--
+-- DESCRIPTION: Finds another target through the other team's list of creeps,
+--				towers and players. 
+------------------------------------------------------------------------------*/
 void Unit::FindTarget(Team *team) {
     /* If in range and alive, set as target. */
     for (size_t i = 0; i < team->creeps.size(); ++i)
@@ -167,9 +214,21 @@ void Unit::FindTarget(Team *team) {
     }
 }
 
-/*
-* Check if the target is alive and in range. Set the pTarget to NULL if either are true.
-*/
+/*------------------------------------------------------------------------------
+-- FUNCTION:    Update
+--
+-- DATE:        2013/04/05
+--
+-- DESIGNER:    Chris Porter
+-- PROGRAMMER:  Chris Porter
+--
+-- INTERFACE:   void CheckTarget(void)
+--
+-- RETURNS:     void 
+--
+-- DESCRIPTION: Checks if a target is within the current unit's perception 
+--				and if they are still alive. 
+------------------------------------------------------------------------------*/
 void Unit::CheckTarget(void) {
     /* Target is DEAD. */
     if( pTarget->health <= 0 )
@@ -179,9 +238,21 @@ void Unit::CheckTarget(void) {
         pTarget = NULL;
 }
 
-/*
-* If we have an Unit target, attack.
-*/
+/*------------------------------------------------------------------------------
+-- FUNCTION:    Update
+--
+-- DATE:        2013/04/05
+--
+-- DESIGNER:    Chris Porter
+-- PROGRAMMER:  Chris Porter
+--
+-- INTERFACE:   void Update(Team& team)
+--
+-- RETURNS:     void 
+--
+-- DESCRIPTION: Logical steps for a unit to go through each turn to either
+--				attack an existing target, or find a new one.
+------------------------------------------------------------------------------*/
 void Unit::Update(Team& team) {
 
     /* If we have a Target, check their status. */
@@ -199,9 +270,21 @@ void Unit::Update(Team& team) {
     }
 }
 
-/*
-* Rotate towards the target. Used for either a path, or a target. 
-*/
+/*------------------------------------------------------------------------------
+-- FUNCTION:    Rotate
+--
+-- DATE:        2013/04/05
+--
+-- DESIGNER:    Chris Porter
+-- PROGRAMMER:  Chris Porter
+--
+-- INTERFACE:   float Rotate(Point pt)
+--
+-- RETURNS:     float: the degrees of the needed rotation. 
+--
+-- DESCRIPTION: A function to calculate the rotation between two points.
+--				Used for graphics to make towers look at their targets.
+------------------------------------------------------------------------------*/
 float Unit::Rotate(Point pt) {
     return atan2( (float)position.y - pt.y, (float)position.x - pt.x );
 }
