@@ -215,7 +215,7 @@ void Unit::FindTarget(Team *team) {
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:    Update
+-- FUNCTION:    CheckTarget
 --
 -- DATE:        2013/04/05
 --
