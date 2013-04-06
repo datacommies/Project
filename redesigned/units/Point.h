@@ -15,6 +15,14 @@ class Point {
 	y = yLoc;
     }
 
+    Point& operator=(const Point& rhs)
+    {
+	x = rhs.x;
+	y = rhs.y;
+
+	return *this;
+    }
+
     int x;
     int y;
 
