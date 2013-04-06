@@ -3,6 +3,18 @@
 
 class Point {
   public:
+    Point()
+    {
+	x = 0;
+	y = 0;
+    }
+
+    Point(int xLoc, int yLoc)
+    {
+	x = xLoc;
+	y = yLoc;
+    }
+
     int x;
     int y;
 
