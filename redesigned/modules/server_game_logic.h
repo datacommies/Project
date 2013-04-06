@@ -25,6 +25,7 @@
 #define INIT_CREEP_ATKCNT 1
 #define INIT_CREEP_SPD 1
 #define INIT_CREEP_MOVESPEED 1
+#define CREEP_COST 10
 
 #define INIT_TOWER_HP 200
 #define INIT_TOWER_ATKDMG 7
@@ -33,6 +34,7 @@
 #define INIT_TOWER_PERCEP 23
 #define INIT_TOWER_ATKCNT 1
 #define INIT_TOWER_WALL 2 
+#define TOWER_COST 100
 
 // This will come actually be read from the map
 #ifndef TESTCLASS
@@ -272,6 +274,9 @@ class ServerGameLogic
     void initializeCreeps();
     void initializeTowers();
     void initializeCurrency();
+
+    void createCreep(int team_no, Point location);
+    void createTower(int team_no, Point location);
 
     static void setAlarm();
     static void updateTimer(int i);

@@ -118,11 +118,8 @@ void ServerGameLogic::initializeCastles()
 
 void ServerGameLogic::initializeCreeps()
 {
-
   for (int team_i=0; team_i<2; team_i++)
     for (int j=0; j<INIT_NUM_CREEPS; j++) {
-
-      int uid = next_unit_id_++;
       Point pos = Point();
       
       if (team_i == 0) {
@@ -134,19 +131,7 @@ void ServerGameLogic::initializeCreeps()
         pos.y = MAX_Y - 1;
       }
 
-      int hp = INIT_CREEP_HP;
-      int atkdmg = INIT_CREEP_ATKDMG;
-      int atkrng = INIT_CREEP_ATKRNG;
-      int atkspd = INIT_CREEP_ATKSPD;
-      int percep = INIT_CREEP_PERCEP;
-      int atkcnt = INIT_CREEP_ATKCNT;
-      int spd = INIT_CREEP_SPD;
-      Direction direct = Direction();
-      Point *path= &teams[1].paths[0][0];
-      int movespeed = INIT_CREEP_MOVESPEED;
-
-      Creep creep = Creep(uid, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, spd, direct, path, movespeed);
-      teams[team_i].creeps.push_back(creep);
+      createCreep(team_i, pos);
     }
 }
 
@@ -154,8 +139,6 @@ void ServerGameLogic::initializeTowers()
 {
   for (int team_i=0; team_i<2; team_i++)
     for (int j=0; j<INIT_NUM_TOWERS; j++) {
-
-      int uid = next_unit_id_++;
       Point pos = Point();
 
       if (team_i == 0) {
@@ -167,16 +150,7 @@ void ServerGameLogic::initializeTowers()
         pos.y = MAX_Y - 2;
       }
 
-      int hp = INIT_TOWER_HP;
-      int atkdmg = INIT_TOWER_ATKDMG;
-      int atkrng = INIT_TOWER_ATKRNG;
-      int atkspd = INIT_TOWER_ATKSPD;
-      int percep = INIT_TOWER_PERCEP;
-      int atkcnt = INIT_TOWER_ATKCNT;
-      int wall = INIT_TOWER_WALL;
-
-      Tower tower = Tower(uid, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, wall);
-      teams[team_i].towers.push_back(tower);
+      createTower(team_i, pos);
     }
 }
 
@@ -348,18 +322,14 @@ void ServerGameLogic::updateCreate(CommandData& command)
   switch (command.type) {
     case CREEP:
       {
-        Creep creep = Creep(id, command.location, INIT_CREEP_HP, INIT_CREEP_ATKDMG, INIT_CREEP_ATKRNG, INIT_CREEP_ATKSPD, 
-            INIT_CREEP_PERCEP, INIT_CREEP_ATKCNT, INIT_CREEP_SPD, Direction(), NULL, INIT_CREEP_MOVESPEED);
-        teams[team_no].creeps.push_back(creep);
+        createCreep(team_no, command.location);        
         break;
       }
     case CASTLE:
     case TOWER:
     case TOWER_ONE:
-      {
-        Tower tower = Tower(id, command.location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
-            INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);
-        teams[team_no].towers.push_back(tower);
+      {        
+        createTower(team_no, command.location);        
         break;
       }
     default:
@@ -499,6 +469,57 @@ void ServerGameLogic::setAlarm()
 
 }
 
+/* Creates a creep.
+ *
+ * PRE:     Teams are initialized.
+ * POST:    A creep has been created and added to the specified team. The team's currency has been
+ *          decremented accordingly.
+ * RETURNS:
+ * NOTES:   
+ */
+void ServerGameLogic::createCreep(int team_no, Point location)
+{  
+  int uid = next_unit_id_++;
+  
+  int hp = INIT_CREEP_HP;
+  int atkdmg = INIT_CREEP_ATKDMG;
+  int atkrng = INIT_CREEP_ATKRNG;
+  int atkspd = INIT_CREEP_ATKSPD;
+  int percep = INIT_CREEP_PERCEP;
+  int atkcnt = INIT_CREEP_ATKCNT;
+  int spd = INIT_CREEP_SPD;
+  Direction direct = Direction();
+  Point *path= &teams[team_no].paths[0][0];
+  int movespeed = INIT_CREEP_MOVESPEED;
+
+  // Add creep to team
+  Creep creep = Creep(uid, location, hp, atkdmg, atkrng, atkspd, percep, atkcnt, spd, direct, path, movespeed);
+  teams[team_no].creeps.push_back(creep);
+
+  // Pay for creep
+  teams[team_no].currency -= CREEP_COST;
+}
+
+/* Creates a tower.
+ *
+ * PRE:     Teams are initialized.
+ * POST:    A tower has been created and added to the specified team. The team's currency has been
+ *          decremented accordingly.
+ * RETURNS:
+ * NOTES:   
+ */
+void ServerGameLogic::createTower(int team_no, Point location)
+{
+  int uid = next_unit_id_++;
+
+  // Add tower to team
+  Tower tower = Tower(uid, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
+  INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);
+  teams[team_no].towers.push_back(tower);
+
+  // Pay for tower
+  teams[team_no].currency -= TOWER_COST;
+}
 
 // To test this class use  g++ -DTESTCLASS -g -Wall server_game_logic.cpp ../build/units/*.o
 #ifdef TESTCLASS
