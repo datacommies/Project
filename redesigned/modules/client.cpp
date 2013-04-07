@@ -27,5 +27,5 @@ void Client::run()
 		sleep(1);
 	}
 
-	clientNetwork_.connectToServer("localhost", 4545);
+	clientNetwork_.connectToServer();
 }

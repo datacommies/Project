@@ -15,6 +15,7 @@ public:
 
    // Functions
    void run();
+
 private:
    // Modules
    ClientNetwork clientNetwork_;

@@ -64,7 +64,7 @@ public:
    // Constructors
    Graphics(ClientGameLogic& clientGameLogic);
    sf::RenderWindow * window;
-
+   pthread_t t;
 private:
    // Module references
    ClientGameLogic& clientGameLogic_;

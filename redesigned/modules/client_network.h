@@ -29,7 +29,7 @@ public:
    bool attack(int playerId, Direction direction);
 
    int sendRequest(int msg);
-   bool connectToServer(std::string hostname, int port);
+   bool connectToServer();
    ClientGameLogic* gl;
    void recvReply();
 
@@ -53,12 +53,16 @@ public:
       p.ready = true;
       send(connectsock, &p, sizeof(player_matchmaking_t), 0);
    }
-
+   
+   void setConnectionInfo (std::string name, std::string server, int port) {
+     _name = name; _server = server; _port = port;
+   }
 private:
-   int connectsock;
+   // Connection parameters
+   std::string _name, _server; 
+   int _port;
 
-   
-   
+   int connectsock;
 };
 
 #endif

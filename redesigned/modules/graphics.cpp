@@ -225,7 +225,6 @@ Graphics::Graphics(ClientGameLogic& clientGameLogic)
     }
 
     // Run main graphics thread.
-    pthread_t t;
     pthread_create(&t, NULL, init, (void*)this);
 }
 
@@ -346,11 +345,11 @@ void Graphics::initJoinWindow()
     sfgPortLabel = sfg::Label::Create("Port:");
 
     // Create the entry boxes.
-    sfgNameEntryBox = sfg::Entry::Create();
+    sfgNameEntryBox = sfg::Entry::Create("*ehnam");
     sfgNameEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 120.
-    sfgServerEntryBox = sfg::Entry::Create();
+    sfgServerEntryBox = sfg::Entry::Create("localhost");
     sfgServerEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 120.
-    sfgPortEntryBox = sfg::Entry::Create();
+    sfgPortEntryBox = sfg::Entry::Create("4545");
     sfgPortEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 120.
 
     // Create a button to join a server and handle it's signal
@@ -526,11 +525,17 @@ void Graphics::exitLobby()
  */
 void Graphics::joinButtonHandler()
 {
-    // todo: actually connect to the game rather than just printing the strings.
-    cout << "Name:" << sfgNameEntryBox->GetText().toAnsiString() << endl;
-    cout << "Server:" << sfgServerEntryBox->GetText().toAnsiString() << endl;
-    cout << "Port:" << sfgPortEntryBox->GetText().toAnsiString() << endl;
+    string name, server, port; 
+    
+    name = sfgNameEntryBox->GetText().toAnsiString();
+    server = sfgServerEntryBox->GetText().toAnsiString();
+    port = sfgPortEntryBox->GetText().toAnsiString();
+    
+    cout << "Name:"   << name << endl;
+    cout << "Server:" << server << endl;
+    cout << "Port:"   << port << endl;
 
+    clientGameLogic_.clientNetwork_.setConnectionInfo(name, server, atoi(port.c_str()));
     clientGameLogic_.join();
     initLobbyWindow();
 

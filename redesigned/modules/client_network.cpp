@@ -29,19 +29,18 @@ ClientNetwork::~ClientNetwork()
     close(connectsock);
 }
 
-/* Connects to a server with the specified hostname and port.
+/* Connects to a server with the connection parameters set before.
  *
- * PRE: none.
- * POST: client is connected to the server with the specified hostname and port
- * ARGS: hostname - the hostname (e.g. 192.168.1.1) in string format
- *		 port - the port of the server (eg. 7400)
+ * PRE: setConnectionInfo() called with valid server, port, and name.
+ * POST: client is connected to the server with the specified _server and port
+ * ARGS: None
  *
  * RETURNS: true if connected to the server succesfully, false otherwise.
  *
  * NOTES: Initializes the connection sockets, server details (structs), then
  * establishes a connection.
  */
-bool ClientNetwork::connectToServer(std::string hostname, int port)
+bool ClientNetwork::connectToServer()
 {
 	cout << "connecting.." <<endl;
 
@@ -57,7 +56,7 @@ bool ClientNetwork::connectToServer(std::string hostname, int port)
 		return false;
 	}
 
-	server = gethostbyname(hostname.c_str());
+	server = gethostbyname(_server.c_str());
 
 	if (server == NULL) 
 	{
@@ -69,7 +68,7 @@ bool ClientNetwork::connectToServer(std::string hostname, int port)
 	serv_addr.sin_family = AF_INET;
 	memcpy((char *) &serv_addr.sin_addr.s_addr, (char*) server->h_addr,
 			server->h_length);
-	serv_addr.sin_port = htons(port);
+	serv_addr.sin_port = htons(_port);
 
 	if (connect(connectsock, (struct sockaddr *) &serv_addr,
 		sizeof(serv_addr)) < 0)
