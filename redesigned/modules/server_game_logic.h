@@ -285,7 +285,7 @@ class ServerGameLogic
 
     // teams, players, creeps, etc..
     std::vector<Unit*>::iterator findUnit(std::vector<Unit*>::iterator first, std::vector<Unit*>::iterator end, int playerID);
-    Unit *findUnit(int unitId);
+    Unit * findUnit(int unitId);
 
     int WhichTeam(int id);
 };
