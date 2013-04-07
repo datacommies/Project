@@ -102,7 +102,7 @@ bool ServerNetwork::sync(int client_)
 
     currency_t cu1 = {0};
     cu1.head.type = MSG_RESOURCE_UPDATE;
-    cu1.teamCurrency = 2000;//serverGameLogic_.teams[0].currency;
+    cu1.teamCurrency = serverGameLogic_.teams[0].currency;
     cu1.head.size = sizeof(currency_t);
     send(client_, (const char*)&cu1, sizeof(currency_t), 0);
 
@@ -128,7 +128,7 @@ bool ServerNetwork::sync(int client_)
 
     currency_t cu2 = {0};
     cu2.head.type = MSG_RESOURCE_UPDATE;
-    cu2.teamCurrency = 1000;//serverGameLogic_.teams[1].currency;
+    cu2.teamCurrency = serverGameLogic_.teams[1].currency;
     cu2.head.size = sizeof(currency_t);
     send(client_, (const char*)&cu2, sizeof(currency_t), 0);
 
