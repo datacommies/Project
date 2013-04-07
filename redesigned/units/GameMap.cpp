@@ -3,11 +3,15 @@
 
 class MapOne{
 public:
-    Point castle1;
-    Point castle2;
-    PATH topOne, midOne, botOne;
-    PATH topTwo, midTwo, botTwo;
+    Point castle1; //position for team 0's castle
+    Point castle2; //position for team 0's castle
+    PATH topOne, midOne, botOne; //paths for team 0's creeps
+    PATH topTwo, midTwo, botTwo; //paths for team 1's creeps
+    Point team0start[4]; //starting positions for team 0's players
+    Point team1start[4]; //starting positions for team 1's players
+    //add the 2d array
     
+
     //initializes castle positions and paths for each team
     //these still need to be assigned to a team object somehow
     //should probably be changed to use the MAPWIDTH/MAPHEIGHT defines
@@ -89,6 +93,51 @@ public:
         b.y = 30;
         midTwo.push_back(b);
         //*** end of team 2 paths ***
+
+        //*** team 1 player starting positions ***
+        Point c;
+        c.x = 10;
+        c.y = 10;
+
+        team0start[0] = c;
+
+        c.x = 12;
+        c.y = 10;
+
+        team0start[1] = c;
+
+        c.x = 14;
+        c.y = 8;
+
+        team0start[2] = c;
+
+        c.x = 16;
+        c.y = 8;
+
+        team0start[3] = c;
+        //*** end of team 1 starting positions ***
+
+        //*** team 2 player starting positions ***
+        c.x = 490;
+        c.y = 490;
+
+        team1start[0] = c;
+
+        c.x = 480;
+        c.y = 480;
+
+        team1start[1] = c;
+
+        c.x = 480;
+        c.y = 490;
+
+        team1start[2] = c;
+
+        c.x = 490;
+        c.y = 480;
+
+        team1start[3] = c;
+        //*** end of team 2 starting positions ***
     }   
 private:
 };
