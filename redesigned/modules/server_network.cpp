@@ -83,14 +83,14 @@ bool ServerNetwork::sync(int client_)
     //wrap into syncFirstTeam()
     for (size_t i = 0; i < serverGameLogic_.teams[0].towers.size(); ++i)
     {
-        string sc = serverGameLogic_.teams[0].towers[i].serializeTower();
+        string sc = serverGameLogic_.teams[0].towers[i]->serializeTower();
         send(client_, sc.data(), sc.size(), 0);
     }
 
     for (size_t i = 0; i < serverGameLogic_.teams[0].creeps.size(); ++i)
     {
-        serverGameLogic_.teams[0].creeps[i].team = 0;
-        string sc = serverGameLogic_.teams[0].creeps[i].serializeCreep();
+        serverGameLogic_.teams[0].creeps[i]->team = 0;
+        string sc = serverGameLogic_.teams[0].creeps[i]->serializeCreep();
         send(client_, sc.data(), sc.size(), 0);
     }
 
@@ -105,14 +105,14 @@ bool ServerNetwork::sync(int client_)
     //wrap into syncSecondTeam()
      for (size_t i = 0; i < serverGameLogic_.teams[1].towers.size(); ++i)
     {
-        string sc = serverGameLogic_.teams[1].towers[i].serializeTower();
+        string sc = serverGameLogic_.teams[1].towers[i]->serializeTower();
         send(client_, sc.data(), sc.size(), 0);
     }
 
     for (size_t i = 0; i < serverGameLogic_.teams[1].creeps.size(); ++i)
     {
-        serverGameLogic_.teams[1].creeps[i].team = 1;
-        string sc = serverGameLogic_.teams[1].creeps[i].serializeCreep();
+        serverGameLogic_.teams[1].creeps[i]->team = 1;
+        string sc = serverGameLogic_.teams[1].creeps[i]->serializeCreep();
         send(client_, sc.data(), sc.size(), 0);
     }
     

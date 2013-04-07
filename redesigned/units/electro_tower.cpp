@@ -50,7 +50,7 @@ void ElectroTower::Attack(Team* team)
         for (size_t i = 0; i < team->creeps.size(); ++i)
         {
 
-            if( inRange( tempTarget->getPos(), team->creeps[i].getPos(), attackRange) && team->creeps[i].health > 0) 
+            if( inRange( tempTarget->getPos(), team->creeps[i]->getPos(), attackRange) && team->creeps[i]->health > 0) 
             {
                 if(tempTarget->id == temp[0]->id || tempTarget->id == temp[1]->id || tempTarget->id == temp[2]->id || tempTarget->id == temp[3]->id)
                 {

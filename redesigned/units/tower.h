@@ -26,7 +26,7 @@ public:
           int atkspd=0, int percep=0, int atkcnt=0, int wall=0);
     std::string serializeTower();
 
-    virtual UnitType getType() const { return CASTLE; }
+    virtual UnitType getType() const { return TOWER; }
 	virtual size_t getSize() const { return Unit::getSize() + sizeof(tower_t); }
 };
 #endif

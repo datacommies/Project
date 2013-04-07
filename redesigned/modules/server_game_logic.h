@@ -73,11 +73,9 @@ struct CommandData {
 
 class ServerGameLogic
 {
-
   public:
     // Constructors
     ServerGameLogic();
-
     ~ServerGameLogic();
 
     // Fields
@@ -105,17 +103,15 @@ class ServerGameLogic
     };
 
     struct GameLogicMap {
-
       int max_x_;
       int max_y_;
 
       // Create a two dimensional grid player_ids .. 0 means the a position is empty
-      int **grid_; 
+      int **grid_;
 
       // Store locatation for each player_id
       std::map<int, Location> units_;
-
-
+      
       void init() {
 
         grid_ = (int**) Malloc(sizeof(int*) * max_x_ + 1);
@@ -227,15 +223,15 @@ class ServerGameLogic
 
         reset();
 
-        for (std::vector<Creep>::iterator it = team.creeps.begin(); it != team.creeps.end(); ++it)
-          _helperBuild((int) it->id, CREEP, it->getPos());
+        for (std::vector<Creep*>::iterator it = team.creeps.begin(); it != team.creeps.end(); ++it)
+          _helperBuild((int) (*it)->id, CREEP, (*it)->getPos());
 
-        for (std::vector<Tower>::iterator it = team.towers.begin(); it != team.towers.end(); ++it) {
-          _helperBuild((int) it->id, TOWER, it->getPos());
+        for (std::vector<Tower*>::iterator it = team.towers.begin(); it != team.towers.end(); ++it) {
+          _helperBuild((int) (*it)->id, TOWER, (*it)->getPos());
         }
 
-        for (std::vector<Player>::iterator it = team.players.begin(); it != team.players.end(); ++it) {
-          _helperBuild((int) it->id, PLAYER, it->getPos());
+        for (std::vector<Player*>::iterator it = team.players.begin(); it != team.players.end(); ++it) {
+          _helperBuild((int) (*it)->id, PLAYER, (*it)->getPos());
         }
       }
 
@@ -285,7 +281,8 @@ class ServerGameLogic
     static void updateTimer(int i);
 
     // teams, players, creeps, etc..
-    std::vector<Unit>::iterator findUnit(std::vector<Unit>::iterator first, std::vector<Unit>::iterator end, int playerID);
+    std::vector<Unit*>::iterator findUnit(std::vector<Unit*>::iterator first, std::vector<Unit*>::iterator end, int playerID);
+    Unit *findUnit(int unitId);
 
     int WhichTeam(int id);
 };

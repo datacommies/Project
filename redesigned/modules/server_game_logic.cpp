@@ -7,6 +7,7 @@
 #include <sys/time.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <new>
 
 #define NOT_FOUND 2
 
@@ -77,20 +78,22 @@ void ServerGameLogic::initializeCastles()
   pos.y = 0;
 
   // Team 0
-  Castle castle1 = Castle(uid, pos, INIT_CASTLE_HP, INIT_CASTLE_ATKDMG, INIT_CASTLE_ATKRNG, INIT_CASTLE_ATKSPD,
+  Castle *castle1 = new Castle(uid, pos, INIT_CASTLE_HP, INIT_CASTLE_ATKDMG, INIT_CASTLE_ATKRNG, INIT_CASTLE_ATKSPD,
       INIT_CASTLE_PERCEP, INIT_CASTLE_ATKCNT, INIT_CASTLE_WALL, 0);
   teams[0].towers.push_back(castle1);
+  teams[0].units.push_back(castle1);
 
-  Point p = castle1.getPos();
+  Point p = castle1->getPos();
   printf("Castle 1 position..x: %d y: %d\n", p.x, p.y);
   
   // Team 1
   uid = next_unit_id_++;
   pos.x = MAX_X; // TODO: MAX_X and MAX_Y will  be replaced later when we get map reading functionality working
   pos.y = MAX_Y; // TODO:
-  Castle castle2 = Castle(uid, pos, INIT_CASTLE_HP, INIT_CASTLE_ATKDMG, INIT_CASTLE_ATKRNG, INIT_CASTLE_ATKSPD,
+  Castle *castle2 = new Castle(uid, pos, INIT_CASTLE_HP, INIT_CASTLE_ATKDMG, INIT_CASTLE_ATKRNG, INIT_CASTLE_ATKSPD,
       INIT_CASTLE_PERCEP, INIT_CASTLE_ATKCNT, INIT_CASTLE_WALL, 1);
   teams[1].towers.push_back(castle2);
+  teams[1].units.push_back(castle2);
 
 #ifdef TESTCLASS
 
@@ -265,15 +268,29 @@ void ServerGameLogic::receiveAttackCommand(int playerId, Direction direction)
   requestedCommands.push(newCommand);
 }
 
+std::vector<Unit*>::iterator ServerGameLogic::findUnit(std::vector<Unit*>::iterator first, std::vector<Unit*>::iterator end, int playerID) {
 
-std::vector<Unit>::iterator ServerGameLogic::findUnit(std::vector<Unit>::iterator first, std::vector<Unit>::iterator end, int playerID) {
-
-  for (std::vector<Unit>::iterator it = first; first != end; ++it)
-    if (it->id == playerID)
+  for (std::vector<Unit*>::iterator it = first; first != end; ++it)
+    if ((*it)->id == playerID)
       return it; 
 
   return end;
 }
+
+
+/*Unit * ServerGameLogic::findUnit(int unitId) {
+  std::vector<Unit*>::iterator it;
+
+  for (int i = 0; i < 2; i++)
+    if ((it = findUnit(teams[i].creeps.begin(), teams[i].creeps.end(), unitId)) != teams[i].creeps.end())
+      return *it;
+    else if ((it = findUnit(teams[i].players.begin(), teams[i].players.end(), unitId)) != teams[i].players.end())
+      return *it;
+    else if ((it = findUnit(teams[i].towers.begin(), teams[i].towers.end(), unitId)) != teams[i].towers.end())
+      return *it;
+
+  return NULL;
+}*/
 
 /*
  * PRE:  Maps are current
@@ -496,9 +513,9 @@ void ServerGameLogic::createCreep(int team_no, Point location, int path_no)
   Point *path= &teams[team_no].paths[path_no % PATH_COUNT][0];
   int movespeed = INIT_CREEP_MOVESPEED;
 
-  // Add creep to team
-  Creep creep = Creep(uid, location, hp, atkdmg, atkrng, atkspd, percep, atkcnt, spd, direct, path, movespeed);
-  teams[team_no].creeps.push_back(creep);
+  // Add creep to team  
+  Creep *creep = new Creep(uid, location, hp, atkdmg, atkrng, atkspd, percep, atkcnt, spd, direct, path, movespeed);  
+  teams[team_no].addUnit(creep);  
 
   // Pay for creep
   teams[team_no].currency -= CREEP_COST;
@@ -517,9 +534,10 @@ void ServerGameLogic::createTower(int team_no, Point location)
   int uid = next_unit_id_++;
 
   // Add tower to team
-  Tower tower = Tower(uid, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
-  INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);
-  teams[team_no].towers.push_back(tower);
+  Tower *tower = new Tower(uid, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
+                           INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);
+
+  teams[team_no].addUnit(tower);
 
   // Pay for tower
   teams[team_no].currency -= TOWER_COST;

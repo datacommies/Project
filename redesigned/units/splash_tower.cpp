@@ -58,11 +58,11 @@ void SplashTower::Attack(Team * team)
     for (size_t i = 0; i < team->creeps.size(); ++i)
     {
         /* if creep is in range AND is alive AND is not our target (to prevent hitting one target twice) */
-        if( inRange( pTarget->getPos(), team->creeps[i].getPos(), splashRange ) 
-            && team->creeps[i].health > 0 
-            && pTarget->id != team->creeps[i].id ) 
+        if( inRange( pTarget->getPos(), team->creeps[i]->getPos(), splashRange ) 
+            && team->creeps[i]->health > 0 
+            && pTarget->id != team->creeps[i]->id ) 
         {
-            team->creeps[i].health -= splashDamage;
+            team->creeps[i]->health -= splashDamage;
         }
     }
     
@@ -70,11 +70,11 @@ void SplashTower::Attack(Team * team)
     for (size_t i = 0; i < team->players.size(); ++i)
     {
         /* if player is in range AND is alive AND is not our target (to prevent hitting one target twice) */
-        if( inRange( pTarget->getPos(), team->players[i].getPos(), splashRange )
-            && team->players[i].health > 0
-            && pTarget->id != team->players[i].id ) 
+        if( inRange( pTarget->getPos(), team->players[i]->getPos(), splashRange )
+            && team->players[i]->health > 0
+            && pTarget->id != team->players[i]->id ) 
         {
-            team->players[i].health -= splashDamage;
+            team->players[i]->health -= splashDamage;
         }
     }
 }

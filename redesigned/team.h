@@ -11,15 +11,34 @@
 class Team
 {
 public:
-   std::vector<Creep> creeps;
-   std::vector<Tower> towers;
-   std::vector<Player> players;
-   std::vector<PATH> paths;
-   std::vector<Projectile> projectiles;
-   int currency;
-   int teamId;
+	std::vector<Creep*> creeps;
+	std::vector<Tower*> towers;
+	std::vector<Player*> players;
+	std::vector<Unit*> units;
+	std::vector<PATH> paths;
+	std::vector<Projectile*> projectiles;
+	int currency;
+	int teamId;
 
-   bool isAlive() { return towers.size() > 0 && towers[0].isAlive(); }
+	void addUnit(Unit *unit)
+	{
+		units.push_back(unit);
+
+		switch(unit->getType())
+		{
+			case CREEP:
+				creeps.push_back((Creep*)unit);
+				break;
+			case TOWER:
+				towers.push_back((Tower*)unit);
+				break;
+			case PLAYER:
+				players.push_back((Player*)unit);
+				break;
+		}   	
+	}
+
+	bool isAlive() { return towers.size() > 0 && towers[0]->isAlive(); }
 private:
 };
 
