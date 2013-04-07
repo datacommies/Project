@@ -35,6 +35,15 @@ public:
 			case PLAYER:
 				players.push_back((Player*)unit);
 				break;
+			case CREEP_ONE:
+			case CREEP_TWO:
+			case CREEP_THREE:
+			case TOWER_ONE:
+			case TOWER_TWO:        // added to remove warnings
+			case TOWER_THREE:
+			case CASTLE:
+			case PROJECTILE:
+				break;
 		}   	
 	}
 

@@ -57,6 +57,7 @@
 #include <map>
 #include "../team.h"
 #include "../units/unit.h"
+#include "../units/GameMap.h"
 //#include "ai.h"
 
 enum Command { Create, MovePlayer, MoveUnit, Attack };
@@ -96,7 +97,7 @@ class ServerGameLogic
     GameState gameState_;
     int next_unit_id_;
     //Ai ai_;
-
+    GameMap *gameMap_;
     struct Location {
       Point pos;
       UnitType type;
@@ -273,10 +274,12 @@ class ServerGameLogic
     void initializeTowers();
     void initializeCurrency();
     void initializePaths();
+    void initializePlayers();
 
     void createCreep(int team_no, Point location, int path_no = 0);
     void createTower(int team_no, Point location);
-
+    void createPlayer(int team_no, Point location);
+    void respawnPlayer(Player* player, Point location);
     static void setAlarm();
     static void updateTimer(int i);
 
