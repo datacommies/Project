@@ -1,7 +1,7 @@
 #include "server_game_logic.h"
 #include "../units/castle.h"
 #include "../units/AiController.h"
-
+#include "../units/player.h"
 #include <stdio.h>
 #include <signal.h>
 #include <sys/time.h>
@@ -38,7 +38,8 @@ ServerGameLogic * gSGL;
   p.push_back(a);
   teams[0].paths.push_back(p);
   teams[1].paths.push_back(p);
-
+  gameMap_ = new GameMap();
+  gameMap_->initMap();
 #if 0
 #ifndef TESTCLASS
   Creep c;
@@ -62,7 +63,7 @@ ServerGameLogic * gSGL;
   startGame();
 #endif
 #endif
-}
+}   
 
 
 ServerGameLogic::~ServerGameLogic()
@@ -168,7 +169,17 @@ void ServerGameLogic::initializeCurrency()
   for (int team_i=0; team_i<2; team_i++)
     teams[team_i].currency = INIT_CURRENCY;
 }
+void ServerGameLogic::initializePlayers()
+{
+  Point pos = gameMap_->team0start[0];
+  for(int i = 0; i < 2; i++)
+  {
 
+    createPlayer(i, pos);
+    if(i == 1)
+      pos = gameMap_->team1start[0];
+  }
+}
 void ServerGameLogic::initializePaths()
 {  
 }
@@ -542,7 +553,25 @@ void ServerGameLogic::createTower(int team_no, Point location)
   // Pay for tower
   teams[team_no].currency -= TOWER_COST;
 }
+/* Creates a tower.
+ *
+ * PRE:     Teams are initialized.
+ * POST:    A player has been created, and added to a team.
+ * RETURNS:
+ * NOTES:   
+ */
+void ServerGameLogic::createPlayer(int team_no, Point location)
+{
+  int uid = next_unit_id_++;
 
+  Player *player = new Player(uid, 10, location); // 10 is a place holder for the client ID. (This should be the socket?)
+  teams[team_no].addUnit(player);
+}
+void ServerGameLogic::respawnPlayer(Player* player, Point location)
+{
+  player->position = location;
+  player->health = 100;
+}
 // To test this class use  g++ -DTESTCLASS -g -Wall server_game_logic.cpp ../build/units/*.o
 #ifdef TESTCLASS
 int main() {
