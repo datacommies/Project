@@ -17,8 +17,6 @@ class ClientGameLogic;
 class ClientNetwork
 {
 public:
-   
-
    // Constructors
    ClientNetwork();
    ~ClientNetwork();
@@ -33,8 +31,8 @@ public:
    ClientGameLogic* gl;
    void recvReply();
 
-   //void behnamspartyfunction();
-   
+   std::string connecting_status;
+
    //Lobby variables
    player_matchmaking_t team_l[5];
    player_matchmaking_t team_r[5];
