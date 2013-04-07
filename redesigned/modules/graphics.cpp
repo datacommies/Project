@@ -456,7 +456,7 @@ void Graphics::takeRole()
     switch((long) this)
     {
         case 11:
-        // This causes a seg fault because we passed in an integer as a pointer to the "graphics" object
+            
             if(globalGraphics != NULL)
             {
                 strcpy(globalGraphics->clientGameLogic_.clientNetwork_.team_l[0].name, "hello");
