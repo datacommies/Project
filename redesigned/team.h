@@ -54,9 +54,16 @@ public:
 		for (std::vector<Unit*>::iterator it = units.begin(); it != units.end(); ++it)
 			if ((*it)->id == unitId)
 		  		return *it;
-		for (std::vector<Unit*>::iterator it = units.begin(); it != units.end(); ++it)
-			if ((*it)->getType() == PLAYER)
-		  		return *it;
+
+		return NULL;
+	}
+
+	Player * findPlayer(int clientId)
+	{
+		for (std::vector<Player*>::iterator it = players.begin(); it != players.end(); ++it)
+			if ((*it)->clientID == clientId)
+		  		return *it;		
+		  	
 		return NULL;
 	}
 private:
