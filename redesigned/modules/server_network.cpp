@@ -95,6 +95,7 @@ bool ServerNetwork::sync(int client_)
     }
 
     //also send updated currency to teams[0] here
+    //int firstTeamCurrency = serverGameLogic_.teams[0].currency;
 
     for (size_t i = 0; i < serverGameLogic_.teams[0].players.size(); ++i)
     {
@@ -123,6 +124,7 @@ bool ServerNetwork::sync(int client_)
     }
 
     //also send updated currency to teams[1] here
+    //int secondTeamCurrency = serverGameLogic_.teams[1].currency;
 
     return true;
 }
