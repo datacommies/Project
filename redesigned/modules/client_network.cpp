@@ -210,8 +210,6 @@ bool ClientNetwork::createUnit(int playerId, UnitType type, Point location, int 
 
 
 bool ClientNetwork::updatePlayerLobby (int team, int role, bool ready) {
-	int n;
-
 	player_matchmaking_t p = {{0, 0}, {0}, 0, 0, 0, false};
 	//TODO: get user's name from GUI. Hardcode for now.
 	p.team = team;
@@ -221,10 +219,10 @@ bool ClientNetwork::updatePlayerLobby (int team, int role, bool ready) {
 	if ((write(connectsock, &p, sizeof(p))) < 0)
 	{
 		std::cerr << "ERROR writing to socket" << std::endl;
-		return;
+		return false;
 	}
 	
-	return;
+	return true;
 }
 
 /* Sends a move player request to the server.
