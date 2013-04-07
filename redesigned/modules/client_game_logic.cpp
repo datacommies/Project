@@ -77,7 +77,7 @@ bool ClientGameLogic::createCreep(UnitType type, int laneID)
 bool ClientGameLogic::movePlayer(Direction direction)
 {
    // TODO: validation
-
+   std::cout << "Sending player move request" << std::endl;
    clientNetwork_.movePlayer(this->playerId, direction);
 
    return true;

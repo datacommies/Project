@@ -20,7 +20,7 @@ public:
     virtual UnitType getType() const { return PLAYER; }
 	virtual size_t getSize() const { return MobileUnit::getSize(); }
 
-private:   
+private:
 };
 
 #endif

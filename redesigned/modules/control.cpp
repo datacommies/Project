@@ -257,23 +257,23 @@ Control::RunAllKeys()
 		switch(_keys[i])
 		{
 			// Moving in Player Mode
-			case sf::Keyboard::Left :
+			case sf::Keyboard::A :
 				CallMoveEvent(LEFT);
 				break;
-			case sf::Keyboard::Up :
+			case sf::Keyboard::W :
 				CallMoveEvent(UP);
 				break;
-			case sf::Keyboard::Right :
+			case sf::Keyboard::D :
 				CallMoveEvent(RIGHT);
 				break;
-			case sf::Keyboard::Down :
+			case sf::Keyboard::S :
 				CallMoveEvent(DOWN);
 				break;
 			// Attacking In Player Mode
-			case sf::Keyboard::A :
+	/*		case sf::Keyboard::A :
 				CallAttackEvent(LEFT);
 				break;
-			case sf::Keyboard::W :
+	/		case sf::Keyboard::W :
 				CallAttackEvent(UP);
 				break;
 			case sf::Keyboard::D :
@@ -285,6 +285,7 @@ Control::RunAllKeys()
 			case sf::Keyboard::Escape :
 				CallExitGameEvent();
 				break;
+				*/
 			default:
 				break;
 				// Does nothing but gets rid of annoying warnings

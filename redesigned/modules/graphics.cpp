@@ -113,6 +113,17 @@ void * init (void * in)
             else if (event.type == sf::Event::Closed){
                 window.close();
                 exit(0);
+            } else if (event.type == sf::Event::KeyPressed)
+            {
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+                    Control::get()->AddNewCalledKey(sf::Keyboard::W);
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+                    Control::get()->AddNewCalledKey(sf::Keyboard::A);
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+                    Control::get()->AddNewCalledKey(sf::Keyboard::S);
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+                    Control::get()->AddNewCalledKey(sf::Keyboard::D);
+                Control::get()->RunAllKeys();
             }
         }
         

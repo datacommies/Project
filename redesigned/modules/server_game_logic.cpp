@@ -248,6 +248,7 @@ void ServerGameLogic::receiveMovePlayerCommand(int playerId, Direction direction
   newCommand.cmd = MovePlayer;
   newCommand.playerID = playerId;
   newCommand.direction = direction;
+  newCommand.unitID = playerId;
 
   requestedCommands.push(newCommand);
 }
@@ -387,15 +388,44 @@ struct CommandData {
 void ServerGameLogic::updateMovePlayer(CommandData& command)
 {
   int team_no;
+  Player* temp;
   if ( !(teams[0].isAlive() && teams[1].isAlive()) ) {
     fprintf(stderr, "Game is already over!! file: %s line %d\n", __FILE__, __LINE__);
     return;
   }
-  if((team_no = WhichTeam(command->unitID) == 2)
+  if((team_no = WhichTeam(command.unitID) == 2))
   {
+    std::cout << "Team not found" << std::endl;
     return; // not found
   }
-  team[team_no]
+
+  temp = (Player*)teams[team_no].findUnit(command.unitID);
+  if(temp == 0)
+  {
+    std::cout << "Player not found" << std::endl;
+    return;
+  }
+  switch(command.direction)
+  {
+    // we need to check for the attack upon running into an attackable unit.
+    case UP:
+    //validate
+    temp->position.y--;
+    break;
+    case DOWN:
+    //validate
+    temp->position.y++;
+    break;
+    case LEFT:
+    //validate
+    temp->position.x--;
+    break;
+    case RIGHT:
+    //validate
+    temp->position.x++;
+    break;
+  }
+  std::cout << "moving player" << std::endl;
 }
 
 void ServerGameLogic::updateMoveUnit(CommandData& command)
