@@ -546,7 +546,7 @@ void Graphics::joinButtonHandler()
  */
 void Graphics::showJoinWindow()
 {
-    sfgJoinWindow->Show(true);
+sfgJoinWindow->Show(true);
 }
 
 /* Makes the JoinWindow invisible.
@@ -592,8 +592,20 @@ void Graphics::drawMap(sf::RenderWindow& window)
  * NOTES:    */
 void Graphics::drawMainMenu(sf::RenderWindow& window)
 {
+
+    creep_tex.loadFromFile("images/dino.png");
+    creep_sprite.setTexture(creep_tex);
+
+    sf::Texture titlesc_bg; 
+    titlesc_bg.loadFromFile("images/title.png");
+    
+    sf::Sprite titlesc; 
+    titlesc.setTexture(titlesc_bg);
+
     sf::Text title("Child's Play", font, 71);
-    title.setPosition(sf::Vector2f(200, 0));
+    title.setPosition(sf::Vector2f(200, 0));\
+    
+    window.draw(titlesc);
     window.draw(title);
 }
 
@@ -745,7 +757,7 @@ void Graphics::loadImages()
     hud_bg.loadFromFile("images/hud.png");
     hud.setTexture(hud_bg);
     hud.setPosition(0, 600);
-
+    
     // Load the map texture.
     map_bg.loadFromFile("images/map.png");
     map.setTexture(map_bg);
