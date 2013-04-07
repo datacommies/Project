@@ -134,7 +134,7 @@ void GameMap::_init() {
   }
 }
 
-GameMap::GameMap(int max_x = MAX_X, int max_y = MAX_Y): max_x_(max_x), max_y_(max_y) {
+GameMap::GameMap(int max_x, int max_y): max_x_(max_x), max_y_(max_y) {
   _init();
 }
 
@@ -151,13 +151,15 @@ int GameMap::max(int a, int b)
 /*
  * This merges two maps together. eg, both = GameLogicMap(map1, map2);
  */
+/*
   GameMap::GameMap(GameMap& map1, GameMap& map2)
 : max_x_(max(map1.max_x_, map2.max_x_)), max_y_(max(map1.max_y_, map2.max_y_))
 {
   _init();
   merge(map1, map2);
 }
-
+*/
+/*
 void GameMap::merge(GameMap& map1, GameMap& map2)
 {
 
@@ -185,6 +187,7 @@ void GameMap::merge(GameMap& map1, GameMap& map2)
       grid_[x][y] = map1.grid_[x][y] != NULL ? map1.grid_[x][y] : map2.grid_[x][y];
     }
 }
+*/
 
 // I write this so that I might be able to see if things work correctly
 void GameMap::printGrid() {

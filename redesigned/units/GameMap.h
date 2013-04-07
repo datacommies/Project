@@ -34,7 +34,7 @@ class GameMap{
     //should probably be changed to use the MAPWIDTH/MAPHEIGHT defines
     //do we want default player spawn positions?
     void initMap();
-    GameMap (int max_x, int max_y);
+    GameMap (int max_x=MAX_X, int max_y=MAX_Y);
     ~GameMap();
 
     // This builds everything based on the Team class
@@ -48,8 +48,8 @@ class GameMap{
     bool isValidPos(Point pos);
 
     void build(Team &team);
-    GameMap(GameMap& map1, GameMap& map2);
-    void merge(GameMap& map1, GameMap& map2);
+    //GameMap(GameMap& map1, GameMap& map2);
+    //void merge(GameMap& map1, GameMap& map2);
   private:
 
     int max_x_;
@@ -76,3 +76,5 @@ class GameMap{
 
     void * Malloc(size_t size);
 }; 
+
+#endif
