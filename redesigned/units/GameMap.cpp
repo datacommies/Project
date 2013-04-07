@@ -1,5 +1,8 @@
 #include "GameMap.h"
 
+#define MAX_X 500
+#define MAX_Y 500
+
 
 void GameMap::initMap(){
   //team 1 castle position, top left corner
@@ -194,8 +197,14 @@ void GameMap::printGrid() {
 
   int x, y;
   for (y=0; y<=max_y_; y++) {
-    for (x=0; x<=max_x_; x++)
-      printf("%2d ", grid_[x][y]->id);
+    for (x=0; x<=max_x_; x++) {
+      
+	if (grid_[x][y] == NULL) 
+	   printf("  . ");
+	else
+	   printf(" %2d ", grid_[x][y]->id);
+
+    }
     printf("\n");
   }
 }
@@ -315,6 +324,7 @@ void GameMap::moveUnit(Unit *unit, Point new_pos) {
   units_[unit] = new_pos;
 }
 
+// People laugh at this wrapper.
 void * GameMap::Malloc(size_t size) {
 
   void * p;
@@ -328,8 +338,65 @@ void * GameMap::Malloc(size_t size) {
 }
 
 #ifdef TEST_MAP  
+// Test with: g++ GameMap.cpp -DTEST_MAP -g -Wall ../build/units/tower.o ../build/units/unit.o
+
+#include <vector>
+#include "tower.h"
+
 int main() {
 
+
+	GameMap the_map(10, 10);
+
+	std::vector<Unit*> units;
+
+
+	// Test add unit
+	
+	for (int i=0; i<3; i++) {
+		
+		Point pos;
+		pos.x = i;
+		pos.y = i;
+		
+		Tower *tower = new Tower(i, i, pos, i, i, i, i, i, i, i);
+		units.push_back(tower);
+		
+		the_map.addUnit(tower, pos);
+		
+	}
+
+	
+	printf("Test add unit to the map.\n");
+	the_map.printGrid();
+
+
+	// Test move unit
+	printf("Test moving units to the right by 2.\n");
+	printf("and down by 3.\n");
+	for (std::vector<Unit*>::iterator it = units.begin(); it != units.end(); ++it) {
+		
+		Point pos;
+		
+		Unit *unit = *it;
+
+		pos = unit->getPos();
+		pos.x += 2;
+		pos.y += 3;
+
+		the_map.moveUnit(unit, pos);
+
+	}
+	the_map.printGrid();
+
+	// Test removing from the map
+	for (std::vector<Unit*>::iterator it = units.begin(); it != units.end(); ++it) {
+
+		the_map.removeUnit(*it);
+	}
+
+	printf("Test removing units from the map\n");
+	the_map.printGrid();
 
 
 }
