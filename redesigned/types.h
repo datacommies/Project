@@ -67,6 +67,11 @@ typedef struct {
     int wallArmour;
 } tower_t;
 
+typedef struct {
+    header_t head;
+    int teamCurrency;
+} currency_t;
+
 /*typedef struct {
     header_t head;
     int id;

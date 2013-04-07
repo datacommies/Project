@@ -59,6 +59,7 @@
 #include "../units/unit.h"
 #include "../units/GameMap.h"
 //#include "ai.h"
+#include "../types.h"
 
 enum Command { Create, MovePlayer, MoveUnit, Attack };
 
@@ -92,6 +93,8 @@ class ServerGameLogic
     void receiveAttackCommand(int playerId, Direction direction);
     void playerConnect();
 
+    void initializeTeams(std::vector<player_matchmaking_t> players);
+    
   private:
     // Fields
     GameState gameState_;
@@ -267,18 +270,17 @@ class ServerGameLogic
     void updateMovePlayer(CommandData& command);
     void updateMoveUnit(CommandData& command);   
 
-    // Initializing the Game functions
-    void initializeTeams();
+    // Initializing the Game functions    
     void initializeCastles();
     void initializeCreeps();
     void initializeTowers();
     void initializeCurrency();
     void initializePaths();
-    void initializePlayers();
-
+    void initializePlayers(std::vector<player_matchmaking_t> players);
+    
     void createCreep(int team_no, Point location, int path_no = 0);
     void createTower(int team_no, Point location);
-    void createPlayer(int team_no, Point location);
+    void createPlayer(int team_no, Point location, int client_id);
     void respawnPlayer(Player* player, Point location);
     static void setAlarm();
     static void updateTimer(int i);

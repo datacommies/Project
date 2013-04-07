@@ -21,6 +21,10 @@ void ClientGameLogic::join () {
    gameState_ = LOBBY;
 }
 
+void ClientGameLogic::menu () {
+   gameState_ = MAIN_MENU;
+}
+
 /* Sends a create unit request to network module.
  *
  * PRE:     

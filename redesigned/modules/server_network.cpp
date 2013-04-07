@@ -94,14 +94,17 @@ bool ServerNetwork::sync(int client_)
         send(client_, sc.data(), sc.size(), 0);
     }
 
-    //also send updated currency to teams[0] here
-    //int firstTeamCurrency = serverGameLogic_.teams[0].currency;
-
     for (size_t i = 0; i < serverGameLogic_.teams[0].players.size(); ++i)
     {
         string sc = serverGameLogic_.teams[0].players[i]->serializeMobileUnit();
         send(client_, sc.data(), sc.size(), 0);
     }
+
+    currency_t cu1 = {0};
+    cu1.head.type = MSG_RESOURCE_UPDATE;
+    cu1.teamCurrency = 2000;//serverGameLogic_.teams[0].currency;
+    cu1.head.size = sizeof(currency_t);
+    send(client_, (const char*)&cu1, sizeof(currency_t), 0);
 
     //wrap into syncSecondTeam()
      for (size_t i = 0; i < serverGameLogic_.teams[1].towers.size(); ++i)
@@ -123,8 +126,11 @@ bool ServerNetwork::sync(int client_)
         send(client_, sc.data(), sc.size(), 0);
     }
 
-    //also send updated currency to teams[1] here
-    //int secondTeamCurrency = serverGameLogic_.teams[1].currency;
+    currency_t cu2 = {0};
+    cu2.head.type = MSG_RESOURCE_UPDATE;
+    cu2.teamCurrency = 1000;//serverGameLogic_.teams[1].currency;
+    cu2.head.size = sizeof(currency_t);
+    send(client_, (const char*)&cu2, sizeof(currency_t), 0);
 
     return true;
 }
@@ -392,7 +398,10 @@ void * ServerNetwork::handle_client_lobby(void * ctx)
                     start_head.type = MSG_START;
                     start_head.size = 0;
                     send(clients_[i], &start_head, sizeof(start_head), 0);
-                }
+                }              
+
+                serverGameLogic_.initializeTeams(players_);
+
                 handleClient(ctx);
             }
         }
