@@ -397,12 +397,29 @@ void ServerGameLogic::updateAttack(CommandData& command)
   // Attack!!
 }
 
+/*
+struct CommandData {
+  Command cmd;
+  int playerID;
+  int unitID;
+  UnitType type;
+  Point location;
+  Direction direction;
+  int pathID;
+};
+*/
 void ServerGameLogic::updateMovePlayer(CommandData& command)
 {
+  int team_no;
   if ( !(teams[0].isAlive() && teams[1].isAlive()) ) {
     fprintf(stderr, "Game is already over!! file: %s line %d\n", __FILE__, __LINE__);
     return;
   }
+  if((team_no = WhichTeam(command->unitID) == 2)
+  {
+    return; // not found
+  }
+  team[team_no]
 }
 
 void ServerGameLogic::updateMoveUnit(CommandData& command)
