@@ -140,6 +140,7 @@ private:
    void startGame();
    void exitLobby();
    void takeRole();
+   void updateLobbyRoles();
 
    friend void * init (void *);
 };
