@@ -28,6 +28,8 @@ inline string to_string(int num)
     return ss.str();
 }
 
+Graphics* globalGraphics = NULL; // Used for the SFGUI button handlers in the lobby.
+
 /* Graphics Thread entry point
  *
  * PRE:     
@@ -215,6 +217,9 @@ Point Lerp(Point start, Point end, float percent)
 Graphics::Graphics(ClientGameLogic& clientGameLogic)
    : window(NULL), clientGameLogic_(clientGameLogic)
 {
+    // Set global graphics to point to this.
+    globalGraphics = this;
+
     // Load font for game.
     char * font_path;
     find_font(&font_path);
@@ -406,10 +411,10 @@ void Graphics::initLobbyWindow()
     // Create the team selection buttons.
     for (int i = 0; i < 5; ++i)
     {
-        leftPlayers[i] = sfg::Button::Create("Player 1");
+        leftPlayers[i] = sfg::Button::Create("Open Slot");
         leftPlayers[i]->GetSignal  (sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) (11+i));
         
-        rightPlayers[i] = sfg::Button::Create("Player 1");
+        rightPlayers[i] = sfg::Button::Create("Open Slot");
         rightPlayers[i]->GetSignal  (sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) (21+i));
     }
 
@@ -452,7 +457,11 @@ void Graphics::takeRole()
     {
         case 11:
         // This causes a seg fault because we passed in an integer as a pointer to the "graphics" object
-            //playerOneOneButton->SetLabel("Ouch");
+            if(globalGraphics != NULL)
+            {
+                strcpy(globalGraphics->clientGameLogic_.clientNetwork_.team_l[0].name, "hello");
+                globalGraphics->updateLobbyRoles();
+            }
             cout << "T11" << endl;
             break;
         case 12:
@@ -482,6 +491,23 @@ void Graphics::takeRole()
         case 25:
             cout << "T25" << endl;
             break;
+    }
+}
+
+/* This method updates all the button texts in the lobby with those in the client network team_l and team_r.
+ *
+ * PRE:     Lobby window is initialized
+ * POST:    All buttons are updated with text
+ * RETURNS: 
+ * NOTES:    
+ */
+void Graphics::updateLobbyRoles()
+{
+    // Loop through the teams and update the buttons.
+    for(int i = 0; i < 5; i++)
+    {
+        leftPlayers[i]->SetLabel(clientGameLogic_.clientNetwork_.team_l[i].name);
+        rightPlayers[i]->SetLabel(clientGameLogic_.clientNetwork_.team_r[i].name);
     }
 }
 
