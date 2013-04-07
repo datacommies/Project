@@ -308,6 +308,7 @@ bool ServerNetwork::update_all_clients(int message) {
     return true;
 }
 
+// Basically runs another function without making it static (this one is static)
 void * ServerNetwork::handle_single_client_lobby(void* thing) {
     cout << "Handling client!" << endl;
     ClientCtx* ctx = (ClientCtx*)thing;
