@@ -194,7 +194,6 @@ bool ClientNetwork::createUnit(int playerId, UnitType type, Point location, int 
 {
 	//TODO: Not using playtypeerID at all!
 
-
 	// Create request and send via connectsock
 	request_create_t request;
 
@@ -207,6 +206,23 @@ bool ClientNetwork::createUnit(int playerId, UnitType type, Point location, int 
 
 	send(connectsock, &request, sizeof(request_create_t), 0);
    return false;
+}
+
+
+bool ClientNetwork::updatePlayerLobby (int team, int role, bool ready) {
+	player_matchmaking_t p = {{0, 0}, {0}, 0, 0, 0, false};
+	//TODO: get user's name from GUI. Hardcode for now.
+	p.team = team;
+	p.role = role;
+	p.ready = ready;
+	
+	if ((write(connectsock, &p, sizeof(p))) < 0)
+	{
+		std::cerr << "ERROR writing to socket" << std::endl;
+		return false;
+	}
+	
+	return true;
 }
 
 /* Sends a move player request to the server.

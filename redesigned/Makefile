@@ -1,5 +1,5 @@
 CFLAGS = -Wall -g
-LIBS = -lsfml-window -lsfml-graphics -lsfml-audio -lsfml-system -lfontconfig -lsfgui /lib64/libX11.so.6
+LIBS = -lsfml-window -lsfml-graphics -lsfml-audio -lsfml-system -lfontconfig -lsfgui -lX11
 MODULES = build/modules/ai.o build/modules/client_game_logic.o build/modules/control.o build/modules/server.o build/modules/server_network.o build/modules/client.o build/modules/client_network.o build/modules/graphics.o build/modules/server_game_logic.o build/units/creep.o build/units/mobile_unit.o build/units/unit.o build/units/castle.o build/units/tower.o build/units/splash_tower.o build/units/electro_tower.o build/units/projectile.o build/units/AiController.o build/units/player.o build/units/GameMap.o
 
 

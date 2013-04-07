@@ -43,6 +43,8 @@ public:
    void player_leave (player_matchmaking_t * p);
    void msg_mapname (char * map);
    void msg_chat (char * text);
+   
+   bool updatePlayerLobby (int team, int role, bool ready);
 
    void sendReady () {
       player_matchmaking_t p = {{MSG_PLAYER_UPDATE, sizeof(player_matchmaking_t)}, {0}, 0, 0, 0, false};
@@ -55,6 +57,7 @@ public:
    void setConnectionInfo (std::string name, std::string server, int port) {
      _name = name; _server = server; _port = port;
    }
+   
 private:
    // Connection parameters
    std::string _name, _server; 

@@ -133,7 +133,6 @@ Control::LoadGraphics(Graphics* graphicsModule)
 void 
 Control::AddNewCalledButton(int id)
 {
-	std::cout << "Added new button call back" << std::endl;
 	_buttonIDs.push_back(id);
 }
 
@@ -158,7 +157,6 @@ Control::AddNewCalledButton(int id)
 void 
 Control::AddNewCalledKey(sf::Keyboard::Key key)
 {
-	std::cout << "Added new key call back" << std::endl;
 	_keys.push_back(key);
 }
 
