@@ -721,7 +721,7 @@ void Graphics::loadImages(){
     map.setTexture(map_bg);
 
     // Load the creep texture.
-    creep_tex.loadFromFile("images/dog.gif");
+    creep_tex.loadFromFile("images/dino.png");
     creep_sprite.setTexture(creep_tex);
      
     // Load the castle texture.
