@@ -24,8 +24,11 @@ public:
    // Functions
    void updateUnits(CLIENT_UNIT unit);
    GameState getCurrentState();
+   
    void start ();
    void join ();
+   void menu ();
+
    bool createTower(UnitType type, Point location);
    bool createCreep(UnitType type, int laneID);
    bool movePlayer(Direction direction);

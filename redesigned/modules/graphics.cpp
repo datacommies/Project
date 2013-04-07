@@ -137,18 +137,21 @@ void * init (void * in)
             g->drawMainMenu(window);
         } else if (g->clientGameLogic_.getCurrentState() == LOBBY) {
             // Check if connected and display lobby, or else show "connecting..." message.
-            for (int i=0; i < 5; i++){
-                //cout << g->clientGameLogic_.clientNetwork_.team_l[i].name << endl;
-                //cout << g->clientGameLogic_.clientNetwork_.team_r[i].name << endl;
+            if (g->clientGameLogic_.clientNetwork_.connecting_status != "connected") {
+                g->unassignedPlayersList->SetText(g->clientGameLogic_.clientNetwork_.connecting_status);
+            } else {
+                for (int i=0; i < 5; i++){
+                    //cout << g->clientGameLogic_.clientNetwork_.team_l[i].name << endl;
+                    //cout << g->clientGameLogic_.clientNetwork_.team_r[i].name << endl;
+                }
+                string unassigned;
+                for (size_t i = 0; i < g->clientGameLogic_.clientNetwork_.waiting.size(); ++i)
+                {
+                    unassigned += g->clientGameLogic_.clientNetwork_.waiting[i].name;
+                    unassigned += "\n";
+                }
+                g->unassignedPlayersList->SetText(unassigned);
             }
-            string unassigned;
-            for (size_t i = 0; i < g->clientGameLogic_.clientNetwork_.waiting.size(); ++i)
-            {
-                unassigned += g->clientGameLogic_.clientNetwork_.waiting[i].name;
-                unassigned += "\n";
-            }
-            g->unassignedPlayersList->SetText(unassigned);
-
         } else if (g->clientGameLogic_.getCurrentState() == IN_GAME || g->clientGameLogic_.getCurrentState() == WON_GAME || g->clientGameLogic_.getCurrentState() == LOST_GAME) {
             if (!controls_init) {
                 controls_init = true;
