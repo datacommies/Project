@@ -35,7 +35,8 @@ inline string to_string(int num)
  * RETURNS: nothing
  * NOTES:   Graphics init and main loop  
 */
-void * init (void * in) {
+void * init (void * in) 
+{
     bool controls_init = false;
     // Pointer to the Graphics instance is passed through the thread create argument.
     Graphics* g = (Graphics *)in;
@@ -169,11 +170,11 @@ void * init (void * in) {
     }
 
     return NULL;
-
 }
 
 // Pick default system font with font config.
-bool find_font (char ** path) {
+bool find_font (char ** path) 
+{
     FcResult result;
     FcPattern* pat = FcPatternCreate();
     //pat = FcNameParse ((FcChar8 *) ""); //specify font family?
@@ -245,30 +246,44 @@ void Graphics::initMainMenuControls()
  * POST:    
  * RETURNS: 
  * NOTES:   Clears and Initializes the set of UIElements for In-game controls */
-void Graphics::initGameControls () {
+void Graphics::initGameControls () 
+{
     clientGameLogic_.UIElements.clear();
 
     int button[] = { 49 , 118, 188, 313, 569, 638, 708, 780 };
     
     //Tower Buttons
-    Button towerButton1(BUILDTOWER_1,sf::Vector2f(button[0],ROW1), sf::Vector2f(BUTTON_SIZE, BUTTON_SIZE), font, "T1");
-    Button towerButton2(BUILDTOWER_2,sf::Vector2f(button[1],ROW1), sf::Vector2f(BUTTON_SIZE, BUTTON_SIZE), font, "T2");
-    Button towerButton3(BUILDTOWER_3,sf::Vector2f(button[2],ROW1), sf::Vector2f(BUTTON_SIZE, BUTTON_SIZE), font, "T3");
+    Button towerButton1(BUILDTOWER_1,sf::Vector2f(button[0],ROW1), sf::Vector2f(BUTTON_SIZE, BUTTON_SIZE), font, NULL);
+    Button towerButton2(BUILDTOWER_2,sf::Vector2f(button[1],ROW1), sf::Vector2f(BUTTON_SIZE, BUTTON_SIZE), font, NULL);
+    Button towerButton3(BUILDTOWER_3,sf::Vector2f(button[2],ROW1), sf::Vector2f(BUTTON_SIZE, BUTTON_SIZE), font, NULL);
 
     // Path Buttons
-    Button highPath(SELECTHIPATH,sf::Vector2f(button[3],ROW2), sf::Vector2f(PATH_WIDTH, PATH_HEIGHT), font, "");
-    Button midPath(SELECTMIDPATH,sf::Vector2f(button[3],ROW3), sf::Vector2f(PATH_WIDTH, PATH_HEIGHT), font, "");
-    Button lowPath(SELECTLOPATH,sf::Vector2f(button[3],ROW4), sf::Vector2f(PATH_WIDTH, PATH_HEIGHT), font, "");
+    Button highPath(SELECTHIPATH,sf::Vector2f(button[3],ROW2), sf::Vector2f(PATH_WIDTH, PATH_HEIGHT), font, NULL);
+    Button midPath(SELECTMIDPATH,sf::Vector2f(button[3],ROW3), sf::Vector2f(PATH_WIDTH, PATH_HEIGHT), font, NULL);
+    Button lowPath(SELECTLOPATH,sf::Vector2f(button[3],ROW4), sf::Vector2f(PATH_WIDTH, PATH_HEIGHT), font, NULL);
     
     // Creep Buttons
-    Button creepButton1(BUILDCREEP_1,sf::Vector2f(button[4],ROW1), sf::Vector2f(BUTTON_SIZE, BUTTON_SIZE), font, "C1");
-    Button creepButton2(BUILDCREEP_2,sf::Vector2f(button[5],ROW1), sf::Vector2f(BUTTON_SIZE, BUTTON_SIZE), font, "C2");
-    Button creepButton3(BUILDCREEP_3,sf::Vector2f(button[6],ROW1), sf::Vector2f(BUTTON_SIZE, BUTTON_SIZE), font, "C3");
+    Button creepButton1(BUILDCREEP_1,sf::Vector2f(button[4],ROW1), sf::Vector2f(BUTTON_SIZE, BUTTON_SIZE), font, NULL);
+    Button creepButton2(BUILDCREEP_2,sf::Vector2f(button[5],ROW1), sf::Vector2f(BUTTON_SIZE, BUTTON_SIZE), font, NULL);
+    Button creepButton3(BUILDCREEP_3,sf::Vector2f(button[6],ROW1), sf::Vector2f(BUTTON_SIZE, BUTTON_SIZE), font, NULL);
     
     // Exit Button
-    Button quitButton(ID_QUIT,sf::Vector2f(button[7],ROW4+8), sf::Vector2f(QUIT_BSIZE, QUIT_BSIZE),  font, "");
+    Button quitButton(ID_QUIT,sf::Vector2f(button[7],ROW4+8), sf::Vector2f(QUIT_BSIZE, QUIT_BSIZE),  font, NULL);
   
     //towerButton1.rect.setFillColor(sf::Color(255, 0, 0));
+    towerButton1.rect.setFillColor(sf::Color::Transparent);
+    towerButton2.rect.setFillColor(sf::Color::Transparent);
+    towerButton3.rect.setFillColor(sf::Color::Transparent);
+
+    creepButton1.rect.setFillColor(sf::Color::Transparent);
+    creepButton2.rect.setFillColor(sf::Color::Transparent);
+    creepButton3.rect.setFillColor(sf::Color::Transparent);
+
+    highPath.rect.setFillColor(sf::Color::Transparent);
+    lowPath.rect.setFillColor(sf::Color::Transparent);
+    midPath.rect.setFillColor(sf::Color::Transparent);
+
+    quitButton.rect.setFillColor(sf::Color::Transparent);
   
     clientGameLogic_.UIElements.insert(towerButton1);
     clientGameLogic_.UIElements.insert(towerButton2);
@@ -290,7 +305,8 @@ void Graphics::initGameControls () {
  * RETURNS: 
  * NOTES:    
  */
-void Graphics::initDesktop(){
+void Graphics::initDesktop()
+{
     sfgDesktop = sfg::Desktop();
     sfgDesktop.SetProperty("Label", "FontSize", 22);
     sfgDesktop.SetProperty("Entry", "FontSize", 22);
@@ -303,7 +319,8 @@ void Graphics::initDesktop(){
  * RETURNS: 
  * NOTES:    
  */
-void Graphics::initJoinWindow(){
+void Graphics::initJoinWindow()
+{
     // Create join window using SFGUI
     sfgJoinWindow = sfg::Window::Create(sfg::Window::BACKGROUND); // Make the window.
     sfgJoinWindow->SetPosition(sf::Vector2f(200,200)); // Change the window position.
@@ -355,7 +372,8 @@ void Graphics::initJoinWindow(){
  * RETURNS: 
  * NOTES:    
  */
-void Graphics::initLobbyWindow(){
+void Graphics::initLobbyWindow()
+{
     // Create lobby window using SFGUI.
     sfgLobbyWindow = sfg::Window::Create(sfg::Window::BACKGROUND); // Make the window.
     sfgLobbyWindow->SetPosition(sf::Vector2f(100, 225)); // Change the window position.
@@ -612,7 +630,7 @@ void Graphics::drawTeamCircle (sf::RenderWindow& window, int team, float x, floa
  * RETURNS: 
  * NOTES:    */
 void Graphics::drawUnits(sf::RenderWindow& window)
-{	
+{
     pthread_mutex_lock( &clientGameLogic_.unit_mutex );
     for (std::vector<CLIENT_UNIT>::iterator unit = clientGameLogic_.units.begin(); unit != clientGameLogic_.units.end(); ++unit)
     {
@@ -710,7 +728,8 @@ void Graphics::drawEndGameScreen(sf::RenderWindow& window)
  * RETURNS: 
  * NOTES:    
  */
-void Graphics::loadImages(){
+void Graphics::loadImages()
+{
     // Load the HUD background.
     hud_bg.loadFromFile("images/hud.png");
     hud.setTexture(hud_bg);
