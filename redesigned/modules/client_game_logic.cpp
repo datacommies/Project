@@ -31,7 +31,6 @@ void ClientGameLogic::join () {
 bool ClientGameLogic::createTower(UnitType type, Point location)
 {
    // TODO: validation
-
    //validate currency
    //confirm that we currently have enough currency to build that tower
    //mutex to access the currency?
