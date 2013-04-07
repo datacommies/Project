@@ -104,7 +104,7 @@ void ClientNetwork::recvReply() {
 		// CREEP type contains a unit_t with the creep's attributes.
 		
 		if(head.type == MSG_RESOURCE_UPDATE){
-			currency_t cu = {{0}, 0};
+			currency_t cu = {0};
 			recv_complete(connectsock, ((char*)&cu) + sizeof(header_t), sizeof(currency_t) - sizeof(header_t), 0);
 			gl->currency = cu.teamCurrency;
 		} else if (head.type == MSG_CREATE_UNIT) {
