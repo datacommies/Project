@@ -5,7 +5,7 @@
 
 #define MAX_X 500
 #define MAX_Y 500
-        
+
 #include <stdio.h>
 #include <stdlib.h> 
 
@@ -19,7 +19,7 @@
 #include <vector>
 
 class GameMap{
-public:
+  public:
     Point castle1; //position for team 0's castle
     Point castle2; //position for team 0's castle
     PATH topOne, midOne, botOne; //paths for team 0's creeps
@@ -27,7 +27,7 @@ public:
     Point team0start[4]; //starting positions for team 0's players
     Point team1start[4]; //starting positions for team 1's players
     //add the 2d array
-    
+
 
     //initializes castle positions and paths for each team
     //these still need to be assigned to a team object somehow
@@ -50,24 +50,24 @@ public:
     void build(Team &team);
     GameMap(GameMap& map1, GameMap& map2);
     void merge(GameMap& map1, GameMap& map2);
-private:
+  private:
 
-   int max_x_;
-   int max_y_;
+    int max_x_;
+    int max_y_;
 
     // Go from position to unit*
     Unit ***grid_;
-        
+
     // Go from unit* to postion
     std::map<Unit*, Point> units_;
-        
+
     // Methods
-    
+
     void _init();
-    
+
     int min(int a, int b);
     int max(int a, int b);
-    
+
     // I write this so that I might be able to see if things work correctly
 
     void _helperBuild(Unit *unit, UnitType type, Point pos);
