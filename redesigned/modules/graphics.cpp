@@ -480,7 +480,8 @@ void Graphics::takeRole()
             break;
         case 12:
             cout << "T12" << endl;
-            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(2, 0, true);
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 0, true);
+            //globalGraphics->clientGameLogic_.clientNetwork_.recvReply();
             break;
         case 13:
             cout << "T13" << endl;
