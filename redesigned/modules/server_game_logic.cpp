@@ -169,29 +169,26 @@ void ServerGameLogic::initializeCurrency()
   for (int team_i=0; team_i<2; team_i++)
     teams[team_i].currency = INIT_CURRENCY;
 }
-void ServerGameLogic::initializePlayers()
-{
-  Point pos = gameMap_->team0start[0];
-  for(int i = 0; i < 2; i++)
-  {
 
-    createPlayer(i, pos);
-    if(i == 1)
-      pos = gameMap_->team1start[0];
+void ServerGameLogic::initializePlayers(std::vector<player_matchmaking_t> players)
+{
+  for (std::vector<player_matchmaking_t>::iterator it = players.begin(); it != players.end(); ++it) {
+    createPlayer(it->team, it->team == 0 ? gameMap_->team0start[0] : gameMap_->team1start[0], it->pid);
   }
 }
+
 void ServerGameLogic::initializePaths()
 {  
 }
 
-void ServerGameLogic::initializeTeams()
+void ServerGameLogic::initializeTeams(std::vector<player_matchmaking_t> players)
 {
   initializePaths(); // Must be done before initializing creeps
   initializeCastles();
   initializeCreeps();
   initializeTowers();
   initializeCurrency();
-  initializePlayers();
+  initializePlayers(players);
 
 #ifdef TESTCLASS  
   mapTeams_[0].build(teams[0]);
@@ -211,9 +208,6 @@ void ServerGameLogic::startGame()
 {
   gSGL = this;
   setAlarm();
-//#ifdef TESTCLASS
-  initializeTeams();
-//#endif
 }
 
 /* Receive and queue a create unit command from a client.
@@ -374,37 +368,30 @@ void ServerGameLogic::updateAttack(CommandData& command)
   // Attack!!
 }
 
-/*
-struct CommandData {
-  Command cmd;
-  int playerID;
-  int unitID;
-  UnitType type;
-  Point location;
-  Direction direction;
-  int pathID;
-};
-*/
 void ServerGameLogic::updateMovePlayer(CommandData& command)
 {
   int team_no;
   Player* temp;
+  
   if ( !(teams[0].isAlive() && teams[1].isAlive()) ) {
     fprintf(stderr, "Game is already over!! file: %s line %d\n", __FILE__, __LINE__);
     return;
   }
+  
   if((team_no = WhichTeam(command.unitID) == 2))
   {
     std::cout << "Team not found" << std::endl;
     return; // not found
   }
 
-  temp = (Player*)teams[team_no].findUnit(command.unitID);
+  temp = teams[team_no].findPlayer(command.playerID);
+
   if(temp == 0)
   {
     std::cout << "Player not found" << std::endl;
     return;
   }
+
   switch(command.direction)
   {
     // we need to check for the attack upon running into an attackable unit.
@@ -584,18 +571,20 @@ void ServerGameLogic::createTower(int team_no, Point location)
  * RETURNS:
  * NOTES:   
  */
-void ServerGameLogic::createPlayer(int team_no, Point location)
+void ServerGameLogic::createPlayer(int team_no, Point location, int client_id)
 {
   int uid = next_unit_id_++;
 
-  Player *player = new Player(uid, 10, location); // 10 is a place holder for the client ID. (This should be the socket?)
+  Player *player = new Player(uid, client_id, location);
   teams[team_no].addUnit(player);
 }
+
 void ServerGameLogic::respawnPlayer(Player* player, Point location)
 {
   player->position = location;
   player->health = 100;
 }
+
 // To test this class use  g++ -DTESTCLASS -g -Wall server_game_logic.cpp ../build/units/*.o
 #ifdef TESTCLASS
 int main() {

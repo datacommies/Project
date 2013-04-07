@@ -398,7 +398,10 @@ void * ServerNetwork::handle_client_lobby(void * ctx)
                     start_head.type = MSG_START;
                     start_head.size = 0;
                     send(clients_[i], &start_head, sizeof(start_head), 0);
-                }
+                }              
+
+                serverGameLogic_.initializeTeams(players_);
+
                 handleClient(ctx);
             }
         }

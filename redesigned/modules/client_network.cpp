@@ -13,20 +13,15 @@ player_matchmaking_t empty = {{0, 0}, "Empty", 0, 0, 0, false};
  * POST:
  * RETURNS:
  * NOTES:   Creates a thread and starts running the module */
-ClientNetwork::ClientNetwork()
-{
-   // TODO: create a thread and begin processing
-//gl = (ClientGameLogic*) malloc (sizeof(ClientGameLogic*));
-
-}
+ClientNetwork::ClientNetwork() {}
 
 /* Destructor
  *
  */
 ClientNetwork::~ClientNetwork()
 {
-    shutdown(connectsock, SHUT_RDWR);
-    close(connectsock);
+	shutdown(connectsock, SHUT_RDWR);
+	close(connectsock);
 }
 
 /* Connects to a server with the connection parameters set before.
@@ -42,8 +37,7 @@ ClientNetwork::~ClientNetwork()
  */
 bool ClientNetwork::connectToServer()
 {
-	cout << "connecting.." <<endl;
-
+	connecting_status = "Connecting...";
 	struct sockaddr_in serv_addr;
 	struct hostent *server;
 	long n;
@@ -60,6 +54,7 @@ bool ClientNetwork::connectToServer()
 
 	if (server == NULL) 
 	{
+		connecting_status = "Server hostname not found!";
 		std::cerr << "ERROR: no such host" << std::endl;
 		return false;
 	}
@@ -73,11 +68,13 @@ bool ClientNetwork::connectToServer()
 	if (connect(connectsock, (struct sockaddr *) &serv_addr,
 		sizeof(serv_addr)) < 0)
 	{
+		connecting_status = "Could not connect, retrying...";
 		std::cerr << "ERROR: connecting" << std::endl;
 		return false;
 	}
 
-	std::cout << "I'M CONNECTEDDDDD!!!!! YEAAAAAAAAAAAAAAAAAAAAAAAA" << std::endl;
+	connecting_status = "connected";
+	std::cout << "Connected!" << std::endl;
 
 	player_matchmaking_t p = {{0, 0}, {0}, 0, 0, 0, false};
 	//TODO: get user's name from GUI. Hardcode for now.
@@ -150,7 +147,7 @@ void ClientNetwork::recvReply() {
 					break;
 				}
 				default:
-				    break;
+					break;
 			}
 		} else if (head.type == MSG_CLEAR) {
 			pthread_mutex_lock( &gl->unit_mutex );
@@ -158,31 +155,31 @@ void ClientNetwork::recvReply() {
 			pthread_mutex_unlock( &gl->unit_mutex );
 		} else if (head.type == MSG_PLAYER_UPDATE) {
 			player_matchmaking_t p;
-            p.head = head;
-            n = recv_complete(connectsock, ((char*)&p) + sizeof(head), sizeof(p) - sizeof(head), 0);
+			p.head = head;
+			n = recv_complete(connectsock, ((char*)&p) + sizeof(head), sizeof(p) - sizeof(head), 0);
 
-            player_update(&p);    
+			player_update(&p);    
 		} else if (head.type == MSG_PLAYER_LEAVE) {
-            player_matchmaking_t p;
-            p.head = head;
-            n = recv_complete(connectsock, ((char*)&p) + sizeof(head), sizeof(p) - sizeof(head), 0);
+			player_matchmaking_t p;
+			p.head = head;
+			n = recv_complete(connectsock, ((char*)&p) + sizeof(head), sizeof(p) - sizeof(head), 0);
 
-            player_leave(&p);
-        } else if (head.type == MSG_MAPNAME) {
-            //n = recv_complete(connectsock, ((char*)&m + sizeof(head)), sizeof(map_t) - sizeof(head), 0);
-            char m[MAP_NAME_SIZE] = {0};
-            if ((n = recv_complete(connectsock, m, MAP_NAME_SIZE, 0)) > 0)
-                msg_mapname(m);
-        } else if (head.type == MSG_CHAT) {
-            char * m = (char *) malloc (head.size);
-            n = recv_complete(connectsock, m, head.size, 0);
-            m[n] = 0;
-            msg_chat(m);
-            free(m);
-        } else if (head.type == MSG_START) {
-        	cout << "Game started!" << endl;
-            gl->start();
-        }
+			player_leave(&p);
+		} else if (head.type == MSG_MAPNAME) {
+			//n = recv_complete(connectsock, ((char*)&m + sizeof(head)), sizeof(map_t) - sizeof(head), 0);
+			char m[MAP_NAME_SIZE] = {0};
+			if ((n = recv_complete(connectsock, m, MAP_NAME_SIZE, 0)) > 0)
+				msg_mapname(m);
+		} else if (head.type == MSG_CHAT) {
+			char * m = (char *) malloc (head.size);
+			n = recv_complete(connectsock, m, head.size, 0);
+			m[n] = 0;
+			msg_chat(m);
+			free(m);
+		} else if (head.type == MSG_START) {
+			cout << "Game started!" << endl;
+			gl->start();
+		}
 	}
 }
 
@@ -253,43 +250,43 @@ bool ClientNetwork::attack(int playerId, Direction direction)
  */
 int ClientNetwork::sendRequest(int msg)
 {
-    return 1;
+	return 1;
 }
 
 void ClientNetwork::player_update (player_matchmaking_t * p) {
-    printf("Player: %s\t" "Team: %d\t"
-        "Role: %d\t" "Ready: %s\n",
-        p->name, p->team,
-        p->role, (p->ready ? "yes" : "no"));
+	printf("Player: %s\t" "Team: %d\t"
+		"Role: %d\t" "Ready: %s\n",
+		p->name, p->team,
+		p->role, (p->ready ? "yes" : "no"));
 
-    if (p->team == 1)
-        team_l[p->role] = *p;
-    else if (p->team == 2)
-        team_r[p->role] = *p;
-    else 
-        waiting.push_back(*p);
+	if (p->team == 1)
+		team_l[p->role] = *p;
+	else if (p->team == 2)
+		team_r[p->role] = *p;
+	else 
+		waiting.push_back(*p);
 }
 
 void ClientNetwork::player_leave (player_matchmaking_t * p) {
-    printf("Player Left: %s\n", p->name);
+	printf("Player Left: %s\n", p->name);
 
-    // Remove player from the waiting list.
-    if (p->team == 0) {
-        waiting.erase(std::remove(waiting.begin(), waiting.end(), *p), waiting.end());
-    } else {
-        // Remove the player from the team arrays.
-        if (p->team == 1){
-            memcpy(team_l+p->role, &empty, sizeof(player_matchmaking_t));
-        } else if (p->team == 2) {
-            memcpy(team_r+p->role, &empty, sizeof(player_matchmaking_t));
-        }
-    }
+	// Remove player from the waiting list.
+	if (p->team == 0) {
+		waiting.erase(std::remove(waiting.begin(), waiting.end(), *p), waiting.end());
+	} else {
+		// Remove the player from the team arrays.
+		if (p->team == 1){
+			memcpy(team_l+p->role, &empty, sizeof(player_matchmaking_t));
+		} else if (p->team == 2) {
+			memcpy(team_r+p->role, &empty, sizeof(player_matchmaking_t));
+		}
+	}
 }
 
 void ClientNetwork::msg_mapname (char * map) {
-    printf("Got map name: %s\n", map);
+	printf("Got map name: %s\n", map);
 }
 
 void ClientNetwork::msg_chat (char * text) {
-    printf("message: %s\n", text);
+	printf("message: %s\n", text);
 }
