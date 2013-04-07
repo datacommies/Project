@@ -55,6 +55,8 @@ public:
    void setConnectionInfo (std::string name, std::string server, int port) {
      _name = name; _server = server; _port = port;
    }
+
+   bool updatePlayerLobby (int team, int role, bool ready);
 private:
    // Connection parameters
    std::string _name, _server; 
