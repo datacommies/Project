@@ -48,6 +48,15 @@ public:
 	}
 
 	bool isAlive() { return towers.size() > 0 && towers[0]->isAlive(); }
+
+	Unit * findUnit(int unitId)
+	{			
+		for (std::vector<Unit*>::iterator it = units.begin(); it != units.end(); ++it)
+			if ((*it)->id == unitId)
+		  		return *it;
+
+		return NULL;
+	}
 private:
 };
 
