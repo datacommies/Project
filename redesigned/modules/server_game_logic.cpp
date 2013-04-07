@@ -280,31 +280,6 @@ void ServerGameLogic::receiveAttackCommand(int playerId, Direction direction)
   requestedCommands.push(newCommand);
 }
 
-std::vector<Unit*>::iterator ServerGameLogic::findUnit(std::vector<Unit*>::iterator first, std::vector<Unit*>::iterator end, int playerID) {
-
-  for (std::vector<Unit*>::iterator it = first; first != end; ++it)
-    if ((*it)->id == playerID)
-      return it; 
-
-  return end;
-}
-
-
-Unit * ServerGameLogic::findUnit(int unitId) {
-  std::vector<Unit*> *teamOneUnits = &teams[0].units;
-  std::vector<Unit*> *teamTwoUnits = &teams[1].units;
-
-  for (std::vector<Unit*>::iterator it = teamOneUnits->begin(); it != teamOneUnits->end(); ++it)
-    if ((*it)->id == unitId)
-      return *it;
-
-  for (std::vector<Unit*>::iterator it = teamTwoUnits->begin(); it != teamTwoUnits->end(); ++it)
-    if ((*it)->id == unitId)
-      return *it;
-
-  return NULL;
-}
-
 /*
  * PRE:  Maps are current
  * RETURNS: 
