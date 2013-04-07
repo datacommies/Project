@@ -12,10 +12,14 @@ using namespace std;
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 700
-#define BUTTON_WIDTH  100
-#define BUTTON_HEIGHT 25
-#define ROW1 620
-#define ROW2 665
+#define BUTTON_SIZE  40
+#define PATH_WIDTH 163
+#define QUIT_BSIZE 15
+#define PATH_HEIGHT 10
+#define ROW1 627
+#define ROW2 619
+#define ROW3 646
+#define ROW4 673
 
 inline string to_string(int num)
 {
@@ -244,36 +248,38 @@ void Graphics::initMainMenuControls()
 void Graphics::initGameControls () {
     clientGameLogic_.UIElements.clear();
 
-    int button[] = { 20, 130, 240, 350, 460, 570, 680 };
+    int button[] = { 49 , 118, 188, 313, 569, 638, 708, 780 };
     
-    // First row of buttons
-    Button towerButton1(BUILDTOWER_1,sf::Vector2f(button[0],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Tower1");
-    Button towerButton2(BUILDTOWER_2,sf::Vector2f(button[1],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Tower2");
-    Button towerButton3(BUILDTOWER_3,sf::Vector2f(button[2],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Tower3");
-    Button creepButton1(BUILDCREEP_1,sf::Vector2f(button[3],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Creep1");
-    Button creepButton2(BUILDCREEP_2,sf::Vector2f(button[4],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Creep2");
-    Button creepButton3(BUILDCREEP_3,sf::Vector2f(button[5],ROW1), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "Creep3");
-    Button quitButton(ID_QUIT,sf::Vector2f(button[6],ROW2), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT),  font, "Quit");
+    //Tower Buttons
+    Button towerButton1(BUILDTOWER_1,sf::Vector2f(button[0],ROW1), sf::Vector2f(BUTTON_SIZE, BUTTON_SIZE), font, "T1");
+    Button towerButton2(BUILDTOWER_2,sf::Vector2f(button[1],ROW1), sf::Vector2f(BUTTON_SIZE, BUTTON_SIZE), font, "T2");
+    Button towerButton3(BUILDTOWER_3,sf::Vector2f(button[2],ROW1), sf::Vector2f(BUTTON_SIZE, BUTTON_SIZE), font, "T3");
+
+    // Path Buttons
+    Button highPath(SELECTHIPATH,sf::Vector2f(button[3],ROW2), sf::Vector2f(PATH_WIDTH, PATH_HEIGHT), font, "");
+    Button midPath(SELECTMIDPATH,sf::Vector2f(button[3],ROW3), sf::Vector2f(PATH_WIDTH, PATH_HEIGHT), font, "");
+    Button lowPath(SELECTLOPATH,sf::Vector2f(button[3],ROW4), sf::Vector2f(PATH_WIDTH, PATH_HEIGHT), font, "");
+    
+    // Creep Buttons
+    Button creepButton1(BUILDCREEP_1,sf::Vector2f(button[4],ROW1), sf::Vector2f(BUTTON_SIZE, BUTTON_SIZE), font, "C1");
+    Button creepButton2(BUILDCREEP_2,sf::Vector2f(button[5],ROW1), sf::Vector2f(BUTTON_SIZE, BUTTON_SIZE), font, "C2");
+    Button creepButton3(BUILDCREEP_3,sf::Vector2f(button[6],ROW1), sf::Vector2f(BUTTON_SIZE, BUTTON_SIZE), font, "C3");
+    
+    // Exit Button
+    Button quitButton(ID_QUIT,sf::Vector2f(button[7],ROW4+8), sf::Vector2f(QUIT_BSIZE, QUIT_BSIZE),  font, "");
   
-    // Second row of buttons.
-    Button highPath(SELECTHIPATH,sf::Vector2f(button[0],ROW2), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "HiPath");
-    Button midPath(SELECTMIDPATH,sf::Vector2f(button[1],ROW2), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "MidPath");
-    Button lowPath(SELECTLOPATH,sf::Vector2f(button[2],ROW2), sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), font, "LowPath");
-  
-    towerButton1.rect.setFillColor(sf::Color(255, 0, 0));
+    //towerButton1.rect.setFillColor(sf::Color(255, 0, 0));
   
     clientGameLogic_.UIElements.insert(towerButton1);
     clientGameLogic_.UIElements.insert(towerButton2);
     clientGameLogic_.UIElements.insert(towerButton3);
+    clientGameLogic_.UIElements.insert(highPath);
+    clientGameLogic_.UIElements.insert(midPath);
+    clientGameLogic_.UIElements.insert(lowPath); 
     clientGameLogic_.UIElements.insert(creepButton1);
     clientGameLogic_.UIElements.insert(creepButton2);
     clientGameLogic_.UIElements.insert(creepButton3);
     clientGameLogic_.UIElements.insert(quitButton);
-    
-    clientGameLogic_.UIElements.insert(highPath);
-    clientGameLogic_.UIElements.insert(midPath);
-    clientGameLogic_.UIElements.insert(lowPath); 
-    
 }
 
 /* Initializes sfgDesktop. ALL SFGUI objects will sit ontop of this. We need this because it's the only way to do
