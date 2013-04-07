@@ -44,6 +44,8 @@ public:
    void msg_mapname (char * map);
    void msg_chat (char * text);
 
+   void updatePlayerLobby (int team, int role, bool ready);
+
    void sendReady () {
       player_matchmaking_t p = {{MSG_PLAYER_UPDATE, sizeof(player_matchmaking_t)}, {0}, 0, 0, 0, false};
       strcpy(p.name, "Test");

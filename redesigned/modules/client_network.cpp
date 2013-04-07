@@ -216,13 +216,13 @@ void ClientNetwork::updatePlayerLobby (int team, int role, bool ready) {
 	p.role = role;
 	p.ready = ready;
 	
-	if ((n = write(connectsock, &p, sizeof(p))) < 0)
+	if ((write(connectsock, &p, sizeof(p))) < 0)
 	{
 		std::cerr << "ERROR writing to socket" << std::endl;
-		return false;
+		return;
 	}
 	
-	return true;
+	return;
 }
 
 /* Sends a move player request to the server.

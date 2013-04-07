@@ -392,26 +392,7 @@ void ServerGameLogic::updateMovePlayer(CommandData& command)
     return;
   }
 
-  switch(command.direction)
-  {
-    // we need to check for the attack upon running into an attackable unit.
-    case UP:
-    //validate
-    temp->position.y--;
-    break;
-    case DOWN:
-    //validate
-    temp->position.y++;
-    break;
-    case LEFT:
-    //validate
-    temp->position.x--;
-    break;
-    case RIGHT:
-    //validate
-    temp->position.x++;
-    break;
-  }
+  temp->direction = command.direction;
   std::cout << "moving player" << std::endl;
 }
 
