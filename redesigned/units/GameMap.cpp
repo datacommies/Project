@@ -1,7 +1,7 @@
 #include "../resource.h"
 #include "Point.h"
 
-class MapOne{
+class GameMap{
 public:
     Point castle1; //position for team 0's castle
     Point castle2; //position for team 0's castle
