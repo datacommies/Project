@@ -96,11 +96,11 @@ bool ServerNetwork::sync(int client_)
 
     //also send updated currency to teams[0] here
 
-    /*for (size_t i = 0; i < serverGameLogic_.teams[0].players_.size(); ++i)
+    for (size_t i = 0; i < serverGameLogic_.teams[0].players.size(); ++i)
     {
-        string sc = serverGameLogic_.teams[0].players_[i].serializePlayer();
+        string sc = serverGameLogic_.teams[0].players[i]->serializeMobileUnit();
         send(client_, sc.data(), sc.size(), 0);
-    }*/
+    }
 
     //wrap into syncSecondTeam()
      for (size_t i = 0; i < serverGameLogic_.teams[1].towers.size(); ++i)
@@ -116,11 +116,11 @@ bool ServerNetwork::sync(int client_)
         send(client_, sc.data(), sc.size(), 0);
     }
     
-    /*for (size_t i = 0; i < serverGameLogic_.teams[1].players_.size(); ++i)
+    for (size_t i = 0; i < serverGameLogic_.teams[1].players.size(); ++i)
     {
-        string sc = serverGameLogic_.teams[1].players_[i].serializePlayer();
+        string sc = serverGameLogic_.teams[1].players[i]->serializeMobileUnit();
         send(client_, sc.data(), sc.size(), 0);
-    }*/
+    }
 
     //also send updated currency to teams[1] here
 

@@ -81,8 +81,8 @@ void GameMap::initMap(){
 
     //*** team 1 player starting positions ***
     Point c;
-    c.x = 10;
-    c.y = 10;
+    c.x = 250;
+    c.y = 250;
 
     team0start[0] = c;
 

@@ -191,6 +191,7 @@ void ServerGameLogic::initializeTeams()
   initializeCreeps();
   initializeTowers();
   initializeCurrency();
+  initializePlayers();
 
 #ifdef TESTCLASS  
   mapTeams_[0].build(teams[0]);
