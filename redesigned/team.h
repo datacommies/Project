@@ -35,10 +35,28 @@ public:
 			case PLAYER:
 				players.push_back((Player*)unit);
 				break;
+			case CREEP_ONE:
+			case CREEP_TWO:
+			case CREEP_THREE:
+			case TOWER_ONE:
+			case TOWER_TWO:        // added to remove warnings
+			case TOWER_THREE:
+			case CASTLE:
+			case PROJECTILE:
+				break;
 		}   	
 	}
 
 	bool isAlive() { return towers.size() > 0 && towers[0]->isAlive(); }
+
+	Unit * findUnit(int unitId)
+	{			
+		for (std::vector<Unit*>::iterator it = units.begin(); it != units.end(); ++it)
+			if ((*it)->id == unitId)
+		  		return *it;
+
+		return NULL;
+	}
 private:
 };
 
