@@ -34,6 +34,9 @@ class GameMap{
     //should probably be changed to use the MAPWIDTH/MAPHEIGHT defines
     //do we want default player spawn positions?
     void initMap();
+    void initPaths();
+    void initPlayerPositions();
+    void initCastlePositions();
     GameMap (int max_x=MAX_X, int max_y=MAX_Y);
     ~GameMap();
 

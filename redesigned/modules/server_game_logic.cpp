@@ -130,7 +130,7 @@ void ServerGameLogic::initializeCastles()
 
 void ServerGameLogic::initializeCreeps()
 {
-  /*for (int team_i=0; team_i<2; team_i++)
+  for (int team_i=0; team_i<2; team_i++){
     for (int j=0; j<INIT_NUM_CREEPS; j++) {
       Point pos = Point();
       
@@ -144,27 +144,29 @@ void ServerGameLogic::initializeCreeps()
       }
 
       createCreep(team_i, pos, j % PATH_COUNT);
-    }*/
-    Point pos = Point(230, 230);
-    int uid = next_unit_id_++;
-  
-    int hp = INIT_CREEP_HP;
-    int atkdmg = INIT_CREEP_ATKDMG;
-    int atkrng = INIT_CREEP_ATKRNG;
-    int atkspd = INIT_CREEP_ATKSPD;
-    int percep = INIT_CREEP_PERCEP;
-    int atkcnt = INIT_CREEP_ATKCNT;
-    int spd = INIT_CREEP_SPD;
-    Direction direct = Direction();
-    Point *path = &teams[0].paths[2][0];
-    int movespeed = INIT_CREEP_MOVESPEED;
+    }
+  }
 
-    // Add creep to team  
-    Creep *creep = new Creep(uid, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, spd, direct, path, movespeed);  
-    teams[0].addUnit(creep);  
+  /*Point pos = Point(230, 230);
+  int uid = next_unit_id_++;
 
-    // Pay for creep
-    teams[0].currency -= CREEP_COST;
+  int hp = INIT_CREEP_HP;
+  int atkdmg = INIT_CREEP_ATKDMG;
+  int atkrng = INIT_CREEP_ATKRNG;
+  int atkspd = INIT_CREEP_ATKSPD;
+  int percep = INIT_CREEP_PERCEP;
+  int atkcnt = INIT_CREEP_ATKCNT;
+  int spd = INIT_CREEP_SPD;
+  Direction direct = Direction();
+  Point *path = &teams[0].paths[2][0];
+  int movespeed = INIT_CREEP_MOVESPEED;
+
+  // Add creep to team  
+  Creep *creep = new Creep(uid, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, spd, direct, path, movespeed);  
+  teams[0].addUnit(creep);  
+
+  // Pay for creep
+  teams[0].currency -= CREEP_COST;*/
 }
 
 void ServerGameLogic::initializeTowers()
