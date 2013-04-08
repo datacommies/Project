@@ -429,6 +429,32 @@ void ServerGameLogic::update()
 
   //mapBoth_.printGrid();
 
+
+  for (int i = 0; i < teams[0].players.size(); ++i)
+  {
+    switch(teams[0].players[i]->direction)
+    {
+      case UP:
+        //validate
+        teams[0].players[i]->position.y--;
+        break;
+      case DOWN:
+        //validate
+        teams[0].players[i]->position.y++;
+        break;
+      case LEFT:
+        //validate
+        teams[0].players[i]->position.x--;
+        break;
+      case RIGHT:
+        //validate
+        teams[0].players[i]->position.x++;
+        break;
+      default:
+        break;
+    }
+  }
+
   if (requestedCommands.empty())
     return;
 
