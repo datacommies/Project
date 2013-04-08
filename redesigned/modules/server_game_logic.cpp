@@ -675,6 +675,7 @@ void ServerGameLogic::handleTowerDeath(Tower *tower)
 void ServerGameLogic::handleCastleDeath(Castle *castle)
 {
   // Game over  
+  gameState_ = GAME_END;
 }
 
 // To test this class use  g++ -DTESTCLASS -g -Wall server_game_logic.cpp ../build/units/*.o
