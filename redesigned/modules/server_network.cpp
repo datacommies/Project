@@ -92,7 +92,7 @@ bool ServerNetwork::sync(int client_)
 {
     int winner = -1;
 
-    if(serverGameLogic_.gameState_ == WON_GAME || serverGameLogic_.gameState_ == LOST_GAME)
+    if(serverGameLogic_.gameState_ == GAME_END)
     {
         winner = serverGameLogic_.getWinner();
         if(winner != -1)
