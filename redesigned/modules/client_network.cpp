@@ -134,6 +134,9 @@ void ClientNetwork::recvReply() {
 					for (int i = 0; i < gl->units.size(); ++i)
 					{
 						if (gl->units[i].id == c.id){
+							// Preserve past position and intervalue.
+							c.inter_value = gl->units[i].inter_value;
+							c.past_position = gl->units[i].inter_position;
 							gl->units[i] = c;
 							updated = true;
 						}
@@ -160,7 +163,11 @@ void ClientNetwork::recvReply() {
 					bool updated = false;
 					for (int i = 0; i < gl->units.size(); ++i)
 					{
+						
 						if (gl->units[i].id == c.id){
+							// Preserve past position and intervalue.
+							c.inter_value = gl->units[i].inter_value;
+							c.past_position = gl->units[i].inter_position;
 							gl->units[i] = c;
 							updated = true;
 						}

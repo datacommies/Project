@@ -721,7 +721,7 @@ void Graphics::drawUnits(sf::RenderWindow& window)
         // Increment interpolation value, if there is a different between past and current positions.
         if (unit->past_position.x != unit->position.x || unit->past_position.y != unit->position.y)
             //  This increment should be as close as possible to the 1 over amount of time required until the next change in unit->position.
-            unit->inter_value += 1/50.0; // TODO: factor in elapsed time since last draw.
+            unit->inter_value += 1/4.0; // TODO: factor in elapsed time since last draw.
         
         // Interpolation complete: set the past position to the current position and stop interpolation.
         if (unit->inter_value >= 1.0) {
@@ -738,7 +738,7 @@ void Graphics::drawUnits(sf::RenderWindow& window)
         else if (unit->type == CREEP) 
         {
             // Linear interpolation between a unit's past position and new position.
-            Point interpolated = Lerp(unit->past_position, unit->position, unit->inter_value);
+            Point interpolated = unit->inter_position = Lerp(unit->past_position, unit->position, unit->inter_value);
             // All drawable unit elements use the same interpolated position.
             drawTeamCircle(window, unit->team, interpolated.x, interpolated.y);
             creep_sprite.setPosition(interpolated.x, interpolated.y);
@@ -753,9 +753,13 @@ void Graphics::drawUnits(sf::RenderWindow& window)
         }
         else if (unit->type == PLAYER)
         {
-            player_sprite.setPosition(unit->position.x, unit->position.y);			
+            // Linear interpolation between a unit's past position and new position.
+            Point interpolated = unit->inter_position = Lerp(unit->past_position, unit->position, unit->inter_value);
+            // All drawable unit elements use the same interpolated position.
+            drawTeamCircle(window, unit->team, interpolated.x, interpolated.y);
+            player_sprite.setPosition(interpolated.x, interpolated.y);			
             window.draw(player_sprite);
-            drawHealthBar(window, unit->position.x, unit->position.y + player_sprite.getTextureRect().height, unit->health);
+            drawHealthBar(window, interpolated.x, interpolated.y + player_sprite.getTextureRect().height, unit->health);
         }
     }
     pthread_mutex_unlock( &clientGameLogic_.unit_mutex );

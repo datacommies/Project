@@ -67,7 +67,8 @@ struct CLIENT_UNIT // This struct applies only to the client side - server side 
    int id;
    Point position;
 
-   Point past_position; // interpolated position - for smooth client-side movement.
+   Point past_position; // Past position.
+   Point inter_position;// interpolated position - for smooth client-side movement.
    float inter_value;   // interpolated value between 
 
    int health;
