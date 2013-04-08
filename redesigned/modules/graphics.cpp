@@ -181,9 +181,6 @@ void * init (void * in)
 
             if (g->clientGameLogic_.getCurrentState() == WON_GAME || g->clientGameLogic_.getCurrentState() == LOST_GAME)
                 g->drawEndGameScreen(window);
-
-            sf::Text state("In Game", g->font, 20);
-            window.draw(state);            
         }
 
         // Iterate through the buttons and draw them one by one.

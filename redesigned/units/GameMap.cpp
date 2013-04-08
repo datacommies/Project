@@ -1,8 +1,5 @@
 #include "GameMap.h"
 
-#define MAX_X 500
-#define MAX_Y 500
-
 void GameMap::initPaths(){
     //*** team 1 paths ***
   Point a;

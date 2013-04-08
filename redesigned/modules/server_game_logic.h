@@ -43,7 +43,7 @@
 
 // This will come actually be read from the map
 #ifndef TESTCLASS
-#define MAX_X 500
+#define MAX_X 700
 #define MAX_Y 500
 #else
 #define MAX_X 20 

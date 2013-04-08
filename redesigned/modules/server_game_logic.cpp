@@ -468,19 +468,19 @@ void ServerGameLogic::update()
     {
       case UP:
         //validate
-        teams[0].players[i]->position.y--;
+        teams[0].players[i]->position.y-= teams[0].players[i]->moveSpeed;
         break;
       case DOWN:
         //validate
-        teams[0].players[i]->position.y++;
+        teams[0].players[i]->position.y+= teams[0].players[i]->moveSpeed;
         break;
       case LEFT:
         //validate
-        teams[0].players[i]->position.x--;
+        teams[0].players[i]->position.x-= teams[0].players[i]->moveSpeed;
         break;
       case RIGHT:
         //validate
-        teams[0].players[i]->position.x++;
+        teams[0].players[i]->position.x+= teams[0].players[i]->moveSpeed;
         break;
       default:
         break;
@@ -615,6 +615,7 @@ void ServerGameLogic::createPlayer(int team_no, Point location, int client_id)
   int uid = next_unit_id_++;
 
   Player *player = new Player(uid, client_id, location);
+  player->setSpeed(5);
   teams[team_no].addUnit(player);
 }
 

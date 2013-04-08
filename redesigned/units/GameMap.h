@@ -2,9 +2,8 @@
 #define GAME_MAP_H
 
 #include "Point.h"
-
-#define MAX_X 500
-#define MAX_Y 500
+class GameMap;
+#include "../modules/server_game_logic.h"
 
 #include <stdio.h>
 #include <stdlib.h> 
