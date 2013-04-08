@@ -134,10 +134,7 @@ void Creep::Update(Team& team) {
     
     /* Search for Target. */
     if(pTarget == NULL) {
-        FindTarget(&team);
-    if(pTarget != NULL && pSaved == NULL)
-        pSaved = &position;
-    
+        FindTarget(&team);    
     }
     
     /* If we found a new Target. */
@@ -150,10 +147,7 @@ void Creep::Update(Team& team) {
     }
     else
     { /*No target. Move along path. */
-        if(pSaved == 0)
-            Move(*pPath);
-        else
-            Move(*pSaved);
+        Move(*pPath);
         Rotate( *pPath );
     }
 }
