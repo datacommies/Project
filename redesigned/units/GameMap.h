@@ -2,9 +2,8 @@
 #define GAME_MAP_H
 
 #include "Point.h"
-
-#define MAX_X 500
-#define MAX_Y 500
+class GameMap;
+#include "../modules/server_game_logic.h"
 
 #include <stdio.h>
 #include <stdlib.h> 
@@ -17,6 +16,8 @@
 #include "../team.h"
 #include "../units/unit.h"
 #include <vector>
+
+#define TEAM_NOT_FOUND 2
 
 class GameMap{
   public:
@@ -34,14 +35,19 @@ class GameMap{
     //should probably be changed to use the MAPWIDTH/MAPHEIGHT defines
     //do we want default player spawn positions?
     void initMap();
+    void initPaths();
+    void initPlayerPositions();
+    void initCastlePositions();
     GameMap (int max_x=MAX_X, int max_y=MAX_Y);
     ~GameMap();
-
+    
+    Unit *getUnit(Point pos);
 
     Unit *getUnitFromId(int id);
+    int getTeamNo(int id);
 
     // This builds everything based on the Team class
-    void build(Team teams[], size_t size);
+    void build(Team teams[]);
 
     void addUnit(Unit *unit, Point pos);
     void removeUnit(Unit *unit);
@@ -50,7 +56,7 @@ class GameMap{
     void printGrid();
     bool isValidPos(Point pos);
 
-    void build(Team &team);
+    //void build(Team &team);
     //GameMap(GameMap& map1, GameMap& map2);
     //void merge(GameMap& map1, GameMap& map2);
   private:
@@ -73,7 +79,7 @@ class GameMap{
 
     // I write this so that I might be able to see if things work correctly
 
-    void _helperBuild(Unit *unit, UnitType type, Point pos);
+    void _helperBuild(Unit *unit, UnitType type, Point pos, int team_no);
 
     void reset();
 

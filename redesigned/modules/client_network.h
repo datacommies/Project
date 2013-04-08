@@ -44,7 +44,7 @@ public:
    void msg_mapname (char * map);
    void msg_chat (char * text);
    
-   bool updatePlayerLobby (int team, int role, bool ready);
+   bool updatePlayerLobby (int team, int role, const char* name, bool ready);
 
    void sendReady () {
       player_matchmaking_t p = {{MSG_PLAYER_UPDATE, sizeof(player_matchmaking_t)}, {0}, 0, 0, 0, false};
@@ -58,10 +58,10 @@ public:
      _name = name; _server = server; _port = port;
    }
    
-private:
    // Connection parameters
    std::string _name, _server; 
    int _port;
+private:
 
    int connectsock;
 };

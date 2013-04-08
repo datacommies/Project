@@ -1,19 +1,7 @@
 #include "GameMap.h"
 
-#define MAX_X 500
-#define MAX_Y 500
-
-
-void GameMap::initMap(){
-  //team 1 castle position, top left corner
-  castle1.x = 0;
-  castle1.y = 0;
-
-  //team 2 castle position, bottom right corner
-  castle2.x = 500;
-  castle2.y = 500;
-
-  //*** team 1 paths ***
+void GameMap::initPaths(){
+    //*** team 1 paths ***
   Point a;
 
   a.x = 30; //castle icon is 25x25
@@ -25,6 +13,9 @@ void GameMap::initMap(){
   a.x = 500;
   a.y = 470;
   topOne.push_back(a);
+  a.x = -1;
+  a.y = -1;
+  topOne.push_back(a);
 
   a.x = 0;
   a.y = 30;
@@ -34,6 +25,9 @@ void GameMap::initMap(){
   botOne.push_back(a);
   a.x = 470;
   a.y = 500;
+  botOne.push_back(a);
+  a.x = -1;
+  a.y = -1;
   botOne.push_back(a);
 
   a.x = 30;
@@ -44,6 +38,9 @@ void GameMap::initMap(){
   midOne.push_back(a);
   a.x = 470;
   a.y = 470; 
+  midOne.push_back(a);
+  a.x = -1;
+  a.y = -1;
   midOne.push_back(a);
   //*** end of team 1 paths ***
 
@@ -60,6 +57,9 @@ void GameMap::initMap(){
   b.x = 30;
   b.y = 0;
   topTwo.push_back(b);
+  b.x = -1;
+  b.y = -1;
+  topTwo.push_back(b);
 
   b.x = 470;
   b.y = 500;
@@ -69,6 +69,9 @@ void GameMap::initMap(){
   botTwo.push_back(b);
   b.x = 0;
   b.y = 30;
+  botTwo.push_back(b);
+  b.x = -1;
+  b.y = -1;
   botTwo.push_back(b);
 
   b.x = 470;
@@ -80,53 +83,75 @@ void GameMap::initMap(){
   b.x = 30;
   b.y = 30;
   midTwo.push_back(b);
-  //*** end of team 2 paths ***
+  b.x = -1;
+  b.y = -1;
+  midTwo.push_back(b);
+  //*** end of team 2 paths ***    
+}
 
-  //*** team 1 player starting positions ***
-  Point c;
-  c.x = 250;
-  c.y = 250;
+void GameMap::initCastlePositions(){
+    //team 1 castle position, top left corner
+    castle1.x = 0;
+    castle1.y = 0;
 
-  team0start[0] = c;
+    //team 2 castle position, bottom right corner
+    castle2.x = 500;
+    castle2.y = 500;
+}
 
-  c.x = 12;
-  c.y = 10;
+void GameMap::initPlayerPositions(){
+    //*** team 1 player starting positions ***
+    Point c;
+    c.x = 250;
+    c.y = 250;
 
-  team0start[1] = c;
+    team0start[0] = c;
 
-  c.x = 14;
-  c.y = 8;
+    c.x = 12;
+    c.y = 10;
 
-  team0start[2] = c;
+    team0start[1] = c;
 
-  c.x = 16;
-  c.y = 8;
+    c.x = 14;
+    c.y = 8;
 
-  team0start[3] = c;
-  //*** end of team 1 starting positions ***
+    team0start[2] = c;
 
-  //*** team 2 player starting positions ***
-  c.x = 490;
-  c.y = 490;
+    c.x = 16;
+    c.y = 8;
 
-  team1start[0] = c;
+    team0start[3] = c;
+    //*** end of team 1 starting positions ***
 
-  c.x = 480;
-  c.y = 480;
+    //*** team 2 player starting positions ***
+    c.x = 490;
+    c.y = 490;
 
-  team1start[1] = c;
+    team1start[0] = c;
 
-  c.x = 480;
-  c.y = 490;
+    c.x = 480;
+    c.y = 480;
 
-  team1start[2] = c;
+    team1start[1] = c;
 
-  c.x = 490;
-  c.y = 480;
+    c.x = 480;
+    c.y = 490;
 
-  team1start[3] = c;
-  //*** end of team 2 starting positions ***
-}   
+    team1start[2] = c;
+
+    c.x = 490;
+    c.y = 480;
+
+    team1start[3] = c;
+    //*** end of team 2 starting positions ***
+}
+
+void GameMap::initMap(){
+    initPaths();
+    initPlayerPositions();
+    initCastlePositions();
+}  
+
 void GameMap::_init() {
 
   grid_ = (Unit***) Malloc(sizeof(Unit**) * max_x_ + 1);
@@ -220,13 +245,10 @@ GameMap::~GameMap() {
 bool GameMap::isValidPos(Point pos)
 {
 
-  //fprintf(stderr, "isValidPos(): max x: %d, max y: %d\n", max_x_, max_y_);
-
-
   return (pos.x >= 0 && pos.x <= max_x_) && (pos.y >= 0 && pos.y <= max_y_);
 }
 
-void GameMap::_helperBuild(Unit *unit, UnitType type, Point pos) {
+void GameMap::_helperBuild(Unit *unit, UnitType type, Point pos, int team_no) {
 
   if (!isValidPos(pos)) {
     fprintf(stderr, "Invalid position x: %d y: %d %s line %d\n", pos.x, pos.y, __FILE__, __LINE__);
@@ -235,9 +257,13 @@ void GameMap::_helperBuild(Unit *unit, UnitType type, Point pos) {
 
   units_[unit->id] = pos;
   grid_[pos.x][pos.y] = unit;
+   
+  // set team_no since in case it wasn't done already
+  unit->team = team_no;
 }
 
-// This builds everything based on the Team class
+// This b_uilds everything based on the Team class
+/*
 void GameMap::build(Team &team) {
 
   reset();
@@ -253,22 +279,26 @@ void GameMap::build(Team &team) {
     _helperBuild(*it, PLAYER, (*it)->getPos());
   }
 }
+*/
 
-void GameMap::build(Team teams[], size_t size) {
+void GameMap::build(Team teams[]) {
 
+  int totalTeams = 2;
   reset();
 
-  for (size_t i=0; i<size; i++) {
+  for (size_t i=0; i<totalTeams; i++) {
+
+    int team_no = i;
 
     for (std::vector<Creep*>::iterator it = teams[i].creeps.begin(); it != teams[i].creeps.end(); ++it)
-      _helperBuild( *it, CREEP, (*it)->getPos());
+      _helperBuild( *it, CREEP, (*it)->getPos(), team_no);
 
     for (std::vector<Tower*>::iterator it = teams[i].towers.begin(); it != teams[i].towers.end(); ++it)
-      _helperBuild(*it, TOWER, (*it)->getPos());
+      _helperBuild(*it, TOWER, (*it)->getPos(), team_no);
 
 
     for (std::vector<Player*>::iterator it = teams[i].players.begin(); it != teams[i].players.end(); ++it)
-      _helperBuild(*it, PLAYER, (*it)->getPos());
+      _helperBuild(*it, PLAYER, (*it)->getPos(), team_no);
 
   }
 }
@@ -352,6 +382,27 @@ Unit *GameMap::getUnitFromId(int id) {
 	}
 
 	return unit;
+}
+
+int GameMap::getTeamNo(int id) {
+
+   Unit *unit;
+   
+   unit = getUnitFromId(id);
+   if (unit == NULL)
+	return TEAM_NOT_FOUND;
+
+   else
+        return unit->team;
+}
+
+
+Unit *GameMap::getUnit(Point pos) {
+
+     if (!isValidPos(pos))
+	return NULL;
+
+     return grid_[pos.x][pos.y];
 }
 
 #ifdef TEST_MAP  

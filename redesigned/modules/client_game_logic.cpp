@@ -13,6 +13,7 @@ ClientGameLogic::ClientGameLogic(ClientNetwork& clientNetwork)
    //unit_mutex = PTHREAD_MUTEX_INITIALIZER; // only allowed for declaration-initialization.
    pthread_mutex_init(&unit_mutex, NULL);
 }
+
 void ClientGameLogic::start () {
    gameState_ = IN_GAME;
 }

@@ -71,6 +71,16 @@ void ServerNetwork::initNetwork()
     }
 }
 
+void ServerNetwork::gameOver(int client_, const int winner)
+{
+    gameover_t go = {0};
+    go.head.type = MSG_GAME_OVER;
+    go.head.size = sizeof(gameover_t);
+    go.winner = winner;
+
+    send(client_, (const char*)&go, sizeof(gameover_t), 0);
+}
+
 /* Sends current game state to a client_.
  *
  * PRE:     client_ is connected
@@ -80,58 +90,71 @@ void ServerNetwork::initNetwork()
  * NOTES:   Current implementation is to refresh ALL data on each update. */
 bool ServerNetwork::sync(int client_)
 {
-    //wrap into syncFirstTeam()
-    for (size_t i = 0; i < serverGameLogic_.teams[0].towers.size(); ++i)
+    int winner = -1;
+
+    if(serverGameLogic_.gameState_ == GAME_END)
     {
-        string sc = serverGameLogic_.teams[0].towers[i]->serializeTower();
-        send(client_, sc.data(), sc.size(), 0);
+        winner = serverGameLogic_.getWinner();
+        if(winner != -1)
+        {
+            gameOver(client_, winner);
+        }
+    }else{
+        int teamId;
+
+        //wrap into syncFirstTeam()
+        for (size_t i = 0; i < serverGameLogic_.teams[0].towers.size(); ++i)
+        {
+            string sc = serverGameLogic_.teams[0].towers[i]->serializeTower();
+            send(client_, sc.data(), sc.size(), 0);
+        }
+
+        for (size_t i = 0; i < serverGameLogic_.teams[0].creeps.size(); ++i)
+        {
+            serverGameLogic_.teams[0].creeps[i]->team = 0;
+            string sc = serverGameLogic_.teams[0].creeps[i]->serializeCreep();
+            send(client_, sc.data(), sc.size(), 0);
+        }
+
+        for (size_t i = 0; i < serverGameLogic_.teams[0].players.size(); ++i)
+        {
+            string sc = serverGameLogic_.teams[0].players[i]->serializeMobileUnit();
+            send(client_, sc.data(), sc.size(), 0);
+
+            if(serverGameLogic_.teams[0].players[i]->clientID == client_)
+                teamId = 0;            
+        }
+
+        //wrap into syncSecondTeam()
+         for (size_t i = 0; i < serverGameLogic_.teams[1].towers.size(); ++i)
+        {
+            string sc = serverGameLogic_.teams[1].towers[i]->serializeTower();
+            send(client_, sc.data(), sc.size(), 0);
+        }
+
+        for (size_t i = 0; i < serverGameLogic_.teams[1].creeps.size(); ++i)
+        {
+            serverGameLogic_.teams[1].creeps[i]->team = 1;
+            string sc = serverGameLogic_.teams[1].creeps[i]->serializeCreep();
+            send(client_, sc.data(), sc.size(), 0);
+        }
+        
+        for (size_t i = 0; i < serverGameLogic_.teams[1].players.size(); ++i)
+        {
+            string sc = serverGameLogic_.teams[1].players[i]->serializeMobileUnit();
+            send(client_, sc.data(), sc.size(), 0);
+
+            if(serverGameLogic_.teams[1].players[i]->clientID == client_)
+                teamId = 1;            
+        }
+
+        // Update currency
+        currency_t cu = {0};
+        cu.head.type = MSG_RESOURCE_UPDATE;
+        cu.teamCurrency = serverGameLogic_.teams[teamId].currency;
+        cu.head.size = sizeof(currency_t);
+        send(client_, (const char*)&cu, sizeof(currency_t), 0);
     }
-
-    for (size_t i = 0; i < serverGameLogic_.teams[0].creeps.size(); ++i)
-    {
-        serverGameLogic_.teams[0].creeps[i]->team = 0;
-        string sc = serverGameLogic_.teams[0].creeps[i]->serializeCreep();
-        send(client_, sc.data(), sc.size(), 0);
-    }
-
-    for (size_t i = 0; i < serverGameLogic_.teams[0].players.size(); ++i)
-    {
-        string sc = serverGameLogic_.teams[0].players[i]->serializeMobileUnit();
-        send(client_, sc.data(), sc.size(), 0);
-    }
-
-    currency_t cu1 = {0};
-    cu1.head.type = MSG_RESOURCE_UPDATE;
-    cu1.teamCurrency = serverGameLogic_.teams[0].currency;
-    cu1.head.size = sizeof(currency_t);
-    send(client_, (const char*)&cu1, sizeof(currency_t), 0);
-
-    //wrap into syncSecondTeam()
-     for (size_t i = 0; i < serverGameLogic_.teams[1].towers.size(); ++i)
-    {
-        string sc = serverGameLogic_.teams[1].towers[i]->serializeTower();
-        send(client_, sc.data(), sc.size(), 0);
-    }
-
-    for (size_t i = 0; i < serverGameLogic_.teams[1].creeps.size(); ++i)
-    {
-        serverGameLogic_.teams[1].creeps[i]->team = 1;
-        string sc = serverGameLogic_.teams[1].creeps[i]->serializeCreep();
-        send(client_, sc.data(), sc.size(), 0);
-    }
-    
-    for (size_t i = 0; i < serverGameLogic_.teams[1].players.size(); ++i)
-    {
-        string sc = serverGameLogic_.teams[1].players[i]->serializeMobileUnit();
-        send(client_, sc.data(), sc.size(), 0);
-    }
-
-    currency_t cu2 = {0};
-    cu2.head.type = MSG_RESOURCE_UPDATE;
-    cu2.teamCurrency = serverGameLogic_.teams[1].currency;
-    cu2.head.size = sizeof(currency_t);
-    send(client_, (const char*)&cu2, sizeof(currency_t), 0);
-
     return true;
 }
 
@@ -369,21 +392,25 @@ void * ServerNetwork::handle_client_lobby(void * ctx)
         }
 
         if (head.type == MSG_PLAYER_UPDATE) {
+            cout << "received player update" << endl;
             bool start = true;
             recv_complete(client, ((char *) &player) + sizeof(header_t), sizeof(player_matchmaking_t) - sizeof(header_t), 0);
             
+            // Only allow updates to this client's pid
+            player.pid = client;
+
             for (size_t i = 0; i < players_.size(); ++i) {
                 if (players_[i].pid == client) {
                     // Validate and update player info.
                     players_[i].ready = player.ready;
+                    players_[i].role = player.role;
+                    players_[i].team = player.team;
                 }
-
             }
 
             for (size_t i = 0; i < clients_.size(); ++i)
             {
-                if (clients_[i] != client)
-                    send(clients_[i], &player, sizeof(player_matchmaking_t), 0);
+                send(clients_[i], &player, sizeof(player_matchmaking_t), 0);
             }
 
             for (size_t i = 0; i < players_.size(); ++i)
@@ -405,6 +432,10 @@ void * ServerNetwork::handle_client_lobby(void * ctx)
 
                 handleClient(ctx);
             }
+        }
+
+        if (head.type == MSG_START) {
+            handleClient(ctx);
         }
     }
 
