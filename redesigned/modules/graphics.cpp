@@ -474,19 +474,19 @@ void Graphics::takeRole()
             globalGraphics->updateLobbyRoles();
             break;
         case 12:
-            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 0, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 1, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
             globalGraphics->updateLobbyRoles();
             break;
         case 13:
-            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 0, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 2, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
             globalGraphics->updateLobbyRoles();
             break;
         case 14:
-            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 0, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 3, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
             globalGraphics->updateLobbyRoles();
             break;
         case 15:
-            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 0, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 4, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
             globalGraphics->updateLobbyRoles();
             break;
         case 21:
@@ -494,19 +494,19 @@ void Graphics::takeRole()
             globalGraphics->updateLobbyRoles();
             break;
         case 22:
-            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(2, 0, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(2, 1, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
             globalGraphics->updateLobbyRoles();
             break;
         case 23:
-            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(2, 0, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(2, 2, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
             globalGraphics->updateLobbyRoles();
             break;
         case 24:
-            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(2, 0, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(2, 3, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
             globalGraphics->updateLobbyRoles();
             break;
         case 25:
-            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(2, 0, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(2, 4, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
             globalGraphics->updateLobbyRoles();
             break;
     }
