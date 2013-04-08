@@ -28,6 +28,7 @@
 
 enum Direction
 {
+   STATIONARY,
    UP,
    LEFT,
    RIGHT,
