@@ -37,6 +37,10 @@
 
 #define PATH_COUNT 1
 
+#define PLAYER_KILL_BONUS 100
+#define CREEP_KILL_BONUS 10
+#define TOWER_KILL_BONUS 50
+
 // This will come actually be read from the map
 #ifndef TESTCLASS
 #define MAX_X 500
@@ -60,6 +64,7 @@
 #include "../units/GameMap.h"
 //#include "ai.h"
 #include "../types.h"
+#include "../units/castle.h"
 
 enum Command { Create, MovePlayer, MoveUnit, Attack };
 
@@ -94,7 +99,7 @@ class ServerGameLogic
     void playerConnect();
 
     void initializeTeams(std::vector<player_matchmaking_t> players);
-    
+
   private:
     // Fields
     GameState gameState_;
@@ -286,6 +291,12 @@ class ServerGameLogic
     static void updateTimer(int i);
     
     int WhichTeam(int id);
+
+    void giveTeamBonus(int team_no, int amount);
+    void handlePlayerDeath(Player *player);
+    void handleCreepDeath(Creep *creep);
+    void handleTowerDeath(Tower *tower);
+    void handleCastleDeath(Castle *castle);
 };
 
 #endif
