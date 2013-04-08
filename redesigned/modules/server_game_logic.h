@@ -5,7 +5,7 @@
 
 #define INIT_NUM_CREEPS 3
 #define INIT_NUM_TOWERS 4
-#define INIT_CURRENCY 100
+#define INIT_CURRENCY 500
 #define INIT_HEALTH 100
 
 #define INIT_CASTLE_HP 100
@@ -32,7 +32,7 @@
 #define INIT_TOWER_ATKSPD 2
 #define INIT_TOWER_PERCEP 23
 #define INIT_TOWER_ATKCNT 1
-#define INIT_TOWER_WALL 2 
+#define INIT_TOWER_WALL 2
 #define TOWER_COST 100
 
 #define PATH_COUNT 1
@@ -60,6 +60,7 @@
 #include "../units/GameMap.h"
 //#include "ai.h"
 #include "../types.h"
+#include <cmath>
 
 enum Command { Create, MovePlayer, MoveUnit, Attack };
 
