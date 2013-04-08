@@ -38,6 +38,14 @@ ServerGameLogic * gSGL;
   p.push_back(a);
   teams[0].paths.push_back(p);
   teams[1].paths.push_back(p);
+  a.x = 250;
+  a.y = 250;
+  PATH p2;
+  p2.push_back(a);
+  a.x = 200;
+  a.y = 200;
+  p2.push_back(a);
+  teams[0].paths.push_back(p2);
   gameMap_ = new GameMap();
   gameMap_->initMap();
 #if 0
@@ -68,6 +76,20 @@ ServerGameLogic * gSGL;
 
 ServerGameLogic::~ServerGameLogic()
 {
+}
+
+int ServerGameLogic::getWinner()
+{
+  if(teams[0].isAlive() && !teams[1].isAlive())
+  {
+    return 0;
+  }
+  else if(teams[1].isAlive() && !teams[0].isAlive())
+  {
+    return 1;
+  }
+
+  return -1;
 }
 
 void ServerGameLogic::initializeCastles() 
@@ -122,7 +144,7 @@ void ServerGameLogic::initializeCastles()
 
 void ServerGameLogic::initializeCreeps()
 {
-  for (int team_i=0; team_i<2; team_i++)
+  for (int team_i=0; team_i<2; team_i++){
     for (int j=0; j<INIT_NUM_CREEPS; j++) {
       Point pos = Point();
       
@@ -137,6 +159,28 @@ void ServerGameLogic::initializeCreeps()
 
       createCreep(team_i, pos, j % PATH_COUNT);
     }
+  }
+
+  /*Point pos = Point(230, 230);
+  int uid = next_unit_id_++;
+
+  int hp = INIT_CREEP_HP;
+  int atkdmg = INIT_CREEP_ATKDMG;
+  int atkrng = INIT_CREEP_ATKRNG;
+  int atkspd = INIT_CREEP_ATKSPD;
+  int percep = INIT_CREEP_PERCEP;
+  int atkcnt = INIT_CREEP_ATKCNT;
+  int spd = INIT_CREEP_SPD;
+  Direction direct = Direction();
+  Point *path = &teams[0].paths[2][0];
+  int movespeed = INIT_CREEP_MOVESPEED;
+
+  // Add creep to team  
+  Creep *creep = new Creep(uid, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, spd, direct, path, movespeed);  
+  teams[0].addUnit(creep);  
+
+  // Pay for creep
+  teams[0].currency -= CREEP_COST;*/
 }
 
 void ServerGameLogic::initializeTowers()
@@ -154,7 +198,7 @@ void ServerGameLogic::initializeTowers()
         pos.y = MAX_Y - 2;
       }
 
-      createTower(team_i, pos);
+      //createTower(team_i, pos);
     }
 }
 
@@ -321,6 +365,7 @@ void ServerGameLogic::updateCreate(CommandData& command)
 
 
   if ( !(teams[0].isAlive() && teams[1].isAlive()) ) {
+    gameState_ = WON_GAME;
     fprintf(stderr, "Game is already over!! file: %s line %d\n", __FILE__, __LINE__);
     return;
   }
@@ -509,19 +554,19 @@ void ServerGameLogic::update()
     {
       case UP:
         //validate
-        teams[0].players[i]->position.y--;
+        teams[0].players[i]->position.y-= teams[0].players[i]->moveSpeed;
         break;
       case DOWN:
         //validate
-        teams[0].players[i]->position.y++;
+        teams[0].players[i]->position.y+= teams[0].players[i]->moveSpeed;
         break;
       case LEFT:
         //validate
-        teams[0].players[i]->position.x--;
+        teams[0].players[i]->position.x-= teams[0].players[i]->moveSpeed;
         break;
       case RIGHT:
         //validate
-        teams[0].players[i]->position.x++;
+        teams[0].players[i]->position.x+= teams[0].players[i]->moveSpeed;
         break;
       default:
         break;
@@ -672,6 +717,7 @@ void ServerGameLogic::createPlayer(int team_no, Point location, int client_id)
   int uid = next_unit_id_++;
 
   Player *player = new Player(uid, client_id, location);
+  player->setSpeed(5);
   teams[team_no].addUnit(player);
 
   gameMap_->addUnit(player, location);
@@ -681,6 +727,44 @@ void ServerGameLogic::respawnPlayer(Player* player, Point location)
 {
   player->position = location;
   player->health = 100;
+}
+
+void ServerGameLogic::giveTeamBonus(int team_no, int amount)
+{
+  teams[team_no].currency += amount;
+}
+
+void ServerGameLogic::handlePlayerDeath(Player *player)
+{
+  // Respawn
+  respawnPlayer(player, gameMap_->team0start[0]); // TODO: made not hardcoded start location
+
+  // Give other team some monies
+  giveTeamBonus(player->team == 0 ? 1 : 0, PLAYER_KILL_BONUS);
+}
+
+void ServerGameLogic::handleCreepDeath(Creep *creep)
+{
+  // Remove creep
+  teams[creep->team].removeUnit(creep);
+
+  // Give other team some monies
+  giveTeamBonus(creep->team == 0 ? 1 : 0, CREEP_KILL_BONUS);
+}
+
+void ServerGameLogic::handleTowerDeath(Tower *tower)
+{
+  // Remove tower
+  teams[tower->team].removeUnit(tower);
+
+  // Give other team some monies
+  giveTeamBonus(tower->team == 0 ? 1 : 0, TOWER_KILL_BONUS);
+}
+
+void ServerGameLogic::handleCastleDeath(Castle *castle)
+{
+  // Game over  
+  gameState_ = GAME_END;
 }
 
 // To test this class use  g++ -DTESTCLASS -g -Wall server_game_logic.cpp ../build/units/*.o

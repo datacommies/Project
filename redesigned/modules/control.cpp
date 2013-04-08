@@ -190,11 +190,11 @@ Control::AddNewUnCalledKey(sf::Keyboard::Key key)
 -- DATE: 2013/03/21
 --
 -- REVISIONS: (Date and Description)
---          Jesse Wright: added button id's to the switch statements. 
+--          
 --
--- DESIGNER: John Payment
+-- DESIGNER: Jesse Wright
 --
--- PROGRAMMER: John Payment
+-- PROGRAMMER: Jesse Wright
 --
 -- INTERFACE: void RunAllButtons()
 --
@@ -258,10 +258,10 @@ Control::RunAllButtons()
 -- DATE: 2013/03/21
 --
 -- REVISIONS: (Date and Description)
---
+--			Jesse Wright: Added attack after every movement.
 -- DESIGNER: John Payment
 --
--- PROGRAMMER: John Payment
+-- PROGRAMMER: John Payment, Jesse Wright
 --
 -- INTERFACE: void RunAllKeys()
 --
@@ -281,41 +281,38 @@ Control::RunAllKeys()
 			// Moving in Player Mode
 			case sf::Keyboard::A :
 				if (!(_currentDirection & LEFT))
+				{
 					CallMoveEvent(LEFT);
+					CallAttackEvent(LEFT);
+				}
 				_currentDirection |= LEFT;
 				break;
 			case sf::Keyboard::W :
 				if (!(_currentDirection & UP))
+				{
 					CallMoveEvent(UP);
+					CallAttackEvent(UP);
+				}
 				_currentDirection |= UP;
 				break;
 			case sf::Keyboard::D :
 				if (!(_currentDirection & RIGHT))
+				{
+					CallAttackEvent(RIGHT);
 					CallMoveEvent(RIGHT);
+				}
+					
 				_currentDirection |= RIGHT;
 				break;
 			case sf::Keyboard::S :
 				if (!(_currentDirection & DOWN))
+				{
 					CallMoveEvent(DOWN);
+					CallAttackEvent(DOWN);
+				}
+					
 				_currentDirection |= DOWN;
 				break;
-			// Attacking In Player Mode
-	/*		case sf::Keyboard::A :
-				CallAttackEvent(LEFT);
-				break;
-	/		case sf::Keyboard::W :
-				CallAttackEvent(UP);
-				break;
-			case sf::Keyboard::D :
-				CallAttackEvent(RIGHT);
-				break;
-			case sf::Keyboard::S :
-				CallAttackEvent(DOWN);
-				break;
-			case sf::Keyboard::Escape :
-				CallExitGameEvent();
-				break;
-				*/
 			default:
 				break;
 				// Does nothing but gets rid of annoying warnings
@@ -346,7 +343,10 @@ Control::RunAllKeys()
 				break;
 		}
 		if (update)
+		{
 			CallMoveEvent((Direction)_currentDirection);
+			CallAttackEvent((Direction)_currentDirection);
+		}
 	}
 	
 	_released_keys.clear();

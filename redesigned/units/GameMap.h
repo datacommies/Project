@@ -2,9 +2,8 @@
 #define GAME_MAP_H
 
 #include "Point.h"
-
-#define MAX_X 500
-#define MAX_Y 500
+class GameMap;
+#include "../modules/server_game_logic.h"
 
 #include <stdio.h>
 #include <stdlib.h> 
@@ -36,6 +35,9 @@ class GameMap{
     //should probably be changed to use the MAPWIDTH/MAPHEIGHT defines
     //do we want default player spawn positions?
     void initMap();
+    void initPaths();
+    void initPlayerPositions();
+    void initCastlePositions();
     GameMap (int max_x=MAX_X, int max_y=MAX_Y);
     ~GameMap();
     

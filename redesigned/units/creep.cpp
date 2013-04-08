@@ -69,9 +69,34 @@ Creep::Creep(int uid, int side, Point pos, Point* path, int hp, int atkdmg, int 
     //any required validation
 }
 
-/*
-* Function to return the difference in two points. Used for movement. 
-*/
+/*------------------------------------------------------------------------------
+-- FUNCTION:    getTargetDirection
+--
+-- DATE:        2013/04/05
+--
+-- DESIGNER:    Chris Porter
+-- PROGRAMMER:  Chris Porter
+--
+-- INTERFACE:   int getTargetDirection(int p1, int p2)
+--
+--				p1: The first value to compare
+-- 				p2: The second value to compare
+--
+-- RETURNS:     int 
+--				-1 	: left or above
+--				0 	: same level
+--				1	: right or below
+--
+-- DESCRIPTION: getTargetDirection is designed to take two values ( x or y )
+--				and then tell the difference between them.
+--				Then it will return the direction from the first point to the 
+--				second in terms of screen coordinates.
+--				IE:
+--					getTargetDirection( 0, 10 ) will return 1.
+--
+--				This means we need to either move right or down. 
+--				Incremementing the x or the y.
+------------------------------------------------------------------------------*/
 int Creep::getTargetDirection(int p1, int p2) {
     if(p1 < p2) /*Target is below or right. */
         return 1;
@@ -82,11 +107,21 @@ int Creep::getTargetDirection(int p1, int p2) {
 }
     
 
-/*
-* Check if we're at the next path point, if we are, update the path target.
-* If we can find an attackable target, attack or move towards them.
-* If not, move along the path. 
-*/
+/*------------------------------------------------------------------------------
+-- FUNCTION:    Update
+--
+-- DATE:        2013/04/05
+--
+-- DESIGNER:    Chris Porter
+-- PROGRAMMER:  Chris Porter
+--
+-- INTERFACE:   void Update( Team& team )
+--
+-- RETURNS:     void 
+--
+-- DESCRIPTION: Logical steps for updating the creep. Overrides Unit::Update
+-- 				to add in movement. 
+------------------------------------------------------------------------------*/
 void Creep::Update(Team& team) {
     /* Check if we are at the next path point.  */
     if(pPath->x == position.x && pPath->y == position.y) {
@@ -122,7 +157,26 @@ void Creep::Update(Team& team) {
         Rotate( *pPath );
     }
 }
-
+/*------------------------------------------------------------------------------
+-- FUNCTION:    Move
+--
+-- DATE:        2013/04/05
+--
+-- DESIGNER:    Chris Porter
+-- PROGRAMMER:  Chris Porter
+--
+-- INTERFACE:   void Move( Point pt )
+--				
+--				pt - A point to move towards.
+--
+-- RETURNS:     void 
+--
+-- DESCRIPTION: Moves the Creep in the direction of the two different points.
+--				It calls GetTargetDirection to get the direction it needs to 
+--				travel. (-1 = left, 0 = nowhere, 1 = right), then we times
+--				this by the speed of the creep to move in the correct direction.
+--
+------------------------------------------------------------------------------*/
 void Creep::Move( Point pt ) {
     position.x += getTargetDirection(position.x, pt.x) * moveSpeed;
     position.y += getTargetDirection(position.y, pt.y) * moveSpeed;
