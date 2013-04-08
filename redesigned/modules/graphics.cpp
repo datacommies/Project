@@ -128,14 +128,14 @@ void * init (void * in)
                 Control::get()->RunAllKeys();
             } else if (event.type == sf::Event::KeyReleased)
             {
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-                    Control::get()->AddNewCalledKey(sf::Keyboard::W);
-                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-                    Control::get()->AddNewCalledKey(sf::Keyboard::A);
-                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-                    Control::get()->AddNewCalledKey(sf::Keyboard::S);
-                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-                    Control::get()->AddNewCalledKey(sf::Keyboard::D);
+                if (!sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+                    Control::get()->AddNewUnCalledKey(sf::Keyboard::W);
+                if (!sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+                    Control::get()->AddNewUnCalledKey(sf::Keyboard::A);
+                if (!sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+                    Control::get()->AddNewUnCalledKey(sf::Keyboard::S);
+                if (!sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+                    Control::get()->AddNewUnCalledKey(sf::Keyboard::D);
                 Control::get()->RunAllKeys();
             }
         }
@@ -165,6 +165,9 @@ void * init (void * in)
                 }
                 g->unassignedPlayersList->SetText(unassigned);
             }
+
+            // Update the names on the buttons.
+            g->updateLobbyRoles();
         } else if (g->clientGameLogic_.getCurrentState() == IN_GAME || g->clientGameLogic_.getCurrentState() == WON_GAME || g->clientGameLogic_.getCurrentState() == LOST_GAME) {
             if (!controls_init) {
                 controls_init = true;
@@ -474,13 +477,13 @@ void Graphics::takeRole()
             if(globalGraphics != NULL)
             {
                 strcpy(globalGraphics->clientGameLogic_.clientNetwork_.team_l[0].name, "hello");
-                globalGraphics->updateLobbyRoles();
             }
             cout << "T11" << endl;
             break;
         case 12:
             cout << "T12" << endl;
-            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(2, 0, true);
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 0, true);
+            globalGraphics->clientGameLogic_.clientNetwork_.recvReply();
             break;
         case 13:
             cout << "T13" << endl;
@@ -521,8 +524,23 @@ void Graphics::updateLobbyRoles()
     // Loop through the teams and update the buttons.
     for(int i = 0; i < 5; i++)
     {
-        leftPlayers[i]->SetLabel(clientGameLogic_.clientNetwork_.team_l[i].name);
-        rightPlayers[i]->SetLabel(clientGameLogic_.clientNetwork_.team_r[i].name);
+        if(strcmp(clientGameLogic_.clientNetwork_.team_l[i].name, ""))
+        {
+            leftPlayers[i]->SetLabel(clientGameLogic_.clientNetwork_.team_l[i].name);
+        }
+        else
+        {
+            leftPlayers[i]->SetLabel("Open Slot");
+        }
+
+        if(strcmp(clientGameLogic_.clientNetwork_.team_r[i].name, ""))
+        {
+            rightPlayers[i]->SetLabel(clientGameLogic_.clientNetwork_.team_r[i].name);
+        }
+        else
+        {
+            rightPlayers[i]->SetLabel("Open Slot");
+        }
     }
 }
 
@@ -777,17 +795,16 @@ void Graphics::drawCurrency(sf::RenderWindow& window)
  */
 void Graphics::drawEndGameScreen(sf::RenderWindow& window)
 {
-    sf::RectangleShape endGameScreen;
+    sf::Texture endGameScreen_bg;
+    sf::Sprite  endGameScreen; 
+    
+    if (clientGameLogic_.getCurrentState() == WON_GAME)
+        endGameScreen_bg.loadFromFile("images/win.png");
+    else 
+        endGameScreen_bg.loadFromFile("images/loss.png");
 
-    endGameScreen.setPosition(100, 100);
-    endGameScreen.setSize(sf::Vector2f(WINDOW_WIDTH - 200, WINDOW_HEIGHT - 300));
-    endGameScreen.setFillColor(clientGameLogic_.getCurrentState() == WON_GAME ? sf::Color(0, 200, 0) : sf::Color(200, 0, 0));    
+    endGameScreen.setTexture(endGameScreen_bg);
     window.draw(endGameScreen);
-    
-    sf::Text endGameText(clientGameLogic_.getCurrentState() == WON_GAME ? "YOU WIN!" : "YOU LOSE!", font, 80);
-    endGameText.setPosition(200, 200);
-    
-    window.draw(endGameText);
 }
 
 /* Loads all the images that are used by the game

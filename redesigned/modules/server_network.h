@@ -31,6 +31,8 @@ public:
     static void* handle_single_client_lobby(void* thing);
     void * handle_client_lobby(void *);
 
+    void gameOver(int client_, const int winner);
+
 private:
     int sock_;
     std::vector<int> clients_;       // client_ sockets
