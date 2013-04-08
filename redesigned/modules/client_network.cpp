@@ -154,6 +154,7 @@ void ClientNetwork::recvReply() {
 			gl->units.clear();
 			pthread_mutex_unlock( &gl->unit_mutex );
 		} else if (head.type == MSG_PLAYER_UPDATE) {
+			cout << "Player updated" << endl;
 			player_matchmaking_t p;
 			p.head = head;
 			n = recv_complete(connectsock, ((char*)&p) + sizeof(head), sizeof(p) - sizeof(head), 0);

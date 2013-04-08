@@ -476,11 +476,12 @@ void Graphics::takeRole()
                 strcpy(globalGraphics->clientGameLogic_.clientNetwork_.team_l[0].name, "hello");
                 globalGraphics->updateLobbyRoles();
             }
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 0, false);
             cout << "T11" << endl;
             break;
         case 12:
             cout << "T12" << endl;
-            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 1, true);
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 1, false);
             break;
         case 13:
             cout << "T13" << endl;
