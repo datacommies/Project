@@ -13,7 +13,13 @@ player_matchmaking_t empty = {{0, 0}, "Empty", 0, 0, 0, false};
  * POST:
  * RETURNS:
  * NOTES:   Creates a thread and starts running the module */
-ClientNetwork::ClientNetwork() {}
+ClientNetwork::ClientNetwork() {
+	for (int i = 0; i < 5; ++i) {	
+		memcpy(team_r+i, &empty, sizeof(player_matchmaking_t));
+		memcpy(team_l+i, &empty, sizeof(player_matchmaking_t));
+	}
+
+}
 
 /* Destructor
  *
@@ -78,8 +84,7 @@ bool ClientNetwork::connectToServer()
 
 	player_matchmaking_t p = {{0, 0}, {0}, 0, 0, 0, false};
 	//TODO: get user's name from GUI. Hardcode for now.
-	strcpy(p.name, "Behnam");
-	p.name[0] = 'a' + (rand() % (int)('z' - 'a' + 1));	
+	strcpy(p.name, _name.c_str());
 	p.team = 0;
 	p.role = 0;
 	p.ready = false;
@@ -278,15 +283,27 @@ int ClientNetwork::sendRequest(int msg)
 }
 
 void ClientNetwork::player_update (player_matchmaking_t * p) {
-	printf("Player: %s\t" "Team: %d\t"
+	printf("Player: %d %s\t" "Team: %d\t"
 		"Role: %d\t" "Ready: %s\n",
-		p->name, p->team,
+		p->pid, p->name, p->team,
 		p->role, (p->ready ? "yes" : "no"));
 
-	if (p->team == 1)
+	// Clear previous position in the team arrays.
+	for (int i = 0; i < 5; i++) {
+		if (team_r[i] == *p)
+			memcpy(team_r+i, &empty, sizeof(player_matchmaking_t));
+		else if (team_l[i] == *p)
+			memcpy(team_l+i, &empty, sizeof(player_matchmaking_t));
+	}
+	
+	waiting.erase(std::remove(waiting.begin(), waiting.end(), *p), waiting.end());
+
+	if (p->team == 1){
 		team_l[p->role] = *p;
-	else if (p->team == 2)
+	}
+	else if (p->team == 2){
 		team_r[p->role] = *p;
+	}
 	else 
 		waiting.push_back(*p);
 }

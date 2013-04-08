@@ -373,18 +373,21 @@ void * ServerNetwork::handle_client_lobby(void * ctx)
             bool start = true;
             recv_complete(client, ((char *) &player) + sizeof(header_t), sizeof(player_matchmaking_t) - sizeof(header_t), 0);
             
+            // Only allow updates to this client's pid
+            player.pid = client;
+
             for (size_t i = 0; i < players_.size(); ++i) {
                 if (players_[i].pid == client) {
                     // Validate and update player info.
                     players_[i].ready = player.ready;
+                    players_[i].role = player.role;
+                    players_[i].team = player.team;
                 }
-
             }
 
             for (size_t i = 0; i < clients_.size(); ++i)
             {
-                if (clients_[i] != client)
-                    send(clients_[i], &player, sizeof(player_matchmaking_t), 0);
+                send(clients_[i], &player, sizeof(player_matchmaking_t), 0);
             }
 
             for (size_t i = 0; i < players_.size(); ++i)
