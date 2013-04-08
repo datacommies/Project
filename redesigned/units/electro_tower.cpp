@@ -24,24 +24,27 @@ ElectroTower::ElectroTower(int uid, Point pos, int hp, int atkdmg, int atkrng,
     //validation
 }
 
-ElectroTower::ElectroTower(int uid, int side, Point pos, int hp, int atkdmg, 
-    int atkrng, int atkspd, int percep, int atkcnt, int wall):
-    Tower(uid, side, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, wall)
+ElectroTower::ElectroTower(int uid, int side, Point pos, int hp, int atkdmg,
+           int atkrng, int atkspd, int percep, int atkcnt, int wall):
+           Tower(uid, side, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, wall)
 {
-    //validation
+    //any required validation
+    printf("Inside unit constructor, x:%d y:%d\n", position.x, position.y);
 }
 
 void ElectroTower::Attack(Team* team)
 {
    if( attackCount++ < attackSpeed )
         return;
-
+    int tempDamage = attackDamage * 3;
     Unit* temp[4];
-    Unit * tempTarget;
+    Unit* tempTarget;
 
     attackCount = 0;
     
-    pTarget->health -= attackDamage;
+    pTarget->health -= tempDamage;
+    tempDamage /= 2;
+
     temp[0] = pTarget;
     tempTarget = pTarget;
 
@@ -52,7 +55,10 @@ void ElectroTower::Attack(Team* team)
 
             if( inRange( tempTarget->getPos(), team->creeps[i]->getPos(), attackRange) && team->creeps[i]->health > 0) 
             {
-                if(tempTarget->id == temp[0]->id || tempTarget->id == temp[1]->id || tempTarget->id == temp[2]->id || tempTarget->id == temp[3]->id)
+                if(team->creeps[i]->id == temp[0]->id || 
+                    team->creeps[i]->id == temp[1]->id || 
+                    team->creeps[i]->id == temp[2]->id || 
+                    team->creeps[i]->id == temp[3]->id)
                 {
                     continue;
                 }
@@ -61,6 +67,7 @@ void ElectroTower::Attack(Team* team)
                     tempTarget = (Unit*)&team->creeps[i];
                     temp[j] = tempTarget;
                     tempTarget->health -= attackDamage;
+                    tempDamage /= 2;
                     break;
                 }       
             }

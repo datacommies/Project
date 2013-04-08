@@ -37,6 +37,9 @@ class GameMap{
     GameMap (int max_x=MAX_X, int max_y=MAX_Y);
     ~GameMap();
 
+
+    Unit *getUnitFromId(int id);
+
     // This builds everything based on the Team class
     void build(Team teams[], size_t size);
 
@@ -58,8 +61,8 @@ class GameMap{
     // Go from position to unit*
     Unit ***grid_;
 
-    // Go from unit* to postion
-    std::map<Unit*, Point> units_;
+    // Go from unit id to postion
+    std::map<int, Point> units_;
 
     // Methods
 
