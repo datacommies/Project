@@ -483,19 +483,19 @@ void ServerGameLogic::update()
     {
       case UP:
         //validate
-        teams[0].players[i]->position.y--;
+        teams[0].players[i]->position.y-= teams[0].players[i]->moveSpeed;
         break;
       case DOWN:
         //validate
-        teams[0].players[i]->position.y++;
+        teams[0].players[i]->position.y+= teams[0].players[i]->moveSpeed;
         break;
       case LEFT:
         //validate
-        teams[0].players[i]->position.x--;
+        teams[0].players[i]->position.x-= teams[0].players[i]->moveSpeed;
         break;
       case RIGHT:
         //validate
-        teams[0].players[i]->position.x++;
+        teams[0].players[i]->position.x+= teams[0].players[i]->moveSpeed;
         break;
       default:
         break;
@@ -630,6 +630,7 @@ void ServerGameLogic::createPlayer(int team_no, Point location, int client_id)
   int uid = next_unit_id_++;
 
   Player *player = new Player(uid, client_id, location);
+  player->setSpeed(5);
   teams[team_no].addUnit(player);
 }
 
@@ -637,6 +638,43 @@ void ServerGameLogic::respawnPlayer(Player* player, Point location)
 {
   player->position = location;
   player->health = 100;
+}
+
+void ServerGameLogic::giveTeamBonus(int team_no, int amount)
+{
+  teams[team_no].currency += amount;
+}
+
+void ServerGameLogic::handlePlayerDeath(Player *player)
+{
+  // Respawn
+  respawnPlayer(player, gameMap_->team0start[0]); // TODO: made not hardcoded start location
+
+  // Give other team some monies
+  giveTeamBonus(player->team == 0 ? 1 : 0, PLAYER_KILL_BONUS);
+}
+
+void ServerGameLogic::handleCreepDeath(Creep *creep)
+{
+  // Remove creep
+  teams[creep->team].removeUnit(creep);
+
+  // Give other team some monies
+  giveTeamBonus(creep->team == 0 ? 1 : 0, CREEP_KILL_BONUS);
+}
+
+void ServerGameLogic::handleTowerDeath(Tower *tower)
+{
+  // Remove tower
+  teams[tower->team].removeUnit(tower);
+
+  // Give other team some monies
+  giveTeamBonus(tower->team == 0 ? 1 : 0, TOWER_KILL_BONUS);
+}
+
+void ServerGameLogic::handleCastleDeath(Castle *castle)
+{
+  // Game over  
 }
 
 // To test this class use  g++ -DTESTCLASS -g -Wall server_game_logic.cpp ../build/units/*.o

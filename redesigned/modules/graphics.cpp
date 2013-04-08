@@ -181,9 +181,6 @@ void * init (void * in)
 
             if (g->clientGameLogic_.getCurrentState() == WON_GAME || g->clientGameLogic_.getCurrentState() == LOST_GAME)
                 g->drawEndGameScreen(window);
-
-            sf::Text state("In Game", g->font, 20);
-            window.draw(state);            
         }
 
         // Iterate through the buttons and draw them one by one.
@@ -795,17 +792,16 @@ void Graphics::drawCurrency(sf::RenderWindow& window)
  */
 void Graphics::drawEndGameScreen(sf::RenderWindow& window)
 {
-    sf::RectangleShape endGameScreen;
+    sf::Texture endGameScreen_bg;
+    sf::Sprite  endGameScreen; 
+    
+    if (clientGameLogic_.getCurrentState() == WON_GAME)
+        endGameScreen_bg.loadFromFile("images/win.png");
+    else 
+        endGameScreen_bg.loadFromFile("images/loss.png");
 
-    endGameScreen.setPosition(100, 100);
-    endGameScreen.setSize(sf::Vector2f(WINDOW_WIDTH - 200, WINDOW_HEIGHT - 300));
-    endGameScreen.setFillColor(clientGameLogic_.getCurrentState() == WON_GAME ? sf::Color(0, 200, 0) : sf::Color(200, 0, 0));    
+    endGameScreen.setTexture(endGameScreen_bg);
     window.draw(endGameScreen);
-    
-    sf::Text endGameText(clientGameLogic_.getCurrentState() == WON_GAME ? "YOU WIN!" : "YOU LOSE!", font, 80);
-    endGameText.setPosition(200, 200);
-    
-    window.draw(endGameText);
 }
 
 /* Loads all the images that are used by the game
