@@ -20,7 +20,7 @@ ServerGameLogic * gSGL;
  * RETURNS:
  * NOTES:   Creates a thread and starts running the module */
   ServerGameLogic::ServerGameLogic()
-: gameState_(LOBBY), next_unit_id_(1)
+: gameState_(LOBBY), next_unit_id_(100)
 {
   PATH p;
   Point a;

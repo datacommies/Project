@@ -25,14 +25,14 @@
 #define SELECTHIPATH 402
 
 // Enums ----------------------------------------------------------------------
-
+// Bit positional values
 enum Direction
 {
-   STATIONARY,
-   UP,
-   LEFT,
-   RIGHT,
-   DOWN
+   STATIONARY = 0,
+   UP    = 1,
+   LEFT  = 2,
+   RIGHT = 4,
+   DOWN  = 8
 };
 
 enum UnitType
