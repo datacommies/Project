@@ -71,6 +71,16 @@ void ServerNetwork::initNetwork()
     }
 }
 
+void ServerNetwork::gameOver(int client_, const int winner)
+{
+    gameover_t go = {0};
+    go.head.type = MSG_GAME_OVER;
+    go.head.size = sizeof(gameover_t);
+    go.winner = winner;
+
+    send(client_, (const char*)&go, sizeof(gameover_t), 0);
+}
+
 /* Sends current game state to a client_.
  *
  * PRE:     client_ is connected

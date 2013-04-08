@@ -103,7 +103,11 @@ void ClientNetwork::recvReply() {
 
 		// CREEP type contains a unit_t with the creep's attributes.
 		
-		if(head.type == MSG_RESOURCE_UPDATE){
+		if(head.type == MSG_GAME_OVER){
+			gameover_t go;
+			recv_complete(connectsock, ((char*)&go) + sizeof(header_t), sizeof(gameover_t) - sizeof(header_t), 0);
+			cout << "The winner is team: " << go.winner;
+		}else if(head.type == MSG_RESOURCE_UPDATE){
 			currency_t cu = {0};
 			recv_complete(connectsock, ((char*)&cu) + sizeof(header_t), sizeof(currency_t) - sizeof(header_t), 0);
 			gl->currency = cu.teamCurrency;
