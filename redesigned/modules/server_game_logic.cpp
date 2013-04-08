@@ -78,6 +78,20 @@ ServerGameLogic::~ServerGameLogic()
 {
 }
 
+int ServerGameLogic::getWinner()
+{
+  if(teams[0].isAlive() && !teams[1].isAlive())
+  {
+    return 0;
+  }
+  else if(teams[1].isAlive() && !teams[0].isAlive())
+  {
+    return 1;
+  }
+
+  return -1;
+}
+
 void ServerGameLogic::initializeCastles() 
 {
 
@@ -184,7 +198,7 @@ void ServerGameLogic::initializeTowers()
         pos.y = MAX_Y - 2;
       }
 
-      createTower(team_i, pos);
+      //createTower(team_i, pos);
     }
 }
 
@@ -334,6 +348,7 @@ void ServerGameLogic::updateCreate(CommandData& command)
 
 
   if ( !(teams[0].isAlive() && teams[1].isAlive()) ) {
+    gameState_ = WON_GAME;
     fprintf(stderr, "Game is already over!! file: %s line %d\n", __FILE__, __LINE__);
     return;
   }
