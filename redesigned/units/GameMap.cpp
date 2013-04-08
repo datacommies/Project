@@ -233,7 +233,7 @@ void GameMap::_helperBuild(Unit *unit, UnitType type, Point pos) {
     return;
   }        
 
-  units_[unit] = pos;
+  units_[unit->id] = pos;
   grid_[pos.x][pos.y] = unit;
 }
 
@@ -286,7 +286,7 @@ void GameMap::addUnit(Unit *unit, Point pos) {
   if (grid_[pos.x][pos.y] == NULL)
   {
     grid_[pos.x][pos.y] = unit;
-    units_[unit] = pos;
+    units_[unit->id] = pos;
 
   }
 
@@ -294,13 +294,13 @@ void GameMap::addUnit(Unit *unit, Point pos) {
 
 void GameMap::removeUnit(Unit *unit) {
 
-  std::map<Unit*, Point>::iterator it;
+  std::map<int, Point>::iterator it;
 
-  it = units_.find(unit);
+  it = units_.find(unit->id);
   if (it != units_.end()) {
 
     Point old_pos;
-    old_pos = units_[unit];
+    old_pos = units_[unit->id];
     grid_[old_pos.x][old_pos.y] = NULL;
 
 
@@ -310,18 +310,18 @@ void GameMap::removeUnit(Unit *unit) {
 
 void GameMap::moveUnit(Unit *unit, Point new_pos) {
 
-  std::map<Unit*, Point>::iterator it;
+  std::map<int, Point>::iterator it;
 
-  it = units_.find(unit);
+  it = units_.find(unit->id);
   if (it != units_.end()) {
 
     Point old_pos;
-    old_pos = units_[unit];
+    old_pos = units_[unit->id];
     grid_[old_pos.x][old_pos.y] = NULL;
   }
 
   grid_[new_pos.x][new_pos.y] = unit;
-  units_[unit] = new_pos;
+  units_[unit->id] = new_pos;
 }
 
 // People laugh at this wrapper.
@@ -335,6 +335,23 @@ void * GameMap::Malloc(size_t size) {
     fprintf(stderr, "Error calling malloc in %s line %d\n", __FILE__, __LINE__);
 
   return p;
+}
+ 
+Unit *GameMap::getUnitFromId(int id) {
+
+	Unit *unit;
+
+	std::map<int, Point>::iterator it;
+	it = units_.find(id);
+
+	
+	unit = NULL;
+	if (it != units_.end()) {
+		Point pos = it->second;
+		unit = grid_[pos.x][pos.y];
+	}
+
+	return unit;
 }
 
 #ifdef TEST_MAP  

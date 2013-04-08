@@ -420,26 +420,7 @@ void ServerGameLogic::updateMovePlayer(CommandData& command)
     return;
   }
 
-  switch(command.direction)
-  {
-    // we need to check for the attack upon running into an attackable unit.
-    case UP:
-    //validate
-    temp->position.y--;
-    break;
-    case DOWN:
-    //validate
-    temp->position.y++;
-    break;
-    case LEFT:
-    //validate
-    temp->position.x--;
-    break;
-    case RIGHT:
-    //validate
-    temp->position.x++;
-    break;
-  }
+  temp->direction = command.direction;
   std::cout << "moving player" << std::endl;
 }
 
@@ -475,6 +456,32 @@ void ServerGameLogic::update()
   //mapBoth_.merge(mapTeams_[0], mapTeams_[1]);
 
   //mapBoth_.printGrid();
+
+
+  for (int i = 0; i < teams[0].players.size(); ++i)
+  {
+    switch(teams[0].players[i]->direction)
+    {
+      case UP:
+        //validate
+        teams[0].players[i]->position.y--;
+        break;
+      case DOWN:
+        //validate
+        teams[0].players[i]->position.y++;
+        break;
+      case LEFT:
+        //validate
+        teams[0].players[i]->position.x--;
+        break;
+      case RIGHT:
+        //validate
+        teams[0].players[i]->position.x++;
+        break;
+      default:
+        break;
+    }
+  }
 
   if (requestedCommands.empty())
     return;
