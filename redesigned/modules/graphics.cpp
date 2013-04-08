@@ -164,6 +164,8 @@ void * init (void * in)
                     unassigned += "\n";
                 }
                 g->unassignedPlayersList->SetText(unassigned);
+
+                g->updateLobbyRoles();
             }
 
             // Update the names on the buttons.
@@ -470,44 +472,38 @@ void Graphics::takeRole()
     switch((long) this)
     {
         case 11:
-            
-            if(globalGraphics != NULL)
-            {
-                strcpy(globalGraphics->clientGameLogic_.clientNetwork_.team_l[0].name, "hello");
-            }
-            cout << "T11" << endl;
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 0, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
             break;
         case 12:
-            cout << "T12" << endl;
-            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 0, true);
-            globalGraphics->clientGameLogic_.clientNetwork_.recvReply();
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 1, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
             break;
         case 13:
-            cout << "T13" << endl;
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 2, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
             break;
         case 14:
-            cout << "T14" << endl;
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 3, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
             break;
         case 15:
-            cout << "T15" << endl;
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 4, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
             break;
         case 21:
-            cout << "T21" << endl;
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(2, 0, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
             break;
         case 22:
-            cout << "T22" << endl;
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(2, 1, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
             break;
         case 23:
-            cout << "T23" << endl;
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(2, 2, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
             break;
         case 24:
-            cout << "T24" << endl;
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(2, 3, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
             break;
         case 25:
-            cout << "T25" << endl;
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(2, 4, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
             break;
     }
 }
+
 
 /* This method updates all the button texts in the lobby with those in the client network team_l and team_r.
  *
@@ -827,7 +823,7 @@ void Graphics::loadImages()
     creep_sprite.setTexture(creep_tex);
      
     // Load the castle texture.
-    castle_tex.loadFromFile("images/tree.gif");
+    castle_tex.loadFromFile("images/castle.png");
     castle_sprite.setTexture(castle_tex);
 
     // Load the player texture.
