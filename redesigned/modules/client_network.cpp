@@ -122,6 +122,7 @@ void ClientNetwork::recvReply() {
 					CLIENT_UNIT c = {0};
 					//int headLength = head.size - sizeof(head);
 					recv_complete(connectsock, &t, sizeof(t), 0);
+					c.id = u.id;
 					c.position.x = u.posx;
 					c.position.y = u.posy;
 					c.past_position = c.position;
@@ -129,7 +130,16 @@ void ClientNetwork::recvReply() {
 					c.type = u.unit_type;
 					c.team = u.team;
 					pthread_mutex_lock( &gl->unit_mutex );
-					gl->units.push_back(c);
+					bool updated = false;
+					for (int i = 0; i < gl->units.size(); ++i)
+					{
+						if (gl->units[i].id == c.id){
+							gl->units[i] = c;
+							updated = true;
+						}
+					}
+					if (!updated)
+						gl->units.push_back(c);
 					pthread_mutex_unlock( &gl->unit_mutex );
 				break;
 				}
@@ -139,6 +149,7 @@ void ClientNetwork::recvReply() {
 					mobileunit_t mu = {0};
 					CLIENT_UNIT c = {0};
 					recv_complete(connectsock, &mu, sizeof(mu), 0);
+					c.id = u.id;
 					c.position.x = u.posx;
 					c.position.y = u.posy;
 					c.past_position = c.position;
@@ -146,7 +157,16 @@ void ClientNetwork::recvReply() {
 					c.type = u.unit_type;
 					c.team = u.team;
 					pthread_mutex_lock( &gl->unit_mutex );
-					gl->units.push_back(c);
+					bool updated = false;
+					for (int i = 0; i < gl->units.size(); ++i)
+					{
+						if (gl->units[i].id == c.id){
+							gl->units[i] = c;
+							updated = true;
+						}
+					}
+					if (!updated)
+						gl->units.push_back(c);
 					pthread_mutex_unlock( &gl->unit_mutex );
 					break;
 				}
@@ -155,7 +175,7 @@ void ClientNetwork::recvReply() {
 			}
 		} else if (head.type == MSG_CLEAR) {
 			pthread_mutex_lock( &gl->unit_mutex );
-			gl->units.clear();
+			//gl->units.clear();
 			pthread_mutex_unlock( &gl->unit_mutex );
 		} else if (head.type == MSG_PLAYER_UPDATE) {
 			player_matchmaking_t p;
