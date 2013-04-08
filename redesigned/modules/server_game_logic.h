@@ -82,6 +82,7 @@ class ServerGameLogic
 
     // Fields
     Team teams[2];
+    GameState gameState_;
 
     std::queue<CommandData> requestedCommands;
 
@@ -92,12 +93,12 @@ class ServerGameLogic
     void receiveMoveUnitCommand(int unitId, Direction direction);
     void receiveAttackCommand(int playerId, Direction direction);
     void playerConnect();
-
+    int getWinner();
     void initializeTeams(std::vector<player_matchmaking_t> players);
     
   private:
     // Fields
-    GameState gameState_;
+    
     int next_unit_id_;
     //Ai ai_;
     GameMap *gameMap_;
