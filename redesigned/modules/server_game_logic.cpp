@@ -685,25 +685,18 @@ void ServerGameLogic::createTower(int team_no, Point location)
 {
   int uid = next_unit_id_++;
 
-  printf("Inside Create Tower\n");
-
   // Add tower to team
   Tower *tower = new Tower(uid, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
                            INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);
 
-  printf("%s line: %d\n", __FILE__, __LINE__);
-  printf ("team_no == %d\n", team_no);
   teams[team_no].addUnit(tower);
-  printf("%s line: %d\n", __FILE__, __LINE__);
 
   // Pay for tower
   teams[team_no].currency -= TOWER_COST;
 
   // Update the Map!
 
-  printf("add unit\n");
   gameMap_->addUnit(tower, location);
-  printf("added unit..\n");
 }
 /* Creates a tower.
  *
