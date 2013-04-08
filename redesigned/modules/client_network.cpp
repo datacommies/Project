@@ -215,12 +215,18 @@ bool ClientNetwork::updatePlayerLobby (int team, int role, bool ready) {
 	p.team = team;
 	p.role = role;
 	p.ready = ready;
+
+	p.head.type = MSG_PLAYER_UPDATE;
+	p.head.size = sizeof(player_matchmaking_t);
+
 	
 	if ((write(connectsock, &p, sizeof(p))) < 0)
 	{
 		std::cerr << "ERROR writing to socket" << std::endl;
 		return false;
 	}
+
+	//player_update(&p);
 	
 	return true;
 }

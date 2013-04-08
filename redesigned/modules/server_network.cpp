@@ -369,6 +369,7 @@ void * ServerNetwork::handle_client_lobby(void * ctx)
         }
 
         if (head.type == MSG_PLAYER_UPDATE) {
+            cout << "received player update" << endl;
             bool start = true;
             recv_complete(client, ((char *) &player) + sizeof(header_t), sizeof(player_matchmaking_t) - sizeof(header_t), 0);
             
