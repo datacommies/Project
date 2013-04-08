@@ -164,6 +164,9 @@ void * init (void * in)
                     unassigned += "\n";
                 }
                 g->unassignedPlayersList->SetText(unassigned);
+
+                // Redraw the lobby names.
+                g->updateLobbyRoles();
             }
         } else if (g->clientGameLogic_.getCurrentState() == IN_GAME || g->clientGameLogic_.getCurrentState() == WON_GAME || g->clientGameLogic_.getCurrentState() == LOST_GAME) {
             if (!controls_init) {
@@ -470,18 +473,11 @@ void Graphics::takeRole()
     switch((long) this)
     {
         case 11:
-            
-            if(globalGraphics != NULL)
-            {
-                strcpy(globalGraphics->clientGameLogic_.clientNetwork_.team_l[0].name, "hello");
-                globalGraphics->updateLobbyRoles();
-            }
-            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 0, false);
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(0, 0, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
             cout << "T11" << endl;
             break;
         case 12:
             cout << "T12" << endl;
-            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 1, false);
             break;
         case 13:
             cout << "T13" << endl;
@@ -493,6 +489,7 @@ void Graphics::takeRole()
             cout << "T15" << endl;
             break;
         case 21:
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 0, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
             cout << "T21" << endl;
             break;
         case 22:

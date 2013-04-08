@@ -210,9 +210,10 @@ bool ClientNetwork::createUnit(int playerId, UnitType type, Point location, int 
 }
 
 
-bool ClientNetwork::updatePlayerLobby (int team, int role, bool ready) {
+bool ClientNetwork::updatePlayerLobby (int team, int role, const char* name, bool ready) {
 	player_matchmaking_t p = {{0, 0}, {0}, 0, 0, 0, false};
-	//TODO: get user's name from GUI. Hardcode for now.
+	
+	strcpy(p.name, name);
 	p.team = team;
 	p.role = role;
 	p.ready = ready;
