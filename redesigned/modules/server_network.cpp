@@ -410,6 +410,10 @@ void * ServerNetwork::handle_client_lobby(void * ctx)
                 handleClient(ctx);
             }
         }
+
+        if (head.type == MSG_START) {
+            handleClient(ctx);
+        }
     }
 
     close(client);

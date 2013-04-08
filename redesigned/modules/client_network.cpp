@@ -184,6 +184,11 @@ void ClientNetwork::recvReply() {
 			free(m);
 		} else if (head.type == MSG_START) {
 			cout << "Game started!" << endl;
+			
+			// Ack the start.
+			header_t ack = {MSG_START, 0}; 
+			send(connectsock, &ack, sizeof(header_t), 0);
+
 			gl->start();
 		}
 	}

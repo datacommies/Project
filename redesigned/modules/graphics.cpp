@@ -809,7 +809,7 @@ void Graphics::loadImages()
     creep_sprite.setTexture(creep_tex);
      
     // Load the castle texture.
-    castle_tex.loadFromFile("images/tree.gif");
+    castle_tex.loadFromFile("images/castle.png");
     castle_sprite.setTexture(castle_tex);
 
     // Load the player texture.
