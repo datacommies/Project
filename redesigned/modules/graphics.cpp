@@ -164,9 +164,6 @@ void * init (void * in)
                     unassigned += "\n";
                 }
                 g->unassignedPlayersList->SetText(unassigned);
-
-                // Redraw the lobby names.
-                g->updateLobbyRoles();
             }
         } else if (g->clientGameLogic_.getCurrentState() == IN_GAME || g->clientGameLogic_.getCurrentState() == WON_GAME || g->clientGameLogic_.getCurrentState() == LOST_GAME) {
             if (!controls_init) {
@@ -473,36 +470,44 @@ void Graphics::takeRole()
     switch((long) this)
     {
         case 11:
-            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(0, 0, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
-            cout << "T11" << endl;
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 0, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
+            globalGraphics->updateLobbyRoles();
             break;
         case 12:
-            cout << "T12" << endl;
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 0, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
+            globalGraphics->updateLobbyRoles();
             break;
         case 13:
-            cout << "T13" << endl;
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 0, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
+            globalGraphics->updateLobbyRoles();
             break;
         case 14:
-            cout << "T14" << endl;
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 0, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
+            globalGraphics->updateLobbyRoles();
             break;
         case 15:
-            cout << "T15" << endl;
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 0, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
+            globalGraphics->updateLobbyRoles();
             break;
         case 21:
-            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 0, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
-            cout << "T21" << endl;
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(2, 0, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
+            globalGraphics->updateLobbyRoles();
             break;
         case 22:
-            cout << "T22" << endl;
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(2, 0, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
+            globalGraphics->updateLobbyRoles();
             break;
         case 23:
-            cout << "T23" << endl;
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(2, 0, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
+            globalGraphics->updateLobbyRoles();
             break;
         case 24:
-            cout << "T24" << endl;
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(2, 0, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
+            globalGraphics->updateLobbyRoles();
             break;
         case 25:
-            cout << "T25" << endl;
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(2, 0, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
+            globalGraphics->updateLobbyRoles();
             break;
     }
 }
