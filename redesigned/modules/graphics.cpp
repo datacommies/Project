@@ -510,6 +510,7 @@ void Graphics::takeRole()
     }
 }
 
+
 /* This method updates all the button texts in the lobby with those in the client network team_l and team_r.
  *
  * PRE:     Lobby window is initialized
