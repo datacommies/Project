@@ -22,6 +22,7 @@ enum { // MESSAGE TYPES
     MSG_CREATE_UNIT,
     MSG_UPDATE_UNIT,
     MSG_RESOURCE_UPDATE,
+    MSG_GAME_OVER,
     
     // CLIENT -> SERVER
     MSG_REQUEST_CREATE,
@@ -71,6 +72,11 @@ typedef struct {
     header_t head;
     int teamCurrency;
 } currency_t;
+
+typedef struct {
+    header_t head;
+    int winner;
+} gameover_t;
 
 /*typedef struct {
     header_t head;
