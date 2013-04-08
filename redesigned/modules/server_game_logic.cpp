@@ -124,15 +124,15 @@ void ServerGameLogic::initializeCastles()
 
   printf("Castle 2 position..x: %d y: %d\n", p.x, p.y);
 
-  mapTeams_[0].build(teams[0]);
-  mapTeams_[1].build(teams[1]);
+  //mapTeams_[0].build(teams[0]);
+  //mapTeams_[1].build(teams[1]);
 
   printf("Castle 2 id %d\n", castle2.id);
 
   printf("Team 0\n");
-  mapTeams_[0].printGrid();
+  //mapTeams_[0].printGrid();
   printf("Team 1\n");
-  mapTeams_[1].printGrid();
+  //mapTeams_[1].printGrid();
 
   //mapBoth_.merge(mapTeams_[0], mapTeams_[1]);
 
@@ -235,10 +235,10 @@ void ServerGameLogic::initializeTeams(std::vector<player_matchmaking_t> players)
   initializePlayers(players);
 
 #ifdef TESTCLASS  
-  mapTeams_[0].build(teams[0]);
-  mapTeams_[1].build(teams[1]);
-  mapBoth_.merge(mapTeams_[0], mapTeams_[1]);
-  mapBoth_.printGrid();
+  //mapTeams_[0].build(teams[0]);
+  //mapTeams_[1].build(teams[1]);
+  //mapBoth_.merge(mapTeams_[0], mapTeams_[1]);
+  //mapBoth_.printGrid();
 #endif
 }
 
@@ -326,6 +326,7 @@ void ServerGameLogic::receiveAttackCommand(int playerId, Direction direction)
  * 1 - Team 2
  * 2 - Not Found
  */
+/*
 int ServerGameLogic::WhichTeam(int id) {
 
   if (mapTeams_[0].units_.find(id) != mapTeams_[0].units_.end())
@@ -336,15 +337,31 @@ int ServerGameLogic::WhichTeam(int id) {
 
   return 2;
 }
+*/
+
+/*
+int ServerGameLogic::WhichTeamPlayerIsOn(int playerId) {
+
+
+}
+
+int ServerGameLogic::WhichTeamUnitIsOn(int unitId) {
+   
+   
+}
+*/
 
 void ServerGameLogic::updateCreate(CommandData& command)
 {
   // Passed in command: PlayerId, type, location
+  
+  Unit *newUnit = NULL;
 
   int team_no;
 
   int x = command.location.x;
   int y = command.location.y;
+
 
 
   if ( !(teams[0].isAlive() && teams[1].isAlive()) ) {
@@ -353,19 +370,55 @@ void ServerGameLogic::updateCreate(CommandData& command)
     return;
   }
 
+/*
+  // To be replaced by if statement after this...
   if ( (team_no = WhichTeam(command.playerID) == NOT_FOUND) ) {
     fprintf(stderr, "playerID not found file: %s line %d\n", __FILE__, __LINE__);
     return;
   }
+*/
 
+  // Replace previous if statement with...
+
+
+  if ( (team_no = gameMap_->getTeamNo(command.playerID)) == TEAM_NOT_FOUND ) {
+    fprintf(stderr, "playerID not found file: %s line %d\n", __FILE__, __LINE__);
+    return;
+  }
+
+  
+  
+  if (!gameMap_->isValidPos(command.location)) {
+    fprintf(stderr, "max x: %d max y: %d\n", MAX_X, MAX_Y);
+    fprintf(stderr, "x: %d, y: %d out of range: %s line %d\n", x, y, __FILE__, __LINE__);
+    return; 
+  }
+  
+/*
   if (!mapTeams_[0].isValidPos(command.location)) {
     fprintf(stderr, "max x: %d max y: %d\n", MAX_X, MAX_Y);
     fprintf(stderr, "x: %d, y: %d out of range: %s line %d\n", x, y, __FILE__, __LINE__);
     return; 
   }
+*/
 
+  // Is the position already occupied?
+
+  
+
+  if ((gameMap_->getUnit(command.location)) != NULL) {
+     Unit *unit;
+     
+     unit = gameMap_->getUnit(command.location);
+     fprintf(stdout, "Position (%d,%d) already occupied by unit %d\n", command.location.x, command.location.y, unit->id);
+     return;
+  }
+
+  /*
   if ( mapBoth_.grid_[x][y] != 0 )
     return; // position is already occupied 
+  */
+
 
   // Create Unit  
   switch (command.type) {
@@ -387,11 +440,14 @@ void ServerGameLogic::updateCreate(CommandData& command)
   }
 
   // Update the our map 
+  /*
   Location location;
   location.pos  = command.location;
   location.type = command.type;
   mapTeams_[team_no].units_[next_unit_id_] = location;
   mapTeams_[team_no].grid_[x][y] = next_unit_id_;
+  */
+
 }
 
 void ServerGameLogic::updateAttack(CommandData& command)
@@ -405,10 +461,18 @@ void ServerGameLogic::updateAttack(CommandData& command)
     return;
   }
 
+  /*
   if ( (team_no = WhichTeam(command.playerID) == NOT_FOUND) ) {
     fprintf(stderr, "playerID not found file: %s line %d\n", __FILE__, __LINE__);
     return;
+  }*/
+
+   
+  if ( gameMap_->getTeamNo(command.playerID) == TEAM_NOT_FOUND ) {
+    fprintf(stderr, "playerID not found file: %s line %d\n", __FILE__, __LINE__);
+    return;
   }
+
 
   // Attack!!
 }
@@ -423,7 +487,9 @@ void ServerGameLogic::updateMovePlayer(CommandData& command)
     return;
   }
   
-  if((team_no = WhichTeam(command.unitID)) == 2)
+  //if((team_no = WhichTeam(command.unitID)) == 2)
+  //
+  if ((team_no = gameMap_->getTeamNo(command.unitID)) == TEAM_NOT_FOUND)
   {
 
     std::cout << "unitID: " << command.unitID << std::endl; 
@@ -431,7 +497,9 @@ void ServerGameLogic::updateMovePlayer(CommandData& command)
     return; // not found
   }
 
-  temp = teams[team_no].findPlayer(command.playerID);
+  //temp = teams[team_no].findPlayer(command.playerID);
+
+  temp = (Player*) gameMap_->getUnitFromId(command.playerID);
 
   if(temp == 0)
   {
@@ -461,15 +529,18 @@ void ServerGameLogic::updateMoveUnit(CommandData& command)
 void ServerGameLogic::update()
 {      
 
-  mapTeams_[0].build(teams[0]);
-  mapTeams_[1].build(teams[1]);
+
+  //mapTeams_[0].build(teams[0]);
+  //mapTeams_[1].build(teams[1]);
+
+  
 
 
 #ifdef DTESTCLASS
-  printf("team 0\n");
-  mapTeams_[0].printGrid();
-  printf("team 1\n");
-  mapTeams_[1].printGrid();
+  //printf("team 0\n");
+  //apTeams_[0].printGrid();
+  //printf("team 1\n");
+  //mapTeams_[1].printGrid();
 #endif
 
   //mapBoth_.merge(mapTeams_[0], mapTeams_[1]);
@@ -501,6 +572,8 @@ void ServerGameLogic::update()
         break;
     }
   }
+
+  gameMap_->build(teams);
 
   if (requestedCommands.empty())
     return;
@@ -595,6 +668,9 @@ void ServerGameLogic::createCreep(int team_no, Point location, int path_no)
 
   // Pay for creep
   teams[team_no].currency -= CREEP_COST;
+
+  // Update the Map!
+  gameMap_->addUnit(creep, location);
 }
 
 /* Creates a tower.
@@ -617,6 +693,10 @@ void ServerGameLogic::createTower(int team_no, Point location)
 
   // Pay for tower
   teams[team_no].currency -= TOWER_COST;
+
+  // Update the Map!
+
+  gameMap_->addUnit(tower, location);
 }
 /* Creates a tower.
  *
@@ -632,6 +712,8 @@ void ServerGameLogic::createPlayer(int team_no, Point location, int client_id)
   Player *player = new Player(uid, client_id, location);
   player->setSpeed(5);
   teams[team_no].addUnit(player);
+
+  gameMap_->addUnit(player, location);
 }
 
 void ServerGameLogic::respawnPlayer(Player* player, Point location)
