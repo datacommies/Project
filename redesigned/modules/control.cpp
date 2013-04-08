@@ -56,6 +56,7 @@ Control::Control()
 :_buttonIDs()
 ,_keys()
 ,_clientGameLogicModule(NULL)
+,_currentDirection(0)
 ,_graphicsModule(NULL)
 ,_currentLane(-1)
 {
@@ -161,6 +162,29 @@ Control::AddNewCalledKey(sf::Keyboard::Key key)
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
+-- FUNCTION: AddNewUnCalledKey
+--
+-- DATE: 2013/03/21
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: John Payment
+--
+-- PROGRAMMER: John Payment
+--
+-- INTERFACE: void AddNewCalledKey(sf::Keyboard::Key key)
+--            sf::Keyboard::Key key - The key that was released
+--
+-- RETURNS: void
+--
+-- NOTES: adds a key to the list of keys that have been released
+----------------------------------------------------------------------------------------------------------------------*/
+void 
+Control::AddNewUnCalledKey(sf::Keyboard::Key key)
+{
+	_released_keys.push_back(key);
+}
+/*-------------------------------------------------------------------------------------------------------------------- 
 -- FUNCTION: RunAllButtons
 --
 -- DATE: 2013/03/21
@@ -256,16 +280,24 @@ Control::RunAllKeys()
 		{
 			// Moving in Player Mode
 			case sf::Keyboard::A :
-				CallMoveEvent(LEFT);
+				if (!(_currentDirection & LEFT))
+					CallMoveEvent(LEFT);
+				_currentDirection |= LEFT;
 				break;
 			case sf::Keyboard::W :
-				CallMoveEvent(UP);
+				if (!(_currentDirection & UP))
+					CallMoveEvent(UP);
+				_currentDirection |= UP;
 				break;
 			case sf::Keyboard::D :
-				CallMoveEvent(RIGHT);
+				if (!(_currentDirection & RIGHT))
+					CallMoveEvent(RIGHT);
+				_currentDirection |= RIGHT;
 				break;
 			case sf::Keyboard::S :
-				CallMoveEvent(DOWN);
+				if (!(_currentDirection & DOWN))
+					CallMoveEvent(DOWN);
+				_currentDirection |= DOWN;
 				break;
 			// Attacking In Player Mode
 	/*		case sf::Keyboard::A :
@@ -289,7 +321,35 @@ Control::RunAllKeys()
 				// Does nothing but gets rid of annoying warnings
 		}
 	}
+
+	for(vector<sf::Keyboard::Key>::size_type i = 0; i < _released_keys.size(); ++i)
+	{
+		bool update = true;
+		// Case for each Key that is attached to a function
+		switch(_released_keys[i])
+		{
+			// Moving in Player Mode
+			case sf::Keyboard::A :
+				_currentDirection &= (~LEFT);
+				break;
+			case sf::Keyboard::W :
+				_currentDirection &= (~UP);
+				break;
+			case sf::Keyboard::D :
+				_currentDirection &= (~RIGHT);
+				break;
+			case sf::Keyboard::S :
+				_currentDirection &= (~DOWN);
+				break;
+			default:
+				update = false;
+				break;
+		}
+		if (update)
+			CallMoveEvent((Direction)_currentDirection);
+	}
 	
+	_released_keys.clear();
 	_keys.clear();
 }
 

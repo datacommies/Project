@@ -56,6 +56,7 @@ public:
 	// Call Functions for reporting Control Events
 	void AddNewCalledButton(int id);
 	void AddNewCalledKey(sf::Keyboard::Key key);
+	void AddNewUnCalledKey(sf::Keyboard::Key key);
 	
 	// Functions for Running Control Events
 	void RunAllButtons();
@@ -72,6 +73,8 @@ private:
 	// Collections for storing Control Events
 	std::vector<int> _buttonIDs;
 	std::vector<sf::Keyboard::Key> _keys;
+	std::vector<sf::Keyboard::Key> _released_keys;
+	int _currentDirection;
 	
 	// Module references
 	ClientGameLogic* _clientGameLogicModule;
