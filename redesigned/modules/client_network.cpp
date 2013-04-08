@@ -116,6 +116,7 @@ void ClientNetwork::recvReply() {
 			currency_t cu = {0};
 			recv_complete(connectsock, ((char*)&cu) + sizeof(header_t), sizeof(currency_t) - sizeof(header_t), 0);
 			gl->currency = cu.teamCurrency;
+			//cout << gl->currency << endl;
 		} else if (head.type == MSG_CREATE_UNIT) {
 			unit_t u = {{0}, 0};
 			recv_complete(connectsock, ((char*)&u) + sizeof(header_t), sizeof(unit_t) - sizeof(header_t), 0);
