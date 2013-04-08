@@ -21,11 +21,19 @@ using namespace std;
 
 SplashTower::SplashTower(	int uid, Point pos, int hp, int atkdmg, int atkrng,
 							int atkspd, int percep, int atkcnt, int wall,
-							int spldmg, int splrng):
+							int spldmg=20, int splrng=10):
 				Tower(uid, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, wall)
 				     , splashDamage(spldmg), splashRange(splrng)
 {
     //validation
+}
+
+SplashTower::SplashTower(int uid, int side, Point pos, int hp, int atkdmg,
+           int atkrng, int atkspd, int percep, int atkcnt, int wall, int spldmg, int splrng):
+           Tower(uid, side, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, wall), splashDamage(spldmg), splashRange(splrng)
+{
+    //any required validation
+    printf("Inside unit constructor, x:%d y:%d\n", position.x, position.y);
 }
 
 /*------------------------------------------------------------------------------
