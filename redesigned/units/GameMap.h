@@ -18,6 +18,8 @@
 #include "../units/unit.h"
 #include <vector>
 
+#define TEAM_NOT_FOUND 2
+
 class GameMap{
   public:
     Point castle1; //position for team 0's castle
@@ -36,12 +38,14 @@ class GameMap{
     void initMap();
     GameMap (int max_x=MAX_X, int max_y=MAX_Y);
     ~GameMap();
-
+    
+    Unit *getUnit(Point pos);
 
     Unit *getUnitFromId(int id);
+    int getTeamNo(int id);
 
     // This builds everything based on the Team class
-    void build(Team teams[], size_t size);
+    void build(Team teams[]);
 
     void addUnit(Unit *unit, Point pos);
     void removeUnit(Unit *unit);
@@ -50,7 +54,7 @@ class GameMap{
     void printGrid();
     bool isValidPos(Point pos);
 
-    void build(Team &team);
+    //void build(Team &team);
     //GameMap(GameMap& map1, GameMap& map2);
     //void merge(GameMap& map1, GameMap& map2);
   private:
@@ -73,7 +77,7 @@ class GameMap{
 
     // I write this so that I might be able to see if things work correctly
 
-    void _helperBuild(Unit *unit, UnitType type, Point pos);
+    void _helperBuild(Unit *unit, UnitType type, Point pos, int team_no);
 
     void reset();
 

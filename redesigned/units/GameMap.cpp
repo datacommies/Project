@@ -220,13 +220,10 @@ GameMap::~GameMap() {
 bool GameMap::isValidPos(Point pos)
 {
 
-  //fprintf(stderr, "isValidPos(): max x: %d, max y: %d\n", max_x_, max_y_);
-
-
   return (pos.x >= 0 && pos.x <= max_x_) && (pos.y >= 0 && pos.y <= max_y_);
 }
 
-void GameMap::_helperBuild(Unit *unit, UnitType type, Point pos) {
+void GameMap::_helperBuild(Unit *unit, UnitType type, Point pos, int team_no) {
 
   if (!isValidPos(pos)) {
     fprintf(stderr, "Invalid position x: %d y: %d %s line %d\n", pos.x, pos.y, __FILE__, __LINE__);
@@ -235,9 +232,13 @@ void GameMap::_helperBuild(Unit *unit, UnitType type, Point pos) {
 
   units_[unit->id] = pos;
   grid_[pos.x][pos.y] = unit;
+   
+  // set team_no since in case it wasn't done already
+  unit->team = team_no;
 }
 
-// This builds everything based on the Team class
+// This b_uilds everything based on the Team class
+/*
 void GameMap::build(Team &team) {
 
   reset();
@@ -253,22 +254,26 @@ void GameMap::build(Team &team) {
     _helperBuild(*it, PLAYER, (*it)->getPos());
   }
 }
+*/
 
-void GameMap::build(Team teams[], size_t size) {
+void GameMap::build(Team teams[]) {
 
+  int totalTeams = 2;
   reset();
 
-  for (size_t i=0; i<size; i++) {
+  for (size_t i=0; i<totalTeams; i++) {
+
+    int team_no = i;
 
     for (std::vector<Creep*>::iterator it = teams[i].creeps.begin(); it != teams[i].creeps.end(); ++it)
-      _helperBuild( *it, CREEP, (*it)->getPos());
+      _helperBuild( *it, CREEP, (*it)->getPos(), team_no);
 
     for (std::vector<Tower*>::iterator it = teams[i].towers.begin(); it != teams[i].towers.end(); ++it)
-      _helperBuild(*it, TOWER, (*it)->getPos());
+      _helperBuild(*it, TOWER, (*it)->getPos(), team_no);
 
 
     for (std::vector<Player*>::iterator it = teams[i].players.begin(); it != teams[i].players.end(); ++it)
-      _helperBuild(*it, PLAYER, (*it)->getPos());
+      _helperBuild(*it, PLAYER, (*it)->getPos(), team_no);
 
   }
 }
@@ -352,6 +357,27 @@ Unit *GameMap::getUnitFromId(int id) {
 	}
 
 	return unit;
+}
+
+int GameMap::getTeamNo(int id) {
+
+   Unit *unit;
+   
+   unit = getUnitFromId(id);
+   if (unit == NULL)
+	return TEAM_NOT_FOUND;
+
+   else
+        return unit->team;
+}
+
+
+Unit *GameMap::getUnit(Point pos) {
+
+     if (!isValidPos(pos))
+	return NULL;
+
+     return grid_[pos.x][pos.y];
 }
 
 #ifdef TEST_MAP  
