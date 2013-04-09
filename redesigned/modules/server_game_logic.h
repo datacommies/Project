@@ -43,8 +43,8 @@
 
 // This will come actually be read from the map
 #ifndef TESTCLASS
-#define MAX_X 700
-#define MAX_Y 500
+#define MAX_X 800
+#define MAX_Y 600
 #else
 #define MAX_X 20 
 #define MAX_Y 20
@@ -145,6 +145,8 @@ class ServerGameLogic
     void handleCreepDeath(Creep *creep);
     void handleTowerDeath(Tower *tower);
     void handleCastleDeath();
+
+    void updateMaps();
 };
 
 #endif

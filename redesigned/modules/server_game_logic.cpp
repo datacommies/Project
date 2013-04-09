@@ -386,8 +386,8 @@ void ServerGameLogic::updateCreate(CommandData& command)
       return;
   }
 
-  mapTeams_[0].build(teams[0]);
-  mapTeams_[1].build(teams[1]);
+  updateMaps();
+
   // Update the our map 
   /*
   Location location;
@@ -415,8 +415,7 @@ void ServerGameLogic::updateAttack(CommandData& command)
   }
 
   // Attack!!
-  mapTeams_[0].build(teams[0]);
-  mapTeams_[1].build(teams[1]);
+  updateMaps();
 }
 
 void ServerGameLogic::updateMovePlayer(CommandData& command)
@@ -460,8 +459,7 @@ void ServerGameLogic::updateMoveUnit(CommandData& command)
   }
 
 
-  mapTeams_[0].build(teams[0]);
-  mapTeams_[1].build(teams[1]);
+  updateMaps();
 }
 
 /* Processes all waiting commands.
@@ -474,9 +472,7 @@ void ServerGameLogic::updateMoveUnit(CommandData& command)
 void ServerGameLogic::update()
 {      
 
-  mapTeams_[0].build(teams[0]);
-  mapTeams_[1].build(teams[1]);
-
+  updateMaps();
 
 #ifdef DTESTCLASS
   printf("team 0\n");
@@ -529,8 +525,8 @@ void ServerGameLogic::update()
         break;
     }
   }
-  mapTeams_[0].build(teams[0]);
-  mapTeams_[1].build(teams[1]);
+
+  updateMaps();
   
   handleDeaths();
 }
@@ -726,6 +722,14 @@ void ServerGameLogic::handleCastleDeath()
   // Game over 
   printf("Game over\n");
   gameState_ = GAME_END;
+}
+
+void ServerGameLogic::updateMaps() {
+
+  mapTeams_[0].build(teams[0]);
+  mapTeams_[1].build(teams[1]);
+  mapBoth_.merge(mapTeams_[0], mapTeams_[1]);
+
 }
 
 // To test this class use  g++ -DTESTCLASS -g -Wall server_game_logic.cpp ../build/units/*.o
