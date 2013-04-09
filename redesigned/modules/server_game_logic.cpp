@@ -46,8 +46,11 @@ ServerGameLogic * gSGL;
   a.y = 200;
   p2.push_back(a);
   teams[0].paths.push_back(p2);
+
+
   gameMap_ = new GameMap();
   gameMap_->initMap();
+
 #if 0
 #ifndef TESTCLASS
   Creep c;
@@ -73,7 +76,6 @@ ServerGameLogic * gSGL;
 #endif
 }   
 
-
 ServerGameLogic::~ServerGameLogic()
 {
 }
@@ -96,12 +98,12 @@ void ServerGameLogic::initializeCastles()
 {
 
   int uid = next_unit_id_++;
-  Point pos;
+  /*Point pos;
   pos.x = 0;
-  pos.y = 0;
+  pos.y = 0;*/
 
   // Team 0
-  Castle *castle1 = new Castle(uid, pos, INIT_CASTLE_HP, INIT_CASTLE_ATKDMG, INIT_CASTLE_ATKRNG, INIT_CASTLE_ATKSPD,
+  Castle *castle1 = new Castle(uid, gameMap_->castle1, INIT_CASTLE_HP, INIT_CASTLE_ATKDMG, INIT_CASTLE_ATKRNG, INIT_CASTLE_ATKSPD,
       INIT_CASTLE_PERCEP, INIT_CASTLE_ATKCNT, INIT_CASTLE_WALL, 0);
   teams[0].towers.push_back(castle1);
   teams[0].units.push_back(castle1);
@@ -111,9 +113,9 @@ void ServerGameLogic::initializeCastles()
   
   // Team 1
   uid = next_unit_id_++;
-  pos.x = MAX_X; // TODO: MAX_X and MAX_Y will  be replaced later when we get map reading functionality working
-  pos.y = MAX_Y; // TODO:
-  Castle *castle2 = new Castle(uid, pos, INIT_CASTLE_HP, INIT_CASTLE_ATKDMG, INIT_CASTLE_ATKRNG, INIT_CASTLE_ATKSPD,
+  //pos.x = MAX_X; // TODO: MAX_X and MAX_Y will  be replaced later when we get map reading functionality working
+  //pos.y = MAX_Y; // TODO:
+  Castle *castle2 = new Castle(uid, gameMap_->castle2, INIT_CASTLE_HP, INIT_CASTLE_ATKDMG, INIT_CASTLE_ATKRNG, INIT_CASTLE_ATKSPD,
       INIT_CASTLE_PERCEP, INIT_CASTLE_ATKCNT, INIT_CASTLE_WALL, 1);
   teams[1].towers.push_back(castle2);
   teams[1].units.push_back(castle2);
@@ -160,6 +162,8 @@ void ServerGameLogic::initializeCreeps()
       createCreep(team_i, pos, j % PATH_COUNT);
     }
   }
+
+
 
   /*Point pos = Point(230, 230);
   int uid = next_unit_id_++;
@@ -217,7 +221,7 @@ void ServerGameLogic::initializeCurrency()
 void ServerGameLogic::initializePlayers(std::vector<player_matchmaking_t> players)
 {
   for (std::vector<player_matchmaking_t>::iterator it = players.begin(); it != players.end(); ++it) {
-    createPlayer(it->team, it->team == 0 ? gameMap_->team0start[0] : gameMap_->team1start[0], it->pid);
+    createPlayer(it->team, it->team == 0 ? gameMap_->team0start[0] : gameMap_->team1start[0], it->pid, it->role);
   }
 }
 
@@ -271,6 +275,43 @@ void ServerGameLogic::receiveCreateUnitCommand(int playerId, UnitType type, Poin
   newCommand.pathID = pathId;
 
   requestedCommands.push(newCommand);
+}
+//Finds Creep Spwan point depending on the path number and the team number.
+Point ServerGameLogic::FindCreepSpawnPoint(int team_no, int pathID)
+{
+  Point creepSpawnLocation;
+  if(team_no == 2) // team 2
+  {
+    if(pathID == HIGHPATH)
+    {
+      creepSpawnLocation.x = gameMap_->topOne[0].x; // first point of the top path.
+      creepSpawnLocation.y = gameMap_->topOne[0].y; // first point of the top path.
+    }else if(pathID == MIDPATH)
+    {
+      creepSpawnLocation.x = gameMap_->midOne[0].x; // first point of the top path.
+      creepSpawnLocation.y = gameMap_->midOne[0].y; // first point of the top path.
+    }else
+    {
+      creepSpawnLocation.x = gameMap_->botOne[0].x; // first point of the top path.
+      creepSpawnLocation.y = gameMap_->botOne[0].y; // first point of the top path.
+    }
+  } else if(team_no == 1)// team 2
+  {
+    if(pathID == HIGHPATH)
+    {
+      creepSpawnLocation.x = gameMap_->topTwo[0].x; // first point of the top path.
+      creepSpawnLocation.y = gameMap_->topTwo[0].y; // first point of the top path.
+    }else if(pathID == MIDPATH)
+    {
+      creepSpawnLocation.x = gameMap_->midTwo[0].x; // first point of the top path.
+      creepSpawnLocation.y = gameMap_->midTwo[0].y; // first point of the top path.
+    }else
+    {
+      creepSpawnLocation.x = gameMap_->botTwo[0].x; // first point of the top path.
+      creepSpawnLocation.y = gameMap_->botTwo[0].y; // first point of the top path.
+    }
+  }
+  return creepSpawnLocation;
 }
 
 /* Receive and queue a move player command from a client.
@@ -348,7 +389,6 @@ void ServerGameLogic::updateCreate(CommandData& command)
   int x = command.location.x;
   int y = command.location.y;
 
-
   if ( !(teams[0].isAlive() && teams[1].isAlive()) ) {
     gameState_ = WON_GAME;
     fprintf(stderr, "Game is already over!! file: %s line %d\n", __FILE__, __LINE__);
@@ -357,6 +397,12 @@ void ServerGameLogic::updateCreate(CommandData& command)
 
   if ( (team_no = WhichTeam(command.playerID) == NOT_FOUND) ) {
     fprintf(stderr, "playerID not found file: %s line %d\n", __FILE__, __LINE__);
+    return;
+  }
+
+  // If we aren't a builder (role 0) break and don't allow a build.
+  if(getPlayerRole(team_no, command.playerID) != 0)
+  {
     return;
   }
 
@@ -373,7 +419,8 @@ void ServerGameLogic::updateCreate(CommandData& command)
   switch (command.type) {
     case CREEP:
       {
-        createCreep(team_no, command.location, command.pathID);        
+
+        createCreep(team_no, command.location, command.pathID);    
         break;
       }
     case CASTLE:
@@ -550,13 +597,15 @@ void ServerGameLogic::updateTimer(int i)
 {
   signal(SIGALRM, updateTimer);
 
-  //std::cout << "Update" <<std::endl;
+  std::cout << "Update" <<std::endl;
 
 #ifndef TESTCLASS
   AiUpdate(gSGL->teams[0], gSGL->teams[1]);
 #endif
 
   gSGL->update();
+
+  gSGL->handleDeaths();
 
   // Call network update function
   ServerGameLogic::setAlarm();
@@ -604,8 +653,10 @@ void ServerGameLogic::createCreep(int team_no, Point location, int path_no)
   Point *path= &teams[team_no].paths[path_no % PATH_COUNT][0];
   int movespeed = INIT_CREEP_MOVESPEED;
 
+  Point spawnLocation = FindCreepSpawnPoint(team_no, path_no);
+
   // Add creep to team  
-  Creep *creep = new Creep(uid, location, hp, atkdmg, atkrng, atkspd, percep, atkcnt, spd, direct, path, movespeed);  
+  Creep *creep = new Creep(uid, spawnLocation, hp, atkdmg, atkrng, atkspd, percep, atkcnt, spd, direct, path, movespeed);  
   teams[team_no].addUnit(creep);  
 
   // Pay for creep
@@ -669,11 +720,11 @@ void ServerGameLogic::createTower(int team_no, Point location)
  * RETURNS:
  * NOTES:   
  */
-void ServerGameLogic::createPlayer(int team_no, Point location, int client_id)
+void ServerGameLogic::createPlayer(int team_no, Point location, int client_id, int role)
 {
   int uid = next_unit_id_++;
 
-  Player *player = new Player(uid, client_id, location);
+  Player *player = new Player(uid, client_id, location, role);
   player->setSpeed(5);
   teams[team_no].addUnit(player);
 }
@@ -749,7 +800,22 @@ void ServerGameLogic::updateMaps() {
   mapTeams_[0].build(teams[0]);
   mapTeams_[1].build(teams[1]);
   mapBoth_.merge(mapTeams_[0], mapTeams_[1]);
+}
 
+// Returns the role given a playerID and team number;
+int ServerGameLogic::getPlayerRole(int teamNumber, int playerID)
+{
+  for (std::vector<Player*>::iterator it = teams[teamNumber].players.begin(); it != teams[teamNumber].players.end(); ++it)
+  {
+    std::cout << "player id: " << playerID << std::endl;
+    std::cout << "client id: " << (*it)->clientID << std::endl;
+    if((*it)->clientID == playerID)
+    {
+      return (*it)->role;
+    }
+  }
+
+  return -1;
 }
 
 // To test this class use  g++ -DTESTCLASS -g -Wall server_game_logic.cpp ../build/units/*.o

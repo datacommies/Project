@@ -43,46 +43,25 @@ Tower(uid, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, wall)
 ------------------------------------------------------------------------------*/
 void MultiShotTower::Attack(Team* team)
 {
-    Unit* tempTarget;
     /* check if we can attack */
     if(attackCount++ < attackSpeed)
         return;
-
+    int j = 0;
     /* reset attackCount and damage pTargetd */
     attackCount = 0;
-    pTarget->health -= attackDamage;
 
-    
-    // repeat three times
-    for(int j = 0; j < 3; j++)
+    /* check for nearby creeps & damage them */
+    for (size_t i = 0; i < team->creeps.size(); ++i)
     {
-    
-        /* check for nearby creeps & damage them */
-        for (size_t i = 0; i < team->creeps.size(); ++i)
+        /* if creep is in range AND is alive AND is not our target (to prevent hitting one target twice) */
+        if( inRange( pTarget->getPos(), team->creeps[i].getPos(), attackRange )
+            && team->creeps[i].health > 0 && pTarget->id != team->creeps[i].id )
         {
-            /* if creep is in range AND is alive AND is not our target (to prevent hitting one target twice) */
-            if( inRange( pTarget->getPos(), team->creeps[i].getPos(), attackRange )
-                && team->creeps[i].health > 0 && pTarget->id != team->creeps[i].id )
-            {
-                team->creeps[i].health -= attackDamage;
-            }
-        
-             /* if creep is in range AND is alive AND is not our target (to prevent hitting one target twice) */
-            if( inRange( pTarget->getPos(), team->creeps[i+1].getPos(), attackRange )
-                && team->creeps[i+1].health > 0 && pTarget->id != team->creeps[i+1].id )
-            {   
-                team->creeps[i+1].health -= attackDamage;
-            }
-    
-            /* if creep is in range AND is alive AND is not our target (to prevent hitting one target twice) */
-            if( inRange( pTarget->getPos(), team->creeps[i+2].getPos(), attackRange )
-                && team->creeps[i+2].health > 0 && pTarget->id != team->creeps[i+2].id )
-            {
-                team->creeps[i+2].health -= attackDamage;
-            }
-    
+            team->creeps[i].health -= attackDamage;
+            j++;
         }
-        
+        if(j == 3)
+            break;
+
     }
-    
 }
