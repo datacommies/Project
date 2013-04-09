@@ -100,6 +100,7 @@ class ServerGameLogic
     void playerConnect();
     int getWinner();
     void initializeTeams(std::vector<player_matchmaking_t> players);
+    void handleDeaths();
 
   private:
     // Fields
@@ -293,8 +294,7 @@ class ServerGameLogic
     
     int WhichTeam(int id);
 
-    void giveTeamBonus(int team_no, int amount);
-    void handleDeaths();
+    void giveTeamBonus(int team_no, int amount);    
     void handlePlayerDeath(Player *player);
     void handleCreepDeath(Creep *creep);
     void handleTowerDeath(Tower *tower);
