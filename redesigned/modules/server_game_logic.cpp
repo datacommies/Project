@@ -389,12 +389,12 @@ void ServerGameLogic::updateCreate(CommandData& command)
 
   if ( !(teams[0].isAlive() && teams[1].isAlive()) ) {
     gameState_ = WON_GAME;
-    fprintf(stderr, "Game is already over!! file: %s line %d\n", __FILE__, __LINE__);
+   // fprintf(stderr, "Game is already over!! file: %s line %d\n", __FILE__, __LINE__);
     return;
   }
 
   if ( (team_no = WhichTeam(command.playerID) == NOT_FOUND) ) {
-    fprintf(stderr, "playerID not found file: %s line %d\n", __FILE__, __LINE__);
+   // fprintf(stderr, "playerID not found file: %s line %d\n", __FILE__, __LINE__);
     return;
   }
 
@@ -405,8 +405,8 @@ void ServerGameLogic::updateCreate(CommandData& command)
   }
 
   if (!mapTeams_[0].isValidPos(command.location)) {
-    fprintf(stderr, "max x: %d max y: %d\n", MAX_X, MAX_Y);
-    fprintf(stderr, "x: %d, y: %d out of range: %s line %d\n", x, y, __FILE__, __LINE__);
+  //  fprintf(stderr, "max x: %d max y: %d\n", MAX_X, MAX_Y);
+ //   fprintf(stderr, "x: %d, y: %d out of range: %s line %d\n", x, y, __FILE__, __LINE__);
     return; 
   }
 
@@ -452,7 +452,7 @@ void ServerGameLogic::updateAttack(CommandData& command)
   int team_no;
 
   if ( !(teams[0].isAlive() && teams[1].isAlive()) ) {
-    fprintf(stderr, "Game is already over!! file: %s line %d\n", __FILE__, __LINE__);
+   //fprintf(stderr, "Game is already over!! file: %s line %d\n", __FILE__, __LINE__);
     return;
   }
 
@@ -472,7 +472,7 @@ void ServerGameLogic::updateMovePlayer(CommandData& command)
   Player* temp;
   
   if ( !(teams[0].isAlive() && teams[1].isAlive()) ) {
-    fprintf(stderr, "Game is already over!! file: %s line %d\n", __FILE__, __LINE__);
+  //  fprintf(stderr, "Game is already over!! file: %s line %d\n", __FILE__, __LINE__);
     return;
   }
   
@@ -493,7 +493,7 @@ void ServerGameLogic::updateMovePlayer(CommandData& command)
   }
 
   temp->direction = command.direction;
-  std::cout << "moving player" << std::endl;
+ // std::cout << "moving player" << std::endl;
 
   mapTeams_[0].build(teams[0]);
   mapTeams_[1].build(teams[1]);
@@ -502,7 +502,7 @@ void ServerGameLogic::updateMovePlayer(CommandData& command)
 void ServerGameLogic::updateMoveUnit(CommandData& command)
 {
   if ( !(teams[0].isAlive() && teams[1].isAlive()) ) {
-    fprintf(stderr, "Game is already over!! file: %s line %d\n", __FILE__, __LINE__);
+  //  fprintf(stderr, "Game is already over!! file: %s line %d\n", __FILE__, __LINE__);
     return;
   }
 
@@ -629,7 +629,7 @@ void ServerGameLogic::createCreep(int team_no, Point location, int path_no)
   
   int hp = INIT_CREEP_HP;
   int atkdmg = INIT_CREEP_ATKDMG;
-  int atkrng = INIT_CREEP_ATKRNG * 10;
+  int atkrng = INIT_CREEP_ATKRNG * 4;
   int atkspd = INIT_CREEP_ATKSPD;
   int percep = INIT_CREEP_PERCEP * 10;
   int atkcnt = INIT_CREEP_ATKCNT;
