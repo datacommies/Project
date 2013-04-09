@@ -113,7 +113,7 @@ void ClientNetwork::recvReply() {
 			recv_complete(connectsock, ((char*)&go) + sizeof(header_t), sizeof(gameover_t) - sizeof(header_t), 0);
 			cout << "The winner is team: " << go.winner;
 		}else if(head.type == MSG_RESOURCE_UPDATE){
-			currency_t cu = {0};
+			currency_t cu = {{}, 0};
 			recv_complete(connectsock, ((char*)&cu) + sizeof(header_t), sizeof(currency_t) - sizeof(header_t), 0);
 			gl->currency = cu.teamCurrency;
 			//cout << gl->currency << endl;
@@ -137,7 +137,7 @@ void ClientNetwork::recvReply() {
 					c.team = u.team;
 					pthread_mutex_lock( &gl->unit_mutex );
 					bool updated = false;
-					for (int i = 0; i < gl->units.size(); ++i)
+					for (unsigned int i = 0; i < gl->units.size(); ++i)
 					{
 						if (gl->units[i].id == c.id){
 							// Preserve past position and intervalue.
@@ -167,7 +167,7 @@ void ClientNetwork::recvReply() {
 					c.team = u.team;
 					pthread_mutex_lock( &gl->unit_mutex );
 					bool updated = false;
-					for (int i = 0; i < gl->units.size(); ++i)
+					for (unsigned int i = 0; i < gl->units.size(); ++i)
 					{
 						
 						if (gl->units[i].id == c.id){
