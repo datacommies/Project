@@ -146,7 +146,7 @@ void ServerGameLogic::initializeCastles()
 
 void ServerGameLogic::initializeCreeps()
 {
-  /*for (int team_i=0; team_i<2; team_i++){
+  for (int team_i=0; team_i<2; team_i++){
     for (int j=0; j<INIT_NUM_CREEPS; j++) {
       Point pos = Point();
       
@@ -161,7 +161,7 @@ void ServerGameLogic::initializeCreeps()
 
       createCreep(team_i, pos, j % PATH_COUNT);
     }
-  }*/
+  }
 
 
 

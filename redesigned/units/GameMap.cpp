@@ -19,7 +19,6 @@
 void GameMap::initPaths(){
   //*** team 1 paths ***
   Point a;
-<<<<<<< HEAD
 
   //top lane, left team
   a.x = 55; //castle icon is 25x25
