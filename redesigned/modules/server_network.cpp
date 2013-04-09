@@ -73,7 +73,7 @@ void ServerNetwork::initNetwork()
 
 void ServerNetwork::gameOver(int client_, const int winner)
 {
-    gameover_t go = {0};
+    gameover_t go = {{}, 0};
     go.head.type = MSG_GAME_OVER;
     go.head.size = sizeof(gameover_t);
     go.winner = winner;
@@ -149,7 +149,7 @@ bool ServerNetwork::sync(int client_)
         }
 
         // Update currency
-        currency_t cu = {0};
+        currency_t cu = {{}, 0};
         cu.head.type = MSG_RESOURCE_UPDATE;
         cu.teamCurrency = serverGameLogic_.teams[teamId].currency;
         cu.head.size = sizeof(currency_t);
