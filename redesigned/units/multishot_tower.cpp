@@ -52,19 +52,21 @@ void MultiShotTower::Attack(Team* team)
     attackCount = 0;
     pTarget->health -= attackDamage;
 
-    // repeat three times 
-    for(int j = 1; j < 3; j++)
+    
+    /* check for nearby creeps & damage them */
+    for (size_t i = 0; i < team->creeps.size(); ++i)
     {
-        /* check for nearby creeps & damage them */
-        for (size_t i = 0; i < team->creeps.size(); ++i)
-        {
-            /* if creep is in range AND is alive AND is not our target (to prevent hitting one target twice) */
-            if( inRange( pTarget->getPos(), team->creeps[i].getPos(), attackRange )
+        /* if creep is in range AND is alive AND is not our target (to prevent hitting one target twice) */
+        if( inRange( pTarget->getPos(), team->creeps[i].getPos(), attackRange )
                 && team->creeps[i].health > 0 && pTarget->id != team->creeps[i].id )
+        {
+            // repeat three times
+            for(int j = 0; j < 3; j++)
             {
                 team->creeps[i].health -= attackDamage;
-                break;
             }
+    
         }
-    }     
+    }
+    
 }
