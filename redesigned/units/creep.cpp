@@ -64,7 +64,7 @@ Creep::Creep(int uid, Point pos, int hp, int atkdmg, int atkrng,
 Creep::Creep(int uid, int side, Point pos, Point* path, int hp, int atkdmg, int atkrng,
              int atkspd, int percep, int atkcnt, int movespeed, Direction direct):
              MobileUnit(uid, side, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, movespeed, direct),
-             pPath(path)
+             pPath(path), pSaved(NULL)
 {
     //any required validation
 }
@@ -133,27 +133,39 @@ void Creep::Update(Team& team) {
         CheckTarget();
     
     /* Search for Target. */
-    if(pTarget == NULL) {
+    if(pTarget == NULL)
         FindTarget(&team);
+
     if(pTarget != NULL && pSaved == NULL)
         pSaved = &position;
     
-    }
-    
     /* If we found a new Target. */
     if(pTarget != NULL){
-        if(inRange(position, pTarget->position, attackRange))
+        if(inRange(position, pTarget->getPos(), attackRange))
+        {
             Attack();
+            printf("Attack\n");
+        }
         else 
+        {
             Move(pTarget->getPos());
+            printf("Move\n");
+        }
         Rotate(pTarget->getPos());
     }
     else
     { /*No target. Move along path. */
         if(pSaved == 0)
+        {
             Move(*pPath);
+        }
         else
+        {
             Move(*pSaved);
+            if(position.x == pSaved->x && position.y == pSaved->y)
+                pSaved = NULL;
+            printf("Move pSaved\n");
+        }
         Rotate( *pPath );
     }
 }
@@ -180,6 +192,14 @@ void Creep::Update(Team& team) {
 void Creep::Move( Point pt ) {
     position.x += getTargetDirection(position.x, pt.x) * moveSpeed;
     position.y += getTargetDirection(position.y, pt.y) * moveSpeed;
+}
+
+void Creep::nextPoint(){
+        ++pPath;
+        if(pPath->x == -1 && pPath->y == -1)
+        {
+            --pPath;
+        }
 }
 
 /*------------------------------------------------------------------------------

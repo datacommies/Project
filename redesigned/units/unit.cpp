@@ -168,7 +168,7 @@ void Unit::Attack(void) {
         pTarget->health -= attackDamage;
 
     if( pTarget->health <= 0 ) {
-        //remove the unit from containers, any other necessary deletion
+        //pTarget = NULL;
     }
 }
 
@@ -177,8 +177,8 @@ void Unit::Attack(void) {
 --
 -- DATE:        2013/04/05
 --
--- DESIGNER:    Chris Porter
--- PROGRAMMER:  Chris Porter
+-- DESIGNER:    Nick Raposo, Chris Porter
+-- PROGRAMMER:  Nick Raposo, Chris Porter
 --
 -- INTERFACE:   void FindTarget(Team *team)
 --
@@ -265,8 +265,7 @@ void Unit::Update(Team& team) {
 
     /* If we found a new Target, and they are in range.. */
     if( pTarget != NULL ) {
-        Attack();
-        Rotate( pTarget->getPos() );
+        //Attack();
     }
 }
 

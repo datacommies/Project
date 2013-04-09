@@ -21,13 +21,13 @@ public:
           Point* path=NULL, int movespeed = 0); 
              
 
-	Creep(int uid, int side, Point pos, Point* path, int hp = 100, int atkdmg = 10, int atkrng = 10,
-             int atkspd = 10, int percep = 10, int atkcnt = 30, int movespeed = 10,
+	Creep(int uid, int side, Point pos, Point* path, int hp = 100, int atkdmg = 10, int atkrng = 1,
+             int atkspd = 10, int percep = 10, int atkcnt = 0, int movespeed = 10,
              Direction direct = Direction());
 
 	
 	void	setPath(Point *pt)	{ pPath = pt; }
-	void	nextPoint(void)	{ pPath++; }
+	void	nextPoint(void);
 	void	savePoint(Point &pt)	{ pSaved = &pt; }
 	void    Move(Point);
 	int		getTargetDirection(int, int);
