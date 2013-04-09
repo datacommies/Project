@@ -19,8 +19,9 @@
 void GameMap::initPaths(){
   //*** team 1 paths ***
   Point a;
+<<<<<<< HEAD
 
-  //top
+  //top lane, left team
   a.x = 55; //castle icon is 25x25
   a.y = 25;
   topOne.push_back(a);
@@ -34,7 +35,7 @@ void GameMap::initPaths(){
   a.y = -1;
   topOne.push_back(a);
 
-  //bottom
+  // left team, bottom lanes
   a.x = 0;
   a.y = 30;
   botOne.push_back(a);
@@ -48,7 +49,8 @@ void GameMap::initPaths(){
   a.y = -1;
   botOne.push_back(a);
 
-  //middle
+
+  // left team, mid lane
   a.x = 30;
   a.y = 30;
   midOne.push_back(a);
@@ -64,7 +66,7 @@ void GameMap::initPaths(){
   //*** end of team 1 paths ***
 
 
-  //*** team 2 paths ***
+  //*** team 2 paths *** RIGHT TEAM
   Point b;
 
   //top

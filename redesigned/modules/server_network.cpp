@@ -94,10 +94,18 @@ bool ServerNetwork::sync(int client_)
 
     if(serverGameLogic_.gameState_ == GAME_END)
     {
+        int teamId = 1;
+        cout << "GAMER OVER!!" << endl; 
+        for (size_t i = 0; i < serverGameLogic_.teams[0].players.size(); ++i)
+        {
+            if(serverGameLogic_.teams[0].players[i]->clientID == client_)
+                teamId = 0;            
+        }
         winner = serverGameLogic_.getWinner();
+
         if(winner != -1)
         {
-            gameOver(client_, winner);
+            gameOver(client_, winner == teamId ? WON_GAME : LOST_GAME);
         }
     }else{
         int teamId;
@@ -145,7 +153,7 @@ bool ServerNetwork::sync(int client_)
             send(client_, sc.data(), sc.size(), 0);
 
             if(serverGameLogic_.teams[1].players[i]->clientID == client_)
-                teamId = 1;            
+                teamId = 1;
         }
 
         // Update currency
@@ -394,11 +402,14 @@ void * ServerNetwork::handle_client_lobby(void * ctx)
         if (head.type == MSG_PLAYER_UPDATE) {
             cout << "received player update" << endl;
             bool start = true;
+
+            // Get the packet.
             recv_complete(client, ((char *) &player) + sizeof(header_t), sizeof(player_matchmaking_t) - sizeof(header_t), 0);
             
             // Only allow updates to this client's pid
             player.pid = client;
 
+            // Go through players and find the player corresponding to the client that is updating its player.
             for (size_t i = 0; i < players_.size(); ++i) {
                 if (players_[i].pid == client) {
                     // Validate and update player info.
@@ -408,16 +419,19 @@ void * ServerNetwork::handle_client_lobby(void * ctx)
                 }
             }
 
+            // Send updated player to all clients.
             for (size_t i = 0; i < clients_.size(); ++i)
             {
                 send(clients_[i], &player, sizeof(player_matchmaking_t), 0);
             }
 
+            // Check to see if everyone is ready
             for (size_t i = 0; i < players_.size(); ++i)
             {
                 start = start && players_[i].ready;
             }            
 
+            // If everyone is ready, start the game.
             if (start)
             {
                 for (size_t i = 0; i < clients_.size(); ++i)

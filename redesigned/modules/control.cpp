@@ -228,21 +228,22 @@ Control::RunAllButtons()
 			    cout << "Setting next to build tower three!" << endl;
 			break;    
 			case BUILDCREEP_1:
-                next_to_build = CREEP_ONE;
-			    cout << "Setting next to build creep one!" << endl;
+			    _clientGameLogicModule->createCreep(CREEP_ONE, GetCurrentLane());
 			 break;   
 			case BUILDCREEP_2:
-                next_to_build = CREEP_TWO;
-			    cout << "Setting next to build creep two!" << endl;	
+			    _clientGameLogicModule->createCreep(CREEP_TWO, GetCurrentLane());
 			 break;  
 			case BUILDCREEP_3:
-                next_to_build = CREEP_THREE;
-			    cout << "Setting next to build creep three!" << endl;
+			    _clientGameLogicModule->createCreep(CREEP_THREE, GetCurrentLane());
 		    break;   
-			case SELECTLOPATH:	  
+			case SELECTLOPATH:
+   				_currentLane = LOWPATH;
+   			break;
 			case SELECTMIDPATH:
+				_currentLane = MIDPATH;
+   			break;
 			case SELECTHIPATH:
-			    _currentLane = _buttonIDs[i] - SELECTLOPATH;
+			    _currentLane = HIGHPATH;
 			break;
 			default:
 			break;
@@ -429,10 +430,8 @@ Control::CallUnitTypeCreationEvent(UnitType unit_type)
 	        _clientGameLogicModule->createTower(unit_type, GetTowerPlacement());
 	    break;
 	    case CREEP_ONE:
-	    case CREEP_TWO:
+	    case CREEP_TWO: // creeps are handled as they are pressed. So we don't have to wait for a second click.
 	    case CREEP_THREE:
-	        _clientGameLogicModule->createCreep(unit_type, GetCurrentLane());
-	    break;
 	    case PLAYER:
 		case PROJECTILE:
 		case CREEP:         // these aren't doing anything, but get rid of
@@ -490,7 +489,7 @@ Control::GetTowerPlacement()
 }
 
 /*-------------------------------------------------------------------------------------------------------------------- 
--- FUNCTION: SetTowerPlacement
+-- FUNCTION: MouseCallback
 --
 -- DATE: 2013/03/20
 --
@@ -500,7 +499,7 @@ Control::GetTowerPlacement()
 --
 -- PROGRAMMER: Jesse Wright
 --
--- INTERFACE: void SetTowerPlacement(Point p)
+-- INTERFACE: void MouseCallback(Point p)
 --                 Point p - The point the tower is to be placed in
 --
 -- RETURNS: void

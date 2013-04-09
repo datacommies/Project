@@ -26,6 +26,14 @@ void ClientGameLogic::menu () {
    gameState_ = MAIN_MENU;
 }
 
+void ClientGameLogic::win () {
+   gameState_ = WON_GAME;
+}
+
+void ClientGameLogic::lose () {
+   gameState_ = LOST_GAME;
+}
+
 /* Sends a create unit request to network module.
  *
  * PRE:     
@@ -66,7 +74,11 @@ bool ClientGameLogic::createCreep(UnitType type, int laneID)
    //should there be a delay between creep creation to ensure that they don't spawn 
    //on top of eachother? I don't know how we wanted that to work...?
 
-   //clientNetwork_.createUnit(this->playerId, type, location);
+   Point location;
+   location.x = 0;
+   location.y = 0; // this doesn't do anything because the implementation sucks. Handled later.
+   std::cout << "lane " << laneID << std::endl;
+   clientNetwork_.createUnit(this->playerId, CREEP, location, laneID);
    
    return true;
 }

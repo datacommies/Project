@@ -273,7 +273,7 @@ void Graphics::initGameControls ()
 {
     clientGameLogic_.UIElements.clear();
 
-    int button[] = { 49 , 118, 188, 313, 569, 638, 708, 780 };
+    int button[] = { 49 , 118, 188, 313, 569, 638, 708 };
     
     //Tower Buttons
     Button towerButton1(BUILDTOWER_1,sf::Vector2f(button[0],ROW1), sf::Vector2f(BUTTON_SIZE, BUTTON_SIZE), font, NULL);
@@ -290,9 +290,6 @@ void Graphics::initGameControls ()
     Button creepButton2(BUILDCREEP_2,sf::Vector2f(button[5],ROW1), sf::Vector2f(BUTTON_SIZE, BUTTON_SIZE), font, NULL);
     Button creepButton3(BUILDCREEP_3,sf::Vector2f(button[6],ROW1), sf::Vector2f(BUTTON_SIZE, BUTTON_SIZE), font, NULL);
     
-    // Exit Button
-    Button quitButton(ID_QUIT,sf::Vector2f(button[7],ROW4+8), sf::Vector2f(QUIT_BSIZE, QUIT_BSIZE),  font, NULL);
-  
     //towerButton1.rect.setFillColor(sf::Color(255, 0, 0));
     towerButton1.rect.setFillColor(sf::Color::Transparent);
     towerButton2.rect.setFillColor(sf::Color::Transparent);
@@ -305,8 +302,6 @@ void Graphics::initGameControls ()
     highPath.rect.setFillColor(sf::Color::Transparent);
     lowPath.rect.setFillColor(sf::Color::Transparent);
     midPath.rect.setFillColor(sf::Color::Transparent);
-
-    quitButton.rect.setFillColor(sf::Color::Transparent);
   
     clientGameLogic_.UIElements.insert(towerButton1);
     clientGameLogic_.UIElements.insert(towerButton2);
@@ -317,7 +312,6 @@ void Graphics::initGameControls ()
     clientGameLogic_.UIElements.insert(creepButton1);
     clientGameLogic_.UIElements.insert(creepButton2);
     clientGameLogic_.UIElements.insert(creepButton3);
-    clientGameLogic_.UIElements.insert(quitButton);
 }
 
 /* Initializes sfgDesktop. ALL SFGUI objects will sit ontop of this. We need this because it's the only way to do
@@ -460,7 +454,16 @@ void Graphics::initLobbyWindow()
  * NOTES:    
  */
 void Graphics::takeRole()
-{
+{   // Set your role in clientGameLogic
+    if((long)this <= 15)
+    {
+        globalGraphics->clientGameLogic_.clientNetwork_.p.role = ((long)this) - 11;
+    }
+    else
+    {
+        globalGraphics->clientGameLogic_.clientNetwork_.p.role = ((long)this) - 21;
+    }
+
     switch((long) this)
     {
         case 11:

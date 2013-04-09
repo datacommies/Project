@@ -61,6 +61,13 @@ enum GameState
    GAME_END
 };
 
+enum PathId
+{
+   HIGHPATH,
+   MIDPATH,
+   LOWPATH
+};
+
 // Structs --------------------------------------------------------------------
 
 struct CLIENT_UNIT // This struct applies only to the client side - server side units are stored differently
