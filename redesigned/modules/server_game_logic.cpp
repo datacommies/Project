@@ -531,6 +531,8 @@ void ServerGameLogic::update()
   }
   mapTeams_[0].build(teams[0]);
   mapTeams_[1].build(teams[1]);
+  
+  handleDeaths();
 }
 
 void ServerGameLogic::updateTimer(int i)
@@ -606,19 +608,48 @@ void ServerGameLogic::createCreep(int team_no, Point location, int path_no)
  *          decremented accordingly.
  * RETURNS:
  * NOTES:   
+ *
+ * REVISIONS: Kevin - Only creates tower if the chosen location is within the team's half
+ *                  of the map AND there is enough currency.
  */
 void ServerGameLogic::createTower(int team_no, Point location)
 {
-  int uid = next_unit_id_++;
+   Point castleLoc;   
+  double distX, distY;
+  int maxTowerDist, dist;
+  
+  // calculate maxDist tower can be created from the castle 
+  //    based on (((MAPWIDTH + MAPHEIGHT) / 2) - initial tower attack range)
+  maxTowerDist = (((MAPWIDTH + MAPHEIGHT) / 2) - INIT_TOWER_ATKRNG);
+  
+  // get location of team's castle                 
+  for(std::vector<Tower*>::iterator it = teams[team_no].towers.begin(); it != teams[team_no].towers.end(); ++it)
+    if ((*it)->getType() == CASTLE) // then this is the team's castle
+      castleLoc = (*it)->getPos();  // castle location
+    
+  // get distance of proposed location from castle
+  distX = abs(location.x - castleLoc.x);
+  distY = abs(location.y - castleLoc.y);
+  dist = distX + distY;
+  
+  // if( chosen distance from player's team's castle is <= maxTowerDist && 
+  //       TOWER_COST <= team currency ) then carry on and create a tower
+  if((dist <= maxTowerDist) && (TOWER_COST <= teams[team_no].currency)){
+  
+    int uid = next_unit_id_++;
 
-  // Add tower to team
-  Tower *tower = new Tower(uid, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
+    // create new tower
+    Tower *tower = new Tower(uid, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
                            INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);
+    // Add tower to team
+    teams[team_no].addUnit(tower);
 
-  teams[team_no].addUnit(tower);
+    // Pay for tower
+    teams[team_no].currency -= TOWER_COST;
 
-  // Pay for tower
-  teams[team_no].currency -= TOWER_COST;
+    // Update the Map!
+    gameMap_->addUnit(tower, location);
+  }
 }
 /* Creates a tower.
  *
@@ -645,6 +676,22 @@ void ServerGameLogic::respawnPlayer(Player* player, Point location)
 void ServerGameLogic::giveTeamBonus(int team_no, int amount)
 {
   teams[team_no].currency += amount;
+}
+
+void ServerGameLogic::handleDeaths()
+{
+  for (size_t i = 0; i < 2; ++i)
+  {
+    for (size_t j = 0; j < teams[i].players.size(); ++j)        
+      handlePlayerDeath(teams[i].players[j]);
+    for (size_t j = 0; j < teams[i].creeps.size(); ++j)        
+      handleCreepDeath(teams[i].creeps[j]);
+    for (size_t j = 0; j < teams[i].towers.size(); ++j)
+      if (j == 0)
+        handleCastleDeath();
+      else
+        handleTowerDeath(teams[i].towers[j]);
+  }
 }
 
 void ServerGameLogic::handlePlayerDeath(Player *player)

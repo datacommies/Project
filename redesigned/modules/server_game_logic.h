@@ -5,7 +5,7 @@
 
 #define INIT_NUM_CREEPS 3
 #define INIT_NUM_TOWERS 4
-#define INIT_CURRENCY 100
+#define INIT_CURRENCY 500
 #define INIT_HEALTH 100
 
 #define INIT_CASTLE_HP 100
@@ -140,6 +140,7 @@ class ServerGameLogic
     int WhichTeam(int id);
 
     void giveTeamBonus(int team_no, int amount);
+    void handleDeaths();
     void handlePlayerDeath(Player *player);
     void handleCreepDeath(Creep *creep);
     void handleTowerDeath(Tower *tower);
