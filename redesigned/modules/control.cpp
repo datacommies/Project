@@ -192,7 +192,8 @@ Control::AddNewUnCalledKey(sf::Keyboard::Key key)
 -- REVISIONS: (Date and Description)
 --          
 --
--- DESIGNER: Jesse Wright
+-- DESIGNER: John Payment
+--           Jesse Wright
 --
 -- PROGRAMMER: Jesse Wright
 --
@@ -257,11 +258,12 @@ Control::RunAllButtons()
 --
 -- DATE: 2013/03/21
 --
--- REVISIONS: (Date and Description)
---			Jesse Wright: Added attack after every movement.
+-- REVISIONS: Jesse Wright: Added attack after every movement.
+--
 -- DESIGNER: John Payment
 --
--- PROGRAMMER: John Payment, Jesse Wright
+-- PROGRAMMER: John Payment
+--             Jesse Wright
 --
 -- INTERFACE: void RunAllKeys()
 --
@@ -401,13 +403,11 @@ Control::CallAttackEvent(Direction direction)
 --
 -- DATE: 2013/03/11
 --
--- REVISIONS: (Date and Description)
---          Jesse Wright: Changed fucntion to take a Unit type so we can have a
---                        more generic function for creating units in the game.
---                        simply checks the unit type and calls the correct
---                        game logic function.
+-- REVISIONS: Jesse Wright: Changed fucntion to take a Unit type so we can have a more generic function for creating 
+--                          units in the game. simply checks the unit type and calls the correct game logic function.
 --
--- DESIGNER: Jesse Wright
+-- DESIGNER: John Payment
+--           Jesse Wright
 --
 -- PROGRAMMER: Jesse Wright
 --
