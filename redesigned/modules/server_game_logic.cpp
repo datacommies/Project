@@ -477,7 +477,7 @@ void ServerGameLogic::update()
   //mapBoth_.printGrid();
 
 
-  for (int i = 0; i < teams[0].players.size(); ++i)
+  for (unsigned int i = 0; i < teams[0].players.size(); ++i)
   {
     if (teams[0].players[i]->direction & UP)
       teams[0].players[i]->position.y-= teams[0].players[i]->moveSpeed;
