@@ -47,9 +47,7 @@ public:
    bool updatePlayerLobby (int team, int role, const char* name, bool ready);
 
    void sendReady () {
-      player_matchmaking_t p = {{MSG_PLAYER_UPDATE, sizeof(player_matchmaking_t)}, {0}, 0, 0, 0, false};
-      strcpy(p.name, "Test");
-      p.role = 0;
+      strcpy(p.name, _name.c_str());
       p.ready = true;
       send(connectsock, &p, sizeof(player_matchmaking_t), 0);
    }
@@ -58,6 +56,8 @@ public:
      _name = name; _server = server; _port = port;
    }
    
+   player_matchmaking_t p;
+
    // Connection parameters
    std::string _name, _server; 
    int _port;
