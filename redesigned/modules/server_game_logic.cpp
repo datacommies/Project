@@ -584,8 +584,6 @@ void ServerGameLogic::updateTimer(int i)
 {
   signal(SIGALRM, updateTimer);
 
-  std::cout << "Update" <<std::endl;
-
 #ifndef TESTCLASS
   AiUpdate(gSGL->teams[0], gSGL->teams[1]);
 #endif
