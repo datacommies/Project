@@ -128,14 +128,6 @@ void * init (void * in)
                 Control::get()->RunAllKeys();
             } else if (event.type == sf::Event::KeyReleased)
             {
-                if (!sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-                    Control::get()->AddNewUnCalledKey(sf::Keyboard::W);
-                if (!sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-                    Control::get()->AddNewUnCalledKey(sf::Keyboard::A);
-                if (!sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-                    Control::get()->AddNewUnCalledKey(sf::Keyboard::S);
-                if (!sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-                    Control::get()->AddNewUnCalledKey(sf::Keyboard::D);
                 Control::get()->RunAllKeys();
             }
         }
@@ -731,7 +723,7 @@ void Graphics::drawUnits(sf::RenderWindow& window)
             window.draw(castle_sprite);
             drawHealthBar(window, unit->position.x, unit->position.y + castle_sprite.getTextureRect().height, unit->health);
         } 
-        else if (unit->type == CREEP) 
+        else if (unit->type == CREEP)
         {
             // Linear interpolation between a unit's past position and new position.
             Point interpolated = unit->inter_position = Lerp(unit->past_position, unit->position, unit->inter_value);

@@ -273,80 +273,29 @@ Control::RunAllButtons()
 void 
 Control::RunAllKeys()
 {
-	for(vector<sf::Keyboard::Key>::size_type i = 0; i < _keys.size(); ++i)
-	{
-		// Case for each Key that is attached to a function
-		switch(_keys[i])
-		{
-			// Moving in Player Mode
-			case sf::Keyboard::A :
-				if (!(_currentDirection & LEFT))
-				{
-					CallMoveEvent(LEFT);
-					CallAttackEvent(LEFT);
-				}
-				_currentDirection |= LEFT;
-				break;
-			case sf::Keyboard::W :
-				if (!(_currentDirection & UP))
-				{
-					CallMoveEvent(UP);
-					CallAttackEvent(UP);
-				}
-				_currentDirection |= UP;
-				break;
-			case sf::Keyboard::D :
-				if (!(_currentDirection & RIGHT))
-				{
-					CallAttackEvent(RIGHT);
-					CallMoveEvent(RIGHT);
-				}
-					
-				_currentDirection |= RIGHT;
-				break;
-			case sf::Keyboard::S :
-				if (!(_currentDirection & DOWN))
-				{
-					CallMoveEvent(DOWN);
-					CallAttackEvent(DOWN);
-				}
-					
-				_currentDirection |= DOWN;
-				break;
-			default:
-				break;
-				// Does nothing but gets rid of annoying warnings
-		}
-	}
+	int old = _currentDirection;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+		_currentDirection |= UP;
+	else
+		_currentDirection &= (~UP);
+	
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+		_currentDirection |= LEFT;
+	else
+		_currentDirection &= (~LEFT);
+	
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+		_currentDirection |= DOWN;
+	else
+		_currentDirection &= (~DOWN);
+	
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+		_currentDirection |= RIGHT;
+	else
+		_currentDirection &= (~RIGHT);
 
-	for(vector<sf::Keyboard::Key>::size_type i = 0; i < _released_keys.size(); ++i)
-	{
-		bool update = true;
-		// Case for each Key that is attached to a function
-		switch(_released_keys[i])
-		{
-			// Moving in Player Mode
-			case sf::Keyboard::A :
-				_currentDirection &= (~LEFT);
-				break;
-			case sf::Keyboard::W :
-				_currentDirection &= (~UP);
-				break;
-			case sf::Keyboard::D :
-				_currentDirection &= (~RIGHT);
-				break;
-			case sf::Keyboard::S :
-				_currentDirection &= (~DOWN);
-				break;
-			default:
-				update = false;
-				break;
-		}
-		if (update)
-		{
-			CallMoveEvent((Direction)_currentDirection);
-			CallAttackEvent((Direction)_currentDirection);
-		}
+	if (old != _currentDirection) {
+		CallMoveEvent((Direction)_currentDirection);
 	}
 	
 	_released_keys.clear();
