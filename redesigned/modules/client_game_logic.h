@@ -28,6 +28,8 @@ public:
    void start ();
    void join ();
    void menu ();
+   void win ();
+   void lose ();
 
    bool createTower(UnitType type, Point location);
    bool createCreep(UnitType type, int laneID);

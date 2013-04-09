@@ -89,7 +89,7 @@ int ServerGameLogic::getWinner()
     return 1;
   }
 
-  return -1;
+  return 2;
 }
 
 void ServerGameLogic::initializeCastles() 
@@ -688,9 +688,10 @@ void ServerGameLogic::handleTowerDeath(Tower *tower)
   giveTeamBonus(tower->team == 0 ? 1 : 0, TOWER_KILL_BONUS);
 }
 
-void ServerGameLogic::handleCastleDeath(Castle *castle)
+void ServerGameLogic::handleCastleDeath()
 {
-  // Game over  
+  // Game over 
+  printf("Game over\n");
   gameState_ = GAME_END;
 }
 

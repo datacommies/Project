@@ -26,6 +26,14 @@ void ClientGameLogic::menu () {
    gameState_ = MAIN_MENU;
 }
 
+void ClientGameLogic::win () {
+   gameState_ = WON_GAME;
+}
+
+void ClientGameLogic::lose () {
+   gameState_ = LOST_GAME;
+}
+
 /* Sends a create unit request to network module.
  *
  * PRE:     

@@ -94,10 +94,18 @@ bool ServerNetwork::sync(int client_)
 
     if(serverGameLogic_.gameState_ == GAME_END)
     {
+        int teamId = 1;
+        cout << "GAMER OVER!!" << endl; 
+        for (size_t i = 0; i < serverGameLogic_.teams[0].players.size(); ++i)
+        {
+            if(serverGameLogic_.teams[0].players[i]->clientID == client_)
+                teamId = 0;            
+        }
         winner = serverGameLogic_.getWinner();
+
         if(winner != -1)
         {
-            gameOver(client_, winner);
+            gameOver(client_, winner == teamId ? WON_GAME : LOST_GAME);
         }
     }else{
         int teamId;
@@ -145,7 +153,7 @@ bool ServerNetwork::sync(int client_)
             send(client_, sc.data(), sc.size(), 0);
 
             if(serverGameLogic_.teams[1].players[i]->clientID == client_)
-                teamId = 1;            
+                teamId = 1;
         }
 
         // Update currency

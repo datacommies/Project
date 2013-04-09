@@ -297,7 +297,7 @@ class ServerGameLogic
     void handlePlayerDeath(Player *player);
     void handleCreepDeath(Creep *creep);
     void handleTowerDeath(Tower *tower);
-    void handleCastleDeath(Castle *castle);
+    void handleCastleDeath();
 };
 
 #endif
