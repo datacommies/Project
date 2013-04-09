@@ -12,7 +12,7 @@
 #define INIT_CASTLE_ATKDMG 5
 #define INIT_CASTLE_ATKRNG 7
 #define INIT_CASTLE_ATKSPD 1
-#define INIT_CASTLE_PERCEP 1
+#define INIT_CASTLE_PERCEP 10
 #define INIT_CASTLE_ATKCNT 1
 #define INIT_CASTLE_WALL 2
 
@@ -20,7 +20,7 @@
 #define INIT_CREEP_ATKDMG 5
 #define INIT_CREEP_ATKRNG 7
 #define INIT_CREEP_ATKSPD 1
-#define INIT_CREEP_PERCEP 1
+#define INIT_CREEP_PERCEP 30
 #define INIT_CREEP_ATKCNT 1
 #define INIT_CREEP_SPD 1
 #define INIT_CREEP_MOVESPEED 1
@@ -100,6 +100,8 @@ class ServerGameLogic
     void playerConnect();
     int getWinner();
     void initializeTeams(std::vector<player_matchmaking_t> players);
+
+    Point FindCreepSpawnPoint(int team_no, int pathID);
 
   private:
     // Fields

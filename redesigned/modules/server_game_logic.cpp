@@ -73,7 +73,6 @@ ServerGameLogic * gSGL;
 #endif
 }   
 
-
 ServerGameLogic::~ServerGameLogic()
 {
 }
@@ -272,6 +271,43 @@ void ServerGameLogic::receiveCreateUnitCommand(int playerId, UnitType type, Poin
 
   requestedCommands.push(newCommand);
 }
+//Finds Creep Spwan point depending on the path number and the team number.
+Point ServerGameLogic::FindCreepSpawnPoint(int team_no, int pathID)
+{
+  Point creepSpawnLocation;
+  if(team_no == 2) // team 2
+  {
+    if(pathID == HIGHPATH)
+    {
+      creepSpawnLocation.x = gameMap_->topOne[0].x; // first point of the top path.
+      creepSpawnLocation.y = gameMap_->topOne[0].y; // first point of the top path.
+    }else if(pathID == MIDPATH)
+    {
+      creepSpawnLocation.x = gameMap_->midOne[0].x; // first point of the top path.
+      creepSpawnLocation.y = gameMap_->midOne[0].y; // first point of the top path.
+    }else
+    {
+      creepSpawnLocation.x = gameMap_->botOne[0].x; // first point of the top path.
+      creepSpawnLocation.y = gameMap_->botOne[0].y; // first point of the top path.
+    }
+  } else if(team_no == 1)// team 2
+  {
+    if(pathID == HIGHPATH)
+    {
+      creepSpawnLocation.x = gameMap_->topTwo[0].x; // first point of the top path.
+      creepSpawnLocation.y = gameMap_->topTwo[0].y; // first point of the top path.
+    }else if(pathID == MIDPATH)
+    {
+      creepSpawnLocation.x = gameMap_->midTwo[0].x; // first point of the top path.
+      creepSpawnLocation.y = gameMap_->midTwo[0].y; // first point of the top path.
+    }else
+    {
+      creepSpawnLocation.x = gameMap_->botTwo[0].x; // first point of the top path.
+      creepSpawnLocation.y = gameMap_->botTwo[0].y; // first point of the top path.
+    }
+  }
+  return creepSpawnLocation;
+}
 
 /* Receive and queue a move player command from a client.
  *
@@ -371,7 +407,8 @@ void ServerGameLogic::updateCreate(CommandData& command)
   switch (command.type) {
     case CREEP:
       {
-        createCreep(team_no, command.location, command.pathID);        
+
+        createCreep(team_no, command.location, command.pathID);    
         break;
       }
     case CASTLE:
@@ -576,8 +613,10 @@ void ServerGameLogic::createCreep(int team_no, Point location, int path_no)
   Point *path= &teams[team_no].paths[path_no % PATH_COUNT][0];
   int movespeed = INIT_CREEP_MOVESPEED;
 
+  Point spawnLocation = FindCreepSpawnPoint(team_no, path_no);
+
   // Add creep to team  
-  Creep *creep = new Creep(uid, location, hp, atkdmg, atkrng, atkspd, percep, atkcnt, spd, direct, path, movespeed);  
+  Creep *creep = new Creep(uid, spawnLocation, hp, atkdmg, atkrng, atkspd, percep, atkcnt, spd, direct, path, movespeed);  
   teams[team_no].addUnit(creep);  
 
   // Pay for creep
