@@ -25,26 +25,59 @@ Projectile::Projectile(int uid, Point pos, int hp, int atkdmg, int atkrng,
     //validation
     //psaved is initialized to NULL so that the game doesn't crash!
 }
-/*
-* Attacks the current target. If it has a weakness, it will apply a 75% damage bonus.
-* QUESTION - If we attack a element we have a weakness against, do we do LESS damage? 
-*/
+/*------------------------------------------------------------------------------
+-- FUNCTION:    Attack
+--
+-- DATE:        2013/04/05
+--
+-- DESIGNER:    Nick Raposo
+-- PROGRAMMER:  Nick Raposo
+--
+-- INTERFACE:   void Attack(void)
+--
+-- RETURNS:     void 
+--
+-- DESCRIPTION:
+--
+------------------------------------------------------------------------------*/
 void Projectile::Attack(void) 
 {
     pTarget->health -= attackDamage;
 }
-/*
-* Check if the target is alive and in range. Set the pTarget to NULL if either are true.
-*/
+/*------------------------------------------------------------------------------
+-- FUNCTION:    CheckTarget
+--
+-- DATE:        2013/04/05
+--
+-- DESIGNER:    Nick Raposo
+-- PROGRAMMER:  Nick Raposo
+--
+-- INTERFACE:   void CheckTarget(void) 
+--
+-- RETURNS:     void 
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void Projectile::CheckTarget(void) 
 {
-    /* Target is DEAD. */
     if(pTarget->health <= 0)
         pTarget = NULL;
 }
-/*
-* If we have an Unit target, attack.
-*/
+/*------------------------------------------------------------------------------
+-- FUNCTION:    Update
+--
+-- DATE:        2013/04/05
+--
+-- DESIGNER:    Nick Raposo, Cody Rossiter
+-- PROGRAMMER:  Nick Raposo
+--
+-- INTERFACE:   void Update(void) 
+--
+-- RETURNS:     void 
+--
+-- DESCRIPTION:
+
+------------------------------------------------------------------------------*/
 void Projectile::Update(void) 
 {
     /* If we have a Target, check their status. */
@@ -56,8 +89,7 @@ void Projectile::Update(void)
         if(inRange(position, pTarget->getPos(), attackRange))
         {
             Attack();
-            Rotate(pTarget->getPos());
-            //I NEED TO DIE NOW
+            health = 0;
         }
         else
         {
