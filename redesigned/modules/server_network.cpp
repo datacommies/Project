@@ -229,13 +229,13 @@ void* ServerNetwork::handleClientRequest(void* args)
     while (1) {
         header_t head;
 
-        cout << "Going to get a head" <<endl;
+       // cout << "Going to get a head" <<endl;
         int n = recv_complete(client_, &head, sizeof(header_t), 0);
 
         if (n <= 0)
             break;
 
-        cout << "Got a head" <<endl;
+       // cout << "Got a head" <<endl;
 
         int x = 0; 
 
