@@ -1,22 +1,40 @@
 #include "GameMap.h"
 
+/*------------------------------------------------------------------------------
+-- FUNCTION:    initPaths
+--
+-- DATE:        April 7, 2013
+--
+-- DESIGNER:    Callum Styan
+-- PROGRAMMER:  Callum Styan
+--
+-- INTERFACE:   no parameters
+--
+-- RETURNS:     void
+--
+-- DESCRIPTION: Gets the next point in the creeps path. If the next point is (-1, -1)
+-- then the creeps next point it is to move to is not updated.  This means that
+-- if the creep is at the last point in it's path it will not move.
+------------------------------------------------------------------------------*/
 void GameMap::initPaths(){
-    //*** team 1 paths ***
+  //*** team 1 paths ***
   Point a;
 
-  a.x = 30; //castle icon is 25x25
-  a.y = 0;
+  //top
+  a.x = 55; //castle icon is 25x25
+  a.y = 25;
   topOne.push_back(a);
   a.x = 500;
-  a.y = 0;
+  a.y = 25;
   topOne.push_back(a);
   a.x = 500;
-  a.y = 470;
+  a.y = 455;
   topOne.push_back(a);
   a.x = -1;
   a.y = -1;
   topOne.push_back(a);
 
+  //bottom
   a.x = 0;
   a.y = 30;
   botOne.push_back(a);
@@ -30,6 +48,7 @@ void GameMap::initPaths(){
   a.y = -1;
   botOne.push_back(a);
 
+  //middle
   a.x = 30;
   a.y = 30;
   midOne.push_back(a);
@@ -48,6 +67,7 @@ void GameMap::initPaths(){
   //*** team 2 paths ***
   Point b;
 
+  //top
   b.x = 500;
   b.y = 470;
   topTwo.push_back(b);
@@ -61,6 +81,7 @@ void GameMap::initPaths(){
   b.y = -1;
   topTwo.push_back(b);
 
+  //bottom
   b.x = 470;
   b.y = 500;
   botTwo.push_back(b);
@@ -74,6 +95,7 @@ void GameMap::initPaths(){
   b.y = -1;
   botTwo.push_back(b);
 
+  //middle
   b.x = 470;
   b.y = 470;
   midTwo.push_back(b);
@@ -95,8 +117,8 @@ void GameMap::initCastlePositions(){
     castle1.y = 0;
 
     //team 2 castle position, bottom right corner
-    castle2.x = 500;
-    castle2.y = 500;
+    castle2.x = MAP_X - 50;
+    castle2.y = MAP_Y - 55;
 }
 
 void GameMap::initPlayerPositions(){

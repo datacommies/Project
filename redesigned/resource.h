@@ -7,6 +7,7 @@
 #include "units/Point.h"
 // Defines --------------------------------------------------------------------
 
+//these aren't used, check game map class
 #define MAPWIDTH  500 //TODO: change placeholder value
 #define MAPHEIGHT 500 //TODO: change placeholder value
 

@@ -2,14 +2,10 @@
 #define GAME_MAP_H
 
 #include "Point.h"
-class GameMap;
 #include "../modules/server_game_logic.h"
-
 #include <stdio.h>
 #include <stdlib.h> 
-
 #include "../resource.h"
-
 #include <string>
 #include <queue>        
 #include <map>          
@@ -17,7 +13,14 @@ class GameMap;
 #include "../units/unit.h"
 #include <vector>
 
+//forward declaration for using a pointer
+class GameMap;
+
 #define TEAM_NOT_FOUND 2
+
+//map size
+#define MAP_X 800
+#define MAP_Y 600
 
 class GameMap{
   public:

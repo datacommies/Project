@@ -78,6 +78,8 @@ struct CommandData {
   int pathID;
 };
 
+class GameMap;
+
 class ServerGameLogic
 {
   public:
