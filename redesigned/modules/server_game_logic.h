@@ -102,6 +102,7 @@ class ServerGameLogic
     void playerConnect();
     int getWinner();
     void initializeTeams(std::vector<player_matchmaking_t> players);
+    int getPlayerRole(int teamNumber, int playerID);
     void handleDeaths();
 
   private:
@@ -133,7 +134,7 @@ class ServerGameLogic
     
     void createCreep(int team_no, Point location, int path_no = 0);
     void createTower(int team_no, Point location);
-    void createPlayer(int team_no, Point location, int client_id);
+    void createPlayer(int team_no, Point location, int client_id, int role);
     void respawnPlayer(Player* player, Point location);
     static void setAlarm();
     static void updateTimer(int i);

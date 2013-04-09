@@ -217,7 +217,7 @@ void ServerGameLogic::initializeCurrency()
 void ServerGameLogic::initializePlayers(std::vector<player_matchmaking_t> players)
 {
   for (std::vector<player_matchmaking_t>::iterator it = players.begin(); it != players.end(); ++it) {
-    createPlayer(it->team, it->team == 0 ? gameMap_->team0start[0] : gameMap_->team1start[0], it->pid);
+    createPlayer(it->team, it->team == 0 ? gameMap_->team0start[0] : gameMap_->team1start[0], it->pid, it->role);
   }
 }
 
@@ -346,7 +346,6 @@ void ServerGameLogic::updateCreate(CommandData& command)
   int x = command.location.x;
   int y = command.location.y;
 
-
   if ( !(teams[0].isAlive() && teams[1].isAlive()) ) {
     gameState_ = WON_GAME;
     fprintf(stderr, "Game is already over!! file: %s line %d\n", __FILE__, __LINE__);
@@ -355,6 +354,12 @@ void ServerGameLogic::updateCreate(CommandData& command)
 
   if ( (team_no = WhichTeam(command.playerID) == NOT_FOUND) ) {
     fprintf(stderr, "playerID not found file: %s line %d\n", __FILE__, __LINE__);
+    return;
+  }
+
+  // If we aren't a builder (role 0) break and don't allow a build.
+  if(getPlayerRole(team_no, command.playerID) != 0)
+  {
     return;
   }
 
@@ -658,11 +663,11 @@ void ServerGameLogic::createTower(int team_no, Point location)
  * RETURNS:
  * NOTES:   
  */
-void ServerGameLogic::createPlayer(int team_no, Point location, int client_id)
+void ServerGameLogic::createPlayer(int team_no, Point location, int client_id, int role)
 {
   int uid = next_unit_id_++;
 
-  Player *player = new Player(uid, client_id, location);
+  Player *player = new Player(uid, client_id, location, role);
   player->setSpeed(5);
   teams[team_no].addUnit(player);
 }
@@ -731,6 +736,22 @@ void ServerGameLogic::handleCastleDeath()
   // Game over 
   printf("Game over\n");
   gameState_ = GAME_END;
+}
+
+// Returns the role given a playerID and team number;
+int ServerGameLogic::getPlayerRole(int teamNumber, int playerID)
+{
+  for (std::vector<Player*>::iterator it = teams[teamNumber].players.begin(); it != teams[teamNumber].players.end(); ++it)
+  {
+    std::cout << "player id: " << playerID << std::endl;
+    std::cout << "client id: " << (*it)->clientID << std::endl;
+    if((*it)->clientID == playerID)
+    {
+      return (*it)->role;
+    }
+  }
+
+  return -1;
 }
 
 // To test this class use  g++ -DTESTCLASS -g -Wall server_game_logic.cpp ../build/units/*.o
