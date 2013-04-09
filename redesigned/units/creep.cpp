@@ -122,7 +122,9 @@ int Creep::getTargetDirection(int p1, int p2) {
 -- DESCRIPTION: Logical steps for updating the creep. Overrides Unit::Update
 -- 				to add in movement. 
 ------------------------------------------------------------------------------*/
-void Creep::Update(Team& team) {
+void Creep::Update(Team& team)
+{
+    //if we are within half our our speed tot he piuint
     /* Check if we are at the next path point.  */
     if(pPath->x == position.x && pPath->y == position.y) {
         nextPoint();
@@ -139,10 +141,6 @@ void Creep::Update(Team& team) {
 
     if(pTarget != NULL && pSaved == NULL)
         pSaved = &position;
-
-    if(pTarget == NULL) {
-        FindTarget(&team);    
-    }
     
     /* If we found a new Target. */
     if(pTarget != NULL){
@@ -174,8 +172,8 @@ void Creep::Update(Team& team) {
 --
 -- DATE:        2013/04/05
 --
--- DESIGNER:    Chris Porter
--- PROGRAMMER:  Chris Porter
+-- DESIGNER:    Nick Raposo, Cody Rossiter, Chris Porter
+-- PROGRAMMER:  Nick Raposo, Cody Rossiter
 --
 -- INTERFACE:   void Move( Point pt )
 --				
@@ -188,13 +186,41 @@ void Creep::Update(Team& team) {
 --				travel. (-1 = left, 0 = nowhere, 1 = right), then we times
 --				this by the speed of the creep to move in the correct direction.
 --
+-- NOTES:       Fixed so it actually works now... Added a range check to the point
+--              so that if you are within the move distance of the paths point
+--              you will move directly to the point instead of getting stuck forever
+--              within one pixel of the paths point.
 ------------------------------------------------------------------------------*/
 void Creep::Move( Point pt ) {
-    position.x += getTargetDirection(position.x, pt.x) * moveSpeed;
-    position.y += getTargetDirection(position.y, pt.y) * moveSpeed;
+    if((pPath->x - moveSpeed < position.x && pPath->x + moveSpeed > position.x) 
+        && (pPath->y - moveSpeed < position.y && pPath->y + moveSpeed > position.y)) 
+    {
+        position.x = pPath->x;
+        position.y = pPath->y;
+    }
+    else
+    {
+        position.x += getTargetDirection(position.x, pt.x) * moveSpeed;
+        position.y += getTargetDirection(position.y, pt.y) * moveSpeed;
+    }
 }
-
-void Creep::nextPoint(){
+/*------------------------------------------------------------------------------
+-- FUNCTION:    nextPoint
+--
+-- DATE:        2013/04/09
+--
+-- DESIGNER:    Nick Raposo
+-- PROGRAMMER:  Nick Raposo
+--
+-- INTERFACE:   void nextPoint(void)
+--
+-- RETURNS:     void 
+--
+-- DESCRIPTION: If we are not at the end of the path we set the next point
+--              to go to.
+------------------------------------------------------------------------------*/
+void Creep::nextPoint()
+{
         ++pPath;
         if(pPath->x == -1 && pPath->y == -1)
         {
