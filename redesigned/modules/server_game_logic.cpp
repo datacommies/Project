@@ -757,6 +757,7 @@ void ServerGameLogic::handleDeaths()
             handleTowerDeath(teams[i].towers[j]);
       }
   }
+  updateMaps();
 }
 
 void ServerGameLogic::handlePlayerDeath(Player *player)
