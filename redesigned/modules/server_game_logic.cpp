@@ -479,27 +479,14 @@ void ServerGameLogic::update()
 
   for (int i = 0; i < teams[0].players.size(); ++i)
   {
-    switch(teams[0].players[i]->direction)
-    {
-      case UP:
-        //validate
-        teams[0].players[i]->position.y-= teams[0].players[i]->moveSpeed;
-        break;
-      case DOWN:
-        //validate
-        teams[0].players[i]->position.y+= teams[0].players[i]->moveSpeed;
-        break;
-      case LEFT:
-        //validate
-        teams[0].players[i]->position.x-= teams[0].players[i]->moveSpeed;
-        break;
-      case RIGHT:
-        //validate
-        teams[0].players[i]->position.x+= teams[0].players[i]->moveSpeed;
-        break;
-      default:
-        break;
-    }
+    if (teams[0].players[i]->direction & UP)
+      teams[0].players[i]->position.y-= teams[0].players[i]->moveSpeed;
+    if (teams[0].players[i]->direction & DOWN)
+      teams[0].players[i]->position.y+= teams[0].players[i]->moveSpeed;
+    if (teams[0].players[i]->direction & LEFT)
+      teams[0].players[i]->position.x-= teams[0].players[i]->moveSpeed;
+    if (teams[0].players[i]->direction & RIGHT)
+      teams[0].players[i]->position.x+= teams[0].players[i]->moveSpeed;
   }
 
   if (requestedCommands.empty())
