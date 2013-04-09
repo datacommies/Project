@@ -679,14 +679,19 @@ void ServerGameLogic::handleDeaths()
   for (size_t i = 0; i < 2; ++i)
   {
     for (size_t j = 0; j < teams[i].players.size(); ++j)        
-      handlePlayerDeath(teams[i].players[j]);
+      if (teams[i].players[j]->health == 0)
+        handlePlayerDeath(teams[i].players[j]);
     for (size_t j = 0; j < teams[i].creeps.size(); ++j)        
-      handleCreepDeath(teams[i].creeps[j]);
+      if (teams[i].creeps[j]->health == 0)
+        handleCreepDeath(teams[i].creeps[j]);
     for (size_t j = 0; j < teams[i].towers.size(); ++j)
-      if (j == 0)
-        handleCastleDeath();
-      else
-        handleTowerDeath(teams[i].towers[j]);
+      if (teams[i].towers[j]->health == 0)
+      {
+        if (j == 0)
+            handleCastleDeath();
+        else
+            handleTowerDeath(teams[i].towers[j]);
+      }
   }
 }
 
