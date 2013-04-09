@@ -460,7 +460,16 @@ void Graphics::initLobbyWindow()
  * NOTES:    
  */
 void Graphics::takeRole()
-{
+{   // Set your role in clientGameLogic
+    if((long)this <= 15)
+    {
+        globalGraphics->clientGameLogic_.clientNetwork_.p.role = ((long)this) - 11;
+    }
+    else
+    {
+        globalGraphics->clientGameLogic_.clientNetwork_.p.role = ((long)this) - 21;
+    }
+
     switch((long) this)
     {
         case 11:

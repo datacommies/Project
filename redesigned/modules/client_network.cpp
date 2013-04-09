@@ -19,6 +19,8 @@ ClientNetwork::ClientNetwork() {
 		memcpy(team_l+i, &empty, sizeof(player_matchmaking_t));
 	}
 
+	p = {{MSG_PLAYER_UPDATE, sizeof(player_matchmaking_t)}, {0}, 0, 0, 0, false};
+
 }
 
 /* Destructor
