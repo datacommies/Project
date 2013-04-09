@@ -294,6 +294,7 @@ class ServerGameLogic
     int WhichTeam(int id);
 
     void giveTeamBonus(int team_no, int amount);
+    void handleDeaths();
     void handlePlayerDeath(Player *player);
     void handleCreepDeath(Creep *creep);
     void handleTowerDeath(Tower *tower);

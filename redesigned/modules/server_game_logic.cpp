@@ -516,6 +516,8 @@ void ServerGameLogic::update()
         break;
     }
   }
+
+  handleDeaths();  
 }
 
 void ServerGameLogic::updateTimer(int i)
@@ -630,6 +632,22 @@ void ServerGameLogic::respawnPlayer(Player* player, Point location)
 void ServerGameLogic::giveTeamBonus(int team_no, int amount)
 {
   teams[team_no].currency += amount;
+}
+
+void ServerGameLogic::handleDeaths()
+{
+  for (size_t i = 0; i < teams.size(); ++i)
+  {
+    for (size_t j = 0; j < teams[i].players.size(); ++j)        
+      handlePlayerDeath(teams[i].players[j]);
+    for (size_t j = 0; j < teams[i].creeps.size(); ++j)        
+      handleCreepDeath(teams[i].creeps[j]);
+    for (size_t j = 0; j < teams[i].towers.size(); ++j)
+      if (j == 0)
+        handleCasteDeath();
+      else
+        handleTowerDeath(teams[i].towers[j]);
+  }
 }
 
 void ServerGameLogic::handlePlayerDeath(Player *player)
