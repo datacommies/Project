@@ -22,7 +22,7 @@ ServerGameLogic * gSGL;
   ServerGameLogic::ServerGameLogic()
 : gameState_(LOBBY), next_unit_id_(1)
 {
-  /*PATH p;
+  PATH p;
   Point a;
   a.x = 0;
   a.y = 0;
@@ -45,7 +45,7 @@ ServerGameLogic * gSGL;
   a.x = 200;
   a.y = 200;
   p2.push_back(a);
-  teams[0].paths.push_back(p2);*/
+  teams[0].paths.push_back(p2);
 
 
   gameMap_ = new GameMap();
