@@ -352,7 +352,7 @@ void Graphics::initJoinWindow()
     sfgPortLabel = sfg::Label::Create("Port:");
 
     // Create the entry boxes.
-    sfgNameEntryBox = sfg::Entry::Create("*ehnam");
+    sfgNameEntryBox = sfg::Entry::Create("Player *");
     sfgNameEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 120.
     sfgServerEntryBox = sfg::Entry::Create("localhost");
     sfgServerEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 120.
@@ -454,49 +454,10 @@ void Graphics::initLobbyWindow()
  * NOTES:    
  */
 void Graphics::takeRole()
-{   // Set your role in clientGameLogic
-    if((long)this <= 15)
-    {
-        globalGraphics->clientGameLogic_.clientNetwork_.p.role = ((long)this) - 11;
-    }
-    else
-    {
-        globalGraphics->clientGameLogic_.clientNetwork_.p.role = ((long)this) - 21;
-    }
-
-    switch((long) this)
-    {
-        case 11:
-            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 0, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
-            break;
-        case 12:
-            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 1, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
-            break;
-        case 13:
-            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 2, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
-            break;
-        case 14:
-            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 3, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
-            break;
-        case 15:
-            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 4, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
-            break;
-        case 21:
-            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(2, 0, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
-            break;
-        case 22:
-            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(2, 1, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
-            break;
-        case 23:
-            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(2, 2, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
-            break;
-        case 24:
-            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(2, 3, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
-            break;
-        case 25:
-            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(2, 4, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
-            break;
-    }
+{
+    int role = (long) this / 10;
+    int team = ((long) this % 10) - 1;
+    globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(role, team, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
 }
 
 
@@ -655,7 +616,7 @@ void Graphics::drawMainMenu(sf::RenderWindow& window)
     titlesc.setTexture(titlesc_bg);
 
     sf::Text title("Child's Play", font, 71);
-    title.setPosition(sf::Vector2f(200, 0));\
+    title.setPosition(sf::Vector2f(200, 0));
     
     window.draw(titlesc);
     window.draw(title);
@@ -765,16 +726,8 @@ void Graphics::drawUnits(sf::RenderWindow& window)
  */
 void Graphics::drawCurrency(sf::RenderWindow& window)
 {
-    sf::RectangleShape currencyBox;
-
-    currencyBox.setPosition(100, 0);
-    currencyBox.setSize(sf::Vector2f(150, 20));
-    currencyBox.setFillColor(sf::Color(0, 0, 0));
-
-    window.draw(currencyBox);
-
     sf::Text currencyText(to_string(clientGameLogic_.currency), font, 20);
-    currencyText.setPosition(100, 0);
+    currencyText.setPosition(5, 675);
     window.draw(currencyText);
 }
 

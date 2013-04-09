@@ -369,8 +369,6 @@ void ServerGameLogic::receiveAttackCommand(int playerId, Direction direction)
  */
 int ServerGameLogic::WhichTeam(int id) {
 
-  updateMaps();
-
   if (mapTeams_[0].units_.find(id) != mapTeams_[0].units_.end())
     return 0;
 
@@ -435,8 +433,8 @@ void ServerGameLogic::updateCreate(CommandData& command)
       return;
   }
 
-  updateMaps();
-
+  mapTeams_[0].build(teams[0]);
+  mapTeams_[1].build(teams[1]);
   // Update the our map 
   /*
   Location location;
@@ -464,7 +462,8 @@ void ServerGameLogic::updateAttack(CommandData& command)
   }
 
   // Attack!!
-  updateMaps();
+  mapTeams_[0].build(teams[0]);
+  mapTeams_[1].build(teams[1]);
 }
 
 void ServerGameLogic::updateMovePlayer(CommandData& command)
@@ -472,8 +471,6 @@ void ServerGameLogic::updateMovePlayer(CommandData& command)
   int team_no;
   Player* temp;
   
-  updateMaps();
-
   if ( !(teams[0].isAlive() && teams[1].isAlive()) ) {
     fprintf(stderr, "Game is already over!! file: %s line %d\n", __FILE__, __LINE__);
     return;
@@ -487,9 +484,7 @@ void ServerGameLogic::updateMovePlayer(CommandData& command)
     return; // not found
   }
 
-  temp = teams[0].findPlayer(command.playerID);
-  if (temp == 0) 
-    temp = teams[1].findPlayer(command.playerID);
+  temp = teams[team_no].findPlayer(command.playerID);
 
   if(temp == 0)
   {
@@ -500,7 +495,8 @@ void ServerGameLogic::updateMovePlayer(CommandData& command)
   temp->direction = command.direction;
   std::cout << "moving player" << std::endl;
 
-  updateMaps();
+  mapTeams_[0].build(teams[0]);
+  mapTeams_[1].build(teams[1]);
 }
 
 void ServerGameLogic::updateMoveUnit(CommandData& command)
@@ -511,7 +507,8 @@ void ServerGameLogic::updateMoveUnit(CommandData& command)
   }
 
 
-  updateMaps();
+  mapTeams_[0].build(teams[0]);
+  mapTeams_[1].build(teams[1]);
 }
 
 /* Processes all waiting commands.
@@ -524,7 +521,9 @@ void ServerGameLogic::updateMoveUnit(CommandData& command)
 void ServerGameLogic::update()
 {      
 
-  updateMaps();
+  mapTeams_[0].build(teams[0]);
+  mapTeams_[1].build(teams[1]);
+
 
 #ifdef DTESTCLASS
   printf("team 0\n");
@@ -540,24 +539,14 @@ void ServerGameLogic::update()
 
   for (unsigned int i = 0; i < teams[0].players.size(); ++i)
   {
-
-    //Point new_position = teams[0].players[i]->position;
-
     if (teams[0].players[i]->direction & UP)
       teams[0].players[i]->position.y-= teams[0].players[i]->moveSpeed;
-      //new_position.y-=teams[0].players[i]->moveSpeed;
-
     if (teams[0].players[i]->direction & DOWN)
       teams[0].players[i]->position.y+= teams[0].players[i]->moveSpeed;
-      //new_position.y+= teams[0].players[i]->moveSpeed;
-
     if (teams[0].players[i]->direction & LEFT)
       teams[0].players[i]->position.x-= teams[0].players[i]->moveSpeed;
     if (teams[0].players[i]->direction & RIGHT)
       teams[0].players[i]->position.x+= teams[0].players[i]->moveSpeed;
-
-//    if (mapTeams_[0].isValidPosition(new_position))
-//      teams[0].players[i]->position = new_position;
   }
 
   if (requestedCommands.empty())
@@ -587,10 +576,8 @@ void ServerGameLogic::update()
         break;
     }
   }
-
-  updateMaps();
-  
-  handleDeaths();
+  mapTeams_[0].build(teams[0]);
+  mapTeams_[1].build(teams[1]);
 }
 
 void ServerGameLogic::updateTimer(int i)
@@ -644,9 +631,9 @@ void ServerGameLogic::createCreep(int team_no, Point location, int path_no)
   
   int hp = INIT_CREEP_HP;
   int atkdmg = INIT_CREEP_ATKDMG;
-  int atkrng = INIT_CREEP_ATKRNG;
+  int atkrng = INIT_CREEP_ATKRNG * 10;
   int atkspd = INIT_CREEP_ATKSPD;
-  int percep = INIT_CREEP_PERCEP;
+  int percep = INIT_CREEP_PERCEP * 10;
   int atkcnt = INIT_CREEP_ATKCNT;
   int spd = INIT_CREEP_SPD;
   Direction direct = Direction();
@@ -793,13 +780,6 @@ void ServerGameLogic::handleCastleDeath()
   // Game over 
   printf("Game over\n");
   gameState_ = GAME_END;
-}
-
-void ServerGameLogic::updateMaps() {
-
-  mapTeams_[0].build(teams[0]);
-  mapTeams_[1].build(teams[1]);
-  mapBoth_.merge(mapTeams_[0], mapTeams_[1]);
 }
 
 // Returns the role given a playerID and team number;
