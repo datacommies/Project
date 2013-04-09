@@ -22,7 +22,7 @@ ServerGameLogic * gSGL;
   ServerGameLogic::ServerGameLogic()
 : gameState_(LOBBY), next_unit_id_(1)
 {
-  PATH p;
+  /*PATH p;
   Point a;
   a.x = 0;
   a.y = 0;
@@ -45,11 +45,12 @@ ServerGameLogic * gSGL;
   a.x = 200;
   a.y = 200;
   p2.push_back(a);
-  teams[0].paths.push_back(p2);
+  teams[0].paths.push_back(p2);*/
 
-  
+
   gameMap_ = new GameMap();
   gameMap_->initMap();
+
 #if 0
 #ifndef TESTCLASS
   Creep c;
@@ -146,7 +147,7 @@ void ServerGameLogic::initializeCastles()
 
 void ServerGameLogic::initializeCreeps()
 {
-  for (int team_i=0; team_i<2; team_i++){
+  /*for (int team_i=0; team_i<2; team_i++){
     for (int j=0; j<INIT_NUM_CREEPS; j++) {
       Point pos = Point();
       
@@ -161,7 +162,9 @@ void ServerGameLogic::initializeCreeps()
 
       createCreep(team_i, pos, j % PATH_COUNT);
     }
-  }
+  }*/
+
+
 
   /*Point pos = Point(230, 230);
   int uid = next_unit_id_++;
