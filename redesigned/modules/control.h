@@ -80,6 +80,9 @@ private:
 	ClientGameLogic* _clientGameLogicModule;
 	Graphics* _graphicsModule;
 	
+	int _currentLane;
+	Point _towerPlacement;
+	
 	// Wrapper Functions
 	void CallExitGameEvent();
 	void CallEnterLobbyEvent();
@@ -89,10 +92,6 @@ private:
 	void CallAttackEvent(Direction direction);
 
 	void CallUnitTypeCreationEvent(UnitType ttype);
-	
-	
-	int _currentLane;
-	Point _towerPlacement;
 };
 
 #endif
