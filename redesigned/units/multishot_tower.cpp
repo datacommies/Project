@@ -64,5 +64,4 @@ void MultiShotTower::Attack(Team* team)
             break;
 
     }
-    
 }
