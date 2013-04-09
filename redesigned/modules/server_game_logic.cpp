@@ -216,7 +216,7 @@ void ServerGameLogic::initializeCurrency()
 void ServerGameLogic::initializePlayers(std::vector<player_matchmaking_t> players)
 {
   for (std::vector<player_matchmaking_t>::iterator it = players.begin(); it != players.end(); ++it) {
-    createPlayer(it->team, it->team == 0 ? gameMap_->team0start[0] : gameMap_->team1start[0], it->pid);
+    createPlayer(it->team, it->team == 0 ? gameMap_->team0start[0] : gameMap_->team1start[0], it->pid, it->role);
   }
 }
 
@@ -382,7 +382,6 @@ void ServerGameLogic::updateCreate(CommandData& command)
   int x = command.location.x;
   int y = command.location.y;
 
-
   if ( !(teams[0].isAlive() && teams[1].isAlive()) ) {
     gameState_ = WON_GAME;
     fprintf(stderr, "Game is already over!! file: %s line %d\n", __FILE__, __LINE__);
@@ -391,6 +390,12 @@ void ServerGameLogic::updateCreate(CommandData& command)
 
   if ( (team_no = WhichTeam(command.playerID) == NOT_FOUND) ) {
     fprintf(stderr, "playerID not found file: %s line %d\n", __FILE__, __LINE__);
+    return;
+  }
+
+  // If we aren't a builder (role 0) break and don't allow a build.
+  if(getPlayerRole(team_no, command.playerID) != 0)
+  {
     return;
   }
 
@@ -423,12 +428,16 @@ void ServerGameLogic::updateCreate(CommandData& command)
       return;
   }
 
+  mapTeams_[0].build(teams[0]);
+  mapTeams_[1].build(teams[1]);
   // Update the our map 
+  /*
   Location location;
   location.pos  = command.location;
   location.type = command.type;
   mapTeams_[team_no].units_[next_unit_id_] = location;
   mapTeams_[team_no].grid_[x][y] = next_unit_id_;
+  */
 }
 
 void ServerGameLogic::updateAttack(CommandData& command)
@@ -448,6 +457,8 @@ void ServerGameLogic::updateAttack(CommandData& command)
   }
 
   // Attack!!
+  mapTeams_[0].build(teams[0]);
+  mapTeams_[1].build(teams[1]);
 }
 
 void ServerGameLogic::updateMovePlayer(CommandData& command)
@@ -478,6 +489,9 @@ void ServerGameLogic::updateMovePlayer(CommandData& command)
 
   temp->direction = command.direction;
   std::cout << "moving player" << std::endl;
+
+  mapTeams_[0].build(teams[0]);
+  mapTeams_[1].build(teams[1]);
 }
 
 void ServerGameLogic::updateMoveUnit(CommandData& command)
@@ -486,6 +500,10 @@ void ServerGameLogic::updateMoveUnit(CommandData& command)
     fprintf(stderr, "Game is already over!! file: %s line %d\n", __FILE__, __LINE__);
     return;
   }
+
+
+  mapTeams_[0].build(teams[0]);
+  mapTeams_[1].build(teams[1]);
 }
 
 /* Processes all waiting commands.
@@ -553,19 +571,23 @@ void ServerGameLogic::update()
         break;
     }
   }
+  mapTeams_[0].build(teams[0]);
+  mapTeams_[1].build(teams[1]);
 }
 
 void ServerGameLogic::updateTimer(int i)
 {
   signal(SIGALRM, updateTimer);
 
-  //std::cout << "Update" <<std::endl;
+  std::cout << "Update" <<std::endl;
 
 #ifndef TESTCLASS
   AiUpdate(gSGL->teams[0], gSGL->teams[1]);
 #endif
 
   gSGL->update();
+
+  gSGL->handleDeaths();
 
   // Call network update function
   ServerGameLogic::setAlarm();
@@ -630,19 +652,48 @@ void ServerGameLogic::createCreep(int team_no, Point location, int path_no)
  *          decremented accordingly.
  * RETURNS:
  * NOTES:   
+ *
+ * REVISIONS: Kevin - Only creates tower if the chosen location is within the team's half
+ *                  of the map AND there is enough currency.
  */
 void ServerGameLogic::createTower(int team_no, Point location)
 {
-  int uid = next_unit_id_++;
+   Point castleLoc;   
+  double distX, distY;
+  int maxTowerDist, dist;
+  
+  // calculate maxDist tower can be created from the castle 
+  //    based on (((MAPWIDTH + MAPHEIGHT) / 2) - initial tower attack range)
+  maxTowerDist = (((MAPWIDTH + MAPHEIGHT) / 2) - INIT_TOWER_ATKRNG);
+  
+  // get location of team's castle                 
+  for(std::vector<Tower*>::iterator it = teams[team_no].towers.begin(); it != teams[team_no].towers.end(); ++it)
+    if ((*it)->getType() == CASTLE) // then this is the team's castle
+      castleLoc = (*it)->getPos();  // castle location
+    
+  // get distance of proposed location from castle
+  distX = abs(location.x - castleLoc.x);
+  distY = abs(location.y - castleLoc.y);
+  dist = distX + distY;
+  
+  // if( chosen distance from player's team's castle is <= maxTowerDist && 
+  //       TOWER_COST <= team currency ) then carry on and create a tower
+  if((dist <= maxTowerDist) && (TOWER_COST <= teams[team_no].currency)){
+  
+    int uid = next_unit_id_++;
 
-  // Add tower to team
-  Tower *tower = new Tower(uid, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
+    // create new tower
+    Tower *tower = new Tower(uid, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
                            INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);
+    // Add tower to team
+    teams[team_no].addUnit(tower);
 
-  teams[team_no].addUnit(tower);
+    // Pay for tower
+    teams[team_no].currency -= TOWER_COST;
 
-  // Pay for tower
-  teams[team_no].currency -= TOWER_COST;
+    // Update the Map!
+    gameMap_->addUnit(tower, location);
+  }
 }
 /* Creates a tower.
  *
@@ -651,11 +702,11 @@ void ServerGameLogic::createTower(int team_no, Point location)
  * RETURNS:
  * NOTES:   
  */
-void ServerGameLogic::createPlayer(int team_no, Point location, int client_id)
+void ServerGameLogic::createPlayer(int team_no, Point location, int client_id, int role)
 {
   int uid = next_unit_id_++;
 
-  Player *player = new Player(uid, client_id, location);
+  Player *player = new Player(uid, client_id, location, role);
   player->setSpeed(5);
   teams[team_no].addUnit(player);
 }
@@ -669,6 +720,27 @@ void ServerGameLogic::respawnPlayer(Player* player, Point location)
 void ServerGameLogic::giveTeamBonus(int team_no, int amount)
 {
   teams[team_no].currency += amount;
+}
+
+void ServerGameLogic::handleDeaths()
+{
+  for (size_t i = 0; i < 2; ++i)
+  {
+    for (size_t j = 0; j < teams[i].players.size(); ++j)        
+      if (teams[i].players[j]->health == 0)
+        handlePlayerDeath(teams[i].players[j]);
+    for (size_t j = 0; j < teams[i].creeps.size(); ++j)        
+      if (teams[i].creeps[j]->health == 0)
+        handleCreepDeath(teams[i].creeps[j]);
+    for (size_t j = 0; j < teams[i].towers.size(); ++j)
+      if (teams[i].towers[j]->health == 0)
+      {
+        if (j == 0)
+            handleCastleDeath();
+        else
+            handleTowerDeath(teams[i].towers[j]);
+      }
+  }
 }
 
 void ServerGameLogic::handlePlayerDeath(Player *player)
@@ -703,6 +775,22 @@ void ServerGameLogic::handleCastleDeath()
   // Game over 
   printf("Game over\n");
   gameState_ = GAME_END;
+}
+
+// Returns the role given a playerID and team number;
+int ServerGameLogic::getPlayerRole(int teamNumber, int playerID)
+{
+  for (std::vector<Player*>::iterator it = teams[teamNumber].players.begin(); it != teams[teamNumber].players.end(); ++it)
+  {
+    std::cout << "player id: " << playerID << std::endl;
+    std::cout << "client id: " << (*it)->clientID << std::endl;
+    if((*it)->clientID == playerID)
+    {
+      return (*it)->role;
+    }
+  }
+
+  return -1;
 }
 
 // To test this class use  g++ -DTESTCLASS -g -Wall server_game_logic.cpp ../build/units/*.o
