@@ -328,6 +328,8 @@ void ServerGameLogic::receiveAttackCommand(int playerId, Direction direction)
  */
 int ServerGameLogic::WhichTeam(int id) {
 
+  updateMaps();
+
   if (mapTeams_[0].units_.find(id) != mapTeams_[0].units_.end())
     return 0;
 
@@ -423,6 +425,8 @@ void ServerGameLogic::updateMovePlayer(CommandData& command)
   int team_no;
   Player* temp;
   
+  updateMaps();
+
   if ( !(teams[0].isAlive() && teams[1].isAlive()) ) {
     fprintf(stderr, "Game is already over!! file: %s line %d\n", __FILE__, __LINE__);
     return;
@@ -436,7 +440,9 @@ void ServerGameLogic::updateMovePlayer(CommandData& command)
     return; // not found
   }
 
-  temp = teams[team_no].findPlayer(command.playerID);
+  temp = teams[0].findPlayer(command.playerID);
+  if (temp == 0) 
+    temp = teams[1].findPlayer(command.playerID);
 
   if(temp == 0)
   {
