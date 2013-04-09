@@ -369,6 +369,8 @@ void ServerGameLogic::receiveAttackCommand(int playerId, Direction direction)
  */
 int ServerGameLogic::WhichTeam(int id) {
 
+  updateMaps();
+
   if (mapTeams_[0].units_.find(id) != mapTeams_[0].units_.end())
     return 0;
 
@@ -462,8 +464,7 @@ void ServerGameLogic::updateAttack(CommandData& command)
   }
 
   // Attack!!
-  mapTeams_[0].build(teams[0]);
-  mapTeams_[1].build(teams[1]);
+  updateMaps();
 }
 
 void ServerGameLogic::updateMovePlayer(CommandData& command)
@@ -495,8 +496,7 @@ void ServerGameLogic::updateMovePlayer(CommandData& command)
   temp->direction = command.direction;
  // std::cout << "moving player" << std::endl;
 
-  mapTeams_[0].build(teams[0]);
-  mapTeams_[1].build(teams[1]);
+  updateMaps();
 }
 
 void ServerGameLogic::updateMoveUnit(CommandData& command)
@@ -507,8 +507,7 @@ void ServerGameLogic::updateMoveUnit(CommandData& command)
   }
 
 
-  mapTeams_[0].build(teams[0]);
-  mapTeams_[1].build(teams[1]);
+  updateMaps();
 }
 
 /* Processes all waiting commands.
@@ -521,9 +520,8 @@ void ServerGameLogic::updateMoveUnit(CommandData& command)
 void ServerGameLogic::update()
 {      
 
-  mapTeams_[0].build(teams[0]);
-  mapTeams_[1].build(teams[1]);
 
+  updateMaps();
 
 #ifdef DTESTCLASS
   printf("team 0\n");
@@ -576,9 +574,9 @@ void ServerGameLogic::update()
         break;
     }
   }
-  mapTeams_[0].build(teams[0]);
-  mapTeams_[1].build(teams[1]);
+  updateMaps();
 }
+
 
 void ServerGameLogic::updateTimer(int i)
 {
@@ -795,6 +793,14 @@ int ServerGameLogic::getPlayerRole(int teamNumber, int playerID)
   }
 
   return -1;
+}
+
+void ServerGameLogic::updateMaps() {
+
+  mapTeams_[0].build(teams[0]);
+  mapTeams_[1].build(teams[1]);
+  mapBoth_.merge(mapTeams_[0], mapTeams_[1]);
+
 }
 
 // To test this class use  g++ -DTESTCLASS -g -Wall server_game_logic.cpp ../build/units/*.o
