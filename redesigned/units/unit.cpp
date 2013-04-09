@@ -265,7 +265,7 @@ void Unit::Update(Team& team) {
 
     /* If we found a new Target, and they are in range.. */
     if( pTarget != NULL ) {
-        //Attack();
+        Attack();
     }
 }
 
