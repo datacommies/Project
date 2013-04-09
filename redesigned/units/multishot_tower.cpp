@@ -63,6 +63,7 @@ void MultiShotTower::Attack(Team* team)
                 && team->creeps[i].health > 0 && pTarget->id != team->creeps[i].id )
             {
                 team->creeps[i].health -= attackDamage;
+                break;
             }
         }
     }     
