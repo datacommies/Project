@@ -128,14 +128,6 @@ void * init (void * in)
                 Control::get()->RunAllKeys();
             } else if (event.type == sf::Event::KeyReleased)
             {
-                if (!sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-                    Control::get()->AddNewUnCalledKey(sf::Keyboard::W);
-                if (!sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-                    Control::get()->AddNewUnCalledKey(sf::Keyboard::A);
-                if (!sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-                    Control::get()->AddNewUnCalledKey(sf::Keyboard::S);
-                if (!sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-                    Control::get()->AddNewUnCalledKey(sf::Keyboard::D);
                 Control::get()->RunAllKeys();
             }
         }
@@ -164,6 +156,8 @@ void * init (void * in)
                     unassigned += "\n";
                 }
                 g->unassignedPlayersList->SetText(unassigned);
+
+                g->updateLobbyRoles();
             }
 
             // Update the names on the buttons.
@@ -470,44 +464,38 @@ void Graphics::takeRole()
     switch((long) this)
     {
         case 11:
-            
-            if(globalGraphics != NULL)
-            {
-                strcpy(globalGraphics->clientGameLogic_.clientNetwork_.team_l[0].name, "hello");
-            }
-            cout << "T11" << endl;
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 0, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
             break;
         case 12:
-            cout << "T12" << endl;
-            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 0, true);
-            globalGraphics->clientGameLogic_.clientNetwork_.recvReply();
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 1, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
             break;
         case 13:
-            cout << "T13" << endl;
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 2, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
             break;
         case 14:
-            cout << "T14" << endl;
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 3, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
             break;
         case 15:
-            cout << "T15" << endl;
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(1, 4, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
             break;
         case 21:
-            cout << "T21" << endl;
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(2, 0, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
             break;
         case 22:
-            cout << "T22" << endl;
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(2, 1, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
             break;
         case 23:
-            cout << "T23" << endl;
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(2, 2, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
             break;
         case 24:
-            cout << "T24" << endl;
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(2, 3, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
             break;
         case 25:
-            cout << "T25" << endl;
+            globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(2, 4, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
             break;
     }
 }
+
 
 /* This method updates all the button texts in the lobby with those in the client network team_l and team_r.
  *
@@ -721,7 +709,7 @@ void Graphics::drawUnits(sf::RenderWindow& window)
         // Increment interpolation value, if there is a different between past and current positions.
         if (unit->past_position.x != unit->position.x || unit->past_position.y != unit->position.y)
             //  This increment should be as close as possible to the 1 over amount of time required until the next change in unit->position.
-            unit->inter_value += 1/50.0; // TODO: factor in elapsed time since last draw.
+            unit->inter_value += 1/4.0; // TODO: factor in elapsed time since last draw.
         
         // Interpolation complete: set the past position to the current position and stop interpolation.
         if (unit->inter_value >= 1.0) {
@@ -735,10 +723,10 @@ void Graphics::drawUnits(sf::RenderWindow& window)
             window.draw(castle_sprite);
             drawHealthBar(window, unit->position.x, unit->position.y + castle_sprite.getTextureRect().height, unit->health);
         } 
-        else if (unit->type == CREEP) 
+        else if (unit->type == CREEP)
         {
             // Linear interpolation between a unit's past position and new position.
-            Point interpolated = Lerp(unit->past_position, unit->position, unit->inter_value);
+            Point interpolated = unit->inter_position = Lerp(unit->past_position, unit->position, unit->inter_value);
             // All drawable unit elements use the same interpolated position.
             drawTeamCircle(window, unit->team, interpolated.x, interpolated.y);
             creep_sprite.setPosition(interpolated.x, interpolated.y);
@@ -753,9 +741,13 @@ void Graphics::drawUnits(sf::RenderWindow& window)
         }
         else if (unit->type == PLAYER)
         {
-            player_sprite.setPosition(unit->position.x, unit->position.y);			
+            // Linear interpolation between a unit's past position and new position.
+            Point interpolated = unit->inter_position = Lerp(unit->past_position, unit->position, unit->inter_value);
+            // All drawable unit elements use the same interpolated position.
+            drawTeamCircle(window, unit->team, interpolated.x, interpolated.y);
+            player_sprite.setPosition(interpolated.x, interpolated.y);			
             window.draw(player_sprite);
-            drawHealthBar(window, unit->position.x, unit->position.y + player_sprite.getTextureRect().height, unit->health);
+            drawHealthBar(window, interpolated.x, interpolated.y + player_sprite.getTextureRect().height, unit->health);
         }
     }
     pthread_mutex_unlock( &clientGameLogic_.unit_mutex );
@@ -827,7 +819,7 @@ void Graphics::loadImages()
     creep_sprite.setTexture(creep_tex);
      
     // Load the castle texture.
-    castle_tex.loadFromFile("images/tree.gif");
+    castle_tex.loadFromFile("images/castle.png");
     castle_sprite.setTexture(castle_tex);
 
     // Load the player texture.
