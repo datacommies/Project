@@ -286,7 +286,7 @@ void GameMap::build(Team teams[]) {
   int totalTeams = 2;
   reset();
 
-  for (size_t i=0; i<totalTeams; i++) {
+  for (int i=0; i<totalTeams; i++) {
 
     int team_no = i;
 
