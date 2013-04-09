@@ -22,7 +22,7 @@ ServerGameLogic * gSGL;
   ServerGameLogic::ServerGameLogic()
 : gameState_(LOBBY), next_unit_id_(1)
 {
-  PATH p;
+  /*PATH p;
   Point a;
   a.x = 0;
   a.y = 0;
@@ -45,9 +45,12 @@ ServerGameLogic * gSGL;
   a.x = 200;
   a.y = 200;
   p2.push_back(a);
-  teams[0].paths.push_back(p2);
+  teams[0].paths.push_back(p2);*/
+
+
   gameMap_ = new GameMap();
   gameMap_->initMap();
+
 #if 0
 #ifndef TESTCLASS
   Creep c;
@@ -95,12 +98,12 @@ void ServerGameLogic::initializeCastles()
 {
 
   int uid = next_unit_id_++;
-  Point pos;
+  /*Point pos;
   pos.x = 0;
-  pos.y = 0;
+  pos.y = 0;*/
 
   // Team 0
-  Castle *castle1 = new Castle(uid, pos, INIT_CASTLE_HP, INIT_CASTLE_ATKDMG, INIT_CASTLE_ATKRNG, INIT_CASTLE_ATKSPD,
+  Castle *castle1 = new Castle(uid, gameMap_->castle1, INIT_CASTLE_HP, INIT_CASTLE_ATKDMG, INIT_CASTLE_ATKRNG, INIT_CASTLE_ATKSPD,
       INIT_CASTLE_PERCEP, INIT_CASTLE_ATKCNT, INIT_CASTLE_WALL, 0);
   teams[0].towers.push_back(castle1);
   teams[0].units.push_back(castle1);
@@ -110,9 +113,9 @@ void ServerGameLogic::initializeCastles()
   
   // Team 1
   uid = next_unit_id_++;
-  pos.x = MAX_X; // TODO: MAX_X and MAX_Y will  be replaced later when we get map reading functionality working
-  pos.y = MAX_Y; // TODO:
-  Castle *castle2 = new Castle(uid, pos, INIT_CASTLE_HP, INIT_CASTLE_ATKDMG, INIT_CASTLE_ATKRNG, INIT_CASTLE_ATKSPD,
+  //pos.x = MAX_X; // TODO: MAX_X and MAX_Y will  be replaced later when we get map reading functionality working
+  //pos.y = MAX_Y; // TODO:
+  Castle *castle2 = new Castle(uid, gameMap_->castle2, INIT_CASTLE_HP, INIT_CASTLE_ATKDMG, INIT_CASTLE_ATKRNG, INIT_CASTLE_ATKSPD,
       INIT_CASTLE_PERCEP, INIT_CASTLE_ATKCNT, INIT_CASTLE_WALL, 1);
   teams[1].towers.push_back(castle2);
   teams[1].units.push_back(castle2);
@@ -159,6 +162,8 @@ void ServerGameLogic::initializeCreeps()
       createCreep(team_i, pos, j % PATH_COUNT);
     }
   }
+
+
 
   /*Point pos = Point(230, 230);
   int uid = next_unit_id_++;
