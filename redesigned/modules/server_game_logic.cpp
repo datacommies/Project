@@ -386,12 +386,16 @@ void ServerGameLogic::updateCreate(CommandData& command)
       return;
   }
 
+  mapTeams_[0].build(teams[0]);
+  mapTeams_[1].build(teams[1]);
   // Update the our map 
+  /*
   Location location;
   location.pos  = command.location;
   location.type = command.type;
   mapTeams_[team_no].units_[next_unit_id_] = location;
   mapTeams_[team_no].grid_[x][y] = next_unit_id_;
+  */
 }
 
 void ServerGameLogic::updateAttack(CommandData& command)
@@ -411,6 +415,8 @@ void ServerGameLogic::updateAttack(CommandData& command)
   }
 
   // Attack!!
+  mapTeams_[0].build(teams[0]);
+  mapTeams_[1].build(teams[1]);
 }
 
 void ServerGameLogic::updateMovePlayer(CommandData& command)
@@ -441,6 +447,9 @@ void ServerGameLogic::updateMovePlayer(CommandData& command)
 
   temp->direction = command.direction;
   std::cout << "moving player" << std::endl;
+
+  mapTeams_[0].build(teams[0]);
+  mapTeams_[1].build(teams[1]);
 }
 
 void ServerGameLogic::updateMoveUnit(CommandData& command)
@@ -449,6 +458,10 @@ void ServerGameLogic::updateMoveUnit(CommandData& command)
     fprintf(stderr, "Game is already over!! file: %s line %d\n", __FILE__, __LINE__);
     return;
   }
+
+
+  mapTeams_[0].build(teams[0]);
+  mapTeams_[1].build(teams[1]);
 }
 
 /* Processes all waiting commands.
@@ -516,8 +529,10 @@ void ServerGameLogic::update()
         break;
     }
   }
-
-  handleDeaths();  
+  mapTeams_[0].build(teams[0]);
+  mapTeams_[1].build(teams[1]);
+  
+  handleDeaths();
 }
 
 void ServerGameLogic::updateTimer(int i)
