@@ -531,21 +531,21 @@ void ServerGameLogic::update()
   }
   mapTeams_[0].build(teams[0]);
   mapTeams_[1].build(teams[1]);
-  
-  handleDeaths();
 }
 
 void ServerGameLogic::updateTimer(int i)
 {
   signal(SIGALRM, updateTimer);
 
-  //std::cout << "Update" <<std::endl;
+  std::cout << "Update" <<std::endl;
 
 #ifndef TESTCLASS
   AiUpdate(gSGL->teams[0], gSGL->teams[1]);
 #endif
 
   gSGL->update();
+
+  gSGL->handleDeaths();
 
   // Call network update function
   ServerGameLogic::setAlarm();
