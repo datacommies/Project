@@ -4,7 +4,7 @@
 -- DATE:        2013/03/11
 --
 -- MAINTAINERS: Callum Styan, Nick Raposo, Cody Rossiter, Behnam Bastami, 
--- 				Chris Porter
+-- 				Chris Porter, Kevin Tangeman
 --
 -- FUNCTIONS:   Unit constructor
 --              inRange
@@ -43,8 +43,8 @@ Unit::Unit(int uid, Point pos, int hp, int atkdmg,
 --
 -- DATE:        March 26, 2013
 --
--- DESIGNER:    Callum Styan, Steve Lo
--- PROGRAMMER:  Callum Styan, Steve Lo
+-- DESIGNER:    Callum Styan, Steve Lo, Kevin Tangeman
+-- PROGRAMMER:  Callum Styan, Steve Lo, Kevin Tangeman
 --
 -- INTERFACE:   Unit::Unit(int uid, int side, Point pos, int hp, int atkdmg,
 --                         int atkrng, int atkspd, int percep, int atkcnt)
