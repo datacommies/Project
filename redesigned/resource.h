@@ -7,9 +7,10 @@
 #include "units/Point.h"
 // Defines --------------------------------------------------------------------
 
-//these aren't used, check game map class
-#define MAPWIDTH  500 //TODO: change placeholder value
-#define MAPHEIGHT 500 //TODO: change placeholder value
+// these are used for defining maxTowerDist in server_game_logic.cpp
+// maxTowerDist = (((MAPWIDTH + MAPHEIGHT) / 2) - INIT_TOWER_ATKRNG);
+#define MAPWIDTH  800 //TODO: change placeholder value
+#define MAPHEIGHT 600 //TODO: change placeholder value
 
 // Button IDs
 #define ID_JOIN 100

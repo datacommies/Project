@@ -28,6 +28,8 @@ public:
     BasicTower(int uid, int side, Point pos, int hp=100, int atkdmg=0, int atkrng=0,
           int atkspd=0, int percep=0, int atkcnt=0, int wall=0);
           
+          
+          
     virtual void Attack(void);
 
 	
