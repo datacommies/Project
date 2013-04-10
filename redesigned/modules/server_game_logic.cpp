@@ -48,6 +48,7 @@ ServerGameLogic * gSGL;
   p2.push_back(a);
   teams[0].paths.push_back(p2);
 
+  pthread_mutex_init(&unit_mutex, NULL);
 
   gameMap_ = new GameMap();
   gameMap_->initMap();
@@ -681,7 +682,7 @@ for (unsigned int i = 0; i < teams[team].players.size(); ++i) {
 
     for (unsigned int j = 0; j < teams[otherteam].towers.size(); ++j) {
       if (distance(teams[team].players[i]->position, teams[otherteam].towers[j]->position) < 5) {
-        teams[1].towers[j]->health -= 10;
+        teams[otherteam].towers[j]->health -= 10;
         collided = true;
         break;
       }
@@ -712,9 +713,11 @@ for (unsigned int i = 0; i < teams[team].players.size(); ++i) {
 void ServerGameLogic::update()
 { 
   updateMaps();
-
+  
+  pthread_mutex_lock( &unit_mutex );
   updateMovement(0, 1);
   updateMovement(1, 0);
+  pthread_mutex_unlock( &unit_mutex );
 
   if (requestedCommands.empty())
     return;
@@ -959,6 +962,8 @@ void ServerGameLogic::giveTeamBonus(int team_no, int amount)
  */
 void ServerGameLogic::handleDeaths()
 {
+  pthread_mutex_lock( &unit_mutex );
+  
   for (size_t i = 0; i < 2; ++i)
   {
     for (size_t j = 0; j < teams[i].players.size(); ++j)        
@@ -976,6 +981,9 @@ void ServerGameLogic::handleDeaths()
             handleTowerDeath(teams[i].towers[j]);
       }
   }
+  
+  pthread_mutex_unlock( &unit_mutex );
+
   updateMaps();
 }
 /* 
@@ -990,10 +998,11 @@ void ServerGameLogic::handleDeaths()
 void ServerGameLogic::handlePlayerDeath(Player *player)
 {
   // Respawn
-  respawnPlayer(player, gameMap_->team0start[0]); // TODO: made not hardcoded start location
+  respawnPlayer(player, player->team == 0 ? gameMap_->team0start[0] : gameMap_->team1start[0]);
 
   // Give other team some monies
   giveTeamBonus(player->team == 0 ? 1 : 0, PLAYER_KILL_BONUS);
+  player->pendingDelete = false;
 }
 /* 
  *
