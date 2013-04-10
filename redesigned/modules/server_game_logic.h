@@ -89,6 +89,8 @@ class ServerGameLogic
     ServerGameLogic();
     ~ServerGameLogic();
 
+    pthread_mutex_t unit_mutex;
+    
     // Fields
     Team teams[2];
     GameState gameState_;

@@ -8,6 +8,7 @@ using namespace std;
 struct ClientCtx {
     ServerNetwork * sn;
     int client;
+    int team;
 };
 
 /* Constructor
@@ -115,28 +116,20 @@ void ServerNetwork::gameOver(int client_, const int winner)
  * RETURNS: true on success
  *          false on fail
  * NOTES:   Current implementation is to refresh ALL data on each update. */
-bool ServerNetwork::sync(int client_)
+bool ServerNetwork::sync(int client_, int team_)
 {
     int winner = -1;
 
     if(serverGameLogic_.gameState_ == GAME_END)
     {
-        int teamId = 1;
         cout << "GAMER OVER!!" << endl; 
-        for (size_t i = 0; i < serverGameLogic_.teams[0].players.size(); ++i)
-        {
-            if(serverGameLogic_.teams[0].players[i]->clientID == client_)
-                teamId = 0;            
-        }
         winner = serverGameLogic_.getWinner();
 
         if(winner != -1)
         {
-            gameOver(client_, winner == teamId ? WON_GAME : LOST_GAME);
+            gameOver(client_, winner == team_ ? WON_GAME : LOST_GAME);
         }
     }else{
-        int teamId = 0;
-
         //wrap into syncFirstTeam()
         for (size_t i = 0; i < serverGameLogic_.teams[0].towers.size(); ++i)
         {
@@ -161,9 +154,7 @@ bool ServerNetwork::sync(int client_)
         {
             string sc = serverGameLogic_.teams[0].players[i]->serializeMobileUnit();
             send(client_, sc.data(), sc.size(), 0);
-
-            if(serverGameLogic_.teams[0].players[i]->clientID == client_)
-                teamId = 0;            
+       
 
             if (!serverGameLogic_.teams[0].players[i]->isAlive())
                 serverGameLogic_.teams[0].players[i]->pendingDelete = true;
@@ -194,17 +185,16 @@ bool ServerNetwork::sync(int client_)
             string sc = serverGameLogic_.teams[1].players[i]->serializeMobileUnit();
             send(client_, sc.data(), sc.size(), 0);
 
-            if(serverGameLogic_.teams[1].players[i]->clientID == client_)
-                teamId = 1;
 
             if (!serverGameLogic_.teams[1].players[i]->isAlive())
                 serverGameLogic_.teams[1].players[i]->pendingDelete = true;
         }
+        
 
         // Update currency
         currency_t cu = {{}, 0};
         cu.head.type = MSG_RESOURCE_UPDATE;
-        cu.teamCurrency = serverGameLogic_.teams[teamId].currency;
+        cu.teamCurrency = serverGameLogic_.teams[team_].currency;
         cu.head.size = sizeof(currency_t);
         send(client_, (const char*)&cu, sizeof(currency_t), 0);
     }
@@ -261,11 +251,11 @@ void* ServerNetwork::handleInput(void* args)
             //create an iterator
             std::vector<int>::iterator it;
             
-            for (it = thiz->clients_.begin() ; it!= thiz->clients_.end() ; ++it){
+            //for (it = thiz->clients_.begin() ; it!= thiz->clients_.end() ; ++it){
             //for (size_t i = 0; i < thiz->clients_.size(); ++i) {
                // send_chat(thiz->clients_[i], rest);
                 //send_chat(*it, rest);
-            }
+            //}
         }
     }
     
@@ -347,6 +337,7 @@ void* ServerNetwork::handleClient(void* args)
     ClientCtx* ctx = (ClientCtx*)args;
     ServerNetwork* thiz = (ServerNetwork*) ctx->sn;
     int client_ = ctx->client;
+    int team_ = ctx->team;
 
     // Create client request handler thread.
     pthread_create (&thiz->crThread_, NULL, handleClientRequest, args); // start server input handler.
@@ -355,7 +346,7 @@ void* ServerNetwork::handleClient(void* args)
         header_t clear = {MSG_CLEAR, 0};
         if (send(client_, &clear, sizeof(header_t), 0) < 1)
             break;
-        thiz->sync(client_);
+        thiz->sync(client_, team_);
         
         if (thiz->serverGameLogic_.gameState_ == GAME_END)
             break;
@@ -564,12 +555,13 @@ void * ServerNetwork::handle_client_lobby(void * ctx)
                 }              
 
                 serverGameLogic_.initializeTeams(players_);
-
+                ctax->team = player.team;
                 handleClient(ctx);
             }
         }
 
         if (head.type == MSG_START) {
+            ctax->team = player.team;
             handleClient(ctx);
         }
     }
