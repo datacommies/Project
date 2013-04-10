@@ -112,10 +112,8 @@ void ClientNetwork::recvReply() {
 		
 		if(head.type == MSG_GAME_OVER){
 			gameover_t go;
-			cout << "recv game over" << endl;
 			recv_complete(connectsock, ((char*)&go) + sizeof(header_t), sizeof(gameover_t) - sizeof(header_t), 0);
-			cout << "recv game over" << endl;
-			//gl->
+			
 			if (go.winner == WON_GAME){
 				gl->win();
 				cout << "We Won!" << endl;
@@ -126,8 +124,9 @@ void ClientNetwork::recvReply() {
 		}else if(head.type == MSG_RESOURCE_UPDATE){
 			currency_t cu = {{}, 0};
 			recv_complete(connectsock, ((char*)&cu) + sizeof(header_t), sizeof(currency_t) - sizeof(header_t), 0);
+			pthread_mutex_lock( &gl->unit_mutex );
 			gl->currency = cu.teamCurrency;
-			//cout << gl->currency << endl;
+			pthread_mutex_unlock( &gl->unit_mutex );
 		} else if (head.type == MSG_CREATE_UNIT) {
 			unit_t u = {{0}, 0};
 			recv_complete(connectsock, ((char*)&u) + sizeof(header_t), sizeof(unit_t) - sizeof(header_t), 0);
@@ -381,4 +380,23 @@ void ClientNetwork::msg_mapname (char * map) {
 
 void ClientNetwork::msg_chat (char * text) {
 	printf("message: %s\n", text);
+}
+
+int ClientNetwork::recv_complete (int sockfd, void *buf, size_t len, int flags) {
+    size_t bytesRead = 0;
+    ssize_t result;
+    
+    while (bytesRead < len) {
+        result = recv (sockfd, (char*)buf + bytesRead, len - bytesRead, flags);
+        
+        if (result < 1) {
+            cerr << ("Connection terminated by server") << endl;
+            exit(0);
+            return result;
+        }
+        
+        bytesRead += result;
+    }
+    
+    return bytesRead;
 }

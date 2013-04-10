@@ -229,7 +229,7 @@ void* ServerNetwork::handleClientRequest(void* args)
     while (1) {
         header_t head;
 
-        int n = recv_complete(client_, &head, sizeof(header_t), 0);
+        int n = thiz->recv_complete(client_, &head, sizeof(header_t), 0);
 
         if (n <= 0)
             break;
@@ -241,7 +241,7 @@ void* ServerNetwork::handleClientRequest(void* args)
             case MSG_REQUEST_CREATE:
                 request_create_t rc;
                 rc.head = head;
-                x = recv_complete(client_, ((char*)&rc)+sizeof(header_t), sizeof(request_create_t) - sizeof(header_t), 0);
+                x = thiz->recv_complete(client_, ((char*)&rc)+sizeof(header_t), sizeof(request_create_t) - sizeof(header_t), 0);
 
                 if (x <= 0)
                     break;
@@ -255,7 +255,7 @@ void* ServerNetwork::handleClientRequest(void* args)
             case MSG_REQUEST_PLAYER_MOVE:
                 request_player_move_t rpm;
                 rpm.head = head;
-                x = recv_complete(client_, ((char*) &rpm) + sizeof(header_t), sizeof(request_player_move_t) - sizeof(header_t), 0);
+                x = thiz->recv_complete(client_, ((char*) &rpm) + sizeof(header_t), sizeof(request_player_move_t) - sizeof(header_t), 0);
 
                 if (x <=0)
                     break;
@@ -299,7 +299,7 @@ void ServerNetwork::handleRequests()
 /* Receive len amount of byte completely (no partial recv) */
 // returns int bytes read
 // recv_complete
-int recv_complete (int sockfd, void *buf, size_t len, int flags) {
+int ServerNetwork::recv_complete (int sockfd, void *buf, size_t len, int flags) {
     size_t bytesRead = 0;
     ssize_t result;
     
@@ -307,8 +307,7 @@ int recv_complete (int sockfd, void *buf, size_t len, int flags) {
         result = recv (sockfd, (char*)buf + bytesRead, len - bytesRead, flags);
         
         if (result < 1) {
-            cerr << ("Connection terminated by peer") << endl;
-            exit(0);
+            cerr << ("Connection Error") << endl;
             return result;
         }
         

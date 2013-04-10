@@ -26,12 +26,13 @@ public:
     int initSock(int port = PORT_DEFAULT);
     static void* handleInput(void* args);
     friend bool operator == (const player_matchmaking_t&, const player_matchmaking_t&);
-    
+    int  recv_complete (int sockfd, void *buf, size_t len, int flags);
     bool update_all_clients(int message);
     static void* handle_single_client_lobby(void* thing);
     void * handle_client_lobby(void *);
 
     void gameOver(int client_, const int winner);
+
 
 private:
     int sock_;
@@ -52,6 +53,6 @@ private:
     void handleRequests();
 };
 
-int recv_complete(int,void*,size_t,int); //?!!? this might be problematic
+
 
 #endif

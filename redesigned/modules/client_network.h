@@ -43,7 +43,7 @@ public:
    void player_leave (player_matchmaking_t * p);
    void msg_mapname (char * map);
    void msg_chat (char * text);
-   
+   int  recv_complete (int sockfd, void *buf, size_t len, int flags);
    bool updatePlayerLobby (int team, int role, const char* name, bool ready);
 
    void sendReady () {
