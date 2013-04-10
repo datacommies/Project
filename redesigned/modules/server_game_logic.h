@@ -41,6 +41,8 @@
 #define CREEP_KILL_BONUS 10
 #define TOWER_KILL_BONUS 50
 
+#define CREEP_COOLDOWN 2
+
 // This will come actually be read from the map
 #ifndef TESTCLASS
 #define MAX_X 800
@@ -52,6 +54,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 //#include <pthread.h>
 
 #include "../resource.h"
@@ -119,7 +122,8 @@ class ServerGameLogic
     //Ai ai_;
     GameMap *gameMap_;
 
- 
+    // The time a creep was created last for each team respectively.
+    time_t lastCreepTime_[2];
     
     GameLogicMap mapTeams_[2]; 
     GameLogicMap mapBoth_;

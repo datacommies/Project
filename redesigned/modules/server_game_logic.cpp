@@ -57,6 +57,8 @@ ServerGameLogic * gSGL;
   gameMap_ = new GameMap();
   gameMap_->initMap();
 
+  lastCreepTime_[0] = time(NULL);
+  lastCreepTime_[1] = time(NULL);
 #if 0
 #ifndef TESTCLASS
   Creep c;
@@ -517,35 +519,32 @@ void ServerGameLogic::updateCreate(CommandData& command)
   }
 
   updateMaps();
-  std::cout << "1" << std::endl;
   if (!mapTeams_[0].isValidPos(command.location)) {
   //  fprintf(stderr, "max x: %d max y: %d\n", MAX_X, MAX_Y);
  //   fprintf(stderr, "x: %d, y: %d out of range: %s line %d\n", x, y, __FILE__, __LINE__);
-      std::cout << "2" << std::endl;
     return; 
   }
 
   if ( mapBoth_.grid_[x][y] != 0 ){
-    std::cout << "3" << std::endl;
     std::cout << "x: " << x << " y: " << y << std::endl; 
     return; // position is already occupied 
   }
-  std::cout << "4" << std::endl;
   // Create Unit  
-  std::cout << "command unit type: " << command.type << std::endl;
-  std::cout << "CREEP: " << CREEP << std::endl;
   switch (command.type) {
     case CREEP:
-      {
-        std::cout << "try to create a creep" << std::endl;
-        createCreep(team_no, command.location, command.pathID);    
+      {  
+        // Check if 2 seconds has elapsed since the last creep creation for the team.
+        if(time(NULL) - lastCreepTime_[team_no] >= 2)
+        {
+          createCreep(team_no, command.location, command.pathID);
+          lastCreepTime_[team_no] = time(NULL);
+        }
         break;
       }
     case CASTLE:
     case TOWER:
     case TOWER_ONE:
-      {  
-        std::cout << "try to create a tower" << std::endl;      
+      { 
         createTower(team_no, command.location);        
         break;
       }
@@ -612,7 +611,7 @@ void ServerGameLogic::updateMovePlayer(CommandData& command)
     return;
   }
   
-  if((team_no = WhichTeam(command.unitID)) == 2)
+  if((team_no = WhichTeam(command.unitID)) == CREEP_COOLDOWN)
   {
     return; // not found
   }
