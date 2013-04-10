@@ -1,4 +1,5 @@
 #include "server_game_logic.h"
+#include "../units/basic_tower.h"
 #include "../units/castle.h"
 #include "../units/AiController.h"
 #include "../units/player.h"
@@ -873,8 +874,9 @@ void ServerGameLogic::createTower(int team_no, Point location)
     int uid = next_unit_id_++;
 
     // create new tower
-    Tower *tower = new Tower(uid, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
+    BasicTower *tower = new BasicTower (uid, team_no, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
                            INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);
+
     // Add tower to team
     teams[team_no].addUnit(tower);
 

@@ -756,6 +756,8 @@ void Graphics::drawEndGameScreen(sf::RenderWindow& window)
         endGameScreen_bg.loadFromFile("images/loss.png");
 
     endGameScreen.setTexture(endGameScreen_bg);
+    endGameScreen.setScale(.625,.5);
+    endGameScreen.setPosition(150,125);
     window.draw(endGameScreen);
 }
 
