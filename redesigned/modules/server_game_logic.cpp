@@ -3,6 +3,7 @@
 #include "../units/castle.h"
 #include "../units/AiController.h"
 #include "../units/player.h"
+#include "../units/basic_tower.h"
 #include <stdio.h>
 #include <signal.h>
 #include <sys/time.h>
@@ -12,6 +13,9 @@
 #include <cmath>
 
 #define NOT_FOUND 2
+
+#define PLAYER_WIDTH 25
+#define PLAYER_HEIGHT 25
 
 ServerGameLogic * gSGL;
 
@@ -650,16 +654,24 @@ void ServerGameLogic::updateMovement (int team, int otherteam) {
 for (unsigned int i = 0; i < teams[team].players.size(); ++i) {
     bool collided = false;
     int dir = teams[team].players[i]->direction;
+    
+    Point new_position = teams[team].players[i]->position;
+
 
     if (dir & UP)
-      teams[team].players[i]->position.y-= teams[team].players[i]->moveSpeed;
+       new_position.y-= teams[team].players[i]->moveSpeed;
     if (dir & DOWN)
-      teams[team].players[i]->position.y+= teams[team].players[i]->moveSpeed;
+       new_position.y+= teams[team].players[i]->moveSpeed;
     if (dir & LEFT)
-      teams[team].players[i]->position.x-= teams[team].players[i]->moveSpeed;
+       new_position.x-= teams[team].players[i]->moveSpeed;
     if (dir & RIGHT)
-      teams[team].players[i]->position.x+= teams[team].players[i]->moveSpeed;
+       new_position.x+= teams[team].players[i]->moveSpeed;
 
+   
+    // Validate new position
+    if (new_position.x >= 0 && new_position.x <= MAP_X - PLAYER_WIDTH)
+	if (new_position.y >= 0 && new_position.y <= MAP_Y - PLAYER_HEIGHT)
+	    teams[team].players[i]->position = new_position;
 
     for (unsigned int j = 0; j < teams[otherteam].players.size(); ++j) {
       // Check all players, other than ourselves!
@@ -801,6 +813,7 @@ void ServerGameLogic::setAlarm()
 
 }
 
+
 /* Creates a creep.
  *
  * PRE:     Teams are initialized.
@@ -809,6 +822,9 @@ void ServerGameLogic::setAlarm()
  * PROGRAMMER:
  * RETURNS:
  * NOTES:   
+ *
+ * REVISIONS: Kevin - Only creates creep if there is enough currency.
+
  */
 void ServerGameLogic::createCreep(int team_no, Point location, int path_no)
 {  
@@ -827,13 +843,20 @@ void ServerGameLogic::createCreep(int team_no, Point location, int path_no)
 
   Point spawnLocation = FindCreepSpawnPoint(team_no, path_no);
 
-  // Add creep to team  
-  Creep *creep = new Creep(uid, spawnLocation, hp, atkdmg, atkrng, atkspd, percep, atkcnt, spd, direct, path, movespeed);  
-  teams[team_no].addUnit(creep);  
+  // if( CREEP_COST <= team currency ) then carry on and create a creep
+  if(CREEP_COST <= teams[team_no].currency){
 
-  // Pay for creep
-  teams[team_no].currency -= CREEP_COST;
+    // Create creep  
+    Creep *creep = new Creep(uid, spawnLocation, hp, atkdmg, atkrng, atkspd, percep, atkcnt, spd, direct, path, movespeed);  
+
+    // Add creep to team
+    teams[team_no].addUnit(creep);  
+ 
+    // Pay for creep
+    teams[team_no].currency -= CREEP_COST;
+  }
 }
+
 
 /* Creates a tower.
  *
@@ -846,6 +869,7 @@ void ServerGameLogic::createCreep(int team_no, Point location, int path_no)
  *
  * REVISIONS: Kevin - Only creates tower if the chosen location is within the team's half
  *                  of the map AND there is enough currency.
+ *                  - changed to calling BasicTower constructor & sending team_no
  */
 void ServerGameLogic::createTower(int team_no, Point location)
 {
@@ -874,9 +898,13 @@ void ServerGameLogic::createTower(int team_no, Point location)
     int uid = next_unit_id_++;
 
     // create new tower
-    BasicTower *tower = new BasicTower (uid, team_no, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
+//    Tower *tower = new Tower(uid, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
+//                           INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);
+//    Tower *tower = new Tower(uid, team_no, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
+//                           INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);                           
+    BasicTower *tower = new BasicTower(uid, team_no, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
                            INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);
-
+        
     // Add tower to team
     teams[team_no].addUnit(tower);
 
@@ -887,7 +915,9 @@ void ServerGameLogic::createTower(int team_no, Point location)
     gameMap_->addUnit(tower, location);
   }
 }
-/* Creates a tower.
+
+
+/* Creates a player.
  *
  * PRE:     Teams are initialized.
  * POST:    A player has been created, and added to a team.

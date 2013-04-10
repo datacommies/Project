@@ -65,6 +65,7 @@
 //#include "ai.h"
 #include "../types.h"
 #include "../units/castle.h"
+#include "../units/basic_tower.h"
 
 #include "game_logic_map.h"
 

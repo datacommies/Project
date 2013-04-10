@@ -4,6 +4,7 @@
 -- DATE:        2013/03/26
 --
 -- MAINTAINERS: Callum Styan, Behnam Bastami, Aaron Lee, David Czech
+--              Kevin Tangeman
 --
 -- FUNCTIONS:   Tower constructor
 --              serializeTower
@@ -30,8 +31,8 @@ Tower::Tower(int uid, Point pos, int hp, int atkdmg, int atkrng,
 --
 -- DATE:        March 26, 2013
 --
--- DESIGNER:    Callum Styan
--- PROGRAMMER:  Callum Styan
+-- DESIGNER:    Callum Styan, Kevin Tangeman
+-- PROGRAMMER:  Callum Styan, Kevin Tangeman
 --
 -- INTERFACE:   Tower::Tower(int uid, int side, Point pos, int hp, int atkdmg, int atkrng,
 --                          int atkspd, int percep, int atkcnt, int wall):
