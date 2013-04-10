@@ -644,6 +644,62 @@ double distance(Point p, Point q)
   return sqrt((q.x-p.x) + (q.y-p.y));
 }
 
+void ServerGameLogic::updateMovement (int team, int otherteam) {
+for (unsigned int i = 0; i < teams[team].players.size(); ++i) {
+    bool collided = false;
+    int dir = teams[team].players[i]->direction;
+
+    if (dir & UP)
+      teams[team].players[i]->position.y-= teams[team].players[i]->moveSpeed;
+    if (dir & DOWN)
+      teams[team].players[i]->position.y+= teams[team].players[i]->moveSpeed;
+    if (dir & LEFT)
+      teams[team].players[i]->position.x-= teams[team].players[i]->moveSpeed;
+    if (dir & RIGHT)
+      teams[team].players[i]->position.x+= teams[team].players[i]->moveSpeed;
+
+
+    for (unsigned int j = 0; j < teams[otherteam].players.size(); ++j) {
+      // Check all players, other than ourselves!
+      if (j != i) {
+        if (distance(teams[otherteam].players[i]->position, teams[otherteam].players[j]->position) < 5) {
+          teams[otherteam].players[j]->health -= 10;
+          collided = true;
+          break;
+        }
+      }
+    }
+
+    for (unsigned int j = 0; j < teams[otherteam].creeps.size(); ++j) {
+      if (distance(teams[team].players[i]->position, teams[otherteam].creeps[j]->position) < 5) {
+        teams[otherteam].creeps[j]->health -= 10;
+        collided = true;
+        break;
+      }
+    }
+
+    for (unsigned int j = 0; j < teams[otherteam].towers.size(); ++j) {
+      if (distance(teams[team].players[i]->position, teams[otherteam].towers[j]->position) < 5) {
+        teams[1].towers[j]->health -= 10;
+        collided = true;
+        break;
+      }
+    }
+
+    // If we collided with something else, stay where we are.
+    if (collided){
+      if (dir & UP)
+        teams[team].players[i]->position.y+= teams[team].players[i]->moveSpeed;
+      if (dir & DOWN)
+        teams[team].players[i]->position.y-= teams[team].players[i]->moveSpeed;
+      if (dir & LEFT)
+        teams[team].players[i]->position.x+= teams[team].players[i]->moveSpeed;
+      if (dir & RIGHT)
+        teams[team].players[i]->position.x-= teams[team].players[i]->moveSpeed;
+    }
+  }
+}
+
 /* Processes all waiting commands.
  *
  * PRE:    
@@ -656,59 +712,8 @@ void ServerGameLogic::update()
 { 
   updateMaps();
 
-  for (unsigned int i = 0; i < teams[0].players.size(); ++i) {
-    bool collided = false;
-    int dir = teams[0].players[i]->direction;
-
-    if (dir & UP)
-      teams[0].players[i]->position.y-= teams[0].players[i]->moveSpeed;
-    if (dir & DOWN)
-      teams[0].players[i]->position.y+= teams[0].players[i]->moveSpeed;
-    if (dir & LEFT)
-      teams[0].players[i]->position.x-= teams[0].players[i]->moveSpeed;
-    if (dir & RIGHT)
-      teams[0].players[i]->position.x+= teams[0].players[i]->moveSpeed;
-
-
-    for (unsigned int j = 0; j < teams[1].players.size(); ++j) {
-      // Check all players, other than ourselves!
-      if (j != i) {
-        if (distance(teams[1].players[i]->position, teams[1].players[j]->position) < 5) {
-          teams[1].players[j]->health -= 10;
-          collided = true;
-          break;
-        }
-      }
-    }
-
-    for (unsigned int j = 0; j < teams[1].creeps.size(); ++j) {
-      if (distance(teams[0].players[i]->position, teams[1].creeps[j]->position) < 5) {
-        teams[1].creeps[j]->health -= 10;
-        collided = true;
-        break;
-      }
-    }
-
-    for (unsigned int j = 0; j < teams[1].towers.size(); ++j) {
-      if (distance(teams[0].players[i]->position, teams[1].towers[j]->position) < 5) {
-        teams[1].towers[j]->health -= 10;
-        collided = true;
-        break;
-      }
-    }
-
-    // If we collided with something else, stay where we are.
-    if (collided){
-      if (dir & UP)
-        teams[0].players[i]->position.y+= teams[0].players[i]->moveSpeed;
-      if (dir & DOWN)
-        teams[0].players[i]->position.y-= teams[0].players[i]->moveSpeed;
-      if (dir & LEFT)
-        teams[0].players[i]->position.x+= teams[0].players[i]->moveSpeed;
-      if (dir & RIGHT)
-        teams[0].players[i]->position.x-= teams[0].players[i]->moveSpeed;
-    }
-  }
+  updateMovement(0, 1);
+  updateMovement(1, 0);
 
   if (requestedCommands.empty())
     return;
@@ -891,6 +896,7 @@ void ServerGameLogic::createPlayer(int team_no, Point location, int client_id, i
 
   Player *player = new Player(uid, client_id, location, role);
   player->setSpeed(5);
+  player->team = team_no;
   teams[team_no].addUnit(player);
   std::cout << "adding player: " << player->clientID << " team: " << team_no << std::endl;
 }
