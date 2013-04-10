@@ -1,33 +1,40 @@
-/*------------------------------------------------------------------------------
--- FILE:        control.cpp
+/*--------------------------------------------------------------------------------------------------------------------
+-- FILE: control.cpp
 --
--- DATE:        2013/03/11
+-- FUNCTIONS: Control* get()
+--            Control()
+--            void LoadGameLogic()
+--            void LoadGraphics()
+--            void AddNewCalledButton()
+--            void AddNewCalledKey()
+--            void AddNewUnCalledKey()
+--            void RunAllButtons()
+--            void RunAllKeys()
+--            voidCallExitGameEvent()
+--            void CallEnterLobbyEvent()
+--            void CallMoveEvent()
+--            void CallAttackEvent()
+--            void CallUnitTypeCreationEvent()
+--            int GetCurrentLane()
+--            Point GetTowerPlacement()
+--            void MouseCallback()
 --
--- MAINTAINERS: Jesse Wright, Dennis Ho, David Czech, Luke Tao
+-- DATE: 2013/03/21
 --
--- FUNCTIONS:   get
---				Control
---				LoadGameLogic
---				LoadGraphics
---				AddNewCalledButton
---				AddNewCalledKey
---				AddNewUnCalledKey
---				RunAllButtons
---				RunAllKeys
---				CallExitGameEvent
---				CallEnterLobbyEvent
---				CallMoveEvent
---				CallAttackEvent
---				CallUnitTypeCreationEvent
---				GetCurrentLane
---				GetTowerPlacement
---				MouseCallback
+-- REVISIONS: (Date and Description)
 --
+-- DESIGNER: John Payment
 --
--- DESCRIPTION: File contains all functions needed for the Control module.
---				this includes registering keypress callbacks, handling button
---				presses and mouse clicks, and all associated actions.
-------------------------------------------------------------------------------*/
+-- PROGRAMMER: John Payment
+--             Jesse Write
+--             Luke Tao
+--
+-- DESCRIPTION: File impliments all functions used by the control class, which is the primary structure of the Control
+--              module. It manages registering keypress callbacks, handling button presses and mouse clicks, and all 
+--              associated actions. Presses and mouse clicks, and all associated actions.
+-- 
+----------------------------------------------------------------------------------------------------------------------*/
+
 #include "control.h"
 #include <SFML/System.hpp>
 
