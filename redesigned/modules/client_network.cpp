@@ -188,6 +188,7 @@ void ClientNetwork::recvReply() {
 					c.past_position = c.position;
 					c.health = u.health;
 					c.type = u.unit_type;
+					c.role = mu.role;
 					c.team = u.team;
 					pthread_mutex_lock( &gl->unit_mutex );
 					bool updated = false;

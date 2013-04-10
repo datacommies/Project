@@ -20,6 +20,17 @@ public:
     virtual UnitType getType() const { return PLAYER; }
 	virtual size_t getSize() const { return MobileUnit::getSize(); }
 
+	virtual std::string serializeMobileUnit() {
+	    std::string s = Unit::serializeUnit();
+	    
+	    mobileunit_t m;
+	    m.speed = moveSpeed;
+	    m.direction = direction;
+	    m.role = role;
+	    s += std::string((char*)&m, sizeof(mobileunit_t));
+	    return s;
+	}
+
 private:
 };
 

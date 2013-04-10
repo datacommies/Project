@@ -25,7 +25,7 @@ public:
     virtual UnitType getType() const = 0;
     virtual size_t getSize() const { return sizeof(unit_t)+sizeof(mobileunit_t); }
 
-    std::string serializeMobileUnit();
+    virtual std::string serializeMobileUnit();
 
 private:   
 };
