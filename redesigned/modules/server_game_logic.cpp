@@ -12,6 +12,9 @@
 
 #define NOT_FOUND 2
 
+#define PLAYER_WIDTH 25
+#define PLAYER_HEIGHT 25
+
 ServerGameLogic * gSGL;
 
 /* Constructor
@@ -649,16 +652,24 @@ void ServerGameLogic::updateMovement (int team, int otherteam) {
 for (unsigned int i = 0; i < teams[team].players.size(); ++i) {
     bool collided = false;
     int dir = teams[team].players[i]->direction;
+    
+    Point new_position = teams[team].players[i]->position;
+
 
     if (dir & UP)
-      teams[team].players[i]->position.y-= teams[team].players[i]->moveSpeed;
+       new_position.y-= teams[team].players[i]->moveSpeed;
     if (dir & DOWN)
-      teams[team].players[i]->position.y+= teams[team].players[i]->moveSpeed;
+       new_position.y+= teams[team].players[i]->moveSpeed;
     if (dir & LEFT)
-      teams[team].players[i]->position.x-= teams[team].players[i]->moveSpeed;
+       new_position.x-= teams[team].players[i]->moveSpeed;
     if (dir & RIGHT)
-      teams[team].players[i]->position.x+= teams[team].players[i]->moveSpeed;
+       new_position.x+= teams[team].players[i]->moveSpeed;
 
+   
+    // Validate new position
+    if (new_position.x >= 0 && new_position.x <= MAP_X - PLAYER_WIDTH)
+	if (new_position.y >= 0 && new_position.y <= MAP_Y - PLAYER_HEIGHT)
+	    teams[team].players[i]->position = new_position;
 
     for (unsigned int j = 0; j < teams[otherteam].players.size(); ++j) {
       // Check all players, other than ourselves!
