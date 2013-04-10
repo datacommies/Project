@@ -45,7 +45,7 @@ private:
     ServerGameLogic& serverGameLogic_;
 
     // Functions
-    bool sync(int); // TODO: clientId is a placeholder. May be a socket or something else
+    bool sync(int, int); // TODO: clientId is a placeholder. May be a socket or something else
     void error(const char *);
     
     static void* handleClient(void*);
