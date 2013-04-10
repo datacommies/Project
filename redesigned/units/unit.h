@@ -21,6 +21,7 @@ public:
     int attackCount; //counter between unit attacks
     Unit *pTarget;
     float fRotate;
+    bool pendingDelete;
     
     bool            isAlive() { return health > 0; } //incase creep get hits more than its remaining health
     virtual void    Attack(void);

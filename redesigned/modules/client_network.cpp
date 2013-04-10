@@ -11,6 +11,7 @@ player_matchmaking_t empty = {{0, 0}, "Empty", 0, 0, 0, false};
  *
  * PRE:
  * POST:
+ * PROGRAMMER:
  * RETURNS:
  * NOTES:   Creates a thread and starts running the module */
 ClientNetwork::ClientNetwork() {
@@ -37,6 +38,8 @@ ClientNetwork::~ClientNetwork()
  * PRE: setConnectionInfo() called with valid server, port, and name.
  * POST: client is connected to the server with the specified _server and port
  * ARGS: None
+ *
+ * PROGRAMMER:
  *
  * RETURNS: true if connected to the server succesfully, false otherwise.
  *
@@ -100,7 +103,15 @@ bool ClientNetwork::connectToServer()
 	recvReply();
 	return true;
 }
-
+/* 
+ *
+ * PRE:     
+ * POST:    
+ * PROGRAMMER:
+ * RETURNS: 
+ *          
+ * NOTES: 
+ */
 void ClientNetwork::recvReply() {
 	long n;
 
@@ -243,9 +254,11 @@ void ClientNetwork::recvReply() {
  *
  * PRE:     Client is connected
  * POST:    Request has been sent to server
+ * PROGRAMMER:
  * RETURNS: true on success
  *          false on fail
- * NOTES:   No validation performed here. */
+ * NOTES:   No validation performed here. 
+ */
 bool ClientNetwork::createUnit(int playerId, UnitType type, Point location, int path)
 {
 	//TODO: Not using playtypeerID at all!
@@ -263,7 +276,15 @@ bool ClientNetwork::createUnit(int playerId, UnitType type, Point location, int 
 	send(connectsock, &request, sizeof(request_create_t), 0);
    return false;
 }
-
+/* 
+ *
+ * PRE:     
+ * POST:    
+ * PROGRAMMER:
+ * RETURNS: 
+ *          
+ * NOTES: 
+ */
 
 bool ClientNetwork::updatePlayerLobby (int team, int role, const char* name, bool ready) {
 	player_matchmaking_t p = {{0, 0}, {0}, 0, 0, 0, false};
@@ -331,7 +352,15 @@ int ClientNetwork::sendRequest(int msg)
 {
 	return 1;
 }
-
+/* 
+ *
+ * PRE:     
+ * POST:    
+ * PROGRAMMER:
+ * RETURNS: 
+ *          
+ * NOTES: 
+ */
 void ClientNetwork::player_update (player_matchmaking_t * p) {
 	printf("Player: %d %s\t" "Team: %d\t"
 		"Role: %d\t" "Ready: %s\n",
@@ -357,7 +386,15 @@ void ClientNetwork::player_update (player_matchmaking_t * p) {
 	else 
 		waiting.push_back(*p);
 }
-
+/* 
+ *
+ * PRE:     
+ * POST:    
+ * PROGRAMMER:
+ * RETURNS: 
+ *          
+ * NOTES: 
+ */
 void ClientNetwork::player_leave (player_matchmaking_t * p) {
 	printf("Player Left: %s\n", p->name);
 
@@ -373,15 +410,39 @@ void ClientNetwork::player_leave (player_matchmaking_t * p) {
 		}
 	}
 }
-
+/* 
+ *
+ * PRE:     
+ * POST:    
+ * PROGRAMMER:
+ * RETURNS: 
+ *          
+ * NOTES: 
+ */
 void ClientNetwork::msg_mapname (char * map) {
 	printf("Got map name: %s\n", map);
 }
-
+/* 
+ *
+ * PRE:     
+ * POST:    
+ * PROGRAMMER:
+ * RETURNS: 
+ *          
+ * NOTES: 
+ */
 void ClientNetwork::msg_chat (char * text) {
 	printf("message: %s\n", text);
 }
-
+/* 
+ *
+ * PRE:     
+ * POST:    
+ * PROGRAMMER:
+ * RETURNS: 
+ *          
+ * NOTES: 
+ */
 int ClientNetwork::recv_complete (int sockfd, void *buf, size_t len, int flags) {
     size_t bytesRead = 0;
     ssize_t result;
