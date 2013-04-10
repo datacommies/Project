@@ -455,9 +455,14 @@ void Graphics::initLobbyWindow()
  */
 void Graphics::takeRole()
 {
-    int role = (long) this / 10;
-    int team = ((long) this % 10) - 1;
-    globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(role, team, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
+    int role = ((long) this % 10) - 1;
+    int team = ((long) this >= 20) + 1;
+    
+    // Set it for when start button sends player_update.
+    globalGraphics->clientGameLogic_.clientNetwork_.p.role = role;
+    //globalGraphics->clientGameLogic_.clientNetwork_.p.team = team;
+    
+    globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(team, role, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
 }
 
 
