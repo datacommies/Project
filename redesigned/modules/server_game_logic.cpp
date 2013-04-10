@@ -369,13 +369,32 @@ int ServerGameLogic::WhichTeam(int id) {
 
   updateMaps();
 
+  //USE THIS UNTIL YOUR MAP STUFF WORKS
+  for (std::vector<Player*>::iterator it = teams[0].players.begin(); it != teams[0].players.end(); ++it)
+  {
+    if((*it)->clientID == id)
+    {
+      return 0;
+    }
+  }
+
+  for (std::vector<Player*>::iterator it = teams[1].players.begin(); it != teams[1].players.end(); ++it)
+  {
+    if((*it)->clientID == id)
+    {
+      return 1;
+    }
+  }
+
+  return -1;
+/*
   if (mapTeams_[0].units_.find(id) != mapTeams_[0].units_.end())
     return 0;
 
   if (mapTeams_[1].units_.find(id) != mapTeams_[1].units_.end())
     return 1;
-
   return 2;
+  */
 }
 
 void ServerGameLogic::updateCreate(CommandData& command)
@@ -478,17 +497,12 @@ void ServerGameLogic::updateMovePlayer(CommandData& command)
   
   if((team_no = WhichTeam(command.unitID)) == 2)
   {
-
-    std::cout << "unitID: " << command.unitID << std::endl; 
-    std::cout << "Team not found" << std::endl;
     return; // not found
   }
 
   temp = teams[team_no].findPlayer(command.playerID);
-
   if(temp == 0)
   {
-    std::cout << "Player not found" << std::endl;
     return;
   }
 
@@ -733,7 +747,7 @@ void ServerGameLogic::createTower(int team_no, Point location)
  * PRE:     Teams are initialized.
  * POST:    A player has been created, and added to a team.
  * RETURNS:
- * NOTES:   
+ * NOTES:   findPlayer
  */
 void ServerGameLogic::createPlayer(int team_no, Point location, int client_id, int role)
 {
@@ -742,6 +756,7 @@ void ServerGameLogic::createPlayer(int team_no, Point location, int client_id, i
   Player *player = new Player(uid, client_id, location, role);
   player->setSpeed(5);
   teams[team_no].addUnit(player);
+  std::cout << "adding player: " << player->clientID << " team: " << team_no << std::endl;
 }
 
 void ServerGameLogic::respawnPlayer(Player* player, Point location)
