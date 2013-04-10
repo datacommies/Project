@@ -44,6 +44,8 @@ public:
     Unit(int uid, int side, Point pos, int hp=100, int atkdmg=0, int atkrng=0,
          int atkspd=0, int percep=0, int atkcnt=0);
     
+    virtual ~Unit(){};
+
     virtual UnitType getType() const = 0;
     virtual size_t getSize() const { return sizeof(unit_t); };
 private:   

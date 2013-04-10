@@ -309,7 +309,6 @@ int ServerNetwork::recv_complete (int sockfd, void *buf, size_t len, int flags) 
     
     while (bytesRead < len) {
         result = recv (sockfd, (char*)buf + bytesRead, len - bytesRead, flags);
-        
         if (result < 1) {
             cerr << ("Connection Error") << endl;
             return result;
