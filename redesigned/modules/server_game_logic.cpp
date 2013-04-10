@@ -498,7 +498,7 @@ void ServerGameLogic::updateCreate(CommandData& command)
     return;
   }
 
-  if ( (team_no = WhichTeam(command.playerID) == NOT_FOUND) ) {
+  if ( ( (team_no = WhichTeam(command.playerID)) == NOT_FOUND) ) {
    // fprintf(stderr, "playerID not found file: %s line %d\n", __FILE__, __LINE__);
     return;
   }
@@ -643,7 +643,7 @@ void ServerGameLogic::updateMoveUnit(CommandData& command)
  */
 double distance(Point p, Point q)
 {
-  return sqrt((q.x-p.x) + (q.y-p.y));
+  return sqrt( pow(q.x-p.x,2) + pow(q.y-p.y, 2));
 }
 
 void ServerGameLogic::updateMovement (int team, int otherteam) {
@@ -662,27 +662,24 @@ for (unsigned int i = 0; i < teams[team].players.size(); ++i) {
 
 
     for (unsigned int j = 0; j < teams[otherteam].players.size(); ++j) {
-      // Check all players, other than ourselves!
-      if (j != i) {
-        if (distance(teams[otherteam].players[i]->position, teams[otherteam].players[j]->position) < 5) {
-          teams[otherteam].players[j]->health -= 10;
-          collided = true;
-          break;
-        }
+      if (distance(teams[team].players[i]->position, teams[otherteam].players[j]->position) < 25) {
+        teams[otherteam].players[j]->health -= 1;
+        collided = true;
+        break;
       }
     }
 
     for (unsigned int j = 0; j < teams[otherteam].creeps.size(); ++j) {
-      if (distance(teams[team].players[i]->position, teams[otherteam].creeps[j]->position) < 5) {
-        teams[otherteam].creeps[j]->health -= 10;
+      if (distance(teams[team].players[i]->position, teams[otherteam].creeps[j]->position) < 25) {
+        teams[otherteam].creeps[j]->health -= 1;
         collided = true;
         break;
       }
     }
 
     for (unsigned int j = 0; j < teams[otherteam].towers.size(); ++j) {
-      if (distance(teams[team].players[i]->position, teams[otherteam].towers[j]->position) < 5) {
-        teams[otherteam].towers[j]->health -= 10;
+      if (distance(teams[team].players[i]->position, teams[otherteam].towers[j]->position) < 25) {
+        teams[otherteam].towers[j]->health -= 1;
         collided = true;
         break;
       }
@@ -875,10 +872,8 @@ void ServerGameLogic::createTower(int team_no, Point location)
       castleLoc = (*it)->getPos();  // castle location
     
   // get distance of proposed location from castle
-  distX = abs(location.x - castleLoc.x);
-  distY = abs(location.y - castleLoc.y);
-  dist = distX + distY;
-  
+  dist = distance( castleLoc, location);
+
   // if( chosen distance from player's team's castle is <= maxTowerDist && 
   //       TOWER_COST <= team currency ) then carry on and create a tower
   if((dist <= maxTowerDist) && (TOWER_COST <= teams[team_no].currency)){
@@ -937,6 +932,7 @@ void ServerGameLogic::respawnPlayer(Player* player, Point location)
 {
   player->position = location;
   player->health = 100;
+  player->pendingDelete = false;
 }
 /* 
  *
@@ -1001,8 +997,7 @@ void ServerGameLogic::handlePlayerDeath(Player *player)
   respawnPlayer(player, player->team == 0 ? gameMap_->team0start[0] : gameMap_->team1start[0]);
 
   // Give other team some monies
-  giveTeamBonus(player->team == 0 ? 1 : 0, PLAYER_KILL_BONUS);
-  player->pendingDelete = false;
+  giveTeamBonus(player->team == 0 ? 1 : 0, PLAYER_KILL_BONUS);  
 }
 /* 
  *
