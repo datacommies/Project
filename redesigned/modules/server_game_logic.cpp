@@ -406,6 +406,7 @@ void ServerGameLogic::updateCreate(CommandData& command)
     return;
   }
 
+  updateMaps();
   if (!mapTeams_[0].isValidPos(command.location)) {
   //  fprintf(stderr, "max x: %d max y: %d\n", MAX_X, MAX_Y);
  //   fprintf(stderr, "x: %d, y: %d out of range: %s line %d\n", x, y, __FILE__, __LINE__);
