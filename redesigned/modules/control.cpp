@@ -25,9 +25,8 @@
 --
 -- DESIGNER: John Payment
 --
--- PROGRAMMER: John Payment
---             Jesse Write
---             Luke Tao
+-- PROGRAMMERS: John Payment
+--              Jesse Write
 --
 -- DESCRIPTION: File impliments all functions used by the control class, which is the primary structure of the Control
 --              module. It manages registering keypress callbacks, handling button presses and mouse clicks, and all 
