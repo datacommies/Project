@@ -414,10 +414,10 @@ void Graphics::initLobbyWindow()
     for (int i = 0; i < 5; ++i)
     {
         leftPlayers[i] = sfg::Button::Create("Open Slot");
-        leftPlayers[i]->GetSignal  (sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) (11+i));
+        leftPlayers[i]->GetSignal  (sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) (long) (11+i));
         
         rightPlayers[i] = sfg::Button::Create("Open Slot");
-        rightPlayers[i]->GetSignal  (sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) (21+i));
+        rightPlayers[i]->GetSignal  (sfg::Widget::OnLeftClick).Connect(&Graphics::takeRole, (Graphics *) (long) (21+i));
     }
 
     // Create the start game / exit buttons.

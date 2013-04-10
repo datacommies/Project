@@ -285,6 +285,10 @@ void* ServerNetwork::handleClient(void* args)
         if (send(client_, &clear, sizeof(header_t), 0) < 1)
             break;
         thiz->sync(client_);
+        
+        if (thiz->serverGameLogic_.gameState_ == GAME_END)
+            break;
+
         usleep(100000);
     }
  
