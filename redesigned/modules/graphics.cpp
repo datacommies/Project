@@ -717,8 +717,8 @@ void Graphics::drawUnits(sf::RenderWindow& window)
             // All drawable unit elements use the same interpolated position.
             drawTeamCircle(window, unit->team, interpolated.x, interpolated.y);
             player_sprites[unit->role].setPosition(interpolated.x, interpolated.y);			
-            window.draw(player_sprites[unit->role]);
-            drawHealthBar(window, interpolated.x, interpolated.y + player_sprites[unit->role].getTextureRect().height, unit->health);
+            window.draw(player_sprites[unit->rolesd]);
+            drawHealthBar(window, interpolated.x, interpolated.y + player_sprites[unit->rolesd].getTextureRect().height, unit->health);
         }
     }
     pthread_mutex_unlock( &clientGameLogic_.unit_mutex );
@@ -795,10 +795,10 @@ void Graphics::loadImages()
     tower_tex.loadFromFile("images/tower.png");
     tower_sprite.setTexture(tower_tex);
 
-    for (int i = 1; i < 6; i++) {
+    for (int i = 0; i < 5; i++) {
         // Load the tower texture.
         stringstream ss;
-        ss << "images/m" << i << ".png";
+        ss << "images/m" << i+1 << ".png";
         player_textures[i].loadFromFile(ss.str().c_str());
         player_sprites[i].setTexture(player_textures[i]);
     }
