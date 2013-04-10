@@ -162,7 +162,7 @@ bool ClientGameLogic::createTower(UnitType type, Point location)
 -- DATE:        2013/03/11
 --
 -- DESIGNER:    Behnam Bastami
--- PROGRAMMER:  Behnam Bastami, Albert Liao
+-- PROGRAMMER:  Behnam Bastami, Albert Liao, Jesse Wright
 --
 -- INTERFACE:   bool ClientGameLogic::createCreep(UnitType type, int laneID)
 --

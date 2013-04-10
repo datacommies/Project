@@ -14,6 +14,7 @@ struct ClientCtx {
  *
  * PRE:     
  * POST:    
+ * PROGRAMMER:
  * RETURNS: 
  * NOTES:   Creates a thread and starts running the module */
 ServerNetwork::ServerNetwork(ServerGameLogic& serverGameLogic)
@@ -21,6 +22,15 @@ ServerNetwork::ServerNetwork(ServerGameLogic& serverGameLogic)
 
 // create nix socket
 // returns error code; arg: port number
+   /* 
+ *
+ * PRE:     
+ * POST:    
+ * PROGRAMMER:
+ * RETURNS: 
+ *          
+ * NOTES: 
+ */
 int ServerNetwork::initSock(int port)
 {
     int ov = 1;
@@ -45,7 +55,15 @@ int ServerNetwork::initSock(int port)
     listen(sock_, MAX_CONNECTIONS);
     return sock_;
 }
-
+/* 
+ *
+ * PRE:     
+ * POST:    
+ * PROGRAMMER:
+ * RETURNS: 
+ *          
+ * NOTES: 
+ */
 void ServerNetwork::initNetwork()
 {    
     pthread_create (&uiThread_, NULL, handleInput, this); // start server input handler.
@@ -70,7 +88,15 @@ void ServerNetwork::initNetwork()
         clients_.push_back(client);
     }
 }
-
+/* 
+ *
+ * PRE:     
+ * POST:    
+ * PROGRAMMER:
+ * RETURNS: 
+ *          
+ * NOTES: 
+ */
 void ServerNetwork::gameOver(int client_, const int winner)
 {
     gameover_t go = {{}, 0};
@@ -85,6 +111,7 @@ void ServerNetwork::gameOver(int client_, const int winner)
  *
  * PRE:     client_ is connected
  * POST:    client_ has received current game state.
+ * PROGRAMMER:
  * RETURNS: true on success
  *          false on fail
  * NOTES:   Current implementation is to refresh ALL data on each update. */
@@ -108,7 +135,7 @@ bool ServerNetwork::sync(int client_)
             gameOver(client_, winner == teamId ? WON_GAME : LOST_GAME);
         }
     }else{
-        int teamId;
+        int teamId = 0;
 
         //wrap into syncFirstTeam()
         for (size_t i = 0; i < serverGameLogic_.teams[0].towers.size(); ++i)
@@ -185,6 +212,15 @@ bool ServerNetwork::sync(int client_)
 }
 
 // fatal error wrapper
+/* 
+ *
+ * PRE:     
+ * POST:    
+ * PROGRAMMER:
+ * RETURNS: 
+ *          
+ * NOTES: 
+ */
 void ServerNetwork::error (const char *msg)
 {
     perror(msg);
@@ -195,6 +231,7 @@ void ServerNetwork::error (const char *msg)
  *
  * PRE:     Server sockets started
  * POST:    
+ * PROGRAMMER:
  * RETURNS: void*
  * NOTES:   Current implementation is to refresh ALL data on each update. */
 void* ServerNetwork::handleInput(void* args)
@@ -234,7 +271,15 @@ void* ServerNetwork::handleInput(void* args)
     
     return NULL;
 }
-
+/* 
+ *
+ * PRE:     
+ * POST:    
+ * PROGRAMMER:
+ * RETURNS: 
+ *          
+ * NOTES: 
+ */
 void* ServerNetwork::handleClientRequest(void* args)
 {
     ClientCtx* ctx = (ClientCtx*)args;
@@ -287,7 +332,15 @@ void* ServerNetwork::handleClientRequest(void* args)
 
     return NULL;
 }
-
+/* 
+ *
+ * PRE:     
+ * POST:    
+ * PROGRAMMER:
+ * RETURNS: 
+ *          
+ * NOTES: 
+ */
 void* ServerNetwork::handleClient(void* args)
 {
     cout << "Handling client!" << endl;
@@ -312,7 +365,15 @@ void* ServerNetwork::handleClient(void* args)
  
     return NULL;
 }
-
+/* 
+ *
+ * PRE:     
+ * POST:    
+ * PROGRAMMER:
+ * RETURNS: 
+ *          
+ * NOTES: 
+ */
 void ServerNetwork::handleRequests()
 {
     
@@ -321,6 +382,15 @@ void ServerNetwork::handleRequests()
 /* Receive len amount of byte completely (no partial recv) */
 // returns int bytes read
 // recv_complete
+/* 
+ *
+ * PRE:     
+ * POST:    
+ * PROGRAMMER:
+ * RETURNS: 
+ *          
+ * NOTES: 
+ */
 int ServerNetwork::recv_complete (int sockfd, void *buf, size_t len, int flags) {
     size_t bytesRead = 0;
     ssize_t result;
@@ -339,11 +409,29 @@ int ServerNetwork::recv_complete (int sockfd, void *buf, size_t len, int flags) 
 }
 
 // Move me! //NO!
+/* 
+ *
+ * PRE:     
+ * POST:    
+ * PROGRAMMER:
+ * RETURNS: 
+ *          
+ * NOTES: 
+ */
 bool operator == (const player_matchmaking_t& a, const player_matchmaking_t& b) {
     return a.pid == b.pid;
 }
 
 //Lobby functions
+/* 
+ *
+ * PRE:     
+ * POST:    
+ * PROGRAMMER:
+ * RETURNS: 
+ *          
+ * NOTES: 
+ */
 bool ServerNetwork::update_all_clients(int message) {
     for (size_t i = 0; i < clients_.size(); i++) {
         for (size_t j = 0; j < players_.size(); j++) {
@@ -356,13 +444,30 @@ bool ServerNetwork::update_all_clients(int message) {
 }
 
 // Basically runs another function without making it static (this one is static)
+/* 
+ *
+ * PRE:     
+ * POST:    
+ * PROGRAMMER:
+ * RETURNS: 
+ *          
+ * NOTES: 
+ */
 void * ServerNetwork::handle_single_client_lobby(void* thing) {
     cout << "Handling client!" << endl;
     ClientCtx* ctx = (ClientCtx*)thing;
     ServerNetwork* thiz = (ServerNetwork*) ctx->sn;
     return thiz->handle_client_lobby(ctx);
 }
-
+/* 
+ *
+ * PRE:     
+ * POST:    
+ * PROGRAMMER:
+ * RETURNS: 
+ *          
+ * NOTES: 
+ */
 void * ServerNetwork::handle_client_lobby(void * ctx)
 {
     ClientCtx* ctax = (ClientCtx*)ctx;

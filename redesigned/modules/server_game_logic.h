@@ -126,9 +126,10 @@ class ServerGameLogic
     void updateCreate(CommandData& command);
     void updateAttack(CommandData& command);
     void updateMovePlayer(CommandData& command);
-    void updateMoveUnit(CommandData& command);   
+    void updateMovement(int, int);
+    void updateMoveUnit(CommandData& command);
 
-    // Initializing the Game functions    
+    // Initializing the Game functions
     void initializeCastles();
     void initializeCreeps();
     void initializeTowers();
