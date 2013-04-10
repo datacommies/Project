@@ -18,7 +18,6 @@ ServerGameLogic * gSGL;
  *
  * PRE:    
  * POST:    
- * RETURNS:
  * NOTES:   Creates a thread and starts running the module */
   ServerGameLogic::ServerGameLogic()
 : gameState_(LOBBY), next_unit_id_(1)
@@ -163,8 +162,6 @@ void ServerGameLogic::initializeCreeps()
       createCreep(team_i, pos, j % PATH_COUNT);
     }
   }
-
-
 
   /*Point pos = Point(230, 230);
   int uid = next_unit_id_++;
@@ -530,13 +527,25 @@ void ServerGameLogic::update()
 
   for (unsigned int i = 0; i < teams[0].players.size(); ++i) {
     bool collided = false;
-    
+    int dir = teams[0].players[i]->direction;
+
+    if (dir & UP)
+      teams[0].players[i]->position.y-= teams[0].players[i]->moveSpeed;
+    if (dir & DOWN)
+      teams[0].players[i]->position.y+= teams[0].players[i]->moveSpeed;
+    if (dir & LEFT)
+      teams[0].players[i]->position.x-= teams[0].players[i]->moveSpeed;
+    if (dir & RIGHT)
+      teams[0].players[i]->position.x+= teams[0].players[i]->moveSpeed;
+
+
     for (unsigned int j = 0; j < teams[0].players.size(); ++j) {
       // Check all players, other than ourselves!
       if (j != i) {
         if (distance(teams[0].players[i]->position, teams[0].players[j]->position) < 5) {
           teams[0].players[j]->health -= 10;
           collided = true;
+          break;
         }
       }
     }
@@ -545,6 +554,7 @@ void ServerGameLogic::update()
       if (distance(teams[0].players[i]->position, teams[1].creeps[j]->position) < 5) {
         teams[1].creeps[j]->health -= 10;
         collided = true;
+        break;
       }
     }
 
@@ -552,21 +562,21 @@ void ServerGameLogic::update()
       if (distance(teams[0].players[i]->position, teams[1].towers[j]->position) < 5) {
         teams[1].towers[j]->health -= 10;
         collided = true;
+        break;
       }
     }
 
     // If we collided with something else, stay where we are.
-    if (collided)
-      break;
-
-    if (teams[0].players[i]->direction & UP)
-      teams[0].players[i]->position.y-= teams[0].players[i]->moveSpeed;
-    if (teams[0].players[i]->direction & DOWN)
-      teams[0].players[i]->position.y+= teams[0].players[i]->moveSpeed;
-    if (teams[0].players[i]->direction & LEFT)
-      teams[0].players[i]->position.x-= teams[0].players[i]->moveSpeed;
-    if (teams[0].players[i]->direction & RIGHT)
-      teams[0].players[i]->position.x+= teams[0].players[i]->moveSpeed;
+    if (collided){
+      if (dir & UP)
+        teams[0].players[i]->position.y+= teams[0].players[i]->moveSpeed;
+      if (dir & DOWN)
+        teams[0].players[i]->position.y-= teams[0].players[i]->moveSpeed;
+      if (dir & LEFT)
+        teams[0].players[i]->position.x+= teams[0].players[i]->moveSpeed;
+      if (dir & RIGHT)
+        teams[0].players[i]->position.x-= teams[0].players[i]->moveSpeed;
+    }
   }
 
   if (requestedCommands.empty())
@@ -797,8 +807,7 @@ void ServerGameLogic::handleTowerDeath(Tower *tower)
 
 void ServerGameLogic::handleCastleDeath()
 {
-  // Game over 
-  printf("Game over\n");
+  // Game over
   gameState_ = GAME_END;
 }
 

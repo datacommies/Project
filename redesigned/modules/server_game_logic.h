@@ -3,7 +3,7 @@
 
 #define INTERVAL 33333
 
-#define INIT_NUM_CREEPS 3
+#define INIT_NUM_CREEPS 1
 #define INIT_NUM_TOWERS 4
 #define INIT_CURRENCY 500
 #define INIT_HEALTH 100
