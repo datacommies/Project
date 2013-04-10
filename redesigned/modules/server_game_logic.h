@@ -29,7 +29,7 @@
 #define INIT_TOWER_HP 100
 #define INIT_TOWER_ATKDMG 7
 #define INIT_TOWER_ATKRNG 75
-#define INIT_TOWER_ATKSPD 2
+#define INIT_TOWER_ATKSPD 20
 #define INIT_TOWER_PERCEP 150
 #define INIT_TOWER_ATKCNT 1
 #define INIT_TOWER_WALL 2 
@@ -90,7 +90,7 @@ class ServerGameLogic
     ~ServerGameLogic();
 
     pthread_mutex_t unit_mutex;
-    
+
     // Fields
     Team teams[2];
     GameState gameState_;
