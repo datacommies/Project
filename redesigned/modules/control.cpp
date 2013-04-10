@@ -1,3 +1,33 @@
+/*------------------------------------------------------------------------------
+-- FILE:        control.cpp
+--
+-- DATE:        2013/03/11
+--
+-- MAINTAINERS: Jesse Wright, Dennis Ho, David Czech, Luke Tao
+--
+-- FUNCTIONS:   get
+--				Control
+--				LoadGameLogic
+--				LoadGraphics
+--				AddNewCalledButton
+--				AddNewCalledKey
+--				AddNewUnCalledKey
+--				RunAllButtons
+--				RunAllKeys
+--				CallExitGameEvent
+--				CallEnterLobbyEvent
+--				CallMoveEvent
+--				CallAttackEvent
+--				CallUnitTypeCreationEvent
+--				GetCurrentLane
+--				GetTowerPlacement
+--				MouseCallback
+--
+--
+-- DESCRIPTION: File contains all functions needed for the Control module.
+--				this includes registering keypress callbacks, handling button
+--				presses and mouse clicks, and all associated actions.
+------------------------------------------------------------------------------*/
 #include "control.h"
 #include <SFML/System.hpp>
 

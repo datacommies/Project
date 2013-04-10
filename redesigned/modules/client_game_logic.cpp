@@ -1,11 +1,30 @@
+/*------------------------------------------------------------------------------
+-- FILE:        client_game_logic.cpp
+--
+-- DATE:        2013/03/11
+--
+-- MAINTAINERS: Callum Styan, David Czech, Dennis Ho, Albert Liao, 
+--              Jesse Wright, Jacob Miner
+--
+-- FUNCTIONS:   ClientGameLogic constructor
+--              start
+--              join
+--              menu
+--              win
+--              lose
+--              createTower
+--              createCreep
+--              movePlayer
+--              attack
+--              exit
+--              getCurrentState
+--
+-- DESCRIPTION: File contains implementation for the Unit class. Unit will be
+--              a base class that Tower and MobileUnit inherit from. 
+------------------------------------------------------------------------------*/
 #include "client_game_logic.h"
 
-/* Constructor
- *
- * PRE:     
- * POST:    
- * RETURNS: 
- * NOTES:   Creates a thread and starts running the module */
+
 ClientGameLogic::ClientGameLogic(ClientNetwork& clientNetwork)
    : clientNetwork_(clientNetwork), gameState_(MAIN_MENU)
 {
@@ -14,33 +33,111 @@ ClientGameLogic::ClientGameLogic(ClientNetwork& clientNetwork)
    pthread_mutex_init(&unit_mutex, NULL);
 }
 
+/*------------------------------------------------------------------------------
+-- FUNCTION:    start
+--
+-- DATE:        2013/03/11
+--
+-- DESIGNER:    David Czech
+-- PROGRAMMER:  David Czech
+--
+-- INTERFACE:   void ClientGameLogic::start ()
+--
+-- RETURNS:     void
+--
+-- DESCRIPTION: This function sets the gameState_ variable to IN_GAME. 
+------------------------------------------------------------------------------*/
 void ClientGameLogic::start () {
    gameState_ = IN_GAME;
 }
 
+/*------------------------------------------------------------------------------
+-- FUNCTION:    join
+--
+-- DATE:        2013/03/11
+--
+-- DESIGNER:    David Czech
+-- PROGRAMMER:  David Czech
+--
+-- INTERFACE:   void ClientGameLogic::join ()
+--
+-- RETURNS:     void
+--
+-- DESCRIPTION: This function sets the gameState_ variable to LOBBY. 
+------------------------------------------------------------------------------*/
 void ClientGameLogic::join () {
    gameState_ = LOBBY;
 }
 
+/*------------------------------------------------------------------------------
+-- FUNCTION:    menu
+--
+-- DATE:        2013/03/11
+--
+-- DESIGNER:    David Czech
+-- PROGRAMMER:  David Czech
+--
+-- INTERFACE:   void ClientGameLogic::menu ()
+--
+-- RETURNS:     void
+--
+-- DESCRIPTION: This function sets the gameState_ variable to MAIN_MENU. 
+------------------------------------------------------------------------------*/
 void ClientGameLogic::menu () {
    gameState_ = MAIN_MENU;
 }
 
+/*------------------------------------------------------------------------------
+-- FUNCTION:    win
+--
+-- DATE:        2013/03/11
+--
+-- DESIGNER:    Behnam Bastami
+-- PROGRAMMER:  Behnam Bastami
+--
+-- INTERFACE:   void ClientGameLogic::win ()
+--
+-- RETURNS:     void
+--
+-- DESCRIPTION: This function sets the gameState_ variable to WON_GAME. 
+------------------------------------------------------------------------------*/
 void ClientGameLogic::win () {
    gameState_ = WON_GAME;
 }
 
+/*------------------------------------------------------------------------------
+-- FUNCTION:    lose
+--
+-- DATE:        2013/03/11
+--
+-- DESIGNER:    Behnam Bastami
+-- PROGRAMMER:  Behnam Bastami
+--
+-- INTERFACE:   void ClientGameLogic::lose ()
+--
+-- RETURNS:     void
+--
+-- DESCRIPTION: This function sets the gameState_ variable to LOST_GAME. 
+------------------------------------------------------------------------------*/
 void ClientGameLogic::lose () {
    gameState_ = LOST_GAME;
 }
 
-/* Sends a create unit request to network module.
- *
- * PRE:     
- * POST:    Request has been sent to the network module (not directly to server) 
- * RETURNS: true if request was sent
- *          false if no request was sent
- * NOTES:   Partial validation is to be performed here (eg. sufficient funds, valid placement). Additional validation will be performed server side. */
+/*------------------------------------------------------------------------------
+-- FUNCTION:    createTower
+--
+-- DATE:        2013/03/11
+--
+-- DESIGNER:    Behnam Bastami
+-- PROGRAMMER:  Behnam Bastami
+--
+-- INTERFACE:   bool ClientGameLogic::createTower(UnitType type, Point location)
+--
+-- RETURNS:     Boolean; True if the request was sent, False otherwise
+--
+-- DESCRIPTION: This function creates a tower of the specified type at the 
+--              specified location.
+------------------------------------------------------------------------------*/
 bool ClientGameLogic::createTower(UnitType type, Point location)
 {
    // TODO: validation
@@ -59,13 +156,21 @@ bool ClientGameLogic::createTower(UnitType type, Point location)
    return true;
 }
 
-/* Sends a create unit request to network module.
- *
- * PRE:     
- * POST:    Request has been sent to the network module (not directly to server) 
- * RETURNS: true if request was sent
- *          false if no request was sent
- * NOTES:   Partial validation is to be performed here (eg. sufficient funds, valid placement). Additional validation will be performed server side. */
+/*------------------------------------------------------------------------------
+-- FUNCTION:    createCreep
+--
+-- DATE:        2013/03/11
+--
+-- DESIGNER:    Behnam Bastami
+-- PROGRAMMER:  Behnam Bastami, Albert Liao
+--
+-- INTERFACE:   bool ClientGameLogic::createCreep(UnitType type, int laneID)
+--
+-- RETURNS:     Boolean; True if the request was sent, False otherwise
+--
+-- DESCRIPTION: This function creates a creep of the specified type on the 
+--              specified lane.
+------------------------------------------------------------------------------*/
 bool ClientGameLogic::createCreep(UnitType type, int laneID)
 {
    // TODO: Need a function that will call the creation on the server side, 
@@ -83,14 +188,21 @@ bool ClientGameLogic::createCreep(UnitType type, int laneID)
    return true;
 }
 
-
-/* Sends a move player (self) request to network module.
- *
- * PRE:     
- * POST:    Request has been sent to the network module (not directly to server)
- * RETURNS: true if request was sent
- *          false if no request was sent
- * NOTES:   Partial validation is to be performed here (eg. valid location). Additional validation will be performed server side. */
+/*------------------------------------------------------------------------------
+-- FUNCTION:    movePlayer
+--
+-- DATE:        2013/03/11
+--
+-- DESIGNER:    Behnam Bastami, Dennis Ho
+-- PROGRAMMER:  Behnam Bastami, Jesse Wright, Dennis Ho
+--
+-- INTERFACE:   bool ClientGameLogic::movePlayer(Direction direction)
+--
+-- RETURNS:     Boolean; True if the request was sent, False otherwise
+--
+-- DESCRIPTION: This function moves the current player in the specified
+--              direction.
+------------------------------------------------------------------------------*/
 bool ClientGameLogic::movePlayer(Direction direction)
 {
    // TODO: validation
@@ -100,13 +212,21 @@ bool ClientGameLogic::movePlayer(Direction direction)
    return true;
 }
 
-/* Sends an attack request to network module.
- *
- * PRE:     
- * POST:    Request has been sent to the network module (not directly to server)
- * RETURNS: true if request was sent
- *          false if no request was sent
- * NOTES:   Partial validation is to be performed here (eg. builders can't attack). Additional validation will be performed server side. */
+/*------------------------------------------------------------------------------
+-- FUNCTION:    attack
+--
+-- DATE:        2013/03/11
+--
+-- DESIGNER:    Dennis Ho
+-- PROGRAMMER:  Dennis Ho
+--
+-- INTERFACE:   bool ClientGameLogic::movePlayer(Direction direction)
+--
+-- RETURNS:     Boolean; True if the request was sent, False otherwise
+--
+-- DESCRIPTION: This function makes the current play attack in the specified
+--              direction.
+------------------------------------------------------------------------------*/
 bool ClientGameLogic::attack(Direction direction)
 {
    // TODO: validation
@@ -116,17 +236,39 @@ bool ClientGameLogic::attack(Direction direction)
    return true;
 }
 
-/* Exits the game.
- *
- * PRE:     
- * POST:    
- * RETURNS: 
- * NOTES:   Any teardown should be performed here (eg. notify server). */
+/*------------------------------------------------------------------------------
+-- FUNCTION:    exit
+--
+-- DATE:        2013/03/11
+--
+-- DESIGNER:    Albert Liao
+-- PROGRAMMER:  Albert Liao
+--
+-- INTERFACE:   void ClientGameLogic::exit()
+--
+-- RETURNS:     void
+--
+-- DESCRIPTION: This function sets the gameState_ variable to MAIN_MENU. 
+------------------------------------------------------------------------------*/ 
 void ClientGameLogic::exit()
 {
    gameState_ = MAIN_MENU;
 }
 
+/*------------------------------------------------------------------------------
+-- FUNCTION:    getCurrentState
+--
+-- DATE:        2013/03/11
+--
+-- DESIGNER:    Dennis Ho
+-- PROGRAMMER:  Dennis Ho
+--
+-- INTERFACE:   GameState ClientGameLogic::getCurrentState()
+--
+-- RETURNS:     GameState; the current state.
+--
+-- DESCRIPTION: This function returns the current state the game is in.
+------------------------------------------------------------------------------*/ 
 GameState ClientGameLogic::getCurrentState() {   
    return gameState_;      
 }

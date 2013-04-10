@@ -4,7 +4,8 @@
 -- DATE:        2013/03/12
 --
 -- MAINTAINERS: Cody Rossiter
---		Kevin Tangeman - 26/Mar/2013 - added team variable "side"
+--		        Kevin Tangeman
+--                  - 26/Mar/2013 - added team variable "side"
 --
 -- FUNCTIONS:   Attack
 --

@@ -32,6 +32,7 @@ QuickTower::QuickTower(int uid, int side, Point pos, int hp, int atkdmg, int atk
 {
     //validation
 }
+
 /*------------------------------------------------------------------------------
 -- FUNCTION:    Attack
 --

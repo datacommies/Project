@@ -1,8 +1,3 @@
-#include "mobile_unit.h"
-#include <string>
-
-using namespace std;
-
 /*------------------------------------------------------------------------------
 -- FILE:        mobile_unit.cpp
 --
@@ -16,6 +11,10 @@ using namespace std;
 -- DESCRIPTION: File contains implementation for the Mobile Unit class. Mobile Unit 
 --              will be a base class that Creep and Player inherit from. 
 ------------------------------------------------------------------------------*/
+#include "mobile_unit.h"
+#include <string>
+
+using namespace std;
 
 //old constructor - Callum
 MobileUnit::MobileUnit(int uid, Point pos, int hp, int atkdmg, int atkrng,

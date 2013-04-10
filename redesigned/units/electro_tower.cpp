@@ -17,6 +17,7 @@
 
 using namespace std;
 
+
 ElectroTower::ElectroTower(int uid, Point pos, int hp, int atkdmg, int atkrng,
             int atkspd, int percep, int atkcnt, int wall):
             Tower(uid, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, wall)
@@ -32,6 +33,24 @@ ElectroTower::ElectroTower(int uid, int side, Point pos, int hp, int atkdmg,
     printf("Inside unit constructor, x:%d y:%d\n", position.x, position.y);
 }
 
+
+/*------------------------------------------------------------------------------
+-- FUNCTION:    ElectroTower::Attack
+--
+-- DATE:        March 26, 2013
+--
+-- DESIGNER:    Nick Raposo
+-- PROGRAMMER:  Nick Raposo
+--
+-- INTERFACE:   void ElectroTower::Attack(Team* team)
+--
+-- RETURNS:     void
+--
+-- DESCRIPTION: Causes the ElectroTower to attack the enemy/enemies in range.
+--              If more than one enemy unit is in range, the attack will chain
+--              to the next closest enemy, repeating while there are enemy
+--              units in range.
+------------------------------------------------------------------------------*/
 void ElectroTower::Attack(Team* team)
 {
    if( attackCount++ < attackSpeed )
@@ -75,6 +94,24 @@ void ElectroTower::Attack(Team* team)
     }
 }
 
+
+/*------------------------------------------------------------------------------
+-- FUNCTION:    ElectroTower::Update
+--
+-- DATE:        March 26, 2013
+--
+-- DESIGNER:    Nick Raposo
+-- PROGRAMMER:  Nick Raposo
+--
+-- INTERFACE:   void ElectroTower::Update(Team& team)
+--
+-- RETURNS:     void
+--
+-- DESCRIPTION: Updates the state of the tower.  If there is currently a target,
+--              check the status of said target to determine the next action.
+--              If there is no current target, search for a new target.  If we
+--              found a new target, and they are in range, attack them.
+------------------------------------------------------------------------------*/
 void ElectroTower::Update(Team& team) {
 
     /* If we have a Target, check their status. */

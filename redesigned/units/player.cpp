@@ -1,3 +1,14 @@
+/*------------------------------------------------------------------------------
+-- FILE:        player.cpp
+--
+-- DATE:        2013/03/11
+--
+-- MAINTAINERS: Callum Styan, Behnam Bastami
+--
+-- FUNCTIONS:   Player constructor
+--
+-- DESCRIPTION: File contains implementation for the Player class.
+------------------------------------------------------------------------------*/
 #include "player.h"
 #include <string>
 

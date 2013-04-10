@@ -38,8 +38,6 @@ Tower(uid, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, wall)
 -- RETURNS: void
 --
 -- DESCRIPTION: Function damages three enemy units and players at once.
---  
--- 
 ------------------------------------------------------------------------------*/
 void MultiShotTower::Attack(Team* team)
 {

@@ -13,6 +13,22 @@
 #include "AiController.h"
 #include "../team.h"
 
+
+/*------------------------------------------------------------------------------
+-- FUNCTION:    AiUpdate
+--
+-- DATE:        March 11th, 2013
+--
+-- DESIGNER:    Nick Raposo
+-- PROGRAMMER:  Nick Raposo
+--
+-- INTERFACE:   void AiUpdate(Team& team1, Team& team2)
+--
+-- RETURNS:     void
+--
+-- DESCRIPTION: Runs a single cycle of AI.  Each creep, tower and projectile
+--				has its Update() function called per cycle.
+------------------------------------------------------------------------------*/
 void AiUpdate(Team& team1, Team& team2)
 {
 
@@ -46,9 +62,9 @@ void AiUpdate(Team& team1, Team& team2)
 		team2.towers[tower_idx]->Update(team1);
 	}
 
-        //loop through team 2 projectiles
-        for (size_t projectile_idx = 0; projectile_idx < team2.projectiles.size(); ++projectile_idx)
-       	{
-                team2.projectiles[projectile_idx]->Update();
-       	}
+    //loop through team 2 projectiles
+    for (size_t projectile_idx = 0; projectile_idx < team2.projectiles.size(); ++projectile_idx)
+   	{
+            team2.projectiles[projectile_idx]->Update();
+   	}
 }

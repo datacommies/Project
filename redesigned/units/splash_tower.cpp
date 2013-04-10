@@ -19,11 +19,11 @@
 
 using namespace std;
 
-SplashTower::SplashTower(	int uid, Point pos, int hp, int atkdmg, int atkrng,
-							int atkspd, int percep, int atkcnt, int wall,
-							int spldmg=20, int splrng=10):
-				Tower(uid, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, wall)
-				     , splashDamage(spldmg), splashRange(splrng)
+SplashTower::SplashTower(int uid, Point pos, int hp, int atkdmg, int atkrng,
+						int atkspd, int percep, int atkcnt, int wall,
+						int spldmg=20, int splrng=10):
+				        Tower(uid, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, wall)
+				        ,splashDamage(spldmg), splashRange(splrng)
 {
     //validation
 }
@@ -86,6 +86,7 @@ void SplashTower::Attack(Team * team)
         }
     }
 }
+
 /*------------------------------------------------------------------------------
 -- FUNCTION:    Update
 --

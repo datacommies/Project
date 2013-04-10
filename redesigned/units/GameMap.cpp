@@ -1,3 +1,37 @@
+/*------------------------------------------------------------------------------
+-- FILE:        GameMap.cpp
+--
+-- DATE:        2013/04/07
+--
+-- MAINTAINERS: Callum Styan
+--
+-- FUNCTIONS:   initPaths
+--              initCastlePositions
+--              initPlayerPositions
+--              initMap
+--              _init
+--              GameMap
+--              min
+--              max
+--              printGrid
+--              ~GameMap
+--              isValidPos
+--              _helperBuild
+--              build
+--              reset
+--              addUnit
+--              removeUnit
+--              moveUnit
+--              Malloc
+--              getUnitFromId
+--              getTeamNo
+--              getUnit
+--              main
+--
+-- DESCRIPTION: File contains implementation for the GameMap class.  This
+--              contains all functions necessary for generating, initializing,
+--              and updating the GameMap. 
+------------------------------------------------------------------------------*/
 #include "GameMap.h"
 
 /*------------------------------------------------------------------------------
@@ -8,7 +42,7 @@
 -- DESIGNER:    Callum Styan
 -- PROGRAMMER:  Callum Styan
 --
--- INTERFACE:   no parameters
+-- INTERFACE:   void GameMap::initPaths()
 --
 -- RETURNS:     void
 --
@@ -112,6 +146,20 @@ void GameMap::initPaths(){
   //*** end of team 2 paths ***    
 }
 
+/*------------------------------------------------------------------------------
+-- FUNCTION:    initCastlePositions
+--
+-- DATE:        April 7, 2013
+--
+-- DESIGNER:    Callum Styan
+-- PROGRAMMER:  Callum Styan
+--
+-- INTERFACE:   void GameMap::initCastlePositions()
+--
+-- RETURNS:     void
+--
+-- DESCRIPTION: Initializes the positions of the castles for both teams.
+------------------------------------------------------------------------------*/
 void GameMap::initCastlePositions(){
     //team 1 castle position, top left corner
     castle1.x = 0;
@@ -122,6 +170,20 @@ void GameMap::initCastlePositions(){
     castle2.y = MAP_Y - 55;
 }
 
+/*------------------------------------------------------------------------------
+-- FUNCTION:    initPlayerPositions
+--
+-- DATE:        April 7, 2013
+--
+-- DESIGNER:    Callum Styan
+-- PROGRAMMER:  Callum Styan
+--
+-- INTERFACE:   void GameMap::initPlayerPositions()
+--
+-- RETURNS:     void
+--
+-- DESCRIPTION: Initializes the positions of the players for both teams.
+------------------------------------------------------------------------------*/
 void GameMap::initPlayerPositions(){
     //*** team 1 player starting positions ***
     Point c;
@@ -169,12 +231,43 @@ void GameMap::initPlayerPositions(){
     //*** end of team 2 starting positions ***
 }
 
+/*------------------------------------------------------------------------------
+-- FUNCTION:    initMap
+--
+-- DATE:        April 7, 2013
+--
+-- DESIGNER:    Callum Styan
+-- PROGRAMMER:  Callum Styan
+--
+-- INTERFACE:   void GameMap::initMap()
+--
+-- RETURNS:     void
+--
+-- DESCRIPTION: Initializes the map.  This is done by initializing the paths,
+--              player positions, and castle positions.
+------------------------------------------------------------------------------*/
 void GameMap::initMap(){
     initPaths();
     initPlayerPositions();
     initCastlePositions();
 }  
 
+/*------------------------------------------------------------------------------
+-- FUNCTION:    _init
+--
+-- DATE:        April 7, 2013
+--
+-- DESIGNER:    Callum Styan
+-- PROGRAMMER:  Callum Styan
+--
+-- INTERFACE:   void GameMap::_init()
+--
+-- RETURNS:     void
+--
+-- DESCRIPTION: Allocates space for the grid_ container, iterates through the
+--              container allocating space for each position, and initializes
+--              the memory at each position to 0.
+------------------------------------------------------------------------------*/
 void GameMap::_init() {
 
   grid_ = (Unit***) Malloc(sizeof(Unit**) * max_x_ + 1);
@@ -185,6 +278,21 @@ void GameMap::_init() {
   }
 }
 
+/*------------------------------------------------------------------------------
+-- FUNCTION:    GameMap
+--
+-- DATE:        April 7, 2013
+--
+-- DESIGNER:    Callum Styan
+-- PROGRAMMER:  Callum Styan
+--
+-- INTERFACE:   GameMap::GameMap(int max_x, int max_y): max_x_(max_x), max_y_(max_y)
+--
+-- RETURNS:     none
+--
+-- DESCRIPTION: GameMap object constructor.  Takes a maximum x and y value,
+--              and calls the _init function to allocate a gride.
+------------------------------------------------------------------------------*/
 GameMap::GameMap(int max_x, int max_y): max_x_(max_x), max_y_(max_y) {
   _init();
 }
@@ -240,7 +348,22 @@ void GameMap::merge(GameMap& map1, GameMap& map2)
 }
 */
 
-// I write this so that I might be able to see if things work correctly
+
+/*------------------------------------------------------------------------------
+-- FUNCTION:    printGrid
+--
+-- DATE:        April 7, 2013
+--
+-- DESIGNER:    Callum Styan
+-- PROGRAMMER:  Callum Styan
+--
+-- INTERFACE:   void GameMap::printGrid()
+--
+-- RETURNS:     void
+--
+-- DESCRIPTION: Utility function to test that the grid is allocating and
+---             populating correctly; not used as part of normal game operation.
+------------------------------------------------------------------------------*/
 void GameMap::printGrid() {
 
   int x, y;
@@ -257,6 +380,22 @@ void GameMap::printGrid() {
   }
 }
 
+/*------------------------------------------------------------------------------
+-- FUNCTION:    ~GameMap
+--
+-- DATE:        April 7, 2013
+--
+-- DESIGNER:    Callum Styan
+-- PROGRAMMER:  Callum Styan
+--
+-- INTERFACE:   void GameMap::~GameMap()
+--
+-- RETURNS:     none
+--
+-- DESCRIPTION: GameMap object destructor.  Frees allocated memory at each
+--              location within the grid_ container, then frees the memory
+--              allocated for the grid_ container itself.
+------------------------------------------------------------------------------*/
 GameMap::~GameMap() {
 
   for (int x=0; x<= max_x_; x++)
@@ -265,12 +404,48 @@ GameMap::~GameMap() {
   free(grid_);
 }
 
+/*------------------------------------------------------------------------------
+-- FUNCTION:    isValidPos
+--
+-- DATE:        April 7, 2013
+--
+-- DESIGNER:    Callum Styan
+-- PROGRAMMER:  Callum Styan
+--
+-- INTERFACE:   bool GameMap::isValidPos(Point pos)
+--
+-- RETURNS:     Boolean; whether or not the position provided is valid
+--
+-- DESCRIPTION: This function determines whether or not the position provided
+--              as a parameter is valid, then returns the result of this check.
+------------------------------------------------------------------------------*/
 bool GameMap::isValidPos(Point pos)
 {
 
   return (pos.x >= 0 && pos.x <= max_x_) && (pos.y >= 0 && pos.y <= max_y_);
 }
 
+/*------------------------------------------------------------------------------
+-- FUNCTION:    _helperBuild
+--
+-- DATE:        April 7, 2013
+--
+-- DESIGNER:    Callum Styan
+-- PROGRAMMER:  Callum Styan
+--
+-- INTERFACE:   void GameMap::_helperBuild(Unit *unit, UnitType type,
+--                                          Point pos, int team_no)
+--
+-- RETURNS:     void
+--
+-- DESCRIPTION: This function is a wrapper for building a unit.  It checks if
+--              the specified location is valid.  If it is not, it logs an
+--              error message.  If the position is valid, the units_ container
+--              for the appropriate unit ID is updated with the unit position,
+--              the location in the grid_ container for the specified position
+--              is updated with the Unit object provided, and the unit's team
+--              is set to the specified team number.
+------------------------------------------------------------------------------*/
 void GameMap::_helperBuild(Unit *unit, UnitType type, Point pos, int team_no) {
 
   if (!isValidPos(pos)) {
@@ -304,6 +479,23 @@ void GameMap::build(Team &team) {
 }
 */
 
+
+/*------------------------------------------------------------------------------
+-- FUNCTION:    build
+--
+-- DATE:        April 7, 2013
+--
+-- DESIGNER:    Callum Styan
+-- PROGRAMMER:  Callum Styan
+--
+-- INTERFACE:   void GameMap::build(Team teams[])
+--
+-- RETURNS:     void
+--
+-- DESCRIPTION: This function iterates through the Creep, Tower and Player
+--              containers, and calls the _helperBuild function for each
+--              object within these containers with the appropriate values.
+------------------------------------------------------------------------------*/
 void GameMap::build(Team teams[]) {
 
   int totalTeams = 2;
@@ -326,6 +518,21 @@ void GameMap::build(Team teams[]) {
   }
 }
 
+/*------------------------------------------------------------------------------
+-- FUNCTION:    reset
+--
+-- DATE:        April 7, 2013
+--
+-- DESIGNER:    Callum Styan
+-- PROGRAMMER:  Callum Styan
+--
+-- INTERFACE:   void GameMap::reset()
+--
+-- RETURNS:     void
+--
+-- DESCRIPTION: This function zeroes out all positions within the grid_ container,
+--              and removes all entries from the units_ container.
+------------------------------------------------------------------------------*/
 void GameMap::reset() {
   // Zero memory
   for (int x=0; x<=max_x_; x++)
@@ -334,19 +541,48 @@ void GameMap::reset() {
   units_.clear();
 } 
 
-void GameMap::addUnit(Unit *unit, Point pos) {
-
+/*------------------------------------------------------------------------------
+-- FUNCTION:    addUnit
+--
+-- DATE:        April 7, 2013
+--
+-- DESIGNER:    Callum Styan
+-- PROGRAMMER:  Callum Styan
+--
+-- INTERFACE:   void GameMap::addUnit(Unit *unit, Point pos)
+--
+-- RETURNS:     void
+--
+-- DESCRIPTION: This function adds a specified unit to the grid_ container at the
+--              specified position if there is no object occupying this space
+--              previously.
+------------------------------------------------------------------------------*/
+void GameMap::addUnit(Unit *unit, Point pos)
+{
   if (grid_[pos.x][pos.y] == NULL)
   {
     grid_[pos.x][pos.y] = unit;
     units_[unit->id] = pos;
-
   }
-
 }
 
-void GameMap::removeUnit(Unit *unit) {
-
+/*------------------------------------------------------------------------------
+-- FUNCTION:    removeUnit
+--
+-- DATE:        April 7, 2013
+--
+-- DESIGNER:    Callum Styan
+-- PROGRAMMER:  Callum Styan
+--
+-- INTERFACE:   void GameMap::removeUnit(Unit *unit)
+--
+-- RETURNS:     void
+--
+-- DESCRIPTION: This function removes the specified unit from the units_
+--              container.
+------------------------------------------------------------------------------*/
+void GameMap::removeUnit(Unit *unit) 
+{
   std::map<int, Point>::iterator it;
 
   it = units_.find(unit->id);
@@ -356,18 +592,31 @@ void GameMap::removeUnit(Unit *unit) {
     old_pos = units_[unit->id];
     grid_[old_pos.x][old_pos.y] = NULL;
 
-
     units_.erase(it);
   }
 }
 
-void GameMap::moveUnit(Unit *unit, Point new_pos) {
-
+/*------------------------------------------------------------------------------
+-- FUNCTION:    moveUnit
+--
+-- DATE:        April 7, 2013
+--
+-- DESIGNER:    Callum Styan
+-- PROGRAMMER:  Callum Styan
+--
+-- INTERFACE:   void GameMap::moveUnit(Unit *unit, Point new_pos)
+--
+-- RETURNS:     void
+--
+-- DESCRIPTION: This function moves a specified unit to a new position.         
+------------------------------------------------------------------------------*/
+void GameMap::moveUnit(Unit *unit, Point new_pos)
+{
   std::map<int, Point>::iterator it;
 
   it = units_.find(unit->id);
-  if (it != units_.end()) {
-
+  if (it != units_.end())
+  {
     Point old_pos;
     old_pos = units_[unit->id];
     grid_[old_pos.x][old_pos.y] = NULL;
@@ -377,7 +626,22 @@ void GameMap::moveUnit(Unit *unit, Point new_pos) {
   units_[unit->id] = new_pos;
 }
 
-// People laugh at this wrapper.
+/*------------------------------------------------------------------------------
+-- FUNCTION:    Malloc
+--
+-- DATE:        April 7, 2013
+--
+-- DESIGNER:    Callum Styan
+-- PROGRAMMER:  Callum Styan
+--
+-- INTERFACE:   void * GameMap::Malloc(size_t size)
+--
+-- RETURNS:     void *; A pointer to the newly allocated memory.
+--
+-- DESCRIPTION: This is a wrapper for Malloc, and prints and error message if
+--              malloc() returns a NULL pointer.  It then returns the pointer
+--              returned by malloc() regardless of success or failure.       
+------------------------------------------------------------------------------*/
 void * GameMap::Malloc(size_t size) {
 
   void * p;
@@ -389,17 +653,32 @@ void * GameMap::Malloc(size_t size) {
 
   return p;
 }
- 
-Unit *GameMap::getUnitFromId(int id) {
 
+/*------------------------------------------------------------------------------
+-- FUNCTION:    getUnitFromId
+--
+-- DATE:        April 7, 2013
+--
+-- DESIGNER:    Callum Styan
+-- PROGRAMMER:  Callum Styan
+--
+-- INTERFACE:   Unit *GameMap::getUnitFromId(int id)
+--
+-- RETURNS:     Unit *; A pointer to the unit with the specified ID.
+--
+-- DESCRIPTION: This function finds the Unit within the units_ container with
+--              the ID specified, and returns a pointer to said unit.   
+------------------------------------------------------------------------------*/
+Unit *GameMap::getUnitFromId(int id)
+{
 	Unit *unit;
 
 	std::map<int, Point>::iterator it;
 	it = units_.find(id);
-
 	
 	unit = NULL;
-	if (it != units_.end()) {
+	if (it != units_.end())
+  {
 		Point pos = it->second;
 		unit = grid_[pos.x][pos.y];
 	}
@@ -407,26 +686,59 @@ Unit *GameMap::getUnitFromId(int id) {
 	return unit;
 }
 
-int GameMap::getTeamNo(int id) {
-
+/*------------------------------------------------------------------------------
+-- FUNCTION:    getTeamNo
+--
+-- DATE:        April 7, 2013
+--
+-- DESIGNER:    Callum Styan
+-- PROGRAMMER:  Callum Styan
+--
+-- INTERFACE:   int GameMap::getTeamNo(int id) 
+--
+-- RETURNS:     int; The team number of the specified unit.
+--
+-- DESCRIPTION: This function locates the unit from the units_ container with
+--              the specified ID, and returns which team this unit is on.
+------------------------------------------------------------------------------*/
+int GameMap::getTeamNo(int id)
+{
    Unit *unit;
-   
    unit = getUnitFromId(id);
+
    if (unit == NULL)
-	return TEAM_NOT_FOUND;
-
+	   return TEAM_NOT_FOUND;
    else
-        return unit->team;
+     return unit->team;
 }
 
+/*------------------------------------------------------------------------------
+-- FUNCTION:    getUnit
+--
+-- DATE:        April 7, 2013
+--
+-- DESIGNER:    Callum Styan
+-- PROGRAMMER:  Callum Styan
+--
+-- INTERFACE:   Unit *GameMap::getUnit(Point pos)
+--
+-- RETURNS:     Unit *; A pointer to the unit at the specified position.
+--
+-- DESCRIPTION: This function determines which, if any, unit is present at the
+--              specified location, and returns a pointer to said unit if one
+--              is located, and a NULL pointer otherwise.
+------------------------------------------------------------------------------*/
+Unit *GameMap::getUnit(Point pos)
+{
+  if (!isValidPos(pos))
+    return NULL;
 
-Unit *GameMap::getUnit(Point pos) {
+  return grid_[pos.x][pos.y];
 
-     if (!isValidPos(pos))
-	return NULL;
-
-     return grid_[pos.x][pos.y];
+  // You should use something like this :D - Jesse
+  // return (!isValidPos(pos)) ? NULL : grid_[pos.x][pos.y];
 }
+
 
 #ifdef TEST_MAP  
 // Test with: g++ GameMap.cpp -DTEST_MAP -g -Wall ../build/units/tower.o ../build/units/unit.o
@@ -434,9 +746,8 @@ Unit *GameMap::getUnit(Point pos) {
 #include <vector>
 #include "tower.h"
 
-int main() {
-
-
+int main()
+{
 	GameMap the_map(10, 10);
 
 	std::vector<Unit*> units;
@@ -492,4 +803,3 @@ int main() {
 
 }
 #endif
-

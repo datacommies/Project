@@ -25,6 +25,7 @@ Projectile::Projectile(int uid, Point pos, int hp, int atkdmg, int atkrng,
     //validation
     //psaved is initialized to NULL so that the game doesn't crash!
 }
+
 /*------------------------------------------------------------------------------
 -- FUNCTION:    Attack
 --
@@ -38,12 +39,12 @@ Projectile::Projectile(int uid, Point pos, int hp, int atkdmg, int atkrng,
 -- RETURNS:     void 
 --
 -- DESCRIPTION:
---
 ------------------------------------------------------------------------------*/
 void Projectile::Attack(void) 
 {
     pTarget->health -= attackDamage;
 }
+
 /*------------------------------------------------------------------------------
 -- FUNCTION:    CheckTarget
 --
@@ -63,6 +64,7 @@ void Projectile::CheckTarget(void)
     if(pTarget->health <= 0)
         pTarget = NULL;
 }
+
 /*------------------------------------------------------------------------------
 -- FUNCTION:    Update
 --
@@ -76,7 +78,6 @@ void Projectile::CheckTarget(void)
 -- RETURNS:     void 
 --
 -- DESCRIPTION:
-
 ------------------------------------------------------------------------------*/
 void Projectile::Update(void) 
 {

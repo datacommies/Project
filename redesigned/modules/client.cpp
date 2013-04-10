@@ -1,12 +1,18 @@
+/*------------------------------------------------------------------------------
+-- FILE:        client.cpp
+--
+-- DATE:        2013/03/11
+--
+-- MAINTAINERS: Dennis Ho, David Czech
+--
+-- FUNCTIONS:   Client constructor
+--              run
+--
+-- DESCRIPTION: File contains implementation for the Client class.
+------------------------------------------------------------------------------*/
 #include "client.h"
 #include <unistd.h>
 
-/* Default ctor
- *
- * PRE:     
- * POST:    All appropriate modules are created and client is started
- * RETURNS: 
- * NOTES:    */
 Client::Client()
    : clientNetwork_(), clientGameLogic_(clientNetwork_), graphics_(clientGameLogic_), control_(Control::get()) 
 { 
@@ -15,12 +21,20 @@ Client::Client()
     run();
 }
 
-/* Runs the client (basically the main function)
- *
- * PRE:     
- * POST:    
- * RETURNS: 
- * NOTES:    */
+/*------------------------------------------------------------------------------
+-- FUNCTION:    run
+--
+-- DATE:        2013/03/11
+--
+-- DESIGNER:    Dennis Ho, David Czech
+-- PROGRAMMER:  Dennis Ho, David Czech
+--
+-- INTERFACE:   void Client::run()
+--
+-- RETURNS:     void
+--
+-- DESCRIPTION: This function will continually attempt to connect to the server.
+------------------------------------------------------------------------------*/
 void Client::run()
 {
     while (true) {
