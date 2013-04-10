@@ -33,7 +33,7 @@ using namespace std;
 Unit::Unit(int uid, Point pos, int hp, int atkdmg,
            int atkrng, int atkspd, int percep, int atkcnt):
            id(uid), position(pos), health(hp), attackDamage(atkdmg), attackRange(atkrng),
-           attackSpeed(atkspd), perception(percep), attackCount(atkcnt), pTarget(NULL)
+           attackSpeed(atkspd), perception(percep), attackCount(atkcnt), pTarget(NULL), pendingDelete(false)
 {
     //any required validation
 }

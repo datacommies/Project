@@ -115,13 +115,19 @@ bool ServerNetwork::sync(int client_)
         {
             string sc = serverGameLogic_.teams[0].towers[i]->serializeTower();
             send(client_, sc.data(), sc.size(), 0);
+
+            if (!serverGameLogic_.teams[0].towers[i]->isAlive())
+                serverGameLogic_.teams[0].towers[i]->pendingDelete = true;
         }
 
         for (size_t i = 0; i < serverGameLogic_.teams[0].creeps.size(); ++i)
         {
             serverGameLogic_.teams[0].creeps[i]->team = 0;
             string sc = serverGameLogic_.teams[0].creeps[i]->serializeCreep();
-            send(client_, sc.data(), sc.size(), 0);
+            send(client_, sc.data(), sc.size(), 0);            
+
+            if (!serverGameLogic_.teams[0].creeps[i]->isAlive())
+                serverGameLogic_.teams[0].creeps[i]->pendingDelete = true;
         }
 
         for (size_t i = 0; i < serverGameLogic_.teams[0].players.size(); ++i)
@@ -131,6 +137,9 @@ bool ServerNetwork::sync(int client_)
 
             if(serverGameLogic_.teams[0].players[i]->clientID == client_)
                 teamId = 0;            
+
+            if (!serverGameLogic_.teams[0].players[i]->isAlive())
+                serverGameLogic_.teams[0].players[i]->pendingDelete = true;
         }
 
         //wrap into syncSecondTeam()
@@ -138,6 +147,9 @@ bool ServerNetwork::sync(int client_)
         {
             string sc = serverGameLogic_.teams[1].towers[i]->serializeTower();
             send(client_, sc.data(), sc.size(), 0);
+
+            if (!serverGameLogic_.teams[1].towers[i]->isAlive())
+                serverGameLogic_.teams[1].towers[i]->pendingDelete = true;
         }
 
         for (size_t i = 0; i < serverGameLogic_.teams[1].creeps.size(); ++i)
@@ -145,6 +157,9 @@ bool ServerNetwork::sync(int client_)
             serverGameLogic_.teams[1].creeps[i]->team = 1;
             string sc = serverGameLogic_.teams[1].creeps[i]->serializeCreep();
             send(client_, sc.data(), sc.size(), 0);
+
+            if (!serverGameLogic_.teams[1].creeps[i]->isAlive())
+                serverGameLogic_.teams[1].creeps[i]->pendingDelete = true;
         }
         
         for (size_t i = 0; i < serverGameLogic_.teams[1].players.size(); ++i)
@@ -154,6 +169,9 @@ bool ServerNetwork::sync(int client_)
 
             if(serverGameLogic_.teams[1].players[i]->clientID == client_)
                 teamId = 1;
+
+            if (!serverGameLogic_.teams[1].players[i]->isAlive())
+                serverGameLogic_.teams[1].players[i]->pendingDelete = true;
         }
 
         // Update currency
