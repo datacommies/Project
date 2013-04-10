@@ -634,12 +634,14 @@ void Graphics::drawHealthBar(sf::RenderWindow& window, float x, float y, int hea
     sf::RectangleShape healthbar, health_bg;
     healthbar.setFillColor(sf::Color(  0, 255,  0));
     health_bg.setFillColor(sf::Color(255,   0,  0));
-    health_bg.setSize(sf::Vector2f( 25, 5));
+    health_bg.setSize(sf::Vector2f( 25, 3));
 
     health_bg.setPosition(x, y);
     healthbar.setPosition(x, y);
-    healthbar.setSize(sf::Vector2f(min(max(health/4, 0), 100), 5));
 
+    float percent = (float) health / 100;
+
+    healthbar.setSize(sf::Vector2f( percent * 25, 3));
     window.draw(health_bg);
     window.draw(healthbar);	
 }

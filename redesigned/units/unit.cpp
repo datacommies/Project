@@ -284,8 +284,8 @@ void Unit::Update(Team& team) {
 -- DESCRIPTION: A function to calculate the rotation between two points.
 --				Used for graphics to make towers look at their targets.
 ------------------------------------------------------------------------------*/
-float Unit::Rotate(Point pt) {
-    return atan2( (float)position.y - pt.y, (float)position.x - pt.x );
+void Unit::Rotate(Point pt) {
+    fRotate = atan2( (float)position.y - pt.y, (float)position.x - pt.x );
 }
 
 /*------------------------------------------------------------------------------
