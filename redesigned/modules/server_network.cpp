@@ -295,7 +295,7 @@ void ServerNetwork::handleRequests()
 {
     
 }
-
+    
 /* Receive len amount of byte completely (no partial recv) */
 // returns int bytes read
 // recv_complete
@@ -307,7 +307,7 @@ int recv_complete (int sockfd, void *buf, size_t len, int flags) {
         result = recv (sockfd, (char*)buf + bytesRead, len - bytesRead, flags);
         
         if (result < 1) {
-            cerr << ("Connection Terminated by Server") << endl;
+            cerr << ("Connection terminated by peer") << endl;
             exit(0);
             return result;
         }
