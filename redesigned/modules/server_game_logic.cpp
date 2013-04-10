@@ -981,6 +981,7 @@ void ServerGameLogic::handlePlayerDeath(Player *player)
 
   // Give other team some monies
   giveTeamBonus(player->team == 0 ? 1 : 0, PLAYER_KILL_BONUS);
+  player->pendingDelete = false;
 }
 /* 
  *
