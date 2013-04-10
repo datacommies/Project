@@ -332,6 +332,13 @@ void Graphics::initDesktop()
     sfgDesktop.SetProperty("Entry", "FontSize", 22);
 }
 
+/* Randomly generates a name based on the name.txt list. 
+*
+* PRE:
+* POST: SFGUI desktop is initialized
+* RETURNS:
+* NOTES:
+*/
 std::string getName( void ) {
 
     std::vector<string> lines;
