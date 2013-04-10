@@ -187,6 +187,9 @@ void ClientNetwork::recvReply() {
 							c.past_position = gl->units[i].inter_position;
 							gl->units[i] = c;
 							updated = true;
+
+							if (gl->units[i].health <= 0)					
+								gl->units.erase(gl->units.begin() + i);						
 						}
 					}
 					if (!updated)

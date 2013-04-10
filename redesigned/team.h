@@ -44,34 +44,41 @@ public:
 			case CASTLE:
 			case PROJECTILE:
 				break;
-		}   	
+		}   			
 	}
 
 	void removeUnit(Unit *unit)
-	{
-		units.erase(find(units.begin(), units.end(), unit));
+	{			
+		std::vector<Unit*>::iterator it = find(units.begin(), units.end(), unit);
 
-		switch(unit->getType())
+		if (it != units.end())
 		{
-			case CREEP:
-				creeps.erase(find(creeps.begin(), creeps.end(), (Creep*)unit));
-				break;
-			case TOWER:
-				towers.erase(find(towers.begin(), towers.end(), (Tower*)unit));
-				break;
-			case PLAYER:
-				players.erase(find(players.begin(), players.end(), (Player*)unit));
-				break;
-			case CREEP_ONE:
-			case CREEP_TWO:
-			case CREEP_THREE:
-			case TOWER_ONE:
-			case TOWER_TWO:        // added to remove warnings
-			case TOWER_THREE:
-			case CASTLE:
-			case PROJECTILE:
-				break;
-		}   			
+			units.erase(it);		
+		
+			switch(unit->getType())
+			{
+				case CREEP:
+					creeps.erase(find(creeps.begin(), creeps.end(), (Creep*)unit));
+					break;
+				case TOWER:
+					towers.erase(find(towers.begin(), towers.end(), (Tower*)unit));
+					break;
+				case PLAYER:
+					players.erase(find(players.begin(), players.end(), (Player*)unit));
+					break;
+				case CREEP_ONE:
+				case CREEP_TWO:
+				case CREEP_THREE:
+				case TOWER_ONE:
+				case TOWER_TWO:        // added to remove warnings
+				case TOWER_THREE:
+				case CASTLE:
+				case PROJECTILE:
+					break;
+			} 
+		}
+
+		delete unit;
 	}
 
 	bool isAlive() { return towers.size() > 0 && towers[0]->isAlive(); }

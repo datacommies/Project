@@ -728,13 +728,13 @@ void ServerGameLogic::handleDeaths()
   for (size_t i = 0; i < 2; ++i)
   {
     for (size_t j = 0; j < teams[i].players.size(); ++j)        
-      if (teams[i].players[j]->health == 0)
+      if (teams[i].players[j]->health <= 0)
         handlePlayerDeath(teams[i].players[j]);
     for (size_t j = 0; j < teams[i].creeps.size(); ++j)        
-      if (teams[i].creeps[j]->health == 0)
+      if (teams[i].creeps[j]->health <= 0)
         handleCreepDeath(teams[i].creeps[j]);
     for (size_t j = 0; j < teams[i].towers.size(); ++j)
-      if (teams[i].towers[j]->health == 0)
+      if (teams[i].towers[j]->health <= 0)
       {
         if (j == 0)
             handleCastleDeath();
@@ -756,6 +756,7 @@ void ServerGameLogic::handlePlayerDeath(Player *player)
 
 void ServerGameLogic::handleCreepDeath(Creep *creep)
 {
+  std::cout << "handling creep death: " << creep->team << std::endl;
   // Remove creep
   teams[creep->team].removeUnit(creep);
 
