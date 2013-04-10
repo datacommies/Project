@@ -192,17 +192,9 @@ void Creep::Update(Team& team)
 --              within one pixel of the paths point.
 ------------------------------------------------------------------------------*/
 void Creep::Move( Point pt ) {
-    if((pPath->x - moveSpeed < position.x && pPath->x + moveSpeed > position.x) 
-        && (pPath->y - moveSpeed < position.y && pPath->y + moveSpeed > position.y)) 
-    {
-        position.x = pPath->x;
-        position.y = pPath->y;
-    }
-    else
-    {
-        position.x += getTargetDirection(position.x, pt.x) * moveSpeed;
-        position.y += getTargetDirection(position.y, pt.y) * moveSpeed;
-    }
+
+    position.x += getTargetDirection(position.x, pt.x) * moveSpeed * ( pTarget != NULL ?  3 : 1 );
+    position.y += getTargetDirection(position.y, pt.y) * moveSpeed * ( pTarget != NULL ?  3 : 1 );
 }
 /*------------------------------------------------------------------------------
 -- FUNCTION:    nextPoint

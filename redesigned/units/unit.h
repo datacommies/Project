@@ -20,12 +20,13 @@ public:
     int perception;  //distance that the unit can aquire a target
     int attackCount; //counter between unit attacks
     Unit *pTarget;
+    float fRotate;
     
     bool            isAlive() { return health > 0; } //incase creep get hits more than its remaining health
     virtual void    Attack(void);
     virtual void    Update(Team&);
     void            setTarget(Unit &newTarget) { pTarget = &newTarget; }
-    float           Rotate(Point); 
+    void           Rotate(Point); 
     void            setDamage(int newDamage) { attackDamage = newDamage;  }
     void            setRange(int newRange) { attackRange = newRange; }
     bool            inRange(Point, Point, int);
