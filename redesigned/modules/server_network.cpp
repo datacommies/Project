@@ -108,7 +108,7 @@ bool ServerNetwork::sync(int client_)
             gameOver(client_, winner == teamId ? WON_GAME : LOST_GAME);
         }
     }else{
-        int teamId;
+        int teamId = 0;
 
         //wrap into syncFirstTeam()
         for (size_t i = 0; i < serverGameLogic_.teams[0].towers.size(); ++i)

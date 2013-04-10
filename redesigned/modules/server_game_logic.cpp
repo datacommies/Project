@@ -553,11 +553,11 @@ void ServerGameLogic::update()
       teams[0].players[i]->position.x+= teams[0].players[i]->moveSpeed;
 
 
-    for (unsigned int j = 0; j < teams[0].players.size(); ++j) {
+    for (unsigned int j = 0; j < teams[1].players.size(); ++j) {
       // Check all players, other than ourselves!
       if (j != i) {
-        if (distance(teams[0].players[i]->position, teams[0].players[j]->position) < 5) {
-          teams[0].players[j]->health -= 10;
+        if (distance(teams[1].players[i]->position, teams[1].players[j]->position) < 5) {
+          teams[1].players[j]->health -= 10;
           collided = true;
           break;
         }

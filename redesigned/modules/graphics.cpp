@@ -460,7 +460,7 @@ void Graphics::takeRole()
     
     // Set it for when start button sends player_update.
     globalGraphics->clientGameLogic_.clientNetwork_.p.role = role;
-    //globalGraphics->clientGameLogic_.clientNetwork_.p.team = team;
+    globalGraphics->clientGameLogic_.clientNetwork_.p.team = team - 1;
     
     globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(team, role, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
 }
