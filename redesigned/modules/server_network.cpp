@@ -264,8 +264,6 @@ void* ServerNetwork::handleClientRequest(void* args)
                     break;
 
                 Direction dir = rpm.direction;
-
-                cout << "Direction: " << dir << endl;
                 thiz->serverGameLogic_.receiveMovePlayerCommand(client_, dir);
                 
             break;

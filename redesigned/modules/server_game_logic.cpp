@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <new>
+#include <cmath>
 
 #define NOT_FOUND 2
 
@@ -511,6 +512,11 @@ void ServerGameLogic::updateMoveUnit(CommandData& command)
   updateMaps();
 }
 
+double distance(Point p, Point q)
+{
+  return sqrt((q.x-p.x) + (q.y-p.y));
+}
+
 /* Processes all waiting commands.
  *
  * PRE:    
@@ -519,25 +525,40 @@ void ServerGameLogic::updateMoveUnit(CommandData& command)
  * NOTES:   Perform validation here.
  *          Nice to have: send a fail message if command is invalid */
 void ServerGameLogic::update()
-{      
-
-
+{ 
   updateMaps();
 
-#ifdef DTESTCLASS
-  printf("team 0\n");
-  mapTeams_[0].printGrid();
-  printf("team 1\n");
-  mapTeams_[1].printGrid();
-#endif
+  for (unsigned int i = 0; i < teams[0].players.size(); ++i) {
+    bool collided = false;
+    
+    for (unsigned int j = 0; j < teams[0].players.size(); ++j) {
+      // Check all players, other than ourselves!
+      if (j != i) {
+        if (distance(teams[0].players[i]->position, teams[0].players[j]->position) < 5) {
+          teams[0].players[j]->health -= 10;
+          collided = true;
+        }
+      }
+    }
 
-  //mapBoth_.merge(mapTeams_[0], mapTeams_[1]);
+    for (unsigned int j = 0; j < teams[1].creeps.size(); ++j) {
+      if (distance(teams[0].players[i]->position, teams[1].creeps[j]->position) < 5) {
+        teams[1].creeps[j]->health -= 10;
+        collided = true;
+      }
+    }
 
-  //mapBoth_.printGrid();
+    for (unsigned int j = 0; j < teams[1].towers.size(); ++j) {
+      if (distance(teams[0].players[i]->position, teams[1].towers[j]->position) < 5) {
+        teams[1].towers[j]->health -= 10;
+        collided = true;
+      }
+    }
 
+    // If we collided with something else, stay where we are.
+    if (collided)
+      break;
 
-  for (unsigned int i = 0; i < teams[0].players.size(); ++i)
-  {
     if (teams[0].players[i]->direction & UP)
       teams[0].players[i]->position.y-= teams[0].players[i]->moveSpeed;
     if (teams[0].players[i]->direction & DOWN)
