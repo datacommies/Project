@@ -7,6 +7,9 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include "../resource.h"
+#include <fstream>
+#include <vector>
+#include <time.h>
 
 using namespace std;
 
@@ -329,11 +332,15 @@ void Graphics::initDesktop()
     sfgDesktop.SetProperty("Entry", "FontSize", 22);
 }
 
-std::string getName( void ) {
+std::string getName( void ) {
+
     std::vector<string> lines;
-    std::string line, result;    srand (time(NULL));
+    std::string line, result;
+
+    srand (time(NULL));
     ifstream myfile;
-    myfile.open("name.txt", ifstream::in);
+    myfile.open("name.txt", ifstream::in);
+
     if ( !myfile.is_open() ) {
         cout << "Cannot find file." << endl;
         return std::string("Error:getName");
@@ -347,7 +354,8 @@ std::string getName( void ) {
     for(int i = 0; i < 3; i++ ) {
         int rnd = rand() % lines.size();
         result += lines.at(rnd);
-        result += " ";
+        result += " ";
+
     }
     return result;
 }
