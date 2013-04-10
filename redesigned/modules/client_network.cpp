@@ -274,9 +274,9 @@ bool ClientNetwork::createUnit(int playerId, UnitType type, Point location, int 
 	request.posx = location.x;
 	request.posy = location.y;
 	request.path = path;
-
+	std::cout << "sending request to create " << request.unit << std::endl;
 	send(connectsock, &request, sizeof(request_create_t), 0);
-   return false;
+    return false;
 }
 /* 
  *

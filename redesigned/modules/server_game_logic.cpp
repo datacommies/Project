@@ -478,6 +478,7 @@ int ServerGameLogic::WhichTeam(int id) {
   return 2;
   */
 }
+
 /* 
  *
  * PRE:     
@@ -493,8 +494,10 @@ void ServerGameLogic::updateCreate(CommandData& command)
 
   int team_no;
 
-  int x = command.location.x;
-  int y = command.location.y;
+  //int x = command.location.x;
+  //nt y = command.location.y;
+  int x = 100;
+  int y = 100;
 
   if ( !(teams[0].isAlive() && teams[1].isAlive()) ) {
     gameState_ = WON_GAME;
@@ -514,27 +517,35 @@ void ServerGameLogic::updateCreate(CommandData& command)
   }
 
   updateMaps();
+  std::cout << "1" << std::endl;
   if (!mapTeams_[0].isValidPos(command.location)) {
   //  fprintf(stderr, "max x: %d max y: %d\n", MAX_X, MAX_Y);
  //   fprintf(stderr, "x: %d, y: %d out of range: %s line %d\n", x, y, __FILE__, __LINE__);
+      std::cout << "2" << std::endl;
     return; 
   }
 
-  if ( mapBoth_.grid_[x][y] != 0 )
+  if ( mapBoth_.grid_[x][y] != 0 ){
+    std::cout << "3" << std::endl;
+    std::cout << "x: " << x << " y: " << y << std::endl; 
     return; // position is already occupied 
-
+  }
+  std::cout << "4" << std::endl;
   // Create Unit  
+  std::cout << "command unit type: " << command.type << std::endl;
+  std::cout << "CREEP: " << CREEP << std::endl;
   switch (command.type) {
     case CREEP:
       {
-
+        std::cout << "try to create a creep" << std::endl;
         createCreep(team_no, command.location, command.pathID);    
         break;
       }
     case CASTLE:
     case TOWER:
     case TOWER_ONE:
-      {        
+      {  
+        std::cout << "try to create a tower" << std::endl;      
         createTower(team_no, command.location);        
         break;
       }
@@ -742,6 +753,9 @@ void ServerGameLogic::update()
 
     CommandData newCommand = requestedCommands.front();
     requestedCommands.pop();
+
+    std::cout << "command type is: " << newCommand.cmd << std::endl;
+    std::cout << "create creep type is: " << Create << std::endl;
 
     switch (newCommand.cmd) {
       case Create:

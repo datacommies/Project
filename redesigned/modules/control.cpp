@@ -264,7 +264,7 @@ Control::RunAllButtons()
 			    cout << "Setting next to build tower three!" << endl;
 			break;    
 			case BUILDCREEP_1:
-			    _clientGameLogicModule->createCreep(CREEP_ONE, GetCurrentLane());
+			    _clientGameLogicModule->createCreep(CREEP, GetCurrentLane());
 			 break;   
 			case BUILDCREEP_2:
 			    _clientGameLogicModule->createCreep(CREEP_TWO, GetCurrentLane());
