@@ -166,6 +166,9 @@ void ClientNetwork::recvReply() {
 							c.past_position = gl->units[i].inter_position;
 							gl->units[i] = c;
 							updated = true;
+
+							if (gl->units[i].health <= 0)					
+								gl->units.erase(gl->units.begin() + i);		
 						}
 					}
 					if (!updated)
@@ -189,8 +192,7 @@ void ClientNetwork::recvReply() {
 					pthread_mutex_lock( &gl->unit_mutex );
 					bool updated = false;
 					for (unsigned int i = 0; i < gl->units.size(); ++i)
-					{
-						
+					{						
 						if (gl->units[i].id == c.id){
 							// Preserve past position and intervalue.
 							c.inter_value = gl->units[i].inter_value;
@@ -272,9 +274,9 @@ bool ClientNetwork::createUnit(int playerId, UnitType type, Point location, int 
 	request.posx = location.x;
 	request.posy = location.y;
 	request.path = path;
-
+	std::cout << "sending request to create " << request.unit << std::endl;
 	send(connectsock, &request, sizeof(request_create_t), 0);
-   return false;
+    return false;
 }
 /* 
  *

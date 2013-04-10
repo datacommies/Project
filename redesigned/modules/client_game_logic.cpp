@@ -176,7 +176,7 @@ bool ClientGameLogic::createCreep(UnitType type, int laneID)
 
    //should there be a delay between creep creation to ensure that they don't spawn 
    //on top of eachother? I don't know how we wanted that to work...?
-
+   std::cout << "trying to send create creep request" << std::endl;
    Point location;
    location.x = 0;
    location.y = 0; // this doesn't do anything because the implementation sucks. Handled later.

@@ -1,4 +1,5 @@
 #include "server_game_logic.h"
+#include "../units/basic_tower.h"
 #include "../units/castle.h"
 #include "../units/AiController.h"
 #include "../units/player.h"
@@ -12,6 +13,9 @@
 #include <cmath>
 
 #define NOT_FOUND 2
+
+#define PLAYER_WIDTH 25
+#define PLAYER_HEIGHT 25
 
 ServerGameLogic * gSGL;
 
@@ -474,6 +478,7 @@ int ServerGameLogic::WhichTeam(int id) {
   return 2;
   */
 }
+
 /* 
  *
  * PRE:     
@@ -489,8 +494,10 @@ void ServerGameLogic::updateCreate(CommandData& command)
 
   int team_no;
 
-  int x = command.location.x;
-  int y = command.location.y;
+  //int x = command.location.x;
+  //nt y = command.location.y;
+  int x = 100;
+  int y = 100;
 
   if ( !(teams[0].isAlive() && teams[1].isAlive()) ) {
     gameState_ = WON_GAME;
@@ -510,27 +517,35 @@ void ServerGameLogic::updateCreate(CommandData& command)
   }
 
   updateMaps();
+  std::cout << "1" << std::endl;
   if (!mapTeams_[0].isValidPos(command.location)) {
   //  fprintf(stderr, "max x: %d max y: %d\n", MAX_X, MAX_Y);
  //   fprintf(stderr, "x: %d, y: %d out of range: %s line %d\n", x, y, __FILE__, __LINE__);
+      std::cout << "2" << std::endl;
     return; 
   }
 
-  if ( mapBoth_.grid_[x][y] != 0 )
+  if ( mapBoth_.grid_[x][y] != 0 ){
+    std::cout << "3" << std::endl;
+    std::cout << "x: " << x << " y: " << y << std::endl; 
     return; // position is already occupied 
-
+  }
+  std::cout << "4" << std::endl;
   // Create Unit  
+  std::cout << "command unit type: " << command.type << std::endl;
+  std::cout << "CREEP: " << CREEP << std::endl;
   switch (command.type) {
     case CREEP:
       {
-
+        std::cout << "try to create a creep" << std::endl;
         createCreep(team_no, command.location, command.pathID);    
         break;
       }
     case CASTLE:
     case TOWER:
     case TOWER_ONE:
-      {        
+      {  
+        std::cout << "try to create a tower" << std::endl;      
         createTower(team_no, command.location);        
         break;
       }
@@ -650,16 +665,24 @@ void ServerGameLogic::updateMovement (int team, int otherteam) {
 for (unsigned int i = 0; i < teams[team].players.size(); ++i) {
     bool collided = false;
     int dir = teams[team].players[i]->direction;
+    
+    Point new_position = teams[team].players[i]->position;
+
 
     if (dir & UP)
-      teams[team].players[i]->position.y-= teams[team].players[i]->moveSpeed;
+       new_position.y-= teams[team].players[i]->moveSpeed;
     if (dir & DOWN)
-      teams[team].players[i]->position.y+= teams[team].players[i]->moveSpeed;
+       new_position.y+= teams[team].players[i]->moveSpeed;
     if (dir & LEFT)
-      teams[team].players[i]->position.x-= teams[team].players[i]->moveSpeed;
+       new_position.x-= teams[team].players[i]->moveSpeed;
     if (dir & RIGHT)
-      teams[team].players[i]->position.x+= teams[team].players[i]->moveSpeed;
+       new_position.x+= teams[team].players[i]->moveSpeed;
 
+   
+    // Validate new position
+    if (new_position.x >= 0 && new_position.x <= MAP_X - PLAYER_WIDTH)
+	if (new_position.y >= 0 && new_position.y <= MAP_Y - PLAYER_HEIGHT)
+	    teams[team].players[i]->position = new_position;
 
     for (unsigned int j = 0; j < teams[otherteam].players.size(); ++j) {
       if (distance(teams[team].players[i]->position, teams[otherteam].players[j]->position) < 25) {
@@ -727,6 +750,9 @@ void ServerGameLogic::update()
 
     CommandData newCommand = requestedCommands.front();
     requestedCommands.pop();
+
+    std::cout << "command type is: " << newCommand.cmd << std::endl;
+    std::cout << "create creep type is: " << Create << std::endl;
 
     switch (newCommand.cmd) {
       case Create:
@@ -888,7 +914,6 @@ void ServerGameLogic::createTower(int team_no, Point location)
     BasicTower *tower = new BasicTower(uid, team_no, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
                            INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);
         
-                           
     // Add tower to team
     teams[team_no].addUnit(tower);
 
