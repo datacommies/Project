@@ -229,13 +229,10 @@ void* ServerNetwork::handleClientRequest(void* args)
     while (1) {
         header_t head;
 
-       // cout << "Going to get a head" <<endl;
         int n = recv_complete(client_, &head, sizeof(header_t), 0);
 
         if (n <= 0)
             break;
-
-       // cout << "Got a head" <<endl;
 
         int x = 0; 
 
@@ -310,7 +307,8 @@ int recv_complete (int sockfd, void *buf, size_t len, int flags) {
         result = recv (sockfd, (char*)buf + bytesRead, len - bytesRead, flags);
         
         if (result < 1) {
-            cerr << ("Error in handleRequest() recv()") << endl;
+            cerr << ("Connection Terminated by Server") << endl;
+            exit(0);
             return result;
         }
         
