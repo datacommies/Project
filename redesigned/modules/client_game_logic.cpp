@@ -141,10 +141,8 @@ void ClientGameLogic::lose () {
 bool ClientGameLogic::createTower(UnitType type, Point location)
 {
    // TODO: validation
-   //validate currency
-   //confirm that we currently have enough currency to build that tower
-   //mutex to access the currency?
-   //where is the currency stored? team?
+   //validate currency - handled in server_game_logic.cpp
+
    //pass team into create unit, switch based on unit type?
 
    //validate location

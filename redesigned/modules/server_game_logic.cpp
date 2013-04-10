@@ -2,6 +2,7 @@
 #include "../units/castle.h"
 #include "../units/AiController.h"
 #include "../units/player.h"
+#include "../units/basic_tower.h"
 #include <stdio.h>
 #include <signal.h>
 #include <sys/time.h>
@@ -853,7 +854,7 @@ void ServerGameLogic::createCreep(int team_no, Point location, int path_no)
  *
  * REVISIONS: Kevin - Only creates tower if the chosen location is within the team's half
  *                  of the map AND there is enough currency.
- *                  - changed to calling BasicTower constructor
+ *                  - changed to calling BasicTower constructor & sending team_no
  */
 void ServerGameLogic::createTower(int team_no, Point location)
 {
@@ -882,8 +883,14 @@ void ServerGameLogic::createTower(int team_no, Point location)
     int uid = next_unit_id_++;
 
     // create new tower
-    Tower *tower = new BasicTower(uid, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
+//    Tower *tower = new Tower(uid, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
+//                           INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);
+//    Tower *tower = new Tower(uid, team_no, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
+//                           INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);                           
+    BasicTower *tower = new BasicTower(uid, team_no, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
                            INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);
+        
+                           
     // Add tower to team
     teams[team_no].addUnit(tower);
 
