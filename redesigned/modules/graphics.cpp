@@ -329,6 +329,29 @@ void Graphics::initDesktop()
     sfgDesktop.SetProperty("Entry", "FontSize", 22);
 }
 
+std::string getName( void ) {
+    std::vector<string> lines;
+    std::string line, result;    srand (time(NULL));
+    ifstream myfile;
+    myfile.open("name.txt", ifstream::in);
+    if ( !myfile.is_open() ) {
+        cout << "Cannot find file." << endl;
+        return std::string("Error:getName");
+    }
+
+    while ( myfile.good() ){
+        getline( myfile, line );
+        lines.push_back(line);
+    }
+    myfile.close();
+    for(int i = 0; i < 3; i++ ) {
+        int rnd = rand() % lines.size();
+        result += lines.at(rnd);
+        result += " ";
+    }
+    return result;
+}
+
 /* Initializes the join window that the join UI sits ontop of.
  *
  * PRE:     
@@ -352,7 +375,7 @@ void Graphics::initJoinWindow()
     sfgPortLabel = sfg::Label::Create("Port:");
 
     // Create the entry boxes.
-    sfgNameEntryBox = sfg::Entry::Create("Player *");
+    sfgNameEntryBox = sfg::Entry::Create(getName());
     sfgNameEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 120.
     sfgServerEntryBox = sfg::Entry::Create("localhost");
     sfgServerEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 120.
