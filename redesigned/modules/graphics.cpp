@@ -341,6 +341,7 @@ void Graphics::initDesktop()
 {
     sfgDesktop = sfg::Desktop();
     sfgDesktop.SetProperty("Label", "FontSize", 22);
+    sfgDesktop.SetProperty("Label", "FontSize", 22);
     sfgDesktop.SetProperty("Entry", "FontSize", 22);
 }
 
@@ -404,6 +405,7 @@ void Graphics::initJoinWindow()
     // Create the entry boxes.
     sfgNameEntryBox = sfg::Entry::Create(getName());
     sfgNameEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 120.
+    sfgNameEntryBox->SetMaximumLength(16);
     sfgServerEntryBox = sfg::Entry::Create("localhost");
     sfgServerEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 120.
     sfgPortEntryBox = sfg::Entry::Create("4545");
@@ -446,6 +448,7 @@ void Graphics::initLobbyWindow()
     sfgLobbyWindow->SetPosition(sf::Vector2f(100, 225)); // Change the window position.
     sfgLobbyWindow->SetRequisition(sf::Vector2f(600, 350));
 
+
     // Create a parent box to hold all the subboxes.
     sfgLobbyBox = sfg::Box::Create(sfg::Box::HORIZONTAL);
 
@@ -455,8 +458,11 @@ void Graphics::initLobbyWindow()
     sfgRightLobbyBox = sfg::Box::Create(sfg::Box::VERTICAL);
 
     // Create all the labels.
-    unassignedPlayersLabel = sfg::Label::Create("Unassigned Players:");
+    unassignedPlayersLabel = sfg::Label::Create("Players Waiting:");
     unassignedPlayersList = sfg::Label::Create("NeedsVector\nGordon\nG-Man\nD0g\nAlyx");
+    unassignedPlayersList->SetId("upl");
+    sfgDesktop.SetProperty("#upl", "FontSize", "8");
+
     teamOneLabel = sfg::Label::Create("Team One");
     teamTwoLabel = sfg::Label::Create("Team Two");
 
@@ -514,7 +520,6 @@ void Graphics::takeRole()
     
     globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(team, role, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
 }
-
 
 /* This method updates all the button texts in the lobby with those in the client network team_l and team_r.
  *
