@@ -37,7 +37,6 @@ Client::Client()
 ------------------------------------------------------------------------------*/
 void Client::run()
 {
-    audio_.playMusic("sounds/bg.ogg");
     
     while (true) {
         while (clientGameLogic_.getCurrentState() != LOBBY)

@@ -1,3 +1,18 @@
+/*------------------------------------------------------------------------------
+-- FILE: multishot_tower.h
+--
+-- DATE: 2013/03/20
+--
+-- PROGRAMMER: Aiko Rose
+--
+-- FUNCTIONS: Attack(Team*)
+-- 
+--
+-- DESCRIPTION: MultiShotTower inherits from Tower.
+-- The function Attack() is declared.
+------------------------------------------------------------------------------*/
+
+
 #ifndef MULTISHOT_TOWER_H
 #define MULTISHOT_TOWER_H
 

@@ -139,7 +139,7 @@ private:
    void initGameControls ();
    void loadImages();
    void drawTeamCircle(sf::RenderWindow& window, int team, float x, float y);
-   void drawHealthBar(sf::RenderWindow& window, float x, float y, int health);
+   void drawHealthBar(sf::RenderWindow& window, float x, float y, int health, int max);
    void drawCurrency(sf::RenderWindow& window);
    void drawEndGameScreen(sf::RenderWindow& window);
    void drawLoadingScreen();
