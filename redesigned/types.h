@@ -78,6 +78,11 @@ typedef struct {
     int winner;
 } gameover_t;
 
+typedef struct {
+    header_t head;
+    char * msg;
+} chatmsg_t;
+
 /*typedef struct {
     header_t head;
     int id;

@@ -504,10 +504,22 @@ void * ServerNetwork::handle_client_lobby(void * ctx)
         if (n <= 0) break;
 
         if (head.type == MSG_CHAT) {
+            chatmsg_t chat;
+
             char * buf = new char [head.size];
             memset(buf, 0, head.size);
             recv_complete(client, buf, head.size, 0);
-            cout << "Got message:" << buf << "from client" << endl;
+            cout << "Got message:" << buf << "from client" << client << endl;
+
+            //memset(chat.msg, 0, head.size);
+            chat.head.type = MSG_CHAT;
+            chat.head.size = head.size;
+            chat.msg = buf;
+            //send the message to all the clients including the sender
+            for (size_t i = 0; i < players_.size(); ++i) {
+                send(clients_[i], &chat, sizeof(chatmsg_t), 0);   
+            }
+
             delete buf;
         }
 
