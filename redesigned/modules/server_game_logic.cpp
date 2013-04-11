@@ -673,7 +673,7 @@ for (unsigned int i = 0; i < teams[team].players.size(); ++i) {
 
     for (unsigned int j = 0; j < teams[otherteam].players.size(); ++j) {
       if (distance(teams[team].players[i]->position, teams[otherteam].players[j]->position) < 25) {
-        teams[otherteam].players[j]->health -= 1;
+        teams[otherteam].players[j]->health -= teams[team].players[i]->attackDamage;
         collided = true;
         break;
       }
@@ -681,7 +681,7 @@ for (unsigned int i = 0; i < teams[team].players.size(); ++i) {
 
     for (unsigned int j = 0; j < teams[otherteam].creeps.size(); ++j) {
       if (distance(teams[team].players[i]->position, teams[otherteam].creeps[j]->position) < 25) {
-        teams[otherteam].creeps[j]->health -= 1;
+        teams[otherteam].creeps[j]->health -= teams[team].players[i]->attackDamage;
         collided = true;
         break;
       }
@@ -689,7 +689,7 @@ for (unsigned int i = 0; i < teams[team].players.size(); ++i) {
 
     for (unsigned int j = 0; j < teams[otherteam].towers.size(); ++j) {
       if (distance(teams[team].players[i]->position, teams[otherteam].towers[j]->position) < 25) {
-        teams[otherteam].towers[j]->health -= 1;
+        teams[otherteam].towers[j]->health -= teams[team].players[i]->attackDamage;
         collided = true;
         break;
       }
@@ -900,11 +900,9 @@ void ServerGameLogic::createTower(int team_no, Point location)
 //    Tower *tower = new Tower(uid, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
 //                           INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);
 //    Tower *tower = new Tower(uid, team_no, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
-//                           INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);  
+//                           INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);                           
     BasicTower *tower = new BasicTower(uid, team_no, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
                            INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);
-
-    std::cout << "asjhasdasdjhsgdh " <<  tower->health << std::endl;
         
     // Add tower to team
     teams[team_no].addUnit(tower);
@@ -930,9 +928,36 @@ void ServerGameLogic::createPlayer(int team_no, Point location, int client_id, i
 {
   int uid = next_unit_id_++;
 
+  //set up base player
   Player *player = new Player(uid, client_id, location, role);
   player->setSpeed(5);
   player->team = team_no;
+
+  std::cout << "role: " << role << std::endl;
+
+  switch (role){
+    case 1: //gordon freeman
+      player->health = 115;
+    break;
+
+    case 2: //the flash
+      player->setSpeed(10);
+      player->health = 150;
+      player->attackDamage = 8;
+    break;
+
+    case 3: //samus
+      player->setSpeed(6);
+      player->attackDamage = 9;
+    break;
+
+    case 4: //hulk
+      player->setSpeed(2);
+      player->health = 250;
+      player->attackDamage = 14;
+    break;
+  }
+
   teams[team_no].addUnit(player);
   std::cout << "adding player: " << player->clientID << " team: " << team_no << std::endl;
 }
@@ -990,15 +1015,15 @@ void ServerGameLogic::handleDeaths()
       {
         if (j == 0)
             handleCastleDeath();
-        else{
+        else
             handleTowerDeath(teams[i].towers[j]);
-        }
       }
   }
   
   pthread_mutex_unlock( &unit_mutex );
 
-  updateMaps();}
+  updateMaps();
+}
 /* 
  *
  * PRE:     
