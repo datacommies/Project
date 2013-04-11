@@ -837,7 +837,7 @@ void ServerGameLogic::setAlarm()
  * PRE:     Teams are initialized.
  * POST:    A creep has been created and added to the specified team. The team's currency has been
  *          decremented accordingly.
- * PROGRAMMER:
+ * PROGRAMMER: Jesse Wright, Someone else.
  * RETURNS:
  * NOTES:   
  *
