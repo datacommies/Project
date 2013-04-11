@@ -160,7 +160,6 @@ void ServerNetwork::gameOver(int client_, const int winner)
 -- DESIGNER:   Behnam Bastami
 -- PROGRAMMER: Behnam Bastami, Dennis Ho
 --
-<<<<<<< HEAD
 -- INTERFACE:   bool sync(int client_, int team_)
 --                  client_ - the socket for the communication channel with this server
 -                   team_ - the team to sync 
@@ -283,11 +282,11 @@ void ServerNetwork::error (const char *msg)
 -- DESIGNER:   David Czech, Ron Bellido
 -- PROGRAMMER: David Czech, Ron Bellido
 --
--- INTERFACE:   
+-- INTERFACE:   void* handleInput(void* args)
 --
--- RETURNS:     
+-- RETURNS:     void *
 --
--- DESCRIPTION: 
+-- DESCRIPTION: handles any input typed on the server command line. Started on a thread.
 ------------------------------------------------------------------------------*/
 void* ServerNetwork::handleInput(void* args)
 {
@@ -320,19 +319,20 @@ void* ServerNetwork::handleInput(void* args)
     
     return NULL;
 }
+
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   handleClientRequest
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Ron Bellido, Behnam Bastami
 -- PROGRAMMER: Ron Bellido, Behnam Bastami
 --
--- INTERFACE:   
+-- INTERFACE:   void* handleClientRequest(void* args)
 --
--- RETURNS:     
+-- RETURNS:     void *
 --
--- DESCRIPTION: 
+-- DESCRIPTION: handles any requests sent by a client. Started on a thread.
 ------------------------------------------------------------------------------*/
 void* ServerNetwork::handleClientRequest(void* args)
 {
@@ -404,19 +404,20 @@ void* ServerNetwork::handleClientRequest(void* args)
 
     return NULL;
 }
+
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   void* handleClient(void* args)
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   David Czech, Behnam Bastami 
 -- PROGRAMMER: David Czech, Behnam Bastami 
 --
--- INTERFACE:   
+-- INTERFACE:   void* handleClient(void* args)
 --
--- RETURNS:     
+-- RETURNS:     void *
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Trampolines the handleClientRequest function.
 ------------------------------------------------------------------------------*/
 void* ServerNetwork::handleClient(void* args)
 {
@@ -445,18 +446,24 @@ void* ServerNetwork::handleClient(void* args)
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   recv_complete
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   David Czech
+--
 -- PROGRAMMER: David Czech, Behnam Bastami
 --
--- INTERFACE:   
+-- INTERFACE:   int recv_complete (int sockfd, void *buf, size_t len, int flags) 
+--                  sockfd - the socket to receive the payload from
+--                  buf - the payload that will receive
+--                  len - the size of the payload
+--                  flags - the flag to pass to recv() function
 --
--- RETURNS:     
+-- RETURNS:     the number of the total bytes read
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Function to call that will completely receive a payload 
+--  (e.g. player_matchmaking_t, map_t, etc.)
 ------------------------------------------------------------------------------*/
 int ServerNetwork::recv_complete (int sockfd, void *buf, size_t len, int flags) {
 
@@ -477,25 +484,25 @@ int ServerNetwork::recv_complete (int sockfd, void *buf, size_t len, int flags) 
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   operator==
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   David Czech
+-- PROGRAMMER: David Czech
 --
--- INTERFACE:   
+-- INTERFACE:   bool operator == (const player_matchmaking_t& a, const player_matchmaking_t& b) 
 --
--- RETURNS:     
+-- RETURNS:     true if the two given player_matchmaking_t's are equal, false otherwise
 --
--- DESCRIPTION: 
+-- DESCRIPTION: override for the == operator to compare two player_matchmaking types
 ------------------------------------------------------------------------------*/
 bool operator == (const player_matchmaking_t& a, const player_matchmaking_t& b) {
     return a.pid == b.pid;
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   update_all_clients
 --
 -- DATE:        2013/03/22
 --
