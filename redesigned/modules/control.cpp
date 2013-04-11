@@ -281,6 +281,10 @@ Control::RunAllButtons()
 			case SELECTHIPATH:
 			    _currentLane = HIGHPATH;
 			break;
+			case INFOBUTTON:
+				cout << "info button press" << endl;
+				_graphicsModule->toggleInfoButton();
+			break;
 			default:
 			break;
 				// Does nothing but gets rid of annoying warnings
