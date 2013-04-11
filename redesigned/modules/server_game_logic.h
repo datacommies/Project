@@ -35,11 +35,13 @@
 #define INIT_TOWER_WALL 2 
 #define TOWER_COST 100
 
-#define PATH_COUNT 1
+#define PATH_COUNT 3
 
 #define PLAYER_KILL_BONUS 100
 #define CREEP_KILL_BONUS 10
 #define TOWER_KILL_BONUS 50
+
+#define CREEP_COOLDOWN 20
 
 // This will come actually be read from the map
 #ifndef TESTCLASS
@@ -52,6 +54,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 //#include <pthread.h>
 
 #include "../resource.h"
@@ -100,7 +103,7 @@ class ServerGameLogic
 
     // Functions
     void startGame();
-    void receiveCreateUnitCommand(int playerId, UnitType type, Point location, int pathId = 0);
+    void receiveCreateUnitCommand(int playerId, UnitType type, Point location, int pathId);
     void receiveMovePlayerCommand(int playerId, Direction direction);
     void receiveMoveUnitCommand(int unitId, Direction direction);
     void receiveAttackCommand(int playerId, Direction direction);
@@ -119,7 +122,8 @@ class ServerGameLogic
     //Ai ai_;
     GameMap *gameMap_;
 
- 
+    // The time a creep was created last for each team respectively.
+    time_t lastCreepTime_[2];
     
     GameLogicMap mapTeams_[2]; 
     GameLogicMap mapBoth_;

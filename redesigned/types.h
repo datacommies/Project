@@ -109,7 +109,6 @@ typedef struct {
     int posx, posy;
     int health;
     int team;
-    //int iElement;
     int attackDamage;//damage that the unit deals per hit
     int attackRange; //distance that the unit can successfully attack
     int attackSpeed; //the speed which the attack counter has to hit in order to initiate an attack
@@ -120,6 +119,7 @@ typedef struct {
 typedef struct {
     int speed;
     int direction;
+    int role;
 } mobileunit_t;
 
 typedef struct

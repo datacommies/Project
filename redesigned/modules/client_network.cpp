@@ -188,6 +188,7 @@ void ClientNetwork::recvReply() {
 					c.past_position = c.position;
 					c.health = u.health;
 					c.type = u.unit_type;
+					c.role = mu.role;
 					c.team = u.team;
 					pthread_mutex_lock( &gl->unit_mutex );
 					bool updated = false;
@@ -274,9 +275,9 @@ bool ClientNetwork::createUnit(int playerId, UnitType type, Point location, int 
 	request.posx = location.x;
 	request.posy = location.y;
 	request.path = path;
-
+	std::cout << "sending request to create " << request.unit << " on path " << path << std::endl;
 	send(connectsock, &request, sizeof(request_create_t), 0);
-   return false;
+    return false;
 }
 /* 
  *
@@ -289,6 +290,11 @@ bool ClientNetwork::createUnit(int playerId, UnitType type, Point location, int 
  */
 
 bool ClientNetwork::updatePlayerLobby (int team, int role, const char* name, bool ready) {
+
+	// If not empty, someone is already there!
+	if ( !((team == 1 ? team_l : team_r)[role] == empty))
+		return false;
+
 	player_matchmaking_t p = {{0, 0}, {0}, 0, 0, 0, false};
 	
 	strcpy(p.name, name);

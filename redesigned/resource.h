@@ -82,6 +82,7 @@ struct CLIENT_UNIT // This struct applies only to the client side - server side 
 
    int health;
    int team;
+   int role;
    UnitType type;
 };
 
