@@ -667,11 +667,11 @@ for (unsigned int i = 0; i < teams[team].players.size(); ++i) {
     {
         respawnPlayer(teams[team].players[i], teams[team].players[i]->team == 0 ? gameMap_->team0start[0] : gameMap_->team1start[0]);
         teams[team].players[i]->tod = 0;
-        return;
+        continue;
     }
     
     if (teams[team].players[i]->tod != 0) { // death
-        return;
+        continue;
     }
 
     if (dir & UP)
