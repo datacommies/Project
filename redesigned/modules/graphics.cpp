@@ -27,6 +27,22 @@ using namespace std;
 #define INFOBUTTONX 770
 #define INFOBUTTONY 670
 
+Graphics* globalGraphics = NULL; // Used for the SFGUI button handlers in the lobby.
+
+/*------------------------------------------------------------------------------
+-- FUNCTION:   to_string
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   David Czech
+-- PROGRAMMER: David Czech
+--
+-- INTERFACE:   inline string to_string(int num) - the integer to be converted
+--
+-- RETURNS:     string - the string version of the integer
+--
+-- DESCRIPTION: This function returns a string version of the given integer
+------------------------------------------------------------------------------*/
 inline string to_string(int num)
 {
     stringstream ss; 
@@ -34,28 +50,32 @@ inline string to_string(int num)
     return ss.str();
 }
 
-Graphics* globalGraphics = NULL; // Used for the SFGUI button handlers in the lobby.
-
 /*------------------------------------------------------------------------------
 -- FUNCTION:   init
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   David Czech
--- PROGRAMMER: David Czech, Jake Miner, Jesse Wright, Dennis Ho
+-- DESIGNER:   David Czech, Albert Liao
+-- PROGRAMMER: David Czech, Albert Liao, Jake Miner, Jesse Wright, Dennis Ho
 --
--- INTERFACE:   void * init (void * in) 
+-- INTERFACE:   void * init (void * in) - in is a pointer to the graphics object
+--                                        being used.
 --
--- RETURNS:     void * - 
+-- RETURNS:     void * - not used
 --
--- DESCRIPTION: 
+-- DESCRIPTION: This function is the main graphics thread that runs and constantly 
+--              redraws the client screen with the graphics that should be drawn
+--              depending on the game state and the units present.
 ------------------------------------------------------------------------------*/
 void * init (void * in) 
 {
+    // Controls should not be initiated until the game has started.
     bool controls_init = false;
+
     // Pointer to the Graphics instance is passed through the thread create argument.
     Graphics* g = (Graphics *)in;
     
+    // Load all the images into the SF sprites that we're going to draw.
     g->loadImages();
 
     // Create window for client and assign it as the window for the graphics object.
@@ -87,14 +107,17 @@ void * init (void * in)
             // If we're in lobby, send a message otherwise if we have the join window open, attempt a join or open the join window.
             if ((event.type == sf::Event::KeyPressed) && sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
             {
+                // If we're in the connecting state, the enter button should trigger a connectino request to a server.
                 if(g->clientGameLogic_.gameState_ == CONNECTING)
                 {
                     g->joinButtonHandler();
                 }
+                // If we're in the lobby, the enter button should trigger a chat message send.
                 else if (g->clientGameLogic_.gameState_ == LOBBY)
                 {
                     g->sendMessage();
                 }
+                // If we're in the starting screen, the enter button should trigger opening the join window.
                 else if (g->clientGameLogic_.gameState_ == MAIN_MENU)
                 {
                     g->clientGameLogic_.UIElements.clear();
@@ -145,7 +168,9 @@ void * init (void * in)
             else if (event.type == sf::Event::Closed){
                 window.close();
                 exit(0);
-            } else if ((event.type == sf::Event::KeyPressed) && (g->clientGameLogic_.gameState_ != LOBBY))
+            }
+            // Handle key presses when the game is running.
+            else if ((event.type == sf::Event::KeyPressed) && (g->clientGameLogic_.gameState_ != LOBBY))
             {
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
                     Control::get()->AddNewCalledKey(sf::Keyboard::W);
@@ -165,8 +190,12 @@ void * init (void * in)
         // Update the sfgui test window
         g->sfgDesktop.Update( 0.f );
         
+        // Clear the window so that we can redraw everything based on the gamestate.
         window.clear();
+
+        // Get the current game state.
         GameState c_state = g->clientGameLogic_.getCurrentState();
+
         // Check to see which state the game is in and act accordingly.        
         if (c_state == MAIN_MENU) {
             g->drawMainMenu(window);
@@ -175,57 +204,64 @@ void * init (void * in)
             if (g->clientGameLogic_.clientNetwork_.connecting_status != "connected") {
                 g->unassignedPlayersList->SetText(g->clientGameLogic_.clientNetwork_.connecting_status);
             } else {
-                string unassigned;
+                string unassigned; // Used to print out all the players unassigned to roles
+
+                // Build the string.
                 for (size_t i = 0; i < g->clientGameLogic_.clientNetwork_.waiting.size(); ++i)
                 {
                     unassigned += g->clientGameLogic_.clientNetwork_.waiting[i].name;
                     unassigned += "\n";
                 }
+
+                // Display the string in the unassignedPlayerList text.
                 g->unassignedPlayersList->SetText(unassigned);
 
+                // If we're waiting for the game to start, draw the loading screen.
                 if(g->clientGameLogic_.waitingForStart)
                 {
                     g->drawLoadingScreen();
                 }
+                // Otherwise, update all the new names in the roles on the buttons in the lobby.
                 else
                 {
-                    // Update the names on the buttons.
                     g->updateLobbyRoles();
                 }
 
-                // Update chat with the latest messages.
+                // Update chat with the latest messages. If there are messages in the chatbuffer_, print them.
                 for (std::vector<string>::iterator it = g->clientGameLogic_.clientNetwork_.chatbuffer_.begin(); it != g->clientGameLogic_.clientNetwork_.chatbuffer_.end(); ++it)
                 {
+                    // Append the new message to what's currently displayed.
                     g->sfgChatDisplayLabel->SetText(g->sfgChatDisplayLabel->GetText().toAnsiString() + *it);
 
-                    // Set scrollbar to lower bound.
+                    // Scroll the scrollbar down to the bottom so the new message is displayed.
                     sfg::Adjustment::Ptr tempAdj = g->sfgChatDisplayWindow->GetVerticalAdjustment();
                     tempAdj->SetValue(tempAdj->GetUpper());
                     g->sfgChatDisplayWindow->SetVerticalAdjustment(tempAdj);
                 }
 
+                // After we've added all the messages, clear the buffer.
                 g->clientGameLogic_.clientNetwork_.chatbuffer_.clear();
             }
-
-            // Update the names on the lobby buttons.
-            g->updateLobbyRoles();
         } else if (c_state == IN_GAME || c_state == WON_GAME || c_state == LOST_GAME) {
-
+            // Only initialize the in game controls once.
             if (!controls_init) {
                 controls_init = true;
                 g->initGameControls();
             }
 
+            // Redraw all the game elements
             g->drawMap(window);
             g->drawUnits(window);
             g->drawHud(window);
             g->drawCurrency(window);
 
+            // Only draw the info screen if the button was pressed.
             if(g->_infoButtonVisible)
             {
                 g->drawInfo(window);
             }
 
+            // If the game is finished, draw the appropriate end screen.
             if (c_state == WON_GAME || c_state == LOST_GAME)
                 g->drawEndGameScreen(window);
         }
@@ -233,39 +269,43 @@ void * init (void * in)
         // Iterate through the buttons and draw them one by one.
         for (std::set<Button>::iterator button = g->clientGameLogic_.UIElements.begin(); button != g->clientGameLogic_.UIElements.end(); ++button)
         {
-                Button b = *button;
-                b.draw(window);
+            Button b = *button;
+            b.draw(window);
         }
 
-
+        // If we're in the lobby, draw all of the sprites besides their rolebuttons.
         if (c_state == LOBBY) {
             sf::RectangleShape ready_box;
             ready_box.setSize(sf::Vector2f( 25, 25));
 
+            // Draw the ready boxes depending on who's ready on the left team.
             for (size_t i = 0; i < 5; i++) {
                 ready_box.setFillColor(g->clientGameLogic_.clientNetwork_.team_l[i].ready ? sf::Color(  0, 255,  0) : sf::Color(  255, 0,  0));
                 ready_box.setPosition(65, i * 55 + 180);
                 window.draw(ready_box);
             }
 
+            // Draw the ready boxes depending on who's ready on the left team.
             for (size_t i = 0; i < 5; i++) {
                 ready_box.setFillColor(g->clientGameLogic_.clientNetwork_.team_r[i].ready ? sf::Color(  0, 255,  0) : sf::Color(  255, 0,  0));
                 ready_box.setPosition(710, i * 55 + 180);
                 window.draw(ready_box);
             }
 
-
+            // Draw the left side sprites.
             for (size_t i = 0; i < 5; i++) {
                 g->player_sprites[i].setPosition(65, i * 55 + 180);
                 g->window->draw(g->player_sprites[i]);
             }
 
+            // Draw the right side sprites.
             for (size_t i = 0; i < 5; i++) {
                 g->player_sprites[i].setPosition(710, i * 55 + 180);
                 g->window->draw(g->player_sprites[i]);
             }
         }
 
+        // Reset the states before drawing everything on SFGUI and then SFML after.
         window.resetGLStates();
         sfgui.Display(window);
         window.display();
@@ -624,7 +664,7 @@ void Graphics::initLobbyWindow()
     // Create the start game / exit buttons.
     startGameButton = sfg::Button::Create("Ready");
     startGameButton->GetSignal( sfg::Widget::OnLeftClick ).Connect(&Graphics::startGame, this);
-    exitLobbyButton = sfg::Button::Create("Exit Lobby");
+    exitLobbyButton = sfg::Button::Create("Exit Game");
     exitLobbyButton->GetSignal( sfg::Widget::OnLeftClick ).Connect(&Graphics::exitLobby, this);
 
     // Add all the controls to the container.
@@ -850,8 +890,8 @@ void Graphics::exitLobby()
     sfgChatDisplayWindow->Show(false);
     sfgChatSendWindow->Show(false);
 
-    // todo: actually exit the session and go back to main screen.
-    clientGameLogic_.exit();
+    // Quit the client.
+    clientGameLogic_.exitGame();
 
     this->initMainMenuControls();
 }
@@ -925,6 +965,7 @@ void Graphics::hideJoinWindow()
 {
     sfgJoinWindow->Show(false);
     this->initMainMenuControls();
+    clientGameLogic_.menu();
 }
 /*------------------------------------------------------------------------------
 -- FUNCTION:   
@@ -978,19 +1019,6 @@ void Graphics::drawMap(sf::RenderWindow& window)
 ------------------------------------------------------------------------------*/
 void Graphics::drawMainMenu(sf::RenderWindow& window)
 {
-
-    creep_tex1.loadFromFile("images/c1.png");
-    creep_sprite1.setTexture(creep_tex1);
-
-    sf::Texture titlesc_bg; 
-    titlesc_bg.loadFromFile("images/title.png");
-    
-    sf::Sprite titlesc; 
-    titlesc.setTexture(titlesc_bg);
-
-    sf::Text title("Child's Play", font, 71);
-    title.setPosition(sf::Vector2f(200, 0));
-    
     window.draw(titlesc);
     window.draw(title);
 }
@@ -1271,6 +1299,12 @@ void Graphics::loadImages()
     infoImage.loadFromFile("images/infos.png");
     infoSprite.setTexture(infoImage);
     infoSprite.setPosition(150, 50);
+
+    titlesc_bg.loadFromFile("images/title.png");
+    titlesc.setTexture(titlesc_bg);
+
+    title = sf::Text("Child's Play", font, 71);
+    title.setPosition(sf::Vector2f(200, 0));
 
     for (int i = 0; i < 5; i++) {
         // Load the tower texture.
