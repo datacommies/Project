@@ -59,7 +59,7 @@ ServerNetwork::ServerNetwork(ServerGameLogic& serverGameLogic)
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   Ron Bellido
+-- DESIGNER:   Ron Bellido, David Czech
 -- PROGRAMMER: Ron Bellido
 --
 -- INTERFACE:   int ServerNetwork::initSock(int port)
@@ -99,7 +99,7 @@ int ServerNetwork::initSock(int port)
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   Ron Bellido
+-- DESIGNER:   Ron Bellido, David Czech
 -- PROGRAMMER: Ron Bellido
 --
 -- INTERFACE:   void initNetwork()
@@ -170,7 +170,7 @@ void ServerNetwork::gameOver(int client_, const int winner)
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Behnam Bastami
--- PROGRAMMER: Behnam Bastami, Dennis Ho
+-- PROGRAMMER: Behnam Bastami, Dennis Ho, David Czech
 --
 -- INTERFACE:   bool sync(int client_, int team_)
 --                  client_ - the socket for the communication channel with this server

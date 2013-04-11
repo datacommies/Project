@@ -665,18 +665,18 @@ void ServerGameLogic::updateMoveUnit(CommandData& command)
   updateMaps();
 }
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   distance
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   David Czech
 -- PROGRAMMER: David Czech
 --
--- INTERFACE:   
+-- INTERFACE:   double distance(Point p, Point q)
 --
--- RETURNS:     
+-- RETURNS:     double - distance between p and q
 --
--- DESCRIPTION: 
+-- DESCRIPTION: uses distance formula to find distance between p and q.
 ------------------------------------------------------------------------------*/
 double distance(Point p, Point q)
 {
@@ -1042,8 +1042,8 @@ void ServerGameLogic::createTower(int team_no, Point location, UnitType ut)
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   Dennis Ho, Albert Liao, Jesse Wright, Callum Styan, David Czech, Behnam Bastami, Jesse Braham
--- PROGRAMMER: Dennis Ho, Albert Liao, Jesse Wright, Callum Styan, David Czech, Behnam Bastami, Jesse Braham
+-- DESIGNER:   Dennis Ho, Callum Styan, Behnam Bastami
+-- PROGRAMMER: Dennis Ho, Callum Styan, Behnam Bastami
 --
 -- INTERFACE:   void ServerGameLogic::createPlayer(int team_no, Point location, int client_id, int role)
 --
