@@ -27,7 +27,7 @@ ServerGameLogic * gSGL;
   ServerGameLogic::ServerGameLogic()
 : gameState_(LOBBY), next_unit_id_(1)
 {
-  PATH p;
+  /*PATH p;
   Point a;
   a.x = 0;
   a.y = 0;
@@ -50,12 +50,19 @@ ServerGameLogic * gSGL;
   a.x = 200;
   a.y = 200;
   p2.push_back(a);
-  teams[0].paths.push_back(p2);
+  teams[0].paths.push_back(p2);*/
 
   pthread_mutex_init(&unit_mutex, NULL);
 
   gameMap_ = new GameMap();
   gameMap_->initMap();
+
+  teams[0].paths.push_back(gameMap_->topOne);
+  teams[0].paths.push_back(gameMap_->midOne);
+  teams[0].paths.push_back(gameMap_->botOne);
+  teams[1].paths.push_back(gameMap_->topTwo);
+  teams[1].paths.push_back(gameMap_->midTwo);
+  teams[1].paths.push_back(gameMap_->botTwo);
 
   lastCreepTime_[0] = time(NULL);
   lastCreepTime_[1] = time(NULL);
@@ -497,7 +504,7 @@ void ServerGameLogic::updateCreate(CommandData& command)
   int team_no;
 
   //int x = command.location.x;
-  //nt y = command.location.y;
+  //int y = command.location.y;
   int x = 100;
   int y = 100;
 
