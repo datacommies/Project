@@ -31,6 +31,7 @@
 #include "../resource.h"
 #include "client_game_logic.h"
 #include "graphics.h"
+#include "audio.h"
 #include <vector>
 
 #define TERMINATE    10000
@@ -92,6 +93,7 @@ private:
 	void CallAttackEvent(Direction direction);
 
 	void CallUnitTypeCreationEvent(UnitType ttype);
+	Audio audio_;
 };
 
 #endif

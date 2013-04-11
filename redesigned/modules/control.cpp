@@ -432,7 +432,6 @@ Control::CallMoveEvent(Direction direction)
 void 
 Control::CallAttackEvent(Direction direction)
 {
-    audio_.playSoundEffect("sounds/bg.ogg");
 	_clientGameLogicModule->attack(direction);
 }
 
