@@ -33,6 +33,7 @@
 --              and updating the GameMap. 
 ------------------------------------------------------------------------------*/
 #include "GameMap.h"
+#include <cmath>
 
 /*------------------------------------------------------------------------------
 -- FUNCTION:    initPaths
@@ -84,18 +85,10 @@ void GameMap::initPaths(){
 
 
   // left team, mid lane
-  a.x = 55;
-  a.y = 41;
-  midOne.push_back(a);
-  a.x = 155;
-  a.y = 100;
-  midOne.push_back(a);
-  a.x = 135;
-  a.y = 100; 
-  midOne.push_back(a);
-  a.x = -1;
-  a.y = -1;
-  midOne.push_back(a);
+  for (int x = 40; x <= 800; x+=2)
+    midOne.push_back(Point(x, round((double)x * MAP_Y/MAP_X)));
+  midOne.push_back(Point(-1,-1));  
+
   //*** end of team 1 paths ***
 
 
@@ -131,18 +124,9 @@ void GameMap::initPaths(){
   botTwo.push_back(b);
 
   //middle
-  b.x = 470;
-  b.y = 470;
-  midTwo.push_back(b);
-  b.x = 250;
-  b.y = 250;
-  midTwo.push_back(b);
-  b.x = 30;
-  b.y = 30;
-  midTwo.push_back(b);
-  b.x = -1;
-  b.y = -1;
-  midTwo.push_back(b);
+  for (int x = 795; x >= 0; x-=2)
+    midTwo.push_back(Point(x, round((double)x * MAP_Y/MAP_X)));
+  midTwo.push_back(Point(-1,-1));  
   //*** end of team 2 paths ***    
 }
 
