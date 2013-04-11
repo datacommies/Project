@@ -3,7 +3,7 @@
 --
 -- DATE:        March 11, 2013
 --
--- MAINTAINERS: Callum Styan, Chris Porter, Nick Raposo
+-- MAINTAINERS: Callum Styan, Chris Porter, Nick Raposo, Kevin Tangeman, Steve Lo
 --
 -- FUNCTIONS:   Creep
 --              getTargetDirection
@@ -39,7 +39,7 @@ Creep::Creep(int uid, Point pos, int hp, int atkdmg, int atkrng,
 -- DATE:        March 26, 2013
 --
 -- DESIGNER:    Callum Styan
--- PROGRAMMER:  Callum Styan
+-- PROGRAMMER:  Callum Styan, Kevin Tangeman, Steve Lo
 --
 -- INTERFACE:   Creep(int uid, int side, Point pos, Point* path, int hp = 100,
 --                  int atkdmg = 10, int atkrng = 10,
@@ -212,15 +212,15 @@ void Creep::Move( Point pt ) {
 --
 -- DATE:        2013/04/09
 --
--- DESIGNER:    Nick Raposo, Christopher Porter
--- PROGRAMMER:  Nick Raposo, Christopher Porter
+-- DESIGNER:    Nick Raposo, Callum Styan
+-- PROGRAMMER:  Nick Raposo
 --
 -- INTERFACE:   void nextPoint(void)
 --
 -- RETURNS:     void 
 --
 -- DESCRIPTION: If we are not at the end of the path we set the next point
---              to go to.
+--              to go to.  Needed to be updated so that
 ------------------------------------------------------------------------------*/
 void Creep::nextPoint( void )
 {

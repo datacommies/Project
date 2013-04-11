@@ -41,7 +41,7 @@
 -- DATE:        April 7, 2013
 --
 -- DESIGNER:    Callum Styan
--- PROGRAMMER:  Callum Styan
+-- PROGRAMMER:  Callum Styan, Darry Danzig, Kevin Tangeman
 --
 -- INTERFACE:   void GameMap::initPaths()
 --
