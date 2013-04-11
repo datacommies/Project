@@ -625,8 +625,8 @@ void * ServerNetwork::handle_single_client_lobby(void* thing) {
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   Ron Bellido, David Czech
--- PROGRAMMER: Ron Bellido, David Czech
+-- DESIGNER:   Ron Bellido, David Czech, Albert Liao
+-- PROGRAMMER: Ron Bellido, David Czech, Albert Liao
 --
 -- INTERFACE:   void * handle_client_lobby(void * ctx)
 --

@@ -496,8 +496,8 @@ int ServerGameLogic::WhichTeam(int id) {
 --
 -- DATE:        2013/04/07
 --
--- DESIGNER:   Jesse Wright, Callum Styan
--- PROGRAMMER: Jesse Wright,  Callum Styan, Darry Danzig
+-- DESIGNER:   Jesse Wright, Callum Styan, Albert Liao
+-- PROGRAMMER: Jesse Wright,  Callum Styan, Darry Danzig, Albert Liao
 --
 -- INTERFACE:   void updateCreate(CommandData& command)
 --
@@ -1276,7 +1276,7 @@ void ServerGameLogic::handleCastleDeath()
 --
 -- RETURNS: int - returns the role of the player found. -1 if player isn't found.
 --
--- DESCRIPTION: Iterates through the player container to find the player via
+-- DESCRIPTION: Iterates through the player container to find the player's role via
 -- the playerID.
 ------------------------------------------------------------------------------*/
 int ServerGameLogic::getPlayerRole(int teamNumber, int playerID)
