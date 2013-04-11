@@ -468,7 +468,7 @@ void Graphics::initLobbyWindow()
     unassignedPlayersLabel = sfg::Label::Create("Players Waiting:");
     unassignedPlayersList = sfg::Label::Create("NeedsVector\nGordon\nG-Man\nD0g\nAlyx");
     unassignedPlayersList->SetId("upl");
-    sfgDesktop.SetProperty("#upl", "FontSize", "8");
+    sfgDesktop.SetProperty("#upl", "FontSize", "12");
 
     teamOneLabel = sfg::Label::Create("Team One");
     teamTwoLabel = sfg::Label::Create("Team Two");
