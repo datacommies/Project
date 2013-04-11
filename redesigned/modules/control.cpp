@@ -23,10 +23,10 @@
 --
 -- REVISIONS: (Date and Description)
 --
--- DESIGNER: John Payment
+-- DESIGNER: John Payment, Jesse Wright
 --
 -- PROGRAMMERS: John Payment
---              Jesse Write
+--              Jesse Wright
 --
 -- DESCRIPTION: File impliments all functions used by the control class, which is the primary structure of the Control
 --              module. It manages registering keypress callbacks, handling button presses and mouse clicks, and all 
@@ -297,7 +297,7 @@ Control::RunAllButtons()
 --
 -- REVISIONS: Jesse Wright: Added attack after every movement.
 --
--- DESIGNER: John Payment
+-- DESIGNER: John Payment, Jesse Wright
 --
 -- PROGRAMMER: John Payment
 --             Jesse Wright
@@ -531,7 +531,7 @@ Control::GetTowerPlacement()
 --
 -- REVISIONS: (Date and Description)
 --
--- DESIGNER: Jesse Wright
+-- DESIGNER: Jesse Wright, David Czech
 --
 -- PROGRAMMER: Jesse Wright
 --

@@ -16,9 +16,9 @@
 --
 -- REVISIONS: (Date and Description)
 --
--- DESIGNER: John Payment
+-- DESIGNER: John Payment, Jesse Wright
 --
--- PROGRAMMER: John Payment
+-- PROGRAMMER: John Payment, Jesse Wright
 --
 -- NOTES: This class is the central Control Module Singleton. It is called to generate lists of Control Events, check
 --        each of those events against lists of valid events, and if a match is found run Wrapper functions. It also contains
