@@ -382,7 +382,7 @@ void ServerNetwork::handleRequests()
  *          
  * NOTES: 
  */
-int ServerNetwork::recv_complete (int sockfd, void *buf, size_t len, int flags) {
+int ServerNetwork::recv_complete(int sockfd, void *buf, size_t len, int flags) {
     size_t bytesRead = 0;
     ssize_t result;
     
@@ -393,6 +393,8 @@ int ServerNetwork::recv_complete (int sockfd, void *buf, size_t len, int flags) 
             return result;
         }
         
+        cout << "buf in recv: " << (char*)buf << endl;
+
         bytesRead += result;
     }
     
@@ -504,21 +506,23 @@ void * ServerNetwork::handle_client_lobby(void * ctx)
         if (n <= 0) break;
 
         if (head.type == MSG_CHAT) { //Received a chatmsg_t, now relay this chatmsg_t to all the clients
-            chatmsg_t chat;
-
+            cout << "recieved chat message" << endl;
+            chatmsg_t * chat = (chatmsg_t*) new char[sizeof(header_t) + head.size];
             char * buf = new char [head.size];
-            memset(buf, 0, head.size);
+            //memset(buf, 0, head.size);
+
+            cout << " head.size: " << head.size << endl;
             recv_complete(client, buf, head.size, 0);
             cout << "Got message:" << buf << "from client" << client << endl;
 
             //memset(chat.msg, 0, head.size);
-            chat.head.type = MSG_CHAT;
-            chat.head.size = head.size;
-            chat.msg = buf;
+            chat->head.type = MSG_CHAT;
+            chat->head.size = head.size;
+            strncpy(chat->msgbuf, buf, chat->head.size);
 
             //send the message to all the clients including the sender
             for (size_t i = 0; i < players_.size(); ++i) {
-                send(clients_[i], &chat, sizeof(chatmsg_t), 0);   
+                send(clients_[i], chat, sizeof(header_t) + head.size, 0);
             }
 
             delete buf;

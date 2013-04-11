@@ -80,7 +80,7 @@ typedef struct {
 
 typedef struct {
     header_t head;
-    char * msg;
+    char msgbuf[1];
 } chatmsg_t;
 
 /*typedef struct {

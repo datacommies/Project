@@ -118,7 +118,7 @@ void * init (void * in)
             else if (event.type == sf::Event::Closed){
                 window.close();
                 exit(0);
-            } else if (event.type == sf::Event::KeyPressed)
+            } else if ((event.type == sf::Event::KeyPressed) && (g->clientGameLogic_.gameState_ != LOBBY))
             {
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
                     Control::get()->AddNewCalledKey(sf::Keyboard::W);
@@ -129,7 +129,7 @@ void * init (void * in)
                 else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
                     Control::get()->AddNewCalledKey(sf::Keyboard::D);
                 Control::get()->RunAllKeys();
-            } else if (event.type == sf::Event::KeyReleased)
+            } else if ((event.type == sf::Event::KeyReleased) && (g->clientGameLogic_.gameState_ != LOBBY))
             {
                 Control::get()->RunAllKeys();
             }
@@ -167,6 +167,20 @@ void * init (void * in)
                     // Update the names on the buttons.
                     g->updateLobbyRoles();
                 }
+
+                // Update chat with the latest messages.
+                for (std::vector<string>::iterator it = g->clientGameLogic_.clientNetwork_.chatbuffer_.begin(); it != g->clientGameLogic_.clientNetwork_.chatbuffer_.end(); ++it)
+                {
+                    g->sfgChatDisplayLabel->SetText(g->sfgChatDisplayLabel->GetText().toAnsiString() + *it);
+
+                    // Set scrollbar to lower bound.
+                    sfg::Adjustment::Ptr tempAdj = g->sfgChatDisplayWindow->GetVerticalAdjustment();
+                    tempAdj->SetValue(tempAdj->GetUpper());
+                    g->sfgChatDisplayWindow->SetVerticalAdjustment(tempAdj);
+                }
+
+
+                g->clientGameLogic_.clientNetwork_.chatbuffer_.clear();
             }
 
             // Update the names on the buttons.
@@ -202,24 +216,24 @@ void * init (void * in)
 
             for (size_t i = 0; i < 5; i++) {
                 ready_box.setFillColor(g->clientGameLogic_.clientNetwork_.team_l[i].ready ? sf::Color(  0, 255,  0) : sf::Color(  255, 0,  0));
-                ready_box.setPosition(65, i * 55 + 310);
+                ready_box.setPosition(65, i * 55 + 180);
                 window.draw(ready_box);
             }
 
             for (size_t i = 0; i < 5; i++) {
                 ready_box.setFillColor(g->clientGameLogic_.clientNetwork_.team_r[i].ready ? sf::Color(  0, 255,  0) : sf::Color(  255, 0,  0));
-                ready_box.setPosition(710, i * 55 + 310);
+                ready_box.setPosition(710, i * 55 + 180);
                 window.draw(ready_box);
             }
 
 
             for (size_t i = 0; i < 5; i++) {
-                g->player_sprites[i].setPosition(65, i * 55 + 310);
+                g->player_sprites[i].setPosition(65, i * 55 + 180);
                 g->window->draw(g->player_sprites[i]);
             }
 
             for (size_t i = 0; i < 5; i++) {
-                g->player_sprites[i].setPosition(710, i * 55 + 310);
+                g->player_sprites[i].setPosition(710, i * 55 + 180);
                 g->window->draw(g->player_sprites[i]);
             }
         }
@@ -597,10 +611,16 @@ void Graphics::initMessageSendWindow()
  */
 void Graphics::sendMessage()
 {
+    string message;
+
+    message = clientGameLogic_.clientNetwork_._name + ": " + sfgChatSendEntry->GetText().toAnsiString() + "\n";
+
     // Add the message to what's currently there if it isn't empty.
     if(sfgChatSendEntry->GetText().toAnsiString() != "")
     {
-        sfgChatDisplayLabel->SetText(sfgChatDisplayLabel->GetText().toAnsiString() + sfgChatSendEntry->GetText().toAnsiString() + "\n");
+        //sfgChatDisplayLabel->SetText(sfgChatDisplayLabel->GetText().toAnsiString());
+        cout << "in graphics, string is: " << message << endl;
+        clientGameLogic_.clientNetwork_.send_chatmsg(message);
     }
 
     // Clear the entry box for new entries.
@@ -672,6 +692,7 @@ void Graphics::startGame()
     clientGameLogic_.ready();
     sfgLobbyWindow->Show(false);
     sfgChatDisplayWindow->Show(false);
+    sfgChatSendWindow->Show(false);
 }
 
 /* Closes the lobby SFGUI window and redraws the main menu.
@@ -685,6 +706,7 @@ void Graphics::exitLobby()
 {
     sfgLobbyWindow->Show(false);
     sfgChatDisplayWindow->Show(false);
+    sfgChatSendWindow->Show(false);
 
     // todo: actually exit the session and go back to main screen.
     clientGameLogic_.exit();

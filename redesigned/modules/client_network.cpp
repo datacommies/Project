@@ -241,12 +241,6 @@ void ClientNetwork::recvReply() {
 			char m[MAP_NAME_SIZE] = {0};
 			if ((n = recv_complete(connectsock, m, MAP_NAME_SIZE, 0)) > 0)
 				msg_mapname(m);
-		} else if (head.type == MSG_CHAT) {
-			char * m = (char *) malloc (head.size);
-			n = recv_complete(connectsock, m, head.size, 0);
-			m[n] = 0;
-			msg_chat(m);
-			free(m);
 		} else if (head.type == MSG_START) {
 			cout << "Game started!" << endl;
 			
@@ -256,14 +250,16 @@ void ClientNetwork::recvReply() {
 			gl->start();
 
 		} else if (head.type == MSG_CHAT) { //chat message is received during the lobby
-			
-			char * buf = new char [head.size];
-            memset(buf, 0, head.size);
-            recv_complete(connectsock, buf, head.size, 0);
-            cout << buf << endl; //message will contain who the message was from
-            
-            //TODO: display the message received to the textbox in lobby
+            char * buf = new char [head.size];
 
+            recv_complete(connectsock, buf, head.size, 0);
+
+            buf[head.size] = '\0';
+
+            cout << "asdf: " << buf << endl; //message will contain who the message was from
+            
+            chatbuffer_.push_back(buf);
+            //delete buf;
 		}
 	}
 }
@@ -469,12 +465,16 @@ void ClientNetwork::msg_chat (char * text) {
  * NOTES: Sends a MSG_CHAT to the server, which will relay the message to all the clients including the sender.
  */
 void ClientNetwork::send_chatmsg(string msg) {
-	chatmsg_t chat;
-	chat.head.type = MSG_CHAT;
-	chat.head.size = msg.size();
-	strncpy(chat.msg, msg.c_str(), msg.size());
+	chatmsg_t * chat = (chatmsg_t*) new char[sizeof(header_t) + msg.size()];
+	chat->head.type = MSG_CHAT;
+	chat->head.size = msg.size();
+	strncpy(chat->msgbuf, msg.c_str(), chat->head.size);
 
-	send(connectsock, &chat, sizeof(chatmsg_t), 0);
+	cout << "message size: " << chat->head.size << endl;
+	cout << "messagebufinsendchat: " << chat->msgbuf << endl;
+	cout << "endmessage" << endl;
+
+	send(connectsock, chat, sizeof(header_t) + msg.size(), 0);
 }
 
 /* 
