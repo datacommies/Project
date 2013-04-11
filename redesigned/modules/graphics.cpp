@@ -380,11 +380,9 @@ std::string getName( void ) {
         lines.push_back(line);
     }
     myfile.close();
-    for(int i = 0; i < 3; i++ ) {
+    for(int i = 0; i < 1; i++ ) {
         int rnd = rand() % lines.size();
         result += lines.at(rnd);
-        result += " ";
-
     }
     return result;
 }
