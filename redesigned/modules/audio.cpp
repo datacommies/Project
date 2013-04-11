@@ -1,24 +1,20 @@
 /*------------------------------------------------------------------------------
--- FILE:        client.cpp
+-- FILE:        audio.cpp
 --
 -- DATE:        2013/03/11
 --
--- MAINTAINERS: Dennis Ho, David Czech
+-- MAINTAINERS: 
 --
 -- FUNCTIONS:   Client constructor
 --              run
 --
 -- DESCRIPTION: File contains implementation for the Client class.
 ------------------------------------------------------------------------------*/
-#include "client.h"
-#include <unistd.h>
+#include "audio.h"
 
-Client::Client()
-   : clientNetwork_(), clientGameLogic_(clientNetwork_), graphics_(clientGameLogic_), control_(Control::get()) 
+Audio::Audio()
 { 
-    control_->LoadGameLogic(&clientGameLogic_);
-    control_->LoadGraphics(&graphics_);
-    run();
+
 }
 
 /*------------------------------------------------------------------------------
@@ -26,8 +22,8 @@ Client::Client()
 --
 -- DATE:        2013/03/11
 --
--- DESIGNER:    Dennis Ho, David Czech
--- PROGRAMMER:  Dennis Ho, David Czech
+-- DESIGNER:    
+-- PROGRAMMER:  
 --
 -- INTERFACE:   void Client::run()
 --
@@ -35,16 +31,26 @@ Client::Client()
 --
 -- DESCRIPTION: This function will continually attempt to connect to the server.
 ------------------------------------------------------------------------------*/
-void Client::run()
+int Audio::playMusic(const char* filename)
 {
-    audio_.playMusic("sounds/bg.ogg");
-    
-    while (true) {
-        while (clientGameLogic_.getCurrentState() != LOBBY)
-            usleep(10);
+    //if (!buffer_.loadFromFile(filename))
+    if (!music_.openFromFile(filename))
+        return EXIT_FAILURE;
 
-        clientNetwork_.connectToServer();
-        
-        sleep(1);
-    }
+    //sound_ = sf::Sound(buffer_);
+    //sound_.play();
+    music_.play();
+
+
+    return EXIT_SUCCESS;
+}
+
+void Audio::stopMusic()
+{
+    music_.stop();
+}
+
+void Audio::pauseMusic()
+{
+    music_.pause();
 }
