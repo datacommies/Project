@@ -11,7 +11,7 @@ player_matchmaking_t empty = {{0, 0}, "Empty", 0, 0, 0, false};
 extern Graphics* globalGraphics; 
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   ClientNetwork (constructor)
 --
 -- DATE:        2013/03/22
 --
@@ -36,7 +36,7 @@ ClientNetwork::ClientNetwork() {
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   ~ClientNetwork (destructor)
 --
 -- DATE:        2013/03/22
 --
@@ -56,7 +56,7 @@ ClientNetwork::~ClientNetwork()
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   connectToServer
 --
 -- DATE:        2013/03/22
 --
@@ -127,7 +127,7 @@ bool ClientNetwork::connectToServer()
 	return true;
 }
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   recvReply
 --
 -- DATE:        2013/03/22
 --
@@ -301,7 +301,7 @@ void ClientNetwork::recvReply() {
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   createUnit
 --
 -- DATE:        2013/03/22
 --
@@ -337,7 +337,7 @@ bool ClientNetwork::createUnit(int playerId, UnitType type, Point location, int 
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   updatePlayerLobby
 --
 -- DATE:        2013/03/22
 --
@@ -385,14 +385,14 @@ bool ClientNetwork::updatePlayerLobby (int team, int role, const char* name, boo
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   movePlayer
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Behnam Bastami, Dennis Ho
 -- PROGRAMMER: Behnam Bastami
 --
--- INTERFACE:  bool ClientNetwork::movePlayer(int playerId, Direction direction)
+-- INTERFACE:  bool movePlayer(int playerId, Direction direction)
 --					playerId - the ID of the player that will move
 --					direction - the direction the player will move to
 --
@@ -433,7 +433,7 @@ bool ClientNetwork::attack(int playerId, Direction direction)
 
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   player_update
 --
 -- DATE:        2013/03/22
 --
@@ -475,18 +475,20 @@ void ClientNetwork::player_update (player_matchmaking_t * p) {
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   player_leave
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   David Czech
 -- PROGRAMMER: David Czech, Ron Bellido
 --
--- INTERFACE:   
+-- INTERFACE:   void player_leave (player_matchmaking_t * p)
+--					p - the details of the player that's about to leave the session
 --
--- RETURNS:     
+-- RETURNS:     void
 --
--- DESCRIPTION: 
+-- DESCRIPTION: This function will ensure that every client is updated that the given
+player left the current session
 ------------------------------------------------------------------------------*/
 void ClientNetwork::player_leave (player_matchmaking_t * p) {
 	printf("Player Left: %s\n", p->name);
@@ -503,54 +505,60 @@ void ClientNetwork::player_leave (player_matchmaking_t * p) {
 		}
 	}
 }
+
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   msg_mapname
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   David Czech
 -- PROGRAMMER: David Czech
 --
--- INTERFACE:   
+-- INTERFACE:   void ClientNetwork::msg_mapname (char * map) 
+--					map - the name of the map
 --
--- RETURNS:     
+-- RETURNS:     void
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Prints the name of the map
 ------------------------------------------------------------------------------*/
 void ClientNetwork::msg_mapname (char * map) {
 	printf("Got map name: %s\n", map);
 }
+
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   msg_chat
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   David Czech
 -- PROGRAMMER: David Czech
 --
--- INTERFACE:   
+-- INTERFACE:   void ClientNetwork::msg_chat (char * text)
+--					text - the chat message to print
 --
--- RETURNS:     
+-- RETURNS:     void
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Prints the chat message
 ------------------------------------------------------------------------------*/
 void ClientNetwork::msg_chat (char * text) {
 	printf("message: %s\n", text);
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   send_chatmsg
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Ron Bellido, Behnam Bastami
 -- PROGRAMMER: Ron Bellido
 --
--- INTERFACE:   
+-- INTERFACE:   void ClientNetwork::send_chatmsg(string msg)
+--					msg - the message to send
 --
--- RETURNS:     
+-- RETURNS:     void
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Creates a MSG_CHAT request to the server with the given
+--	message
 ------------------------------------------------------------------------------*/
 void ClientNetwork::send_chatmsg(string msg) {
 	chatmsg_t * chat = (chatmsg_t*) new char[sizeof(header_t) + msg.size()];
@@ -570,11 +578,16 @@ void ClientNetwork::send_chatmsg(string msg) {
 --
 -- PROGRAMMER: David Czech, Behnam Bastami
 --
--- INTERFACE:   
+-- INTERFACE:   int recv_complete (int sockfd, void *buf, size_t len, int flags) 
+--					sockfd - the socket to receive the payload from
+--					buf - the payload that will receive
+--					len - the size of the payload
+--					flags - the flag to pass to recv() function
 --
--- RETURNS:     
+-- RETURNS:     the number of the total bytes read
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Function to call that will completely receive a payload 
+--	(e.g. player_matchmaking_t, map_t, etc.)
 ------------------------------------------------------------------------------*/
 int ClientNetwork::recv_complete (int sockfd, void *buf, size_t len, int flags) {
     size_t bytesRead = 0;
