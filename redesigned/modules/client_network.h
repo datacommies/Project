@@ -45,6 +45,7 @@ public:
    void msg_chat (char * text);
    int  recv_complete (int sockfd, void *buf, size_t len, int flags);
    bool updatePlayerLobby (int team, int role, const char* name, bool ready);
+   void send_chatmsg(std::string msg);
 
    void sendReady () {
       strcpy(p.name, (_name+" - Ready").c_str());

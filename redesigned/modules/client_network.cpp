@@ -247,8 +247,17 @@ void ClientNetwork::recvReply() {
 			// Ack the start.
 			header_t ack = {MSG_START, 0}; 
 			send(connectsock, &ack, sizeof(header_t), 0);
-
 			gl->start();
+
+		} else if (head.type == MSG_CHAT) { //chat message is received during the lobby
+			
+			char * buf = new char [head.size];
+            memset(buf, 0, head.size);
+            recv_complete(connectsock, buf, head.size, 0);
+            cout << buf << endl; //message will contain who the message was from
+            
+            //TODO: display the message received to the textbox in lobby
+
 		}
 	}
 }
@@ -430,6 +439,7 @@ void ClientNetwork::player_leave (player_matchmaking_t * p) {
 void ClientNetwork::msg_mapname (char * map) {
 	printf("Got map name: %s\n", map);
 }
+
 /* 
  *
  * PRE:     
@@ -442,9 +452,28 @@ void ClientNetwork::msg_mapname (char * map) {
 void ClientNetwork::msg_chat (char * text) {
 	printf("message: %s\n", text);
 }
+
 /* 
  *
- * PRE:     
+ * PRE: msg is null terminated
+ * POST: message is sent to the server
+ * PROGRAMMER: Ronald Bellido
+ * RETURNS: void
+ *          
+ * NOTES: Sends a MSG_CHAT to the server, which will relay the message to all the clients including the sender.
+ */
+void ClientNetwork::send_chatmsg(string msg) {
+	chatmsg_t chat;
+	chat.head.type = MSG_CHAT;
+	chat.head.size = msg.size();
+	strncpy(chat.msg, msg.c_str(), msg.size());
+
+	send(connectsock, &chat, sizeof(chatmsg_t), 0);
+}
+
+/* 
+ *
+ * PRE:      
  * POST:    
  * PROGRAMMER:
  * RETURNS: 
