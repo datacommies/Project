@@ -498,7 +498,6 @@ void ClientNetwork::player_leave (player_matchmaking_t * p) {
 void ClientNetwork::msg_mapname (char * map) {
 	printf("Got map name: %s\n", map);
 }
-<<<<<<< HEAD
 /*------------------------------------------------------------------------------
 -- FUNCTION:   
 --
