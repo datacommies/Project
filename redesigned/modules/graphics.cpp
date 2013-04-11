@@ -73,6 +73,9 @@ void * init (void * in)
             
             // Handle SFGUI events.
             g->sfgDesktop.HandleEvent(event);
+            
+            if ((event.type == sf::Event::KeyPressed) && sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
+                g->sendMessage();
 
             // If a mouse button was pressed, find out where we clicked.
             if (event.type == sf::Event::MouseButtonPressed){
@@ -128,8 +131,6 @@ void * init (void * in)
                     Control::get()->AddNewCalledKey(sf::Keyboard::S);
                 else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
                     Control::get()->AddNewCalledKey(sf::Keyboard::D);
-                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return));
-                    g->sendMessage();
                 Control::get()->RunAllKeys();
             } else if ((event.type == sf::Event::KeyReleased) && (g->clientGameLogic_.gameState_ != LOBBY))
             {
@@ -141,11 +142,11 @@ void * init (void * in)
         g->sfgDesktop.Update( 0.f );
         
         window.clear();
-
+        GameState c_state = g->clientGameLogic_.getCurrentState();
         // Check to see which state the game is in and act accordingly.        
-        if (g->clientGameLogic_.getCurrentState() == MAIN_MENU) {
+        if (c_state == MAIN_MENU) {
             g->drawMainMenu(window);
-        } else if (g->clientGameLogic_.getCurrentState() == LOBBY) {
+        } else if (c_state == LOBBY) {
             // Check if connected and display lobby, or else show "connecting..." message.
             if (g->clientGameLogic_.clientNetwork_.connecting_status != "connected") {
                 g->unassignedPlayersList->SetText(g->clientGameLogic_.clientNetwork_.connecting_status);
@@ -181,13 +182,12 @@ void * init (void * in)
                     g->sfgChatDisplayWindow->SetVerticalAdjustment(tempAdj);
                 }
 
-
                 g->clientGameLogic_.clientNetwork_.chatbuffer_.clear();
             }
 
             // Update the names on the buttons.
             g->updateLobbyRoles();
-        } else if (g->clientGameLogic_.getCurrentState() == IN_GAME || g->clientGameLogic_.getCurrentState() == WON_GAME || g->clientGameLogic_.getCurrentState() == LOST_GAME) {
+        } else if (c_state == IN_GAME || c_state == WON_GAME || c_state == LOST_GAME) {
             if (!controls_init) {
                 controls_init = true;
                 g->initGameControls();
@@ -198,7 +198,7 @@ void * init (void * in)
             g->drawHud(window);
             g->drawCurrency(window);
 
-            if (g->clientGameLogic_.getCurrentState() == WON_GAME || g->clientGameLogic_.getCurrentState() == LOST_GAME)
+            if (c_state == WON_GAME || c_state == LOST_GAME)
                 g->drawEndGameScreen(window);
         }
 
@@ -209,10 +209,8 @@ void * init (void * in)
                 b.draw(window);
         }
 
-        // Display test windows.
-        sfgui.Display(window);
 
-        if (g->clientGameLogic_.getCurrentState() == LOBBY) {
+        if (c_state == LOBBY) {
             sf::RectangleShape ready_box;
             ready_box.setSize(sf::Vector2f( 25, 25));
 
@@ -240,6 +238,8 @@ void * init (void * in)
             }
         }
 
+        window.resetGLStates();
+        sfgui.Display(window);
         window.display();
     }
 
@@ -280,6 +280,8 @@ Graphics::Graphics(ClientGameLogic& clientGameLogic)
 {
     // Set global graphics to point to this.
     globalGraphics = this;
+
+    chatShowing = false;
 
     // Load font for game.
     char * font_path;
@@ -695,6 +697,7 @@ void Graphics::startGame()
     sfgLobbyWindow->Show(false);
     sfgChatDisplayWindow->Show(false);
     sfgChatSendWindow->Show(false);
+    chatShowing = false;
 }
 
 /* Closes the lobby SFGUI window and redraws the main menu.
@@ -1002,5 +1005,21 @@ void Graphics::loadImages()
         ss << "images/m" << i+1 << ".png";
         player_textures[i].loadFromFile(ss.str().c_str());
         player_sprites[i].setTexture(player_textures[i]);
+    }
+}
+
+void Graphics::showChat(bool show)
+{
+    if(show)
+    {
+        sfgChatDisplayWindow->Show(true);
+        sfgChatSendWindow->Show(true);
+        chatShowing = true;
+    }
+    else
+    {
+        sfgChatDisplayWindow->Show(false);
+        sfgChatSendWindow->Show(false);
+        chatShowing = false;
     }
 }

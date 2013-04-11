@@ -129,6 +129,8 @@ private:
    sfg::Label::Ptr teamTwoLabel;
    sfg::Button::Ptr rightPlayers[5];
 
+   bool chatShowing;
+
    // Functions
    void initMainMenuControls();
    void drawHud(sf::RenderWindow& window);
@@ -158,6 +160,7 @@ private:
    void exitLobby();
    void takeRole();
    void updateLobbyRoles();
+   void showChat(bool show);
 
    friend void * init (void *);
 };

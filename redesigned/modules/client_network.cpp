@@ -206,8 +206,7 @@ void ClientNetwork::recvReply() {
 							if (gl->units[i].health <= 0)
 							{	
 							    audio_.playMusic("sounds/wilhelm.ogg");				
-								gl->units.erase(gl->units.begin() + i);			
-											
+								gl->units.erase(gl->units.begin() + i);
 						    }
 						}
 					}
