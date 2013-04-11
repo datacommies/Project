@@ -120,10 +120,6 @@ void * init (void * in)
                             g->showJoinWindow();
                             g->clientGameLogic_.connecting();
                             break;
-                        } else if (button->id == ID_TEST){
-                            g->initGameControls();
-                            g->clientGameLogic_.start();
-                            break; // Must break out now, initGameControls invalidates the iterators.
                         }
                         // Quit button.
                         else if (button->id == ID_QUIT){
@@ -214,6 +210,7 @@ void * init (void * in)
         } else if (c_state == IN_GAME || c_state == WON_GAME || c_state == LOST_GAME) {
             g->sfgLobbyWindow->Show(false);
             g->sfgChatDisplayWindow->Show(false);
+            g->sfgChatSendWindow->Show(false);
 
             if (!controls_init) {
                 controls_init = true;
@@ -538,7 +535,7 @@ void Graphics::initJoinWindow()
     sfgNameEntryBox = sfg::Entry::Create(getName());
     sfgNameEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 120.
     sfgNameEntryBox->SetMaximumLength(16);
-    sfgServerEntryBox = sfg::Entry::Create("localhost");
+    sfgServerEntryBox = sfg::Entry::Create("192.168.0.");
     sfgServerEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 120.
     sfgPortEntryBox = sfg::Entry::Create("4545");
     sfgPortEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 120.
