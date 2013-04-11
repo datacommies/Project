@@ -75,6 +75,24 @@ void ClientGameLogic::join () {
 }
 
 /*------------------------------------------------------------------------------
+-- FUNCTION:    connecting
+--
+-- DATE:        2013/03/11
+--
+-- DESIGNER:    Albert Liao
+-- PROGRAMMER:  Albert Liao
+--
+-- INTERFACE:   void ClientGameLogic::connecting ()
+--
+-- RETURNS:     void
+--
+-- DESCRIPTION: This function sets the gameState_ variable to CONNECTING. 
+------------------------------------------------------------------------------*/
+void ClientGameLogic::connecting () {
+   gameState_ = CONNECTING;
+}
+
+/*------------------------------------------------------------------------------
 -- FUNCTION:    menu
 --
 -- DATE:        2013/03/11

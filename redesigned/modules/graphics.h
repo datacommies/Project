@@ -86,8 +86,6 @@ private:
 
    sf::Texture castle_tex;
    sf::Sprite castle_sprite;
-   sf::Texture player_tex;
-   sf::Sprite player_sprite;
    
    sf::Texture tower_tex1;
    sf::Sprite tower_sprite1;
@@ -140,6 +138,8 @@ private:
    sfg::Label::Ptr teamTwoLabel;
    sfg::Button::Ptr rightPlayers[5];
 
+   bool chatShowing;
+
    // Functions
    void initMainMenuControls();
    void drawHud(sf::RenderWindow& window);
@@ -169,6 +169,7 @@ private:
    void exitLobby();
    void takeRole();
    void updateLobbyRoles();
+   void showChat(bool show);
 
    friend void * init (void *);
 };

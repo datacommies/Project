@@ -27,6 +27,7 @@ public:
    GameState getCurrentState();
    
    void start ();
+   void connecting();
    void join ();
    void menu ();
    void win ();
