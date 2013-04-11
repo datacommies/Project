@@ -897,7 +897,10 @@ void ServerGameLogic::createTower(int team_no, Point location)
       castleLoc = (*it)->getPos();  // castle location
     
   // get distance of proposed location from castle
-  dist = distance( castleLoc, location);
+  //dist = distance( castleLoc, location);
+    distX = abs(castleLoc.x - location.x);
+    distY = abs(castleLoc.y - location.y);
+    dist = distX + distY;
 
   // if( chosen distance from player's team's castle is <= maxTowerDist && 
   //       TOWER_COST <= team currency ) then carry on and create a tower
