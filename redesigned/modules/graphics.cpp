@@ -908,8 +908,7 @@ void Graphics::drawUnits(sf::RenderWindow& window)
         else if (unit->type == TOWER)
         {
             
-
-            if (unit->maxHealth == INIT_CREEP_HP)
+           /* if (unit->maxHealth == INIT_CREEP_HP)
             {
                 tower_sprite1.setPosition(unit->position.x, unit->position.y);
                 window.draw(tower_sprite1);
@@ -919,8 +918,10 @@ void Graphics::drawUnits(sf::RenderWindow& window)
             } else if (unit->maxHealth == INIT_CREEP_HP * .75) {
                 tower_sprite3.setPosition(unit->position.x, unit->position.y);
                 window.draw(tower_sprite3);
-            }
+            }*/
 
+            tower_sprite1.setPosition(unit->position.x, unit->position.y);
+            window.draw(tower_sprite1);
             
             drawHealthBar(window, unit->position.x, unit->position.y + tower_sprite1.getTextureRect().height, unit->health, unit->maxHealth);
         }
