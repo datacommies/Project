@@ -454,7 +454,7 @@ void * ServerNetwork::handle_single_client_lobby(void* thing) {
  *
  * PRE:     
  * POST:    
- * PROGRAMMER:
+ * PROGRAMMER: Ronald Bellido
  * RETURNS: 
  *          
  * NOTES: 
@@ -503,7 +503,7 @@ void * ServerNetwork::handle_client_lobby(void * ctx)
 
         if (n <= 0) break;
 
-        if (head.type == MSG_CHAT) {
+        if (head.type == MSG_CHAT) { //Received a chatmsg_t, now relay this chatmsg_t to all the clients
             chatmsg_t chat;
 
             char * buf = new char [head.size];
@@ -515,6 +515,7 @@ void * ServerNetwork::handle_client_lobby(void * ctx)
             chat.head.type = MSG_CHAT;
             chat.head.size = head.size;
             chat.msg = buf;
+
             //send the message to all the clients including the sender
             for (size_t i = 0; i < players_.size(); ++i) {
                 send(clients_[i], &chat, sizeof(chatmsg_t), 0);   
