@@ -2,10 +2,13 @@
 #include "client_network.h"
 #include "../units/creep.h"
 #include "client_game_logic.h"
+#include "graphics.h"
 
 using namespace std;
 
 player_matchmaking_t empty = {{0, 0}, "Empty", 0, 0, 0, false};
+
+extern Graphics* globalGraphics; 
 
 /*------------------------------------------------------------------------------
 -- FUNCTION:   
@@ -259,7 +262,13 @@ void ClientNetwork::recvReply() {
 			// Ack the start.
 			header_t ack = {MSG_START, 0}; 
 			send(connectsock, &ack, sizeof(header_t), 0);
+
+			// Remove the chat.
+            globalGraphics->sfgChatDisplayWindow->Show(false);
+            globalGraphics->sfgChatSendWindow->Show(false);
+			
 			gl->start();
+
 
 		} else if (head.type == MSG_CHAT) { //chat message is received during the lobby
             char * buf = new char [head.size];

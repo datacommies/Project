@@ -351,7 +351,7 @@ void* ServerNetwork::handleClientRequest(void* args)
                 thiz->serverGameLogic_.receiveCreateUnitCommand(client_, rc.unit, loc, rc.path);
             break;
 
-            case MSG_REQUEST_PLAYER_MOVE:
+            case MSG_REQUEST_PLAYER_MOVE: {
                 request_player_move_t rpm;
                 rpm.head = head;
                 x = thiz->recv_complete(client_, ((char*) &rpm) + sizeof(header_t), sizeof(request_player_move_t) - sizeof(header_t), 0);
@@ -361,7 +361,28 @@ void* ServerNetwork::handleClientRequest(void* args)
 
                 Direction dir = rpm.direction;
                 thiz->serverGameLogic_.receiveMovePlayerCommand(client_, dir);
+            }
                 
+            break;
+            case MSG_CHAT: { //Received a chatmsg_t, now relay this chatmsg_t to all the clients
+                chatmsg_t * chat = (chatmsg_t*) new char[sizeof(header_t) + head.size];
+                char * buf = new char [head.size];
+                //memset(buf, 0, head.size);
+
+                thiz->recv_complete(client_, buf, head.size, 0);
+
+                //memset(chat.msg, 0, head.size);
+                chat->head.type = MSG_CHAT;
+                chat->head.size = head.size;
+                strncpy(chat->msgbuf, buf, chat->head.size);
+
+                //send the message to all the clients including the sender
+                for (size_t i = 0; i < thiz->players_.size(); ++i) {
+                    send(thiz->clients_[i], chat, sizeof(header_t) + head.size, 0);
+                }
+
+                delete buf;
+            }
             break;
        }
     }

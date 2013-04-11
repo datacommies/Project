@@ -208,9 +208,6 @@ void * init (void * in)
             // Update the names on the buttons.
             g->updateLobbyRoles();
         } else if (c_state == IN_GAME || c_state == WON_GAME || c_state == LOST_GAME) {
-            g->sfgLobbyWindow->Show(false);
-            g->sfgChatDisplayWindow->Show(false);
-            g->sfgChatSendWindow->Show(false);
 
             if (!controls_init) {
                 controls_init = true;
@@ -1149,6 +1146,28 @@ void Graphics::drawCurrency(sf::RenderWindow& window)
     currencyText.setPosition(5, 675);
     window.draw(currencyText);
 }
+
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
+/*void Graphics::draw(sf::RenderWindow& window)
+{
+    sf::Text currencyText(to_string(clientGameLogic_.currency), font, 20);
+    currencyText.setPosition(5, 675);
+    window.draw(currencyText);
+}*/
+
 /*------------------------------------------------------------------------------
 -- FUNCTION:   
 --
