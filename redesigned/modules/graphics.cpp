@@ -40,7 +40,7 @@ Graphics* globalGraphics = NULL; // Used for the SFGUI button handlers in the lo
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   David Czech
--- PROGRAMMER: David Czech, Jake Miner, Jesse Wright
+-- PROGRAMMER: David Czech, Jake Miner, Jesse Wright, Dennis Ho
 --
 -- INTERFACE:   void * init (void * in) 
 --
@@ -1132,8 +1132,8 @@ void Graphics::drawUnits(sf::RenderWindow& window)
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: Jacob Miner
+-- DESIGNER:   Jacob Miner, Dennis Ho
+-- PROGRAMMER: Jacob Miner, Dennis Ho
 --
 -- INTERFACE:   
 --
@@ -1174,8 +1174,8 @@ void Graphics::drawCurrency(sf::RenderWindow& window)
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   Jacob Miner
--- PROGRAMMER: Jacob Miner
+-- DESIGNER:   Jacob Miner, Dennis Ho
+-- PROGRAMMER: Jacob Miner, Dennis Ho
 --
 -- INTERFACE:   
 --

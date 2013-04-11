@@ -262,8 +262,8 @@ void ServerGameLogic::initializePaths()
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Dennis Ho
+-- PROGRAMMER: Dennis Ho
 --
 -- INTERFACE:   
 --
@@ -667,8 +667,8 @@ void ServerGameLogic::updateMoveUnit(CommandData& command)
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   David Czech
+-- PROGRAMMER: David Czech
 --
 -- INTERFACE:   
 --
@@ -1023,8 +1023,8 @@ void ServerGameLogic::createTower(int team_no, Point location)
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Dennis Ho
+-- PROGRAMMER: Dennis Ho
 --
 -- INTERFACE:   
 --
@@ -1080,8 +1080,8 @@ void ServerGameLogic::createPlayer(int team_no, Point location, int client_id, i
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Dennis Ho
+-- PROGRAMMER: Dennis Ho
 --
 -- INTERFACE:   
 --
@@ -1100,8 +1100,8 @@ void ServerGameLogic::respawnPlayer(Player* player, Point location)
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Dennis Ho
+-- PROGRAMMER: Dennis Ho
 --
 -- INTERFACE:   
 --
@@ -1118,8 +1118,8 @@ void ServerGameLogic::giveTeamBonus(int team_no, int amount)
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Dennis Ho
+-- PROGRAMMER: Dennis Ho
 --
 -- INTERFACE:   
 --
@@ -1158,8 +1158,8 @@ void ServerGameLogic::handleDeaths()
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Dennis Ho
+-- PROGRAMMER: Dennis Ho
 --
 -- INTERFACE:   
 --
@@ -1172,10 +1172,10 @@ void ServerGameLogic::handlePlayerDeath(Player *player)
 
   // Give other team some monies
   if (player->tod == 0) {
-      giveTeamBonus(player->team == 0 ? 1 : 0, PLAYER_KILL_BONUS);
+    giveTeamBonus(player->team == 0 ? 1 : 0, PLAYER_KILL_BONUS);
       
-      // Set Respawn timestamp
-      player->tod = time(NULL);
+    // Set Respawn timestamp
+    player->tod = time(NULL);
   }
 }
 /*------------------------------------------------------------------------------
@@ -1183,8 +1183,8 @@ void ServerGameLogic::handlePlayerDeath(Player *player)
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Dennis Ho
+-- PROGRAMMER: Dennis Ho
 --
 -- INTERFACE:   
 --
@@ -1205,8 +1205,8 @@ void ServerGameLogic::handleCreepDeath(Creep *creep)
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Dennis Ho
+-- PROGRAMMER: Dennis Ho
 --
 -- INTERFACE:   
 --
@@ -1227,8 +1227,8 @@ void ServerGameLogic::handleTowerDeath(Tower *tower)
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Dennis Ho   
+-- PROGRAMMER: Dennis Ho
 --
 -- INTERFACE:   
 --
