@@ -521,14 +521,22 @@ void ServerGameLogic::updateCreate(CommandData& command)
   switch (command.type) {
     case CREEP:
       {  
-        // Check if 2 seconds has elapsed since the last creep creation for the team.
+        
+      }
+      case CREEP_ONE:
+      case CREEP_TWO:
+      case CREEP_THREE:
+      {
+          // Check if 2 seconds has elapsed since the last creep creation for the team.
         if(time(NULL) - lastCreepTime_[team_no] >= 2)
         {
-          createCreep(team_no, command.location, command.pathID);
+          createCreep(team_no, command.location, command.pathID, command.type);
           lastCreepTime_[team_no] = time(NULL);
         }
         break;
+
       }
+
     case CASTLE:
     case TOWER:
     case TOWER_ONE:
@@ -576,7 +584,6 @@ void ServerGameLogic::updateAttack(CommandData& command)
     fprintf(stderr, "playerID not found file: %s line %d\n", __FILE__, __LINE__);
     return;
   }
-
   // Attack!!
   updateMaps();
 }
@@ -747,6 +754,8 @@ void ServerGameLogic::update()
         break;
       case Attack:
         updateAttack(newCommand);
+         std::cout << "Attacking" << std::endl;
+        audio_.playSoundEffect("sounds/punch.wav");
         break;
       case MovePlayer:
         updateMovePlayer(newCommand);
@@ -824,10 +833,10 @@ void ServerGameLogic::setAlarm()
  * REVISIONS: Kevin - Only creates creep if there is enough currency.
 
  */
-void ServerGameLogic::createCreep(int team_no, Point location, int path_no)
+void ServerGameLogic::createCreep(int team_no, Point location, int path_no, UnitType unitType)
 {  
   int uid = next_unit_id_++;
-  
+
   int hp = INIT_CREEP_HP;
   int atkdmg = INIT_CREEP_ATKDMG;
   int atkrng = INIT_CREEP_ATKRNG * 4;
@@ -835,6 +844,39 @@ void ServerGameLogic::createCreep(int team_no, Point location, int path_no)
   int percep = INIT_CREEP_PERCEP * 10;
   int atkcnt = INIT_CREEP_ATKCNT;
   int spd = INIT_CREEP_SPD;
+  switch(unitType)
+  {
+
+    case CREEP_ONE: // regular
+      hp = INIT_CREEP_HP;
+      atkdmg = INIT_CREEP_ATKDMG;
+      atkrng = INIT_CREEP_ATKRNG * 4;
+      atkspd = INIT_CREEP_ATKSPD;
+      percep = INIT_CREEP_PERCEP * 10;
+      atkcnt = INIT_CREEP_ATKCNT;
+      spd = INIT_CREEP_SPD;
+    break;
+    case CREEP_TWO: // Tank (lots of health, but slower than fuck)
+      hp = INIT_CREEP_HP * 3;
+      atkdmg = INIT_CREEP_ATKDMG;
+      atkrng = INIT_CREEP_ATKRNG * 4;
+      atkspd = INIT_CREEP_ATKSPD;
+      percep = INIT_CREEP_PERCEP * 5;
+      atkcnt = INIT_CREEP_ATKCNT;
+      spd = INIT_CREEP_SPD;
+    break;
+    case CREEP_THREE: // Fast.
+      hp = INIT_CREEP_HP * .75;
+      atkdmg = INIT_CREEP_ATKDMG;
+      atkrng = INIT_CREEP_ATKRNG * 4;
+      atkspd = INIT_CREEP_ATKSPD / 2;
+      percep = INIT_CREEP_PERCEP * 10;
+      atkcnt = INIT_CREEP_ATKCNT;
+      spd = INIT_CREEP_SPD;
+    break;
+  }
+  
+
   Direction direct = Direction();
   Point *path= &teams[team_no].paths[path_no % PATH_COUNT][0];
   int movespeed = INIT_CREEP_MOVESPEED;

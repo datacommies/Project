@@ -6,6 +6,7 @@
 #include <set>
 #include <vector>
 #include "client_network.h"
+#include "audio.h"
 
 class ClientGameLogic
 {
@@ -51,6 +52,7 @@ private:
 
    // Fields
    GameState gameState_;
+   Audio audio_;
 };
 
 #endif

@@ -32,6 +32,7 @@ ClientGameLogic::ClientGameLogic(ClientNetwork& clientNetwork)
    clientNetwork_.gl = this;
    //unit_mutex = PTHREAD_MUTEX_INITIALIZER; // only allowed for declaration-initialization.
    pthread_mutex_init(&unit_mutex, NULL);
+   audio_.playMusic("sounds/bg.ogg");
 }
 
 /*------------------------------------------------------------------------------
@@ -49,7 +50,10 @@ ClientGameLogic::ClientGameLogic(ClientNetwork& clientNetwork)
 -- DESCRIPTION: This function sets the gameState_ variable to IN_GAME. 
 ------------------------------------------------------------------------------*/
 void ClientGameLogic::start () {
+   audio_.stopMusic();
+   audio_.playSoundEffect("sounds/start.wav");
    gameState_ = IN_GAME;
+   audio_.playMusic("sounds/bg.ogg");
 }
 
 /*------------------------------------------------------------------------------
@@ -122,6 +126,7 @@ void ClientGameLogic::win () {
 ------------------------------------------------------------------------------*/
 void ClientGameLogic::lose () {
    gameState_ = LOST_GAME;
+   audio_.playSoundEffect("sounds/lose.wav");
 }
 
 /*------------------------------------------------------------------------------
@@ -141,14 +146,6 @@ void ClientGameLogic::lose () {
 ------------------------------------------------------------------------------*/
 bool ClientGameLogic::createTower(UnitType type, Point location)
 {
-   // TODO: validation
-   //validate currency - handled in server_game_logic.cpp
-
-   //pass team into create unit, switch based on unit type?
-
-   //validate location
-   //if the location you are attempting to build a tower at
-   //is not currently occupied and is not impassible terrain
 
    clientNetwork_.createUnit(this->playerId, type, location, 2); //hardcoded path = 2 (last parameter)
    
@@ -182,7 +179,7 @@ bool ClientGameLogic::createCreep(UnitType type, int laneID)
    location.x = 0;
    location.y = 0; // this doesn't do anything because the implementation sucks. Handled later.
    std::cout << "lane " << laneID << std::endl;
-   clientNetwork_.createUnit(this->playerId, CREEP, location, laneID);
+   clientNetwork_.createUnit(this->playerId, type, location, laneID);
    
    return true;
 }
@@ -229,9 +226,7 @@ bool ClientGameLogic::movePlayer(Direction direction)
 bool ClientGameLogic::attack(Direction direction)
 {
    // TODO: validation
-
    clientNetwork_.attack(this->playerId, direction);
-
    return true;
 }
 

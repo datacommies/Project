@@ -148,10 +148,6 @@ void * init (void * in)
             if (g->clientGameLogic_.clientNetwork_.connecting_status != "connected") {
                 g->unassignedPlayersList->SetText(g->clientGameLogic_.clientNetwork_.connecting_status);
             } else {
-                for (int i=0; i < 5; i++){
-                    //cout << g->clientGameLogic_.clientNetwork_.team_l[i].name << endl;
-                    //cout << g->clientGameLogic_.clientNetwork_.team_r[i].name << endl;
-                }
                 string unassigned;
                 for (size_t i = 0; i < g->clientGameLogic_.clientNetwork_.waiting.size(); ++i)
                 {
@@ -200,13 +196,29 @@ void * init (void * in)
         sfgui.Display(window);
 
         if (g->clientGameLogic_.getCurrentState() == LOBBY) {
+            sf::RectangleShape ready_box;
+            ready_box.setSize(sf::Vector2f( 25, 25));
+
             for (size_t i = 0; i < 5; i++) {
-                g->player_sprites[i].setPosition(65, i * 55 + 310);          
+                ready_box.setFillColor(g->clientGameLogic_.clientNetwork_.team_l[i].ready ? sf::Color(  0, 255,  0) : sf::Color(  255, 0,  0));
+                ready_box.setPosition(65, i * 55 + 310);
+                window.draw(ready_box);
+            }
+
+            for (size_t i = 0; i < 5; i++) {
+                ready_box.setFillColor(g->clientGameLogic_.clientNetwork_.team_r[i].ready ? sf::Color(  0, 255,  0) : sf::Color(  255, 0,  0));
+                ready_box.setPosition(710, i * 55 + 310);
+                window.draw(ready_box);
+            }
+
+
+            for (size_t i = 0; i < 5; i++) {
+                g->player_sprites[i].setPosition(65, i * 55 + 310);
                 g->window->draw(g->player_sprites[i]);
             }
 
             for (size_t i = 0; i < 5; i++) {
-                g->player_sprites[i].setPosition(710, i * 55 + 310);          
+                g->player_sprites[i].setPosition(710, i * 55 + 310);
                 g->window->draw(g->player_sprites[i]);
             }
         }
@@ -278,11 +290,9 @@ void Graphics::initMainMenuControls()
     clientGameLogic_.UIElements.clear();
 
     // Create buttons for the menu screen and add them to the list of UI elements.
-    Button a(ID_TEST, sf::Vector2f(250,300), sf::Vector2f(300,50), font, "                Test Game");
-    Button b(ID_JOIN, 	   sf::Vector2f(250,400), sf::Vector2f(300,50), font, "               Join Game");
-    Button c(ID_QUIT,  sf::Vector2f(250,500), sf::Vector2f(300,50), font, "                     Quit");
+    Button b(ID_JOIN, 	   sf::Vector2f(250,300), sf::Vector2f(300,50), font, "               Join Game");
+    Button c(ID_QUIT,  sf::Vector2f(250,400), sf::Vector2f(300,50), font, "                     Quit");
 
-    clientGameLogic_.UIElements.insert(a);
     clientGameLogic_.UIElements.insert(b);
     clientGameLogic_.UIElements.insert(c);
 }
@@ -519,13 +529,14 @@ void Graphics::initLobbyWindow()
 void Graphics::takeRole()
 {
     int role = ((long) this % 10) - 1;
-    int team = ((long) this >= 20) + 1;
+    int team = ((long) this >= 20);
     
-    // Set it for when start button sends player_update.
-    globalGraphics->clientGameLogic_.clientNetwork_.p.role = role;
-    globalGraphics->clientGameLogic_.clientNetwork_.p.team = team - 1;
+    if (globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(team, role, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false)){
+        // Set it for when start button sends player_update.
+        globalGraphics->clientGameLogic_.clientNetwork_.p.role = role;
+        globalGraphics->clientGameLogic_.clientNetwork_.p.team = team;
+    }
     
-    globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(team, role, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
 }
 
 /* This method updates all the button texts in the lobby with those in the client network team_l and team_r.
