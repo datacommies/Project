@@ -7,6 +7,9 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include "../resource.h"
+#include <fstream>
+#include <vector>
+#include <time.h>
 
 using namespace std;
 
@@ -184,7 +187,7 @@ void * init (void * in)
             g->drawCurrency(window);
 
             if (g->clientGameLogic_.getCurrentState() == WON_GAME || g->clientGameLogic_.getCurrentState() == LOST_GAME)
-                g->drawEndGameScreen(window);            
+                g->drawEndGameScreen(window);
         }
 
         // Iterate through the buttons and draw them one by one.
@@ -196,7 +199,7 @@ void * init (void * in)
 
         // Display test windows.
         sfgui.Display(window);
-           
+
         window.display();
     }
 
@@ -339,6 +342,41 @@ void Graphics::initDesktop()
     sfgDesktop.SetProperty("Entry", "FontSize", 22);
 }
 
+/* Randomly generates a name based on the name.txt list. 
+*
+* PRE:
+* POST: SFGUI desktop is initialized
+* RETURNS:
+* NOTES:
+*/
+std::string getName( void ) {
+
+    std::vector<string> lines;
+    std::string line, result;
+
+    srand (time(NULL));
+    ifstream myfile;
+    myfile.open("name.txt", ifstream::in);
+
+    if ( !myfile.is_open() ) {
+        cout << "Cannot find file." << endl;
+        return std::string("Error:getName");
+    }
+
+    while ( myfile.good() ){
+        getline( myfile, line );
+        lines.push_back(line);
+    }
+    myfile.close();
+    for(int i = 0; i < 3; i++ ) {
+        int rnd = rand() % lines.size();
+        result += lines.at(rnd);
+        result += " ";
+
+    }
+    return result;
+}
+
 /* Initializes the join window that the join UI sits ontop of.
  *
  * PRE:     
@@ -362,7 +400,7 @@ void Graphics::initJoinWindow()
     sfgPortLabel = sfg::Label::Create("Port:");
 
     // Create the entry boxes.
-    sfgNameEntryBox = sfg::Entry::Create("Player *");
+    sfgNameEntryBox = sfg::Entry::Create(getName());
     sfgNameEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 120.
     sfgServerEntryBox = sfg::Entry::Create("localhost");
     sfgServerEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 120.
@@ -454,8 +492,6 @@ void Graphics::initLobbyWindow()
     sfgLobbyWindow->Add(sfgLobbyBox);
 
     sfgDesktop.Add(sfgLobbyWindow);
-
-
 }
 
 /* Button handler for the lobby player select buttons
@@ -814,4 +850,5 @@ void Graphics::loadImages()
         player_textures[i].loadFromFile(ss.str().c_str());
         player_sprites[i].setTexture(player_textures[i]);
     }
+
 }
