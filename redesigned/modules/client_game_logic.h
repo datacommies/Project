@@ -42,6 +42,8 @@ public:
    void ready() {
       clientNetwork_.sendReady();
    }
+
+   bool waitingForStart;
    // Module References
    ClientNetwork& clientNetwork_;
 private:

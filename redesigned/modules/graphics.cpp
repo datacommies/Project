@@ -160,7 +160,16 @@ void * init (void * in)
                 }
                 g->unassignedPlayersList->SetText(unassigned);
 
-                g->updateLobbyRoles();
+                 if(g->clientGameLogic_.waitingForStart)
+                {
+                    g->sfgLobbyWindow->Show(false);
+                    g->drawLoadingScreen();
+                }
+                else
+                {
+                    // Update the names on the buttons.
+                    g->updateLobbyRoles();
+                }
             }
 
             // Update the names on the buttons.
@@ -809,6 +818,18 @@ void Graphics::drawEndGameScreen(sf::RenderWindow& window)
     endGameScreen.setScale(.625,.5);
     endGameScreen.setPosition(150,125);
     window.draw(endGameScreen);
+}
+
+
+void Graphics::drawLoadingScreen()
+{
+    sf::Texture loadingScreen_bg;
+    sf::Sprite  loadingScreen;
+
+    loadingScreen_bg.loadFromFile("images/loading.png");
+    loadingScreen.setTexture(loadingScreen_bg);
+
+    window->draw(loadingScreen);
 }
 
 /* Loads all the images that are used by the game
