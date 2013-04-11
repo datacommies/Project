@@ -339,6 +339,7 @@ bool find_font (char ** path)
     match = FcFontMatch (0, pat, &result);
     return (FcPatternGetString(match, FC_FILE, 0, (FcChar8**)path) == FcResultMatch);
 }
+
 /*------------------------------------------------------------------------------
 -- FUNCTION:   Lerp
 --
@@ -404,14 +405,14 @@ Graphics::Graphics(ClientGameLogic& clientGameLogic)
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER:  Jacob Miner
+-- DESIGNER:   Albert Liao
+-- PROGRAMMER:  Albert Liao, Jacob Miner
 --
 -- INTERFACE:   void Graphics::initMainMenuControls()
 --
 -- RETURNS:     void
 --
--- DESCRIPTION: Initializes main menu controls (Join, Quit)
+-- DESCRIPTION: Initializes main menu controls (Adds the join and quit buttons)
 ------------------------------------------------------------------------------*/
 void Graphics::initMainMenuControls()
 {
@@ -422,6 +423,7 @@ void Graphics::initMainMenuControls()
     Button b(ID_JOIN, 	   sf::Vector2f(250,300), sf::Vector2f(300,50), font, "               Join Game");
     Button c(ID_QUIT,  sf::Vector2f(250,400), sf::Vector2f(300,50), font, "                     Quit");
 
+    // Add the buttons to the screen.
     clientGameLogic_.UIElements.insert(b);
     clientGameLogic_.UIElements.insert(c);
 }
@@ -431,14 +433,15 @@ void Graphics::initMainMenuControls()
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   Jacob Miner
--- PROGRAMMER: Jacob Miner
+-- DESIGNER:   Jacob Miner, Albert Liao
+-- PROGRAMMER: Jacob Miner, Albert Liao
 --
 -- INTERFACE:   Graphics::initGameControls()
 --
 -- RETURNS:     void
 --
--- DESCRIPTION: Init game controls while playing (Create buttons etc)
+-- DESCRIPTION: Creates the buttons that are visible when we're in the game.
+--              Build tower, build creep, lane choose, info etc.
 ------------------------------------------------------------------------------*/
 void Graphics::initGameControls () 
 {
@@ -465,19 +468,18 @@ void Graphics::initGameControls ()
     Button infoButton(INFOBUTTON,sf::Vector2f(INFOBUTTONX,INFOBUTTONY), sf::Vector2f(25, 25), font, NULL);
     infoButton.rect.setFillColor(sf::Color::Transparent);
 
-    //towerButton1.rect.setFillColor(sf::Color(255, 0, 0));
+    // Make all the buttons transparent.
     towerButton1.rect.setFillColor(sf::Color::Transparent);
     towerButton2.rect.setFillColor(sf::Color::Transparent);
     towerButton3.rect.setFillColor(sf::Color::Transparent);
-
     creepButton1.rect.setFillColor(sf::Color::Transparent);
     creepButton2.rect.setFillColor(sf::Color::Transparent);
     creepButton3.rect.setFillColor(sf::Color::Transparent);
-
     highPath.rect.setFillColor(sf::Color::Transparent);
     lowPath.rect.setFillColor(sf::Color::Transparent);
     midPath.rect.setFillColor(sf::Color::Transparent);
   
+    // Add all the buttons to the screen.
     clientGameLogic_.UIElements.insert(towerButton1);
     clientGameLogic_.UIElements.insert(towerButton2);
     clientGameLogic_.UIElements.insert(towerButton3);
@@ -491,18 +493,20 @@ void Graphics::initGameControls ()
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   initDesktop
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Albert Liao
+-- PROGRAMMER: Albert Liao
 --
--- INTERFACE:   
+-- INTERFACE:   void Graphics::initDesktop()
 --
--- RETURNS:     
+-- RETURNS:     none.
 --
--- DESCRIPTION: 
+-- DESCRIPTION: This function is the basis of all of our SFGUI objects that we
+--              draw. In order for controls in SFGUI to be able to have their
+--              settings like font size set, it needs to be in a Desktop container.
 ------------------------------------------------------------------------------*/
 void Graphics::initDesktop()
 {
@@ -553,18 +557,20 @@ std::string getName( void ) {
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   initJoinWindow
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Albert Liao
+-- PROGRAMMER: Albert Liao
 --
--- INTERFACE:   
+-- INTERFACE:   void Graphics::initJoinWindow()
 --
--- RETURNS:     
+-- RETURNS:     nothing.
 --
--- DESCRIPTION: 
+-- DESCRIPTION: This function creates the window that holds all the SFGUI Join
+--              controls. This window is created when the user clicks join on the
+--              main menu and assists in helping the user connect to a server.
 ------------------------------------------------------------------------------*/
 void Graphics::initJoinWindow()
 {
@@ -610,21 +616,26 @@ void Graphics::initJoinWindow()
 
     sfgJoinWindow->Add(sfgJoinBox);
 
+    // Add the window to the desktop for displaying.
     sfgDesktop.Add(sfgJoinWindow);
 }
+
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   initLobbyWindow
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Albert Liao
+-- PROGRAMMER: Albert Liao
 --
--- INTERFACE:   
+-- INTERFACE:  void Graphics::initLobbyWindow()
 --
--- RETURNS:     
+-- RETURNS:     none.
 --
--- DESCRIPTION: 
+-- DESCRIPTION: This function creates the lobby window. The lobby window consists
+--              entirely of SFGUI buttons and labels and it provides an interface
+--              for users to see which players are in the game and select the team
+--              and role that they want to take.
 ------------------------------------------------------------------------------*/
 void Graphics::initLobbyWindow()
 {
@@ -632,7 +643,6 @@ void Graphics::initLobbyWindow()
     sfgLobbyWindow = sfg::Window::Create(sfg::Window::BACKGROUND); // Make the window.
     sfgLobbyWindow->SetPosition(sf::Vector2f(100, 100)); // Change the window position.
     sfgLobbyWindow->SetRequisition(sf::Vector2f(600, 350));
-
 
     // Create a parent box to hold all the subboxes.
     sfgLobbyBox = sfg::Box::Create(sfg::Box::HORIZONTAL);
@@ -643,14 +653,15 @@ void Graphics::initLobbyWindow()
     sfgRightLobbyBox = sfg::Box::Create(sfg::Box::VERTICAL);
 
     // Create all the labels.
-    unassignedPlayersLabel = sfg::Label::Create("Players Waiting:");
-    unassignedPlayersList = sfg::Label::Create("NeedsVector\nGordon\nG-Man\nD0g\nAlyx");
-    unassignedPlayersList->SetId("upl");
-    sfgDesktop.SetProperty("#upl", "FontSize", "12");
-
     teamOneLabel = sfg::Label::Create("Team Red");
     teamTwoLabel = sfg::Label::Create("Team Blue");
-
+    unassignedPlayersLabel = sfg::Label::Create("Players Waiting:");
+    unassignedPlayersList = sfg::Label::Create("NeedsVector\nGordon\nG-Man\nD0g\nAlyx");
+    
+    // Set the fontsize for upl labels.
+    unassignedPlayersList->SetId("upl");
+    sfgDesktop.SetProperty("#upl", "FontSize", "12");
+    
     // Create the team selection buttons.
     for (int i = 0; i < 5; ++i)
     {
@@ -684,8 +695,10 @@ void Graphics::initLobbyWindow()
 
     sfgLobbyWindow->Add(sfgLobbyBox);
 
+    // Add it to the desktop to be drawn.
     sfgDesktop.Add(sfgLobbyWindow);
 }
+
 /*------------------------------------------------------------------------------
 -- FUNCTION:   
 --
@@ -1304,7 +1317,7 @@ void Graphics::loadImages()
     titlesc_bg.loadFromFile("images/title.png");
     titlesc.setTexture(titlesc_bg);
 
-    title = sf::Text("Child's Play", font, 71);
+    title = sf::Text("Jurassic Mistake", font, 71);
     title.setPosition(sf::Vector2f(200, 0));
 
     for (int i = 0; i < 5; i++) {
