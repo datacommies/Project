@@ -700,18 +700,21 @@ void Graphics::initLobbyWindow()
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   void Graphics::initMessageDisplayWindow()
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Albert Liao
+-- PROGRAMMER: Albert Liao
 --
--- INTERFACE:   
+-- INTERFACE:  void Graphics::initMessageDisplayWindow()
 --
--- RETURNS:     
+-- RETURNS:     none.
 --
--- DESCRIPTION: 
+-- DESCRIPTION: This SFGUI initializer creates the window which the chat display
+--              sits on. The window needs to be of type ScrolledWindow to support
+--              scrolling. There is simply a label that gets appended to inside
+--              this window and that's how we show our chat messages!
 ------------------------------------------------------------------------------*/
 void Graphics::initMessageDisplayWindow()
 {
@@ -735,18 +738,20 @@ void Graphics::initMessageDisplayWindow()
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   initMessageSendWindow
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Albert Liao
+-- PROGRAMMER: Albert Liao
 --
--- INTERFACE:   
+-- INTERFACE:   void Graphics::initMessageSendWindow()
 --
--- RETURNS:     
+-- RETURNS:     none.
 --
--- DESCRIPTION: 
+-- DESCRIPTION: This function creates the send message portion of the game's chat
+-- system. The send message window consists of a simple entry field for the user
+-- to enter in a message they want to send out and a send button to do so.
 ------------------------------------------------------------------------------*/
 void Graphics::initMessageSendWindow()
 {
@@ -1318,7 +1323,8 @@ void Graphics::loadImages()
     titlesc.setTexture(titlesc_bg);
 
     title = sf::Text("Jurassic Mistake", font, 71);
-    title.setPosition(sf::Vector2f(200, 0));
+    title.setPosition(sf::Vector2f(50, 0));
+    title.setColor(sf::Color(255, 0, 0));
 
     for (int i = 0; i < 5; i++) {
         // Load the tower texture.
