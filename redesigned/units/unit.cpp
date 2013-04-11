@@ -165,7 +165,7 @@ void Unit::Attack(void) {
     else if( hasStrength(iElement, pTarget->iElement) )
         pTarget->health -= attackDamage * 0.25;
     else
-        pTarget->health -= attackDamage + (rand() % (attackDamage*3);
+        pTarget->health -= attackDamage + (rand() % (attackDamage*3));
 
     if( pTarget->health <= 0 ) {
         //pTarget = NULL;
