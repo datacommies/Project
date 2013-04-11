@@ -154,6 +154,7 @@ void ClientNetwork::recvReply() {
 					c.position.y = u.posy;
 					c.past_position = c.position;
 					c.health = u.health;
+					c.maxHealth = u.maxHealth;
 					c.type = u.unit_type;
 					c.team = u.team;
 					pthread_mutex_lock( &gl->unit_mutex );
@@ -187,6 +188,7 @@ void ClientNetwork::recvReply() {
 					c.position.y = u.posy;
 					c.past_position = c.position;
 					c.health = u.health;
+					c.maxHealth = u.maxHealth;
 					c.type = u.unit_type;
 					c.role = mu.role;
 					c.team = u.team;

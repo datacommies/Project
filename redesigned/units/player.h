@@ -16,7 +16,7 @@ public:
    //       int atkspd, int percep, int atkcnt, int spd, Direction direct,
     //      int cid);
 	
-    Player(int uid, int cid, Point pos, int role, int hp=100, int atkdmg=0, int atkrng=0,
+    Player(int uid, int cid, Point pos, int role, int hp=200, int atkdmg=10, int atkrng=0,
           int atkspd=0, int percep=0, int atkcnt=0, int spd=0, Direction direct=STATIONARY, time_t tod=0);
 
     virtual UnitType getType() const { return PLAYER; }

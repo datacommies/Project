@@ -1010,7 +1010,7 @@ void ServerGameLogic::createPlayer(int team_no, Point location, int client_id, i
       player->attackDamage = 14;
     break;
   }
-
+  player->maxHealth = player->health;
   teams[team_no].addUnit(player);
   std::cout << "adding player: " << player->clientID << " team: " << team_no << std::endl;
 }

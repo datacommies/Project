@@ -707,7 +707,7 @@ void Graphics::drawMainMenu(sf::RenderWindow& window)
  * RETURNS: 
  * NOTES:    
  */
-void Graphics::drawHealthBar(sf::RenderWindow& window, float x, float y, int health)
+void Graphics::drawHealthBar(sf::RenderWindow& window, float x, float y, int health, int maxhealth)
 {
     sf::RectangleShape healthbar, health_bg;
     healthbar.setFillColor(sf::Color(  0, 255,  0));
@@ -717,7 +717,7 @@ void Graphics::drawHealthBar(sf::RenderWindow& window, float x, float y, int hea
     health_bg.setPosition(x, y);
     healthbar.setPosition(x, y);
 
-    float percent = (float) health / 100;
+    float percent = ( ((float) health) / maxhealth);
 
     healthbar.setSize(sf::Vector2f( percent * 25, 3));
     window.draw(health_bg);
@@ -765,7 +765,7 @@ void Graphics::drawUnits(sf::RenderWindow& window)
         {
             castle_sprite.setPosition(unit->position.x, unit->position.y);			
             window.draw(castle_sprite);
-            drawHealthBar(window, unit->position.x, unit->position.y + castle_sprite.getTextureRect().height, unit->health);
+            drawHealthBar(window, unit->position.x, unit->position.y + castle_sprite.getTextureRect().height, unit->health, unit->maxHealth);
         } 
         else if (unit->type == CREEP)
         {
@@ -775,13 +775,13 @@ void Graphics::drawUnits(sf::RenderWindow& window)
             drawTeamCircle(window, unit->team, interpolated.x, interpolated.y);
             creep_sprite.setPosition(interpolated.x, interpolated.y);
             window.draw(creep_sprite);
-            drawHealthBar(window, interpolated.x, interpolated.y+25, unit->health);
+            drawHealthBar(window, interpolated.x, interpolated.y+25, unit->health, unit->maxHealth);
         }
         else if (unit->type == TOWER)
         {
             tower_sprite.setPosition(unit->position.x, unit->position.y);			
             window.draw(tower_sprite);
-            drawHealthBar(window, unit->position.x, unit->position.y + tower_sprite.getTextureRect().height, unit->health);
+            drawHealthBar(window, unit->position.x, unit->position.y + tower_sprite.getTextureRect().height, unit->health, unit->maxHealth);
         }
         else if (unit->type == PLAYER)
         {
@@ -791,7 +791,7 @@ void Graphics::drawUnits(sf::RenderWindow& window)
             drawTeamCircle(window, unit->team, interpolated.x, interpolated.y);
             player_sprites[unit->role].setPosition(interpolated.x, interpolated.y);			
             window.draw(player_sprites[unit->role]);
-            drawHealthBar(window, interpolated.x, interpolated.y + player_sprites[unit->role].getTextureRect().height, unit->health);
+            drawHealthBar(window, interpolated.x, interpolated.y + player_sprites[unit->role].getTextureRect().height, unit->health, unit->maxHealth);
         }
     }
     pthread_mutex_unlock( &clientGameLogic_.unit_mutex );
