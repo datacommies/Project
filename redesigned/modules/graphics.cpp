@@ -24,6 +24,8 @@ using namespace std;
 #define ROW2 619
 #define ROW3 646
 #define ROW4 673
+#define INFOBUTTONX 770
+#define INFOBUTTONY 670
 
 inline string to_string(int num)
 {
@@ -205,7 +207,7 @@ void * init (void * in)
                 g->clientGameLogic_.clientNetwork_.chatbuffer_.clear();
             }
 
-            // Update the names on the buttons.
+            // Update the names on the lobby buttons.
             g->updateLobbyRoles();
         } else if (c_state == IN_GAME || c_state == WON_GAME || c_state == LOST_GAME) {
 
@@ -218,6 +220,11 @@ void * init (void * in)
             g->drawUnits(window);
             g->drawHud(window);
             g->drawCurrency(window);
+
+            if(g->_infoButtonVisible)
+            {
+                g->drawInfo(window);
+            }
 
             if (c_state == WON_GAME || c_state == LOST_GAME)
                 g->drawEndGameScreen(window);
@@ -337,6 +344,7 @@ Graphics::Graphics(ClientGameLogic& clientGameLogic)
     globalGraphics = this;
 
     chatShowing = false;
+    _infoButtonVisible = false;
 
     // Load font for game.
     char * font_path;
@@ -413,6 +421,10 @@ void Graphics::initGameControls ()
     Button creepButton2(BUILDCREEP_2,sf::Vector2f(button[5],ROW1), sf::Vector2f(BUTTON_SIZE, BUTTON_SIZE), font, NULL);
     Button creepButton3(BUILDCREEP_3,sf::Vector2f(button[6],ROW1), sf::Vector2f(BUTTON_SIZE, BUTTON_SIZE), font, NULL);
     
+    // Info Buttons
+    Button infoButton(INFOBUTTON,sf::Vector2f(INFOBUTTONX,INFOBUTTONY), sf::Vector2f(25, 25), font, NULL);
+    infoButton.rect.setFillColor(sf::Color::Transparent);
+
     //towerButton1.rect.setFillColor(sf::Color(255, 0, 0));
     towerButton1.rect.setFillColor(sf::Color::Transparent);
     towerButton2.rect.setFillColor(sf::Color::Transparent);
@@ -435,6 +447,7 @@ void Graphics::initGameControls ()
     clientGameLogic_.UIElements.insert(creepButton1);
     clientGameLogic_.UIElements.insert(creepButton2);
     clientGameLogic_.UIElements.insert(creepButton3);
+    clientGameLogic_.UIElements.insert(infoButton);
 }
 
 /*------------------------------------------------------------------------------
@@ -982,7 +995,10 @@ void Graphics::drawMainMenu(sf::RenderWindow& window)
     window.draw(title);
 }
 
-
+void Graphics::drawInfo(sf::RenderWindow& window)
+{
+    window.draw(infoSprite);
+}
 /*------------------------------------------------------------------------------
 -- FUNCTION:   
 --
@@ -1252,6 +1268,10 @@ void Graphics::loadImages()
     tower_tex3.loadFromFile("images/t3.png");
     tower_sprite3.setTexture(tower_tex3);
 
+    infoImage.loadFromFile("images/infos.png");
+    infoSprite.setTexture(infoImage);
+    infoSprite.setPosition(150, 50);
+
     for (int i = 0; i < 5; i++) {
         // Load the tower texture.
         stringstream ss;
@@ -1275,4 +1295,9 @@ void Graphics::showChat(bool show)
         sfgChatSendWindow->Show(false);
         chatShowing = false;
     }
+}
+
+void Graphics::toggleInfoButton()
+{
+    _infoButtonVisible ? _infoButtonVisible = false : _infoButtonVisible = true;
 }

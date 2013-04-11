@@ -69,7 +69,8 @@ public:
 
    sfg::ScrolledWindow::Ptr sfgChatDisplayWindow;
    sfg::Window::Ptr sfgChatSendWindow;
-   
+   void toggleInfoButton();
+
 private:
    // Module references
    ClientGameLogic& clientGameLogic_;
@@ -97,6 +98,9 @@ private:
    sf::Sprite tower_sprite3;
    sf::Texture tower_tex2;
    sf::Sprite tower_sprite2;
+
+   sf::Texture infoImage;
+   sf::Sprite infoSprite;
 
    sf::Texture player_textures[5];   
    sf::Sprite player_sprites[5];
@@ -142,6 +146,8 @@ private:
 
    bool chatShowing;
 
+   bool _infoButtonVisible;
+
    // Functions
    void initMainMenuControls();
    void drawHud(sf::RenderWindow& window);
@@ -156,6 +162,7 @@ private:
    void drawCurrency(sf::RenderWindow& window);
    void drawEndGameScreen(sf::RenderWindow& window);
    void drawLoadingScreen();
+   void drawInfo(sf::RenderWindow& window);
 
    // SFGUI Functions
    void initDesktop();

@@ -1,3 +1,28 @@
+/*------------------------------------------------------------------------------
+-- FILE:        client_network.cpp
+--
+-- DATE:        2013/03/11
+--
+-- MAINTAINERS: David Czech, Dennis Ho,
+--              Ron Bellido, Behnam Bastami, Aaron Lee
+--
+-- FUNCTIONS:	ClientNetwork
+--				~ClientNetwork
+--				connectToServer
+--				recvReply
+--				createUnit
+--              updatePlayerLobby
+--				movePlayer
+--				attack
+--				player_update
+--				player_leave
+--				msg_mapname
+--				msg_chat
+--				send_msgchat
+--				recv_complete
+--
+-- DESCRIPTION: Implementation of the client-side interface function
+------------------------------------------------------------------------------*/
 #include <iostream>
 #include "client_network.h"
 #include "../units/creep.h"
@@ -126,6 +151,7 @@ bool ClientNetwork::connectToServer()
 	recvReply();
 	return true;
 }
+
 /*------------------------------------------------------------------------------
 -- FUNCTION:   recvReply
 --
@@ -175,6 +201,9 @@ void ClientNetwork::recvReply() {
 			switch (u.unit_type) {
 				//FALL THROUGH
 				case TOWER:
+				case TOWER_ONE:
+				case TOWER_TWO:
+				case TOWER_THREE:
 				case CASTLE: {
 					tower_t t = {0};
 					CLIENT_UNIT c = {0};

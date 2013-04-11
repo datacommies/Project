@@ -281,6 +281,9 @@ Control::RunAllButtons()
 			case SELECTHIPATH:
 			    _currentLane = HIGHPATH;
 			break;
+			case INFOBUTTON:
+				_graphicsModule->toggleInfoButton();
+			break;
 			default:
 			break;
 				// Does nothing but gets rid of annoying warnings
@@ -465,14 +468,7 @@ Control::CallUnitTypeCreationEvent(UnitType unit_type)
 	    case TOWER_THREE:
 	        _clientGameLogicModule->createTower(unit_type, GetTowerPlacement());
 	    break;
-	    case CREEP_ONE:
-	    case CREEP_TWO: // creeps are handled as they are pressed. So we don't have to wait for a second click.
-	    case CREEP_THREE:
-	    case PLAYER:
-		case PROJECTILE:
-		case CREEP:         // these aren't doing anything, but get rid of
-		case TOWER:         // warnings
-		case CASTLE:
+		default:
 		break;
 	}
 	

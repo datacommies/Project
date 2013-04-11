@@ -146,7 +146,7 @@ class ServerGameLogic
     void initializePlayers(std::vector<player_matchmaking_t> players);
     
     void createCreep(int team_no, Point location, int path_no = 0, UnitType unitType =  CREEP);
-    void createTower(int team_no, Point location);
+    void createTower(int team_no, Point location, UnitType ut);
     void createPlayer(int team_no, Point location, int client_id, int role);
     void respawnPlayer(Player* player, Point location);
     static void setAlarm();

@@ -28,8 +28,22 @@ int atkspd, int percep, int atkcnt, int wall);
         int atkspd=30, int percep=30, int atkcnt=0, int wall=0);
 
     void    Attack(Team*);
-    void    Update(Team&);
+    virtual void    Update(Team& team){
+	    /* If we have a Target, check their status. */
+	    if( pTarget != NULL )
+	        CheckTarget();
 
+	    /* Search for Target. */
+	    if( pTarget == NULL )
+	        FindTarget(&team);
+
+	    /* If we found a new Target, and they are in range.. */
+	    if( pTarget != NULL ) {
+	        Attack(&team);
+	        //cout << "Elec att" << endl;
+	    }
+	}
+    virtual UnitType getType() const { return TOWER_TWO; }
 private:
 };
 
