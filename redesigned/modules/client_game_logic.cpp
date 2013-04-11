@@ -141,14 +141,6 @@ void ClientGameLogic::lose () {
 ------------------------------------------------------------------------------*/
 bool ClientGameLogic::createTower(UnitType type, Point location)
 {
-   // TODO: validation
-   //validate currency - handled in server_game_logic.cpp
-
-   //pass team into create unit, switch based on unit type?
-
-   //validate location
-   //if the location you are attempting to build a tower at
-   //is not currently occupied and is not impassible terrain
 
    clientNetwork_.createUnit(this->playerId, type, location, 2); //hardcoded path = 2 (last parameter)
    
@@ -211,29 +203,6 @@ bool ClientGameLogic::movePlayer(Direction direction)
    return true;
 }
 
-/*------------------------------------------------------------------------------
--- FUNCTION:    attack
---
--- DATE:        2013/03/11
---
--- DESIGNER:    Dennis Ho
--- PROGRAMMER:  Dennis Ho
---
--- INTERFACE:   bool ClientGameLogic::movePlayer(Direction direction)
---
--- RETURNS:     Boolean; True if the request was sent, False otherwise
---
--- DESCRIPTION: This function makes the current play attack in the specified
---              direction.
-------------------------------------------------------------------------------*/
-bool ClientGameLogic::attack(Direction direction)
-{
-   // TODO: validation
-
-   clientNetwork_.attack(this->playerId, direction);
-
-   return true;
-}
 
 /*------------------------------------------------------------------------------
 -- FUNCTION:    exit
