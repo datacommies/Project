@@ -90,7 +90,7 @@ bool ClientNetwork::connectToServer()
 	player_matchmaking_t p = {{0, 0}, {0}, 0, 0, 0, false};
 	//TODO: get user's name from GUI. Hardcode for now.
 	strcpy(p.name, _name.c_str());
-	p.team = 0;
+	p.team = 2; // 2 is waiting/spectate team.
 	p.role = 0;
 	p.ready = false;
 
@@ -292,7 +292,7 @@ bool ClientNetwork::createUnit(int playerId, UnitType type, Point location, int 
 bool ClientNetwork::updatePlayerLobby (int team, int role, const char* name, bool ready) {
 
 	// If not empty, someone is already there!
-	if ( !((team == 1 ? team_l : team_r)[role] == empty))
+	if ( !((team == 0 ? team_l : team_r)[role] == empty))
 		return false;
 
 	player_matchmaking_t p = {{0, 0}, {0}, 0, 0, 0, false};
@@ -385,10 +385,10 @@ void ClientNetwork::player_update (player_matchmaking_t * p) {
 	
 	waiting.erase(std::remove(waiting.begin(), waiting.end(), *p), waiting.end());
 
-	if (p->team == 1){
+	if (p->team == 0){
 		team_l[p->role] = *p;
 	}
-	else if (p->team == 2){
+	else if (p->team == 1){
 		team_r[p->role] = *p;
 	}
 	else 
@@ -407,13 +407,13 @@ void ClientNetwork::player_leave (player_matchmaking_t * p) {
 	printf("Player Left: %s\n", p->name);
 
 	// Remove player from the waiting list.
-	if (p->team == 0) {
+	if (p->team == 2) {
 		waiting.erase(std::remove(waiting.begin(), waiting.end(), *p), waiting.end());
 	} else {
 		// Remove the player from the team arrays.
-		if (p->team == 1){
+		if (p->team == 0){
 			memcpy(team_l+p->role, &empty, sizeof(player_matchmaking_t));
-		} else if (p->team == 2) {
+		} else if (p->team == 1) {
 			memcpy(team_r+p->role, &empty, sizeof(player_matchmaking_t));
 		}
 	}

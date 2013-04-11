@@ -519,13 +519,14 @@ void Graphics::initLobbyWindow()
 void Graphics::takeRole()
 {
     int role = ((long) this % 10) - 1;
-    int team = ((long) this >= 20) + 1;
+    int team = ((long) this >= 20);
     
-    // Set it for when start button sends player_update.
-    globalGraphics->clientGameLogic_.clientNetwork_.p.role = role;
-    globalGraphics->clientGameLogic_.clientNetwork_.p.team = team - 1;
+    if (globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(team, role, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false)){
+        // Set it for when start button sends player_update.
+        globalGraphics->clientGameLogic_.clientNetwork_.p.role = role;
+        globalGraphics->clientGameLogic_.clientNetwork_.p.team = team;
+    }
     
-    globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(team, role, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
 }
 
 /* This method updates all the button texts in the lobby with those in the client network team_l and team_r.
