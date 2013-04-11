@@ -381,11 +381,9 @@ std::string getName( void ) {
         lines.push_back(line);
     }
     myfile.close();
-    for(int i = 0; i < 3; i++ ) {
+    for(int i = 0; i < 1; i++ ) {
         int rnd = rand() % lines.size();
         result += lines.at(rnd);
-        result += " ";
-
     }
     return result;
 }
@@ -471,7 +469,7 @@ void Graphics::initLobbyWindow()
     unassignedPlayersLabel = sfg::Label::Create("Players Waiting:");
     unassignedPlayersList = sfg::Label::Create("NeedsVector\nGordon\nG-Man\nD0g\nAlyx");
     unassignedPlayersList->SetId("upl");
-    sfgDesktop.SetProperty("#upl", "FontSize", "8");
+    sfgDesktop.SetProperty("#upl", "FontSize", "12");
 
     teamOneLabel = sfg::Label::Create("Team One");
     teamTwoLabel = sfg::Label::Create("Team Two");
