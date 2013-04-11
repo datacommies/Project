@@ -1,1 +1,1 @@
-LD_LIBRARY_PATH=/usr/local/lib ./client $*
+LD_LIBRARY_PATH=/usr/local/lib gdb ./client $*

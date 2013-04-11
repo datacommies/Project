@@ -1100,7 +1100,7 @@ void ServerGameLogic::createPlayer(int team_no, Point location, int client_id, i
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Dennis Ho
--- PROGRAMMER: Dennis Ho
+-- PROGRAMMER: Dennis Ho, Jesse Braham
 --
 -- INTERFACE:   void ServerGameLogic::respawnPlayer(Player* player, Point location)
 --
