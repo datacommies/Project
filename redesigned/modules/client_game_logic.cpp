@@ -179,7 +179,7 @@ bool ClientGameLogic::createCreep(UnitType type, int laneID)
    location.x = 0;
    location.y = 0; // this doesn't do anything because the implementation sucks. Handled later.
    std::cout << "lane " << laneID << std::endl;
-   clientNetwork_.createUnit(this->playerId, CREEP, location, laneID);
+   clientNetwork_.createUnit(this->playerId, type, location, laneID);
    
    return true;
 }
