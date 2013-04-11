@@ -122,6 +122,7 @@ void ClientGameLogic::win () {
 ------------------------------------------------------------------------------*/
 void ClientGameLogic::lose () {
    gameState_ = LOST_GAME;
+   audio_.playSoundEffect("sounds/lose.wav");
 }
 
 /*------------------------------------------------------------------------------
@@ -229,9 +230,7 @@ bool ClientGameLogic::movePlayer(Direction direction)
 bool ClientGameLogic::attack(Direction direction)
 {
    // TODO: validation
-
    clientNetwork_.attack(this->playerId, direction);
-
    return true;
 }
 

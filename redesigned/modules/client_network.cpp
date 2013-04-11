@@ -201,8 +201,12 @@ void ClientNetwork::recvReply() {
 							gl->units[i] = c;
 							updated = true;
 
-							if (gl->units[i].health <= 0)					
-								gl->units.erase(gl->units.begin() + i);						
+							if (gl->units[i].health <= 0)
+							{	
+							    				
+								gl->units.erase(gl->units.begin() + i);			
+								audio_.playSoundEffect("sounds/wilhelm.wav");			
+						    }
 						}
 					}
 					if (!updated)
@@ -345,6 +349,7 @@ bool ClientNetwork::movePlayer(int playerId, Direction direction)
  * NOTES:   No validation performed here. */
 bool ClientNetwork::attack(int playerId, Direction direction)
 {
+    audio_.playSoundEffect("sounds/punch.wav");
    return false;
 }
 

@@ -13,7 +13,7 @@
 -- DESCRIPTION: File contains implementation for the Audio class.
 ------------------------------------------------------------------------------*/
 #include "audio.h"
-
+#include <iostream>
 Audio::Audio()
 { 
 
@@ -38,7 +38,8 @@ int Audio::playMusic(const char* filename)
     if (!music_.openFromFile(filename))
         return EXIT_FAILURE;
 
-    music_.play();
+	music_.setVolume(20);
+    //music_.play();
 
 
     return EXIT_SUCCESS;
@@ -60,12 +61,21 @@ int Audio::playMusic(const char* filename)
 ------------------------------------------------------------------------------*/
 int Audio::playSoundEffect(const char* filename)
 {
-    if (!buffer_.loadFromFile(filename))
+    sf::SoundBuffer Buffer;
+    if (!Buffer.loadFromFile(filename))
         return EXIT_FAILURE;
-
-    sound_ = sf::Sound(buffer_);
+    
+    sf::Sound Sound;
+    Sound.setBuffer(Buffer);
+    Sound.play();
+    
+    /*sound_ = sf::Sound(buffer_);
     sound_.play();
-
+    std::cout << "play sound effect" << std::endl;*/
+    while(Sound.getStatus() == sf::Sound::Playing)
+    {
+        sf::sleep(sf::seconds(0.1f));
+    }
     return EXIT_SUCCESS;
 }
 
