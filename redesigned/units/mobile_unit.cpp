@@ -3,7 +3,7 @@
 --
 -- DATE:        March 11, 2013
 --
--- MAINTAINERS: Callum Styan
+-- MAINTAINERS: Callum Styan, Kevin Tangeman, Steve Lo
 --
 -- FUNCTIONS:   MobileUnit constructor
 --              serializeUnit
@@ -31,7 +31,7 @@ MobileUnit::MobileUnit(int uid, Point pos, int hp, int atkdmg, int atkrng,
 -- DATE:        March 26, 2013
 --
 -- DESIGNER:    Callum Styan
--- PROGRAMMER:  Callum Styan
+-- PROGRAMMER:  Callum Styan, Kevin Tangeman, Steve Lo
 --
 -- INTERFACE:   MobileUnit(int uid, int side, Point pos, int hp=100, int atkdmg=0, int atkrng=0,
 --                         int atkspd=0, int percep=0, int atkcnt=0, int movespeed = 10, 
