@@ -180,8 +180,6 @@ void * init (void * in)
 
                 if(g->clientGameLogic_.waitingForStart)
                 {
-                    g->sfgLobbyWindow->Show(false);
-                    g->sfgChatDisplayWindow->Show(false);
                     g->drawLoadingScreen();
                 }
                 else
@@ -207,6 +205,9 @@ void * init (void * in)
             // Update the names on the buttons.
             g->updateLobbyRoles();
         } else if (c_state == IN_GAME || c_state == WON_GAME || c_state == LOST_GAME) {
+            g->sfgLobbyWindow->Show(false);
+            g->sfgChatDisplayWindow->Show(false);
+
             if (!controls_init) {
                 controls_init = true;
                 g->initGameControls();
@@ -714,9 +715,6 @@ void Graphics::startGame()
     cout << "start the game!" << endl;
     clientGameLogic_.ready();
     sfgLobbyWindow->Show(false);
-    sfgChatDisplayWindow->Show(false);
-    sfgChatSendWindow->Show(false);
-    chatShowing = false;
 }
 
 /* Closes the lobby SFGUI window and redraws the main menu.
