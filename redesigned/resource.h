@@ -59,7 +59,8 @@ enum GameState
    IN_GAME,
    WON_GAME,
    LOST_GAME,
-   GAME_END
+   GAME_END,
+   CONNECTING
 };
 
 enum PathId

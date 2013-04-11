@@ -13,7 +13,7 @@
 
 using namespace std;
 
-#define INIT_CREEP_HP 100
+#define INIT_CREEP_HP 150
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 700
 #define BUTTON_SIZE  40
@@ -34,13 +34,20 @@ inline string to_string(int num)
 
 Graphics* globalGraphics = NULL; // Used for the SFGUI button handlers in the lobby.
 
-/* Graphics Thread entry point
- *
- * PRE:     
- * POST:    Window closed: no more graphics thread necessary.
- * RETURNS: nothing
- * NOTES:   Graphics init and main loop  
-*/
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void * init (void * in) 
 {
     bool controls_init = false;
@@ -75,9 +82,26 @@ void * init (void * in)
             // Handle SFGUI events.
             g->sfgDesktop.HandleEvent(event);
             
+            // If we're in lobby, send a message otherwise if we have the join window open, attempt a join or open the join window.
             if ((event.type == sf::Event::KeyPressed) && sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
-                g->sendMessage();
-
+            {
+                if(g->clientGameLogic_.gameState_ == CONNECTING)
+                {
+                    g->joinButtonHandler();
+                }
+                else if (g->clientGameLogic_.gameState_ == LOBBY)
+                {
+                    g->sendMessage();
+                }
+                else if (g->clientGameLogic_.gameState_ == MAIN_MENU)
+                {
+                    g->clientGameLogic_.UIElements.clear();
+                    g->initJoinWindow();
+                    g->showJoinWindow();
+                    g->clientGameLogic_.connecting();
+                }
+            }
+                
             // If a mouse button was pressed, find out where we clicked.
             if (event.type == sf::Event::MouseButtonPressed){
                 sf::Vector2f mouse = window.mapPixelToCoords(sf::Mouse::getPosition(window));
@@ -94,11 +118,8 @@ void * init (void * in)
                             g->clientGameLogic_.UIElements.clear();
                             g->initJoinWindow();
                             g->showJoinWindow();
+                            g->clientGameLogic_.connecting();
                             break;
-                        } else if (button->id == ID_TEST){
-                            g->initGameControls();
-                            g->clientGameLogic_.start();
-                            break; // Must break out now, initGameControls invalidates the iterators.
                         }
                         // Quit button.
                         else if (button->id == ID_QUIT){
@@ -162,8 +183,6 @@ void * init (void * in)
 
                 if(g->clientGameLogic_.waitingForStart)
                 {
-                    g->sfgLobbyWindow->Show(false);
-                    g->sfgChatDisplayWindow->Show(false);
                     g->drawLoadingScreen();
                 }
                 else
@@ -189,6 +208,10 @@ void * init (void * in)
             // Update the names on the buttons.
             g->updateLobbyRoles();
         } else if (c_state == IN_GAME || c_state == WON_GAME || c_state == LOST_GAME) {
+            g->sfgLobbyWindow->Show(false);
+            g->sfgChatDisplayWindow->Show(false);
+            g->sfgChatSendWindow->Show(false);
+
             if (!controls_init) {
                 controls_init = true;
                 g->initGameControls();
@@ -247,7 +270,20 @@ void * init (void * in)
     return NULL;
 }
 
-// Pick default system font with font config.
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 bool find_font (char ** path) 
 {
     FcResult result;
@@ -259,7 +295,20 @@ bool find_font (char ** path)
     match = FcFontMatch (0, pat, &result);
     return (FcPatternGetString(match, FC_FILE, 0, (FcChar8**)path) == FcResultMatch);
 }
-
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 Point Lerp(Point start, Point end, float percent)
 {
     float sx = start.x, sy= start.y;
@@ -270,12 +319,20 @@ Point Lerp(Point start, Point end, float percent)
     return result;
 }
 
-/* Constructor
- *
- * PRE:     
- * POST:    
- * RETURNS: 
- * NOTES:   Creates a thread and starts running the module */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 Graphics::Graphics(ClientGameLogic& clientGameLogic)
    : window(NULL), clientGameLogic_(clientGameLogic)
 {
@@ -297,13 +354,20 @@ Graphics::Graphics(ClientGameLogic& clientGameLogic)
     pthread_create(&t, NULL, init, (void*)this);
 }
 
-/* Constructor
- *
- * PRE:     
- * POST:    Clears the SFML screen of all UI components and then adds the Main Menu Buttons.
- * RETURNS:	
- * NOTES:   This can be called at any time to draw the new buttons.
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void Graphics::initMainMenuControls()
 {
     // Clear all the UI buttons previous
@@ -317,12 +381,20 @@ void Graphics::initMainMenuControls()
     clientGameLogic_.UIElements.insert(c);
 }
 
-/* Init Game controls
- *
- * PRE:     
- * POST:    
- * RETURNS: 
- * NOTES:   Clears and Initializes the set of UIElements for In-game controls */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void Graphics::initGameControls () 
 {
     clientGameLogic_.UIElements.clear();
@@ -368,14 +440,20 @@ void Graphics::initGameControls ()
     clientGameLogic_.UIElements.insert(creepButton3);
 }
 
-/* Initializes sfgDesktop. ALL SFGUI objects will sit ontop of this. We need this because it's the only way to do
- * text styling in SFGUI
- *
- * PRE:     
- * POST:    SFGUI desktop is initialized
- * RETURNS: 
- * NOTES:    
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void Graphics::initDesktop()
 {
     sfgDesktop = sfg::Desktop();
@@ -384,13 +462,20 @@ void Graphics::initDesktop()
     sfgDesktop.SetProperty("Entry", "FontSize", 22);
 }
 
-/* Randomly generates a name based on the name.txt list. 
-*
-* PRE:
-* POST: SFGUI desktop is initialized
-* RETURNS:
-* NOTES:
-*/
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 std::string getName( void ) {
 
     std::vector<string> lines;
@@ -417,13 +502,20 @@ std::string getName( void ) {
     return result;
 }
 
-/* Initializes the join window that the join UI sits ontop of.
- *
- * PRE:     
- * POST:    sfgJoinWindow will have initialized with all entry objects for user/server/port
- * RETURNS: 
- * NOTES:    
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void Graphics::initJoinWindow()
 {
     // Create join window using SFGUI
@@ -443,7 +535,7 @@ void Graphics::initJoinWindow()
     sfgNameEntryBox = sfg::Entry::Create(getName());
     sfgNameEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 120.
     sfgNameEntryBox->SetMaximumLength(16);
-    sfgServerEntryBox = sfg::Entry::Create("localhost");
+    sfgServerEntryBox = sfg::Entry::Create("192.168.0.");
     sfgServerEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 120.
     sfgPortEntryBox = sfg::Entry::Create("4545");
     sfgPortEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 120.
@@ -470,14 +562,20 @@ void Graphics::initJoinWindow()
 
     sfgDesktop.Add(sfgJoinWindow);
 }
-
-/* Initializes the lobby window that the lobby sits ontop of.
- *
- * PRE:     
- * POST:    sfgLobbyWindow will be initialized with all the lobby components on it
- * RETURNS: 
- * NOTES:    
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void Graphics::initLobbyWindow()
 {
     // Create lobby window using SFGUI.
@@ -538,14 +636,20 @@ void Graphics::initLobbyWindow()
 
     sfgDesktop.Add(sfgLobbyWindow);
 }
-
-/* Initializes the chat window with the chat display.
- *
- * PRE:     
- * POST:    sfgChatDisplayWindow will be initialized with the scrollbars and label containing chat text.
- * RETURNS: 
- * NOTES:    
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void Graphics::initMessageDisplayWindow()
 {
     // Set up the size and other settings of the message window.
@@ -567,13 +671,20 @@ void Graphics::initMessageDisplayWindow()
     sfgDesktop.Add(sfgChatDisplayWindow);
 }
 
-/* Initializes the chat window with the sending mechanism
- *
- * PRE:     
- * POST:    sfgChatSendWindow will be initialized with the entry box and send button
- * RETURNS: 
- * NOTES:    
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void Graphics::initMessageSendWindow()
 {
     // Create the window that will hold the entrybox and button.
@@ -606,14 +717,20 @@ void Graphics::initMessageSendWindow()
 
     sfgChatDisplayLabel->SetText("");
 }
-
-/* Sends the message over the network.
- *
- * PRE:     
- * POST:    message is sent over to the server
- * RETURNS: 
- * NOTES:    
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/  
 void Graphics::sendMessage()
 {
     string message;
@@ -631,14 +748,6 @@ void Graphics::sendMessage()
     // Clear the entry box for new entries.
     sfgChatSendEntry->SetText("");
 }
-
-/* Button handler for the lobby player select buttons
- *
- * PRE:     Lobby window is initialized
- * POST:    player will have selected his/her role
- * RETURNS: 
- * NOTES:    
- */
 void Graphics::takeRole()
 {
     int role = ((long) this % 10) - 1;
@@ -652,13 +761,20 @@ void Graphics::takeRole()
     
 }
 
-/* This method updates all the button texts in the lobby with those in the client network team_l and team_r.
- *
- * PRE:     Lobby window is initialized
- * POST:    All buttons are updated with text
- * RETURNS: 
- * NOTES:    
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void Graphics::updateLobbyRoles()
 {
     // Loop through the teams and update the buttons.
@@ -683,31 +799,41 @@ void Graphics::updateLobbyRoles()
         }
     }
 }
-
-/* Button handler for starting the game: set our ready state and inform the server
- *
- * PRE:     Lobby window is initialized
- * POST:    game will have started
- * RETURNS: 
- * NOTES:    
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void Graphics::startGame()
 {
     cout << "start the game!" << endl;
     clientGameLogic_.ready();
     sfgLobbyWindow->Show(false);
-    sfgChatDisplayWindow->Show(false);
-    sfgChatSendWindow->Show(false);
-    chatShowing = false;
 }
 
-/* Closes the lobby SFGUI window and redraws the main menu.
- *
- * PRE:     SFGUI Lobby window is open
- * POST:    Closes the lobby SFGUI window and redraws the main menu.
- * RETURNS: 
- * NOTES:    
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void Graphics::exitLobby()
 {
     sfgLobbyWindow->Show(false);
@@ -719,14 +845,20 @@ void Graphics::exitLobby()
 
     this->initMainMenuControls();
 }
-
-/* Button handler for the join button on the join window.
- *
- * PRE:     Join window is initialized
- * POST:    Joins the specified server and creates lobby window
- * RETURNS: 
- * NOTES:    
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void Graphics::joinButtonHandler()
 {
     string name, server, port; 
@@ -747,60 +879,93 @@ void Graphics::joinButtonHandler()
 
     sfgJoinWindow->Show(false);
 }
-
-/* Makes the JoinWindow visible.
- *
- * PRE:     JoinWindow is initialized
- * POST:    JoinWindow is shown
- * RETURNS: 
- * NOTES:    
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void Graphics::showJoinWindow()
 {
 sfgJoinWindow->Show(true);
 }
-
-/* Makes the JoinWindow invisible.
- *
- * PRE:     JoinWindow is initialized
- * POST:    JoinWindow is not drawn anymore
- * RETURNS: 
- * NOTES:    
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void Graphics::hideJoinWindow()
 {
     sfgJoinWindow->Show(false);
     this->initMainMenuControls();
 }
-
-/* Draws the HUD.
- *
- * PRE:     
- * POST:    Current HUD is displayed
- * RETURNS: 
- * NOTES:    */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void Graphics::drawHud(sf::RenderWindow& window)
 {
     window.draw(hud);
 }
-
-/* Draws the map
- *
- * PRE:     
- * POST:    The map is displayed
- * RETURNS: 
- * NOTES:    */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void Graphics::drawMap(sf::RenderWindow& window)
 {
     window.draw(map);
 }
-
-/* Draws the main menu background
- *
- * PRE:     
- * POST:    The main menu text is displayed (no buttons)
- * RETURNS: 
- * NOTES:    */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void Graphics::drawMainMenu(sf::RenderWindow& window)
 {
 
@@ -820,14 +985,23 @@ void Graphics::drawMainMenu(sf::RenderWindow& window)
     window.draw(title);
 }
 
-/* Healthbar is drawn
- *
- * PRE:     
- * POST:    Health bar is drawn at location
- * RETURNS: 
- * NOTES:    
- */
+
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void Graphics::drawHealthBar(sf::RenderWindow& window, float x, float y, int health, int maxhealth)
+
 {
     sf::RectangleShape healthbar, health_bg;
     healthbar.setFillColor(sf::Color(  0, 255,  0));
@@ -843,13 +1017,20 @@ void Graphics::drawHealthBar(sf::RenderWindow& window, float x, float y, int hea
     window.draw(health_bg);
     window.draw(healthbar);	
 }
-
-/* Draws a circle around the unit to identify which team the unit is on
- *
- * PRE:     
- * POST:    All current unit circles are displayed
- * RETURNS: 
- * NOTES:    */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void Graphics::drawTeamCircle (sf::RenderWindow& window, int team, float x, float y) {
     sf::CircleShape cs(25/2);
     cs.setPosition(x, y);
@@ -858,13 +1039,20 @@ void Graphics::drawTeamCircle (sf::RenderWindow& window, int team, float x, floa
     cs.setOutlineThickness(2.0f);
     window.draw(cs);
 }
-
-/* Draws all current units.
- *
- * PRE:     
- * POST:    All current units are displayed
- * RETURNS: 
- * NOTES:    */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void Graphics::drawUnits(sf::RenderWindow& window)
 {
     pthread_mutex_lock( &clientGameLogic_.unit_mutex );
@@ -901,9 +1089,12 @@ void Graphics::drawUnits(sf::RenderWindow& window)
             } else if (unit->maxHealth == INIT_CREEP_HP * 3) {
                 creep_sprite2.setPosition(interpolated.x, interpolated.y);
                 window.draw(creep_sprite2);
-            } else if (unit->maxHealth == INIT_CREEP_HP * .75) {
+            } else if (unit->maxHealth == (int)(INIT_CREEP_HP * .75)) {
                 creep_sprite3.setPosition(interpolated.x, interpolated.y);
                 window.draw(creep_sprite3);
+            } else {
+                creep_sprite1.setPosition(interpolated.x, interpolated.y);
+                window.draw(creep_sprite1);
             }
             
             drawHealthBar(window, interpolated.x, interpolated.y+25, unit->health, unit->maxHealth);
@@ -941,28 +1132,40 @@ void Graphics::drawUnits(sf::RenderWindow& window)
     }
     pthread_mutex_unlock( &clientGameLogic_.unit_mutex );
 }
-
-/* Draws currency at the top of the screen
- *
- * PRE:     
- * POST:    Currency bar is at the top of the screen
- * RETURNS: 
- * NOTES:    
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void Graphics::drawCurrency(sf::RenderWindow& window)
 {
     sf::Text currencyText(to_string(clientGameLogic_.currency), font, 20);
     currencyText.setPosition(5, 675);
     window.draw(currencyText);
 }
-
-/* Draws the end of game screen
- *
- * PRE:     
- * POST:    End of game message is drawn
- * RETURNS: 
- * NOTES:    
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void Graphics::drawEndGameScreen(sf::RenderWindow& window)
 {
     sf::Texture endGameScreen_bg;
@@ -979,7 +1182,20 @@ void Graphics::drawEndGameScreen(sf::RenderWindow& window)
     window.draw(endGameScreen);
 }
 
-
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void Graphics::drawLoadingScreen()
 {
     sf::Texture loadingScreen_bg;
@@ -990,14 +1206,20 @@ void Graphics::drawLoadingScreen()
 
     window->draw(loadingScreen);
 }
-
-/* Loads all the images that are used by the game
- *
- * PRE:     
- * POST:    Images for HUD, background units etc are initialized
- * RETURNS: 
- * NOTES:    
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void Graphics::loadImages()
 {
     // Load the HUD background.
@@ -1023,10 +1245,6 @@ void Graphics::loadImages()
     // Load the castle texture.
     castle_tex.loadFromFile("images/castle.png");
     castle_sprite.setTexture(castle_tex);
-
-    // Load the player texture.
-    player_tex.loadFromFile("images/player.png");
-    player_sprite.setTexture(player_tex);
 
     // Load the tower texture.
     tower_tex1.loadFromFile("images/t1.png");

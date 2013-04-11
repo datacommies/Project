@@ -4,7 +4,7 @@
 -- DATE:        2013/03/11
 --
 -- MAINTAINERS: Callum Styan, David Czech, Dennis Ho, Albert Liao, 
---              Steve Lo, Jesse Wright, Jacob Miner
+--              Jesse Wright, Behnam Bastami
 --
 -- FUNCTIONS:   ClientGameLogic constructor
 --              start
@@ -72,6 +72,24 @@ void ClientGameLogic::start () {
 ------------------------------------------------------------------------------*/
 void ClientGameLogic::join () {
    gameState_ = LOBBY;
+}
+
+/*------------------------------------------------------------------------------
+-- FUNCTION:    connecting
+--
+-- DATE:        2013/03/11
+--
+-- DESIGNER:    Albert Liao
+-- PROGRAMMER:  Albert Liao
+--
+-- INTERFACE:   void ClientGameLogic::connecting ()
+--
+-- RETURNS:     void
+--
+-- DESCRIPTION: This function sets the gameState_ variable to CONNECTING. 
+------------------------------------------------------------------------------*/
+void ClientGameLogic::connecting () {
+   gameState_ = CONNECTING;
 }
 
 /*------------------------------------------------------------------------------
@@ -160,8 +178,8 @@ bool ClientGameLogic::createTower(UnitType type, Point location)
 --
 -- DATE:        2013/03/11
 --
--- DESIGNER:    Behnam Bastami
--- PROGRAMMER:  Behnam Bastami, Albert Liao, Jesse Wright
+-- DESIGNER:    Behnam Bastami, Albert Liao
+-- PROGRAMMER:  Behnam Bastami, Jesse Wright
 --
 -- INTERFACE:   bool ClientGameLogic::createCreep(UnitType type, int laneID)
 --
@@ -172,11 +190,6 @@ bool ClientGameLogic::createTower(UnitType type, Point location)
 ------------------------------------------------------------------------------*/
 bool ClientGameLogic::createCreep(UnitType type, int laneID)
 {
-   // TODO: Need a function that will call the creation on the server side, 
-   //just like the build tower function above.
-
-   //should there be a delay between creep creation to ensure that they don't spawn 
-   //on top of eachother? I don't know how we wanted that to work...?
    std::cout << "trying to send create creep request" << std::endl;
    Point location;
    location.x = 0;
@@ -193,7 +206,7 @@ bool ClientGameLogic::createCreep(UnitType type, int laneID)
 -- DATE:        2013/03/11
 --
 -- DESIGNER:    Behnam Bastami, Dennis Ho
--- PROGRAMMER:  Behnam Bastami, Jesse Wright, Dennis Ho
+-- PROGRAMMER:  Dennis Ho
 --
 -- INTERFACE:   bool ClientGameLogic::movePlayer(Direction direction)
 --
