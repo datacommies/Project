@@ -282,7 +282,6 @@ Control::RunAllButtons()
 			    _currentLane = HIGHPATH;
 			break;
 			case INFOBUTTON:
-				cout << "info button press" << endl;
 				_graphicsModule->toggleInfoButton();
 			break;
 			default:

@@ -1268,8 +1268,9 @@ void Graphics::loadImages()
     tower_tex3.loadFromFile("images/t3.png");
     tower_sprite3.setTexture(tower_tex3);
 
-    infoImage.loadFromFile("images/info.png");
+    infoImage.loadFromFile("images/infos.png");
     infoSprite.setTexture(infoImage);
+    infoSprite.setPosition(150, 50);
 
     for (int i = 0; i < 5; i++) {
         // Load the tower texture.
