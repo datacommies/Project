@@ -662,7 +662,7 @@ for (unsigned int i = 0; i < teams[team].players.size(); ++i) {
     
     Point new_position = teams[team].players[i]->position;
 
-    std::cout << "TEAM: " << team << " PLAYER : " <<  i  << "TOD: " << teams[team].players[i]->tod  << std::endl;
+    // std::cout << "TEAM: " << team << " PLAYER : " <<  i  << "TOD: " << teams[team].players[i]->tod  << std::endl;
     if (teams[team].players[i]->tod != 0 && time(NULL) >= teams[team].players[i]->tod + 3)
     {
         respawnPlayer(teams[team].players[i], teams[team].players[i]->team == 0 ? gameMap_->team0start[0] : gameMap_->team1start[0]);
