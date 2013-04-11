@@ -765,8 +765,6 @@ void ServerGameLogic::update()
         break;
       case Attack:
         updateAttack(newCommand);
-         std::cout << "Attacking" << std::endl;
-        audio_.playSoundEffect("sounds/punch.wav");
         break;
       case MovePlayer:
         updateMovePlayer(newCommand);
@@ -837,7 +835,7 @@ void ServerGameLogic::setAlarm()
  * PRE:     Teams are initialized.
  * POST:    A creep has been created and added to the specified team. The team's currency has been
  *          decremented accordingly.
- * PROGRAMMER:
+ * PROGRAMMER: Jesse Wright, Someone else.
  * RETURNS:
  * NOTES:   
  *

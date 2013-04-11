@@ -108,6 +108,8 @@ void ClientGameLogic::menu () {
 ------------------------------------------------------------------------------*/
 void ClientGameLogic::win () {
    gameState_ = WON_GAME;
+   audio_.stopMusic();
+   audio_.playSoundEffect("sounds/win.wav");
 }
 
 /*------------------------------------------------------------------------------
@@ -126,6 +128,7 @@ void ClientGameLogic::win () {
 ------------------------------------------------------------------------------*/
 void ClientGameLogic::lose () {
    gameState_ = LOST_GAME;
+   audio_.stopMusic();
    audio_.playSoundEffect("sounds/lose.wav");
 }
 
