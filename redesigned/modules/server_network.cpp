@@ -25,35 +25,36 @@ struct ClientCtx {
 };
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   ServerNetwork
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Ron Bellido
 -- PROGRAMMER: Ron Bellido
 --
--- INTERFACE:   
+-- INTERFACE:   ServerNetwork(ServerGameLogic& serverGameLogic)
+--                 serverGameLogic - an instance of a ServerGameLogic object
 --
--- RETURNS:     
+-- RETURNS:     None
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Constructor for ServerNetwork object
 ------------------------------------------------------------------------------*/
 ServerNetwork::ServerNetwork(ServerGameLogic& serverGameLogic)
    : serverGameLogic_(serverGameLogic) {}
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   initSock
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Ron Bellido
 -- PROGRAMMER: Ron Bellido
 --
--- INTERFACE:   
+-- INTERFACE:   int ServerNetwork::initSock(int port)
 --
--- RETURNS:     
+-- RETURNS:     The socket created
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Initializes the listening socket and returns that socket for later use
 ------------------------------------------------------------------------------*/
 int ServerNetwork::initSock(int port)
 {
@@ -79,6 +80,7 @@ int ServerNetwork::initSock(int port)
     listen(sock_, MAX_CONNECTIONS);
     return sock_;
 }
+
 /*------------------------------------------------------------------------------
 -- FUNCTION:   
 --
@@ -87,9 +89,9 @@ int ServerNetwork::initSock(int port)
 -- DESIGNER:   Ron Bellido
 -- PROGRAMMER: Ron Bellido
 --
--- INTERFACE:   
+-- INTERFACE:   void initNetwork()
 --
--- RETURNS:     
+-- RETURNS:     void
 --
 -- DESCRIPTION: 
 ------------------------------------------------------------------------------*/
