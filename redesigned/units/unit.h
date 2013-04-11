@@ -42,7 +42,7 @@ public:
     Unit(int uid, Point pos, int hp, int atkdmg, int atkrng,
          int atkspd, int percep, int atkcnt);    
 
-    Unit(int uid, int side, Point pos, int hp=100, int atkdmg=0, int atkrng=0,
+    Unit(int uid, int side, Point pos, int hp=200, int atkdmg=10, int atkrng=0,
          int atkspd=0, int percep=0, int atkcnt=0);
     
     virtual ~Unit(){};
