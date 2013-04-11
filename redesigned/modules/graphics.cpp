@@ -160,7 +160,7 @@ void * init (void * in)
                 }
                 g->unassignedPlayersList->SetText(unassigned);
 
-                 if(g->clientGameLogic_.waitingForStart)
+                if(g->clientGameLogic_.waitingForStart)
                 {
                     g->sfgLobbyWindow->Show(false);
                     g->drawLoadingScreen();
