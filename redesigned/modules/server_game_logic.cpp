@@ -225,7 +225,7 @@ void ServerGameLogic::initializeCurrency()
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
+-- DESIGNER:   Jesse Wright
 -- PROGRAMMER: 
 --
 -- INTERFACE:   
@@ -328,16 +328,16 @@ void ServerGameLogic::receiveCreateUnitCommand(int playerId, UnitType type, Poin
   requestedCommands.push(newCommand);
 }
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   FindCreepSpawnPoint
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Jesse Wright
+-- PROGRAMMER: Jesse Wright
 --
--- INTERFACE:   
+-- INTERFACE:   Point FindCreepSpawnPoint(int team_no, int pathID)
 --
--- RETURNS:     
+-- RETURNS:     Point - the location where the creep will spawn.
 --
 -- DESCRIPTION: 
 ------------------------------------------------------------------------------*/
@@ -348,49 +348,50 @@ Point ServerGameLogic::FindCreepSpawnPoint(int team_no, int pathID)
   {
     if(pathID == HIGHPATH)
     {
-      creepSpawnLocation.x = gameMap_->topOne[0].x; // first point of the top path.
-      creepSpawnLocation.y = gameMap_->topOne[0].y; // first point of the top path.
+      creepSpawnLocation.x = gameMap_->topOne[0].x;
+      creepSpawnLocation.y = gameMap_->topOne[0].y;
     }else if(pathID == MIDPATH)
     {
-      creepSpawnLocation.x = gameMap_->midOne[0].x; // first point of the top path.
-      creepSpawnLocation.y = gameMap_->midOne[0].y; // first point of the top path.
+      creepSpawnLocation.x = gameMap_->midOne[0].x;
+      creepSpawnLocation.y = gameMap_->midOne[0].y;
     }else
     {
-      creepSpawnLocation.x = gameMap_->botOne[0].x; // first point of the top path.
-      creepSpawnLocation.y = gameMap_->botOne[0].y; // first point of the top path.
+      creepSpawnLocation.x = gameMap_->botOne[0].x;
+      creepSpawnLocation.y = gameMap_->botOne[0].y;
     }
   } else if(team_no == 1)// team 2
   {
     if(pathID == HIGHPATH)
     {
-      creepSpawnLocation.x = gameMap_->topTwo[0].x; // first point of the top path.
-      creepSpawnLocation.y = gameMap_->topTwo[0].y; // first point of the top path.
+      creepSpawnLocation.x = gameMap_->topTwo[0].x;
+      creepSpawnLocation.y = gameMap_->topTwo[0].y;
     }else if(pathID == MIDPATH)
     {
-      creepSpawnLocation.x = gameMap_->midTwo[0].x; // first point of the top path.
-      creepSpawnLocation.y = gameMap_->midTwo[0].y; // first point of the top path.
+      creepSpawnLocation.x = gameMap_->midTwo[0].x;
+      creepSpawnLocation.y = gameMap_->midTwo[0].y;
     }else
     {
-      creepSpawnLocation.x = gameMap_->botTwo[0].x; // first point of the top path.
-      creepSpawnLocation.y = gameMap_->botTwo[0].y; // first point of the top path.
+      creepSpawnLocation.x = gameMap_->botTwo[0].x;
+      creepSpawnLocation.y = gameMap_->botTwo[0].y;
     }
   }
   return creepSpawnLocation;
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   receiveMovePlayerCommand
 --
--- DATE:        2013/03/22
+-- DATE:        2013/04/06
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Jesse Wright
+-- PROGRAMMER: Jesse Wright
 --
--- INTERFACE:   
+-- INTERFACE:   void receiveMovePlayerCommand(int playerId, Direction direction)
 --
--- RETURNS:     
+-- RETURNS:    void.
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Sets command parameters but takes the player ID. Same as move unit
+-- but is used for readability by calling this for a Player.
 ------------------------------------------------------------------------------*/
 void ServerGameLogic::receiveMovePlayerCommand(int playerId, Direction direction)
 {
@@ -491,18 +492,19 @@ int ServerGameLogic::WhichTeam(int id) {
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   updateCreate
 --
--- DATE:        2013/03/22
+-- DATE:        2013/04/07
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Jesse Wright, 
+-- PROGRAMMER: Jesse Wright,  
 --
--- INTERFACE:   
+-- INTERFACE:   void updateCreate(CommandData& command)
 --
 -- RETURNS:     
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Requests to create units, checkes the teams and the state of 
+-- the game.
 ------------------------------------------------------------------------------*/
 void ServerGameLogic::updateCreate(CommandData& command)
 {
@@ -601,18 +603,18 @@ void ServerGameLogic::updateAttack(CommandData& command)
   updateMaps();
 }
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   updateMovePlayer
 --
--- DATE:        2013/03/22
+-- DATE:        2013/04/07
 --
 -- DESIGNER:   
--- PROGRAMMER: 
+-- PROGRAMMER: Jesse Wright, David Czech
 --
--- INTERFACE:   
+-- INTERFACE:   void updateMovePlayer(CommandData& command)
 --
--- RETURNS:     
+-- RETURNS:     void.
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Updates the players movement.
 ------------------------------------------------------------------------------*/
 void ServerGameLogic::updateMovePlayer(CommandData& command)
 {
@@ -620,7 +622,6 @@ void ServerGameLogic::updateMovePlayer(CommandData& command)
   Player* temp;
   
   if ( !(teams[0].isAlive() && teams[1].isAlive()) ) {
-  //  fprintf(stderr, "Game is already over!! file: %s line %d\n", __FILE__, __LINE__);
     return;
   }
   
@@ -636,7 +637,6 @@ void ServerGameLogic::updateMovePlayer(CommandData& command)
   }
 
   temp->direction = command.direction;
- // std::cout << "moving player" << std::endl;
 
   updateMaps();
 }
@@ -657,7 +657,6 @@ void ServerGameLogic::updateMovePlayer(CommandData& command)
 void ServerGameLogic::updateMoveUnit(CommandData& command)
 {
   if ( !(teams[0].isAlive() && teams[1].isAlive()) ) {
-  //  fprintf(stderr, "Game is already over!! file: %s line %d\n", __FILE__, __LINE__);
     return;
   }
 
@@ -682,7 +681,20 @@ double distance(Point p, Point q)
 {
   return sqrt( pow(q.x-p.x,2) + pow(q.y-p.y, 2));
 }
-
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ServerGameLogic::updateMovement (int team, int otherteam) {
 for (unsigned int i = 0; i < teams[team].players.size(); ++i) {
     bool collided = false;
@@ -875,18 +887,19 @@ void ServerGameLogic::setAlarm()
 
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   createCreep
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Jesse Wright, 
+-- PROGRAMMER: Jesse Wright, 
 --
--- INTERFACE:   
+-- INTERFACE:   void createCreep(int team_no, Point location, int path_no, UnitType unitType)
 --
--- RETURNS:     
+-- RETURNS:     void.
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Creates the creep. Uses the unit type passed in to set the
+-- attributes of the creep.
 ------------------------------------------------------------------------------*/
 void ServerGameLogic::createCreep(int team_no, Point location, int path_no, UnitType unitType)
 {  
@@ -1232,18 +1245,19 @@ void ServerGameLogic::handleCastleDeath()
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   getPlayerRole
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Jesse Wright, Dennis Ho
+-- PROGRAMMER: Dennis Ho
 --
--- INTERFACE:   
+-- INTERFACE:   int getPlayerRole(int teamNumber, int playerID)
 --
--- RETURNS:     
+-- RETURNS: int - returns the role of the player found. -1 if player isn't found.
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Iterates through the player container to find the player via
+-- the playerID.
 ------------------------------------------------------------------------------*/
 int ServerGameLogic::getPlayerRole(int teamNumber, int playerID)
 {

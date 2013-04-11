@@ -35,16 +35,16 @@ inline string to_string(int num)
 Graphics* globalGraphics = NULL; // Used for the SFGUI button handlers in the lobby.
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   init
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   David Czech
+-- PROGRAMMER: David Czech, Jake Miner, Jesse Wright
 --
--- INTERFACE:   
+-- INTERFACE:   void * init (void * in) 
 --
--- RETURNS:     
+-- RETURNS:     void * - 
 --
 -- DESCRIPTION: 
 ------------------------------------------------------------------------------*/

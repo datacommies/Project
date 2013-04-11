@@ -307,48 +307,6 @@ int GameMap::max(int a, int b)
   return a > b ? a : b;
 }
 
-/*
- * This merges two maps together. eg, both = GameLogicMap(map1, map2);
- */
-/*
-  GameMap::GameMap(GameMap& map1, GameMap& map2)
-: max_x_(max(map1.max_x_, map2.max_x_)), max_y_(max(map1.max_y_, map2.max_y_))
-{
-  _init();
-  merge(map1, map2);
-}
-*/
-/*
-void GameMap::merge(GameMap& map1, GameMap& map2)
-{
-
-  reset ();
-  int x, y;
-
-  // Okay, yes, I know, in this game, both maps will be the same size....
-  int min_x = min(map1.max_x_, map2.max_x_);
-  int min_y = min(map1.max_y_, map2.max_y_);
-
-  // add units_s together ...
-  for(std::map<Unit*, Point>::const_iterator it = map1.units_.begin(), it_end = map1.units_.end(); it != it_end; ++it)
-    units_.insert(*it);
-  for(std::map<Unit*, Point>::const_iterator it = map2.units_.begin(), it_end = map2.units_.end(); it != it_end; ++it)
-    units_.insert(*it);
-
-  // add grid_s together
-  for (x=0; x<=min_x; x++)
-    for (y=0; y<=min_y; y++) {
-
-      if (map1.grid_[x][y] != 0 && map2.grid_[x][y] != 0) {
-        fprintf(stderr, "!!!Error..more than one object occuping the same space!!! %s line: %d\n", __FILE__, __LINE__);
-      }
-
-      grid_[x][y] = map1.grid_[x][y] != NULL ? map1.grid_[x][y] : map2.grid_[x][y];
-    }
-}
-*/
-
-
 /*------------------------------------------------------------------------------
 -- FUNCTION:    printGrid
 --
@@ -459,27 +417,6 @@ void GameMap::_helperBuild(Unit *unit, UnitType type, Point pos, int team_no) {
   // set team_no since in case it wasn't done already
   unit->team = team_no;
 }
-
-// This b_uilds everything based on the Team class
-/*
-void GameMap::build(Team &team) {
-
-  reset();
-
-  for (std::vector<Creep*>::iterator it = team.creeps.begin(); it != team.creeps.end(); ++it)
-    _helperBuild(*it, CREEP, (*it)->getPos());
-
-  for (std::vector<Tower*>::iterator it = team.towers.begin(); it != team.towers.end(); ++it) {
-    _helperBuild(*it, TOWER, (*it)->getPos());
-  }
-
-  for (std::vector<Player*>::iterator it = team.players.begin(); it != team.players.end(); ++it) {
-    _helperBuild(*it, PLAYER, (*it)->getPos());
-  }
-}
-*/
-
-
 /*------------------------------------------------------------------------------
 -- FUNCTION:    build
 --
