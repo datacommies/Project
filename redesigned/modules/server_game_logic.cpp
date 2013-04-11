@@ -1,3 +1,17 @@
+/*------------------------------------------------------------------------------
+-- FILE:        server_game_logic.cpp
+--
+-- DATE:        2013/03/11
+--
+-- MAINTAINERS: Callum Styan, David Czech, Dennis Ho,
+--              Jesse Wright, Behnam Bastami
+--
+-- FUNCTIONS:
+--              
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
+
 #include "server_game_logic.h"
 #include "../units/basic_tower.h"
 #include "../units/castle.h"
@@ -19,11 +33,20 @@
 
 ServerGameLogic * gSGL;
 
-/* Constructor
- *
- * PRE:    
- * POST:    
- * NOTES:   Creates a thread and starts running the module */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
   ServerGameLogic::ServerGameLogic()
 : gameState_(LOBBY), next_unit_id_(1)
 {
@@ -37,53 +60,31 @@ ServerGameLogic * gSGL;
   teams[0].paths.push_back(gameMap_->midOne);
   teams[0].paths.push_back(gameMap_->botOne);
 
-  /*teams[1].paths.push_back(gameMap_->topOne);
-  teams[1].paths.push_back(gameMap_->midOne);
-  teams[1].paths.push_back(gameMap_->botOne);*/
-
   teams[1].paths.push_back(gameMap_->topTwo);
   teams[1].paths.push_back(gameMap_->midTwo);
   teams[1].paths.push_back(gameMap_->botTwo);
 
   lastCreepTime_[0] = time(NULL);
   lastCreepTime_[1] = time(NULL);
-#if 0
-#ifndef TESTCLASS
-  Creep c;
-  c.pPath = &teams[1].paths[0][0];
-  c.attackRange = 100;
-  c.attackDamage = 10;
-  c.health = 100;
-  c.position.x = 200;
-  c.position.y = 200;
-  c.moveSpeed = 1;
-  teams[0].creeps.push_back(c);
-
-
-  c.position.x = 250;
-  c.position.y = 200;
-  c.moveSpeed = 1;
-  teams[1].creeps.push_back(c);
-  initializeCastles();
-  //initializeTeams();
-
-  startGame();
-#endif
-#endif
 }   
 
 ServerGameLogic::~ServerGameLogic()
 {
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 int ServerGameLogic::getWinner()
 {
   if(teams[0].isAlive() && !teams[1].isAlive())
@@ -97,22 +98,25 @@ int ServerGameLogic::getWinner()
 
   return 2;
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ServerGameLogic::initializeCastles() 
 {
 
   int uid = next_unit_id_++;
-  /*Point pos;
-  pos.x = 0;
-  pos.y = 0;*/
+
 
   // Team 0
   Castle *castle1 = new Castle(uid, gameMap_->castle1, INIT_CASTLE_HP, INIT_CASTLE_ATKDMG, INIT_CASTLE_ATKRNG, INIT_CASTLE_ATKSPD,
@@ -125,45 +129,26 @@ void ServerGameLogic::initializeCastles()
   
   // Team 1
   uid = next_unit_id_++;
-  //pos.x = MAX_X; // TODO: MAX_X and MAX_Y will  be replaced later when we get map reading functionality working
-  //pos.y = MAX_Y; // TODO:
   Castle *castle2 = new Castle(uid, gameMap_->castle2, INIT_CASTLE_HP, INIT_CASTLE_ATKDMG, INIT_CASTLE_ATKRNG, INIT_CASTLE_ATKSPD,
       INIT_CASTLE_PERCEP, INIT_CASTLE_ATKCNT, INIT_CASTLE_WALL, 1);
   teams[1].towers.push_back(castle2);
   teams[1].units.push_back(castle2);
 
-#ifdef TESTCLASS
-
-  p = castle2.getPos();
-
-  printf("Castle 2 position..x: %d y: %d\n", p.x, p.y);
-
-  mapTeams_[0].build(teams[0]);
-  mapTeams_[1].build(teams[1]);
-
-  printf("Castle 2 id %d\n", castle2.id);
-
-  printf("Team 0\n");
-  mapTeams_[0].printGrid();
-  printf("Team 1\n");
-  mapTeams_[1].printGrid();
-
-  //mapBoth_.merge(mapTeams_[0], mapTeams_[1]);
-
-  //printf("Both\n");
-  //mapBoth_.printGrid();
-
-#endif
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ServerGameLogic::initializeCreeps()
 {
   for (int team_i=0; team_i<2; team_i++){
@@ -182,37 +167,21 @@ void ServerGameLogic::initializeCreeps()
       createCreep(team_i, pos, j % PATH_COUNT);
     }
   }
-
-  /*Point pos = Point(230, 230);
-  int uid = next_unit_id_++;
-
-  int hp = INIT_CREEP_HP;
-  int atkdmg = INIT_CREEP_ATKDMG;
-  int atkrng = INIT_CREEP_ATKRNG;
-  int atkspd = INIT_CREEP_ATKSPD;
-  int percep = INIT_CREEP_PERCEP;
-  int atkcnt = INIT_CREEP_ATKCNT;
-  int spd = INIT_CREEP_SPD;
-  Direction direct = Direction();
-  Point *path = &teams[0].paths[2][0];
-  int movespeed = INIT_CREEP_MOVESPEED;
-
-  // Add creep to team  
-  Creep *creep = new Creep(uid, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, spd, direct, path, movespeed);  
-  teams[0].addUnit(creep);  
-
-  // Pay for creep
-  teams[0].currency -= CREEP_COST;*/
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ServerGameLogic::initializeTowers()
 {
   for (int team_i=0; team_i<2; team_i++)
@@ -232,53 +201,76 @@ void ServerGameLogic::initializeTowers()
     }
 }
 
-/* Sets all teams' initial currency.
- *
- * PRE:     2 teams exist
- * POST:    The currency of all teams has been set to an initial value
- * RETURNS:
- * NOTES:    */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ServerGameLogic::initializeCurrency()
 {
   for (int team_i=0; team_i<2; team_i++)
     teams[team_i].currency = INIT_CURRENCY;
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ServerGameLogic::initializePlayers(std::vector<player_matchmaking_t> players)
 {
   for (std::vector<player_matchmaking_t>::iterator it = players.begin(); it != players.end(); ++it) {
     createPlayer(it->team, it->team == 0 ? gameMap_->team0start[0] : gameMap_->team1start[0], it->pid, it->role);
   }
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ServerGameLogic::initializePaths()
 {  
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ServerGameLogic::initializeTeams(std::vector<player_matchmaking_t> players)
 {
   initializePaths(); // Must be done before initializing creeps
@@ -287,33 +279,42 @@ void ServerGameLogic::initializeTeams(std::vector<player_matchmaking_t> players)
   initializeTowers();
   initializeCurrency();
   initializePlayers(players);
-
-#ifdef TESTCLASS  
-  mapTeams_[0].build(teams[0]);
-  mapTeams_[1].build(teams[1]);
-  mapBoth_.merge(mapTeams_[0], mapTeams_[1]);
-  mapBoth_.printGrid();
-#endif
 }
 
-/* Starts the game.
- *
- * PRE:     Game is in the lobby and players are ready.
- * POST:    Data structures and initialized and game is placed in an active state, with all appropriate modules processing.
- * RETURNS:
- * NOTES:    */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ServerGameLogic::startGame()
 {
   gSGL = this;
   setAlarm();
 }
 
-/* Receive and queue a create unit command from a client.
- *
- * PRE:     Game is active.
- * POST:    Command has been queued.
- * RETURNS:
- * NOTES:   No validation is performed here. */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ServerGameLogic::receiveCreateUnitCommand(int playerId, UnitType type, Point location, int pathId)
 {
   CommandData newCommand;
@@ -326,16 +327,20 @@ void ServerGameLogic::receiveCreateUnitCommand(int playerId, UnitType type, Poin
 
   requestedCommands.push(newCommand);
 }
-/* 
- *
- * PRE: Game is started.
- * POST: Will set point for the spawn place of the creep.
- * PROGRAMMER: Jesse Wright
- * RETURNS: The point where the creep will spawn.
- *          
- * NOTES: Uses the players team and selected path number
- * to discern where the creep will spawn based on map coordinates.
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 Point ServerGameLogic::FindCreepSpawnPoint(int team_no, int pathID)
 {
   Point creepSpawnLocation;
@@ -373,13 +378,20 @@ Point ServerGameLogic::FindCreepSpawnPoint(int team_no, int pathID)
   return creepSpawnLocation;
 }
 
-/* Receive and queue a move player command from a client.
- *
- * PRE:     Game is active.
- * POST:    Command has been queued.
- * PROGRAMMER:
- * RETURNS:
- * NOTES:   No validation is performed here. */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ServerGameLogic::receiveMovePlayerCommand(int playerId, Direction direction)
 {
   CommandData newCommand;
@@ -391,15 +403,20 @@ void ServerGameLogic::receiveMovePlayerCommand(int playerId, Direction direction
 
   requestedCommands.push(newCommand);
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ServerGameLogic::receiveMoveUnitCommand(int unitId, Direction direction)
 {
   CommandData newCommand;
@@ -411,13 +428,20 @@ void ServerGameLogic::receiveMoveUnitCommand(int unitId, Direction direction)
   requestedCommands.push(newCommand);
 }
 
-/* Receive and queue an attack command from a client.
- *
- * PRE:     Game is active.
- * POST:    Command has been queued.
- * PROGRAMMER:
- * RETURNS:
- * NOTES:   No validation is performed here. */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ServerGameLogic::receiveAttackCommand(int playerId, Direction direction)
 {
   CommandData newCommand;
@@ -428,15 +452,20 @@ void ServerGameLogic::receiveAttackCommand(int playerId, Direction direction)
 
   requestedCommands.push(newCommand);
 }
-
-/*
- * PRE:  Maps are current
- * PROGRAMMER:
- * RETURNS: 
- * 0 - Team 1
- * 1 - Team 2
- * 2 - Not Found
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 int ServerGameLogic::WhichTeam(int id) {
 
   updateMaps();
@@ -459,44 +488,36 @@ int ServerGameLogic::WhichTeam(int id) {
   }
 
   return -1;
-/*
-  if (mapTeams_[0].units_.find(id) != mapTeams_[0].units_.end())
-    return 0;
-
-  if (mapTeams_[1].units_.find(id) != mapTeams_[1].units_.end())
-    return 1;
-  return 2;
-  */
 }
 
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ServerGameLogic::updateCreate(CommandData& command)
 {
   // Passed in command: PlayerId, type, location
 
   int team_no;
-
-  //int x = command.location.x;
-  //int y = command.location.y;
   int x = 100;
   int y = 100;
 
   if ( !(teams[0].isAlive() && teams[1].isAlive()) ) {
     gameState_ = WON_GAME;
-   // fprintf(stderr, "Game is already over!! file: %s line %d\n", __FILE__, __LINE__);
     return;
   }
 
   if ( ( (team_no = WhichTeam(command.playerID)) == NOT_FOUND) ) {
-   // fprintf(stderr, "playerID not found file: %s line %d\n", __FILE__, __LINE__);
     return;
   }
 
@@ -508,8 +529,6 @@ void ServerGameLogic::updateCreate(CommandData& command)
 
   updateMaps();
   if (!mapTeams_[0].isValidPos(command.location)) {
-  //  fprintf(stderr, "max x: %d max y: %d\n", MAX_X, MAX_Y);
- //   fprintf(stderr, "x: %d, y: %d out of range: %s line %d\n", x, y, __FILE__, __LINE__);
     return; 
   }
 
@@ -520,22 +539,19 @@ void ServerGameLogic::updateCreate(CommandData& command)
   // Create Unit  
   switch (command.type) {
     case CREEP:
-      {  
-        
-      }
-      case CREEP_ONE:
-      case CREEP_TWO:
-      case CREEP_THREE:
+    case CREEP_ONE:
+    case CREEP_TWO:
+    case CREEP_THREE:
+    {
+        // Check if 1 seconds has elapsed since the last creep creation for the team.
+      if(time(NULL) - lastCreepTime_[team_no] >= 1)
       {
-          // Check if 1 seconds has elapsed since the last creep creation for the team.
-        if(time(NULL) - lastCreepTime_[team_no] >= 1)
-        {
-          createCreep(team_no, command.location, command.pathID, command.type);
-          lastCreepTime_[team_no] = time(NULL);
-        }
-        break;
-
+        createCreep(team_no, command.location, command.pathID, command.type);
+        lastCreepTime_[team_no] = time(NULL);
       }
+      break;
+
+    }
 
     case CASTLE:
     case TOWER:
@@ -551,24 +567,21 @@ void ServerGameLogic::updateCreate(CommandData& command)
 
   mapTeams_[0].build(teams[0]);
   mapTeams_[1].build(teams[1]);
-  // Update the our map 
-  /*
-  Location location;
-  location.pos  = command.location;
-  location.type = command.type;
-  mapTeams_[team_no].units_[next_unit_id_] = location;
-  mapTeams_[team_no].grid_[x][y] = next_unit_id_;
-  */
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ServerGameLogic::updateAttack(CommandData& command)
 {
   // Passed in command: playerID and direction
@@ -587,15 +600,20 @@ void ServerGameLogic::updateAttack(CommandData& command)
   // Attack!!
   updateMaps();
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ServerGameLogic::updateMovePlayer(CommandData& command)
 {
   int team_no;
@@ -622,15 +640,20 @@ void ServerGameLogic::updateMovePlayer(CommandData& command)
 
   updateMaps();
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ServerGameLogic::updateMoveUnit(CommandData& command)
 {
   if ( !(teams[0].isAlive() && teams[1].isAlive()) ) {
@@ -641,15 +664,20 @@ void ServerGameLogic::updateMoveUnit(CommandData& command)
 
   updateMaps();
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 double distance(Point p, Point q)
 {
   return sqrt( pow(q.x-p.x,2) + pow(q.y-p.y, 2));
@@ -727,14 +755,20 @@ for (unsigned int i = 0; i < teams[team].players.size(); ++i) {
   }
 }
 
-/* Processes all waiting commands.
- *
- * PRE:    
- * POST:    Command queue is cleared.
- * PROGRAMMER:
- * RETURNS:
- * NOTES:   Perform validation here.
- *          Nice to have: send a fail message if command is invalid */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ServerGameLogic::update()
 { 
   updateMaps();
@@ -777,15 +811,20 @@ void ServerGameLogic::update()
   updateMaps();
 }
 
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ServerGameLogic::updateTimer(int i)
 {
   signal(SIGALRM, updateTimer);
@@ -801,15 +840,20 @@ void ServerGameLogic::updateTimer(int i)
   // Call network update function
   ServerGameLogic::setAlarm();
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ServerGameLogic::setAlarm()
 {
 
@@ -830,18 +874,20 @@ void ServerGameLogic::setAlarm()
 }
 
 
-/* Creates a creep.
- *
- * PRE:     Teams are initialized.
- * POST:    A creep has been created and added to the specified team. The team's currency has been
- *          decremented accordingly.
- * PROGRAMMER: Jesse Wright, Someone else.
- * RETURNS:
- * NOTES:   
- *
- * REVISIONS: Kevin - Only creates creep if there is enough currency.
-
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ServerGameLogic::createCreep(int team_no, Point location, int path_no, UnitType unitType)
 {  
   int uid = next_unit_id_++;
@@ -867,7 +913,7 @@ void ServerGameLogic::createCreep(int team_no, Point location, int path_no, Unit
     break;
     case CREEP_TWO: // Tank (lots of health, but slower than fuck)
       hp = INIT_CREEP_HP * 3;
-      atkdmg = INIT_CREEP_ATKDMG;
+      atkdmg = INIT_CREEP_ATKDMG + 4;
       atkrng = INIT_CREEP_ATKRNG * 4;
       atkspd = INIT_CREEP_ATKSPD;
       percep = INIT_CREEP_PERCEP * 5;
@@ -907,19 +953,20 @@ void ServerGameLogic::createCreep(int team_no, Point location, int path_no, Unit
 }
 
 
-/* Creates a tower.
- *
- * PRE:     Teams are initialized.
- * POST:    A tower has been created and added to the specified team. The team's currency has been
- *          decremented accordingly.
- * PROGRAMMER:
- * RETURNS:
- * NOTES:   
- *
- * REVISIONS: Kevin - Only creates tower if the chosen location is within the team's half
- *                  of the map AND there is enough currency.
- *                  - changed to calling BasicTower constructor & sending team_no
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ServerGameLogic::createTower(int team_no, Point location)
 {
    Point castleLoc;   
@@ -936,22 +983,15 @@ void ServerGameLogic::createTower(int team_no, Point location)
       castleLoc = (*it)->getPos();  // castle location
     
   // get distance of proposed location from castle
-  //dist = distance( castleLoc, location);
     distX = abs(castleLoc.x - location.x);
     distY = abs(castleLoc.y - location.y);
     dist = distX + distY;
 
-  // if( chosen distance from player's team's castle is <= maxTowerDist && 
-  //       TOWER_COST <= team currency ) then carry on and create a tower
   if((dist <= maxTowerDist) && (TOWER_COST <= teams[team_no].currency)){
   
     int uid = next_unit_id_++;
 
-    // create new tower
-//    Tower *tower = new Tower(uid, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
-//                           INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);
-//    Tower *tower = new Tower(uid, team_no, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
-//                           INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);                           
+    // create new tower                     
     BasicTower *tower = new BasicTower(uid, team_no, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
                            INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);
         
@@ -967,14 +1007,20 @@ void ServerGameLogic::createTower(int team_no, Point location)
 }
 
 
-/* Creates a player.
- *
- * PRE:     Teams are initialized.
- * POST:    A player has been created, and added to a team.
- * PROGRAMMER:
- * RETURNS:
- * NOTES:   findPlayer
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ServerGameLogic::createPlayer(int team_no, Point location, int client_id, int role)
 {
   int uid = next_unit_id_++;
@@ -992,17 +1038,18 @@ void ServerGameLogic::createPlayer(int team_no, Point location, int client_id, i
     break;
 
     case 1: //gordon freeman
-      player->health = 250;
-      player->attackDamage = 11;
+      player->health = 275;
+      player->attackDamage = 12;
+      player->setSpeed(6);
     break;
 
     case 2: //the flash
-      player->setSpeed(8);
-      player->health = 150;
-      player->attackDamage = 6;
+      player->setSpeed(9);
+      player->attackDamage = 7;
     break;
 
     case 3: //samus
+      player->health = 215;
       player->setSpeed(6);
       player->attackDamage = 9;
     break;
@@ -1010,50 +1057,65 @@ void ServerGameLogic::createPlayer(int team_no, Point location, int client_id, i
     case 4: //hulk
       player->setSpeed(3);
       player->health = 600;
-      player->attackDamage = 14;
+      player->attackDamage = 15;
     break;
   }
   player->maxHealth = player->health;
   teams[team_no].addUnit(player);
   std::cout << "adding player: " << player->clientID << " team: " << team_no << std::endl;
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ServerGameLogic::respawnPlayer(Player* player, Point location)
 {
   player->position = location;
   player->health = player->maxHealth;
   player->pendingDelete = false;
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ServerGameLogic::giveTeamBonus(int team_no, int amount)
 {
   teams[team_no].currency += amount;
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ServerGameLogic::handleDeaths()
 {
   pthread_mutex_lock( &unit_mutex );
@@ -1080,15 +1142,20 @@ void ServerGameLogic::handleDeaths()
 
   updateMaps();
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ServerGameLogic::handlePlayerDeath(Player *player)
 {
 
@@ -1100,15 +1167,20 @@ void ServerGameLogic::handlePlayerDeath(Player *player)
       player->tod = time(NULL);
   }
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ServerGameLogic::handleCreepDeath(Creep *creep)
 {
   // Remove creep
@@ -1117,15 +1189,20 @@ void ServerGameLogic::handleCreepDeath(Creep *creep)
   // Give other team some monies
   giveTeamBonus(creep->team == 0 ? 1 : 0, CREEP_KILL_BONUS);
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ServerGameLogic::handleTowerDeath(Tower *tower)
 {
   // Remove tower
@@ -1134,31 +1211,40 @@ void ServerGameLogic::handleTowerDeath(Tower *tower)
   // Give other team some monies
   giveTeamBonus(tower->team == 0 ? 1 : 0, TOWER_KILL_BONUS);
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ServerGameLogic::handleCastleDeath()
 {
   // Game over
   gameState_ = GAME_END;
 }
 
-// Returns the role given a playerID and team number;
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 int ServerGameLogic::getPlayerRole(int teamNumber, int playerID)
 {
   for (std::vector<Player*>::iterator it = teams[teamNumber].players.begin(); it != teams[teamNumber].players.end(); ++it)
@@ -1173,15 +1259,20 @@ int ServerGameLogic::getPlayerRole(int teamNumber, int playerID)
 
   return -1;
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ServerGameLogic::updateMaps() {
 
   mapTeams_[0].build(teams[0]);
@@ -1198,8 +1289,7 @@ int main() {
 
   game.startGame();
 
-  while (1)
-    ;
+  while (1);
 
 }
 #endif

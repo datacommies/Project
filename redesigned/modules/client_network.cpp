@@ -7,13 +7,20 @@ using namespace std;
 
 player_matchmaking_t empty = {{0, 0}, "Empty", 0, 0, 0, false};
 
-/* Constructor
- *
- * PRE:
- * POST:
- * PROGRAMMER:
- * RETURNS:
- * NOTES:   Creates a thread and starts running the module */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 ClientNetwork::ClientNetwork() {
 	for (int i = 0; i < 5; ++i) {	
 		memcpy(team_r+i, &empty, sizeof(player_matchmaking_t));
@@ -33,19 +40,20 @@ ClientNetwork::~ClientNetwork()
 	close(connectsock);
 }
 
-/* Connects to a server with the connection parameters set before.
- *
- * PRE: setConnectionInfo() called with valid server, port, and name.
- * POST: client is connected to the server with the specified _server and port
- * ARGS: None
- *
- * PROGRAMMER:
- *
- * RETURNS: true if connected to the server succesfully, false otherwise.
- *
- * NOTES: Initializes the connection sockets, server details (structs), then
- * establishes a connection.
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 bool ClientNetwork::connectToServer()
 {
 	connecting_status = "Connecting...";
@@ -103,15 +111,20 @@ bool ClientNetwork::connectToServer()
 	recvReply();
 	return true;
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ClientNetwork::recvReply() {
 	long n;
 
@@ -263,15 +276,20 @@ void ClientNetwork::recvReply() {
 	}
 }
 
-/* Sends a create unit request to the server.
- *
- * PRE:     Client is connected
- * POST:    Request has been sent to server
- * PROGRAMMER:
- * RETURNS: true on success
- *          false on fail
- * NOTES:   No validation performed here. 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 bool ClientNetwork::createUnit(int playerId, UnitType type, Point location, int path)
 {
 	//TODO: Not using playtypeerID at all!
@@ -289,15 +307,20 @@ bool ClientNetwork::createUnit(int playerId, UnitType type, Point location, int 
 	send(connectsock, &request, sizeof(request_create_t), 0);
     return false;
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 
 bool ClientNetwork::updatePlayerLobby (int team, int role, const char* name, bool ready) {
 
@@ -327,13 +350,20 @@ bool ClientNetwork::updatePlayerLobby (int team, int role, const char* name, boo
 	return true;
 }
 
-/* Sends a move player request to the server.
- *
- * PRE:     Client is connected
- * POST:    Request has been sent to server
- * RETURNS: true on success
- *          false on fail
- * NOTES:   No validation performed here. */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 bool ClientNetwork::movePlayer(int playerId, Direction direction)
 {
 	request_player_move_t request;
@@ -346,39 +376,57 @@ bool ClientNetwork::movePlayer(int playerId, Direction direction)
 	return false;
 }
 
-/* Sends an attack request to the server.
- *
- * PRE:     Client is connected
- * POST:    Request has been sent to the server
- * RETURNS: true on success
- *          false on fail
- * NOTES:   No validation performed here. */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 bool ClientNetwork::attack(int playerId, Direction direction)
 {
    return false;
 }
 
-/*
- * Sends a generic request to the server
- *
- * PRE: client is connected to the server
- * POST: msg is received in server side
- *
- * RETURNS: the amount of message sent
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 int ClientNetwork::sendRequest(int msg)
 {
 	return 1;
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ClientNetwork::player_update (player_matchmaking_t * p) {
 	printf("Player: %d %s\t" "Team: %d\t"
 		"Role: %d\t" "Ready: %s\n",
@@ -404,15 +452,20 @@ void ClientNetwork::player_update (player_matchmaking_t * p) {
 	else 
 		waiting.push_back(*p);
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ClientNetwork::player_leave (player_matchmaking_t * p) {
 	printf("Player Left: %s\n", p->name);
 
@@ -428,41 +481,55 @@ void ClientNetwork::player_leave (player_matchmaking_t * p) {
 		}
 	}
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ClientNetwork::msg_mapname (char * map) {
 	printf("Got map name: %s\n", map);
 }
-
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ClientNetwork::msg_chat (char * text) {
 	printf("message: %s\n", text);
 }
 
-/* 
- *
- * PRE: msg is null terminated
- * POST: message is sent to the server
- * PROGRAMMER: Ronald Bellido
- * RETURNS: void
- *          
- * NOTES: Sends a MSG_CHAT to the server, which will relay the message to all the clients including the sender.
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ClientNetwork::send_chatmsg(string msg) {
 	chatmsg_t * chat = (chatmsg_t*) new char[sizeof(header_t) + msg.size()];
 	chat->head.type = MSG_CHAT;
@@ -476,15 +543,20 @@ void ClientNetwork::send_chatmsg(string msg) {
 	send(connectsock, chat, sizeof(header_t) + msg.size(), 0);
 }
 
-/* 
- *
- * PRE:      
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 int ClientNetwork::recv_complete (int sockfd, void *buf, size_t len, int flags) {
     size_t bytesRead = 0;
     ssize_t result;
