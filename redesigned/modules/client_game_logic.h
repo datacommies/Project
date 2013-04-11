@@ -40,8 +40,11 @@ public:
    // 
    // required because theres no reference to clientNetwork.
    void ready() {
+      waitingForStart = true;
       clientNetwork_.sendReady();
    }
+
+   bool waitingForStart;
    // Module References
    ClientNetwork& clientNetwork_;
 private:

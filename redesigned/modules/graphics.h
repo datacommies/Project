@@ -65,6 +65,7 @@ public:
    Graphics(ClientGameLogic& clientGameLogic);
    sf::RenderWindow * window;
    pthread_t t;
+   
 private:
    // Module references
    ClientGameLogic& clientGameLogic_;
@@ -84,9 +85,9 @@ private:
    sf::Texture tower_tex;
    sf::Sprite tower_sprite;
 
-   sf::Texture player_textures[5];
+   sf::Texture player_textures[5];   
    sf::Sprite player_sprites[5];
-
+   
    // SFGUI stuff
    sfg::Desktop sfgDesktop; // The desktop is the top level object that all other SFGUI elements display on.
    
@@ -132,6 +133,7 @@ private:
    void drawHealthBar(sf::RenderWindow& window, float x, float y, int health);
    void drawCurrency(sf::RenderWindow& window);
    void drawEndGameScreen(sf::RenderWindow& window);
+   void drawLoadingScreen();
 
    // SFGUI Functions
    void initDesktop();

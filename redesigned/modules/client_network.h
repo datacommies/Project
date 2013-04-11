@@ -48,7 +48,7 @@ public:
    void send_chatmsg(std::string msg);
 
    void sendReady () {
-      strcpy(p.name, _name.c_str());
+      strcpy(p.name, (_name+" - Ready").c_str());
       p.head.type = MSG_PLAYER_UPDATE;
       p.ready = true;
       send(connectsock, &p, sizeof(player_matchmaking_t), 0);

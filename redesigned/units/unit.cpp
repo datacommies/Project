@@ -4,7 +4,7 @@
 -- DATE:        2013/03/11
 --
 -- MAINTAINERS: Callum Styan, Nick Raposo, Cody Rossiter, Behnam Bastami, 
--- 				Chris Porter, Kevin Tangeman
+-- 				Chris Porter, Steve Lo, Kevin Tangeman
 --
 -- FUNCTIONS:   Unit constructor
 --              inRange
@@ -75,8 +75,8 @@ Unit::Unit(int uid, int side, Point pos, int hp, int atkdmg,
 -- INTERFACE:   bool inRange(Point p1, Point p2, int distance)
 --
 -- RETURNS:     boolean: If the target is out of range 
---                       (target distance > distance) return false, otherwise, 
---                       return true
+--                       (target's distance > detectable distance) return false, 
+--                       otherwise, return true
 --
 -- DESCRIPTION: Function uses the Pythagorean Theorem to calculate the
 --              the targets distance. 
@@ -165,7 +165,7 @@ void Unit::Attack(void) {
     else if( hasStrength(iElement, pTarget->iElement) )
         pTarget->health -= attackDamage * 0.25;
     else
-        pTarget->health -= attackDamage;
+        pTarget->health -= attackDamage + (rand() % (attackDamage*3));
 
     if( pTarget->health <= 0 ) {
         //pTarget = NULL;

@@ -6,7 +6,7 @@
 #include <cstdlib>
 #include <cstring>
 
-#define PLAYER_NAME_SIZE 32
+#define PLAYER_NAME_SIZE 128
 #define MAP_NAME_SIZE  64
 
 enum { // MESSAGE TYPES

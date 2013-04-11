@@ -20,7 +20,7 @@ Ai::Ai(ServerGameLogic& serverGameLogicModule)
  * NOTES:   Performs no validation. Validation is handled by game logic module. */
 void Ai::createUnit(int unitId, UnitType type, Point location, Point destination)
 {
-   serverGameLogicModule_.receiveCreateUnitCommand(unitId, type, location);
+   //serverGameLogicModule_.receiveCreateUnitCommand(unitId, type, location);
 }
 
 /* Handles an AI request to move a unit.

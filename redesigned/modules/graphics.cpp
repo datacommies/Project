@@ -7,6 +7,9 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include "../resource.h"
+#include <fstream>
+#include <vector>
+#include <time.h>
 
 using namespace std;
 
@@ -157,7 +160,16 @@ void * init (void * in)
                 }
                 g->unassignedPlayersList->SetText(unassigned);
 
-                g->updateLobbyRoles();
+                if(g->clientGameLogic_.waitingForStart)
+                {
+                    g->sfgLobbyWindow->Show(false);
+                    g->drawLoadingScreen();
+                }
+                else
+                {
+                    // Update the names on the buttons.
+                    g->updateLobbyRoles();
+                }
             }
 
             // Update the names on the buttons.
@@ -186,6 +198,18 @@ void * init (void * in)
 
         // Display test windows.
         sfgui.Display(window);
+
+        if (g->clientGameLogic_.getCurrentState() == LOBBY) {
+            for (size_t i = 0; i < 5; i++) {
+                g->player_sprites[i].setPosition(65, i * 55 + 310);          
+                g->window->draw(g->player_sprites[i]);
+            }
+
+            for (size_t i = 0; i < 5; i++) {
+                g->player_sprites[i].setPosition(710, i * 55 + 310);          
+                g->window->draw(g->player_sprites[i]);
+            }
+        }
 
         window.display();
     }
@@ -326,7 +350,41 @@ void Graphics::initDesktop()
 {
     sfgDesktop = sfg::Desktop();
     sfgDesktop.SetProperty("Label", "FontSize", 22);
+    sfgDesktop.SetProperty("Label", "FontSize", 22);
     sfgDesktop.SetProperty("Entry", "FontSize", 22);
+}
+
+/* Randomly generates a name based on the name.txt list. 
+*
+* PRE:
+* POST: SFGUI desktop is initialized
+* RETURNS:
+* NOTES:
+*/
+std::string getName( void ) {
+
+    std::vector<string> lines;
+    std::string line, result;
+
+    srand (time(NULL));
+    ifstream myfile;
+    myfile.open("name.txt", ifstream::in);
+
+    if ( !myfile.is_open() ) {
+        cout << "Cannot find file." << endl;
+        return std::string("Error:getName");
+    }
+
+    while ( myfile.good() ){
+        getline( myfile, line );
+        lines.push_back(line);
+    }
+    myfile.close();
+    for(int i = 0; i < 1; i++ ) {
+        int rnd = rand() % lines.size();
+        result += lines.at(rnd);
+    }
+    return result;
 }
 
 /* Initializes the join window that the join UI sits ontop of.
@@ -352,8 +410,9 @@ void Graphics::initJoinWindow()
     sfgPortLabel = sfg::Label::Create("Port:");
 
     // Create the entry boxes.
-    sfgNameEntryBox = sfg::Entry::Create("Player *");
+    sfgNameEntryBox = sfg::Entry::Create(getName());
     sfgNameEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 120.
+    sfgNameEntryBox->SetMaximumLength(16);
     sfgServerEntryBox = sfg::Entry::Create("localhost");
     sfgServerEntryBox->SetRequisition(sf::Vector2f(120, 0)); // Set entry box size to 120.
     sfgPortEntryBox = sfg::Entry::Create("4545");
@@ -395,7 +454,8 @@ void Graphics::initLobbyWindow()
     sfgLobbyWindow = sfg::Window::Create(sfg::Window::BACKGROUND); // Make the window.
     sfgLobbyWindow->SetPosition(sf::Vector2f(100, 225)); // Change the window position.
     sfgLobbyWindow->SetRequisition(sf::Vector2f(600, 350));
-    
+
+
     // Create a parent box to hold all the subboxes.
     sfgLobbyBox = sfg::Box::Create(sfg::Box::HORIZONTAL);
 
@@ -405,8 +465,11 @@ void Graphics::initLobbyWindow()
     sfgRightLobbyBox = sfg::Box::Create(sfg::Box::VERTICAL);
 
     // Create all the labels.
-    unassignedPlayersLabel = sfg::Label::Create("Unassigned Players:");
+    unassignedPlayersLabel = sfg::Label::Create("Players Waiting:");
     unassignedPlayersList = sfg::Label::Create("NeedsVector\nGordon\nG-Man\nD0g\nAlyx");
+    unassignedPlayersList->SetId("upl");
+    sfgDesktop.SetProperty("#upl", "FontSize", "12");
+
     teamOneLabel = sfg::Label::Create("Team One");
     teamTwoLabel = sfg::Label::Create("Team Two");
 
@@ -464,7 +527,6 @@ void Graphics::takeRole()
     
     globalGraphics->clientGameLogic_.clientNetwork_.updatePlayerLobby(team, role, globalGraphics->clientGameLogic_.clientNetwork_._name.c_str(), false);
 }
-
 
 /* This method updates all the button texts in the lobby with those in the client network team_l and team_r.
  *
@@ -761,6 +823,18 @@ void Graphics::drawEndGameScreen(sf::RenderWindow& window)
     window.draw(endGameScreen);
 }
 
+
+void Graphics::drawLoadingScreen()
+{
+    sf::Texture loadingScreen_bg;
+    sf::Sprite  loadingScreen;
+
+    loadingScreen_bg.loadFromFile("images/loading.png");
+    loadingScreen.setTexture(loadingScreen_bg);
+
+    window->draw(loadingScreen);
+}
+
 /* Loads all the images that are used by the game
  *
  * PRE:     
@@ -802,5 +876,4 @@ void Graphics::loadImages()
         player_textures[i].loadFromFile(ss.str().c_str());
         player_sprites[i].setTexture(player_textures[i]);
     }
-
 }
