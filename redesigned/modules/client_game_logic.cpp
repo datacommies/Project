@@ -4,7 +4,7 @@
 -- DATE:        2013/03/11
 --
 -- MAINTAINERS: Callum Styan, David Czech, Dennis Ho, Albert Liao, 
---              Jesse Wright, Behnam Bastami, Luke Tao
+--              Jesse Wright, Behnam Bastami, Luke Tao, Jacob Miner
 --
 -- FUNCTIONS:   ClientGameLogic constructor
 --              start

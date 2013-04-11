@@ -993,11 +993,11 @@ void Graphics::hideJoinWindow()
 -- DESIGNER:   Jacob Miner
 -- PROGRAMMER: Jacob Miner
 --
--- INTERFACE:   
+-- INTERFACE:  Graphics::drawHud(sf::RenderWindow& window)
 --
--- RETURNS:     
+-- RETURNS:    void
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Draws the HUD on the window.
 ------------------------------------------------------------------------------*/
 void Graphics::drawHud(sf::RenderWindow& window)
 {
@@ -1107,11 +1107,11 @@ void Graphics::drawTeamCircle (sf::RenderWindow& window, int team, float x, floa
 -- DESIGNER:   
 -- PROGRAMMER: Jacob Miner
 --
--- INTERFACE:   
+-- INTERFACE:  Graphics::drawUnits(sf::RenderWindow& window)
 --
--- RETURNS:     
+-- RETURNS:    void.
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Updates all the units, drawing their sprites on the screen.
 ------------------------------------------------------------------------------*/
 void Graphics::drawUnits(sf::RenderWindow& window)
 {
@@ -1249,11 +1249,11 @@ void Graphics::drawEndGameScreen(sf::RenderWindow& window)
 -- DESIGNER:   Jacob Miner
 -- PROGRAMMER: Jacob Miner
 --
--- INTERFACE:   
+-- INTERFACE:  Graphics::drawLoadingScreen()
 --
--- RETURNS:     
+-- RETURNS:    void. 
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Draws the loading screen in place of an empty screen.
 ------------------------------------------------------------------------------*/
 void Graphics::drawLoadingScreen()
 {
@@ -1273,11 +1273,11 @@ void Graphics::drawLoadingScreen()
 -- DESIGNER:   
 -- PROGRAMMER: Jacob Miner
 --
--- INTERFACE:   
+-- INTERFACE:   Graphics::loadImages()
 --
--- RETURNS:     
+-- RETURNS:     void.
 --
--- DESCRIPTION: 
+-- DESCRIPTION: loads images at the beginning of the program for later use.
 ------------------------------------------------------------------------------*/
 void Graphics::loadImages()
 {
