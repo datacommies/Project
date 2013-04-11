@@ -33,18 +33,19 @@
 ServerGameLogic * gSGL;
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   ServerGameLogic()
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Callum Styan
+-- PROGRAMMER: Callum Styan, Dennis Ho
 --
 -- INTERFACE:   
 --
 -- RETURNS:     
 --
--- DESCRIPTION: 
+-- DESCRIPTION: ServerGameLogic constructor.  Initializes the game map and creep
+-- paths, as well as the time for creation of creeps.
 ------------------------------------------------------------------------------*/
   ServerGameLogic::ServerGameLogic()
 : gameState_(LOBBY), next_unit_id_(1)
@@ -775,7 +776,7 @@ for (unsigned int i = 0; i < teams[team].players.size(); ++i) {
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   
--- PROGRAMMER: 
+-- PROGRAMMER: Darry Danzig
 --
 -- INTERFACE:   
 --
@@ -828,7 +829,7 @@ void ServerGameLogic::update()
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   
--- PROGRAMMER: 
+-- PROGRAMMER: Darry Danzig
 --
 -- INTERFACE:   
 --
@@ -859,7 +860,7 @@ void ServerGameLogic::updateTimer(int i)
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   
--- PROGRAMMER: 
+-- PROGRAMMER: Darry Danzig
 --
 -- INTERFACE:   
 --
@@ -1326,8 +1327,8 @@ bool ServerGameLogic::getPlayerIsAlive(int teamNumber, int playerID)
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:  Darry Danzig
+-- PROGRAMMER: Darry Danzig
 --
 -- INTERFACE:   
 --

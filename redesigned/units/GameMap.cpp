@@ -41,7 +41,7 @@
 -- DATE:        April 7, 2013
 --
 -- DESIGNER:    Callum Styan
--- PROGRAMMER:  Callum Styan
+-- PROGRAMMER:  Callum Styan, Darry Danzig, Kevin Tangeman
 --
 -- INTERFACE:   void GameMap::initPaths()
 --
@@ -661,9 +661,24 @@ Unit *GameMap::getUnit(Point pos)
 }
 
 
-#ifdef TEST_MAP  
-// Test with: g++ GameMap.cpp -DTEST_MAP -g -Wall ../build/units/tower.o ../build/units/unit.o
 
+/*------------------------------------------------------------------------------
+-- FUNCTION:    main 
+--
+-- DATE:        April 7, 2013
+--
+-- DESIGNER:    Darry Danzig
+-- PROGRAMMER:  Darry Danzig
+--
+-- INTERFACE:   int main()
+--
+-- RETURNS:     int  
+--
+-- DESCRIPTION: This function is used to test this class.
+-- Test with: g++ GameMap.cpp -DTEST_MAP -g -Wall ../build/units/tower.o ../build/units/unit.o          
+------------------------------------------------------------------------------*/
+
+#ifdef TEST_MAP  
 #include <vector>
 #include "tower.h"
 

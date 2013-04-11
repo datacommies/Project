@@ -4,7 +4,7 @@
 -- DATE:        2013/03/26
 --
 -- MAINTAINERS: Callum Styan, Nick Raposo, Cody Rossiter, Behnam Bastami, 
---              Chris Porter, Kevin Tangeman
+--              Chris Porter, Kevin Tangeman, Steve Lo
 --
 -- FUNCTIONS:   Unit constructor
 --              inRange
@@ -43,7 +43,7 @@ Castle::Castle(int uid, Point pos, int hp, int atkdmg, int atkrng,
 -- DATE:        March 26, 2013
 --
 -- DESIGNER:    Kevin Tangeman
--- PROGRAMMER:  Kevin Tangeman
+-- PROGRAMMER:  Kevin Tangeman, Steve Lo
 --
 -- INTERFACE:   Castle(int uid, int cid, int side, Point pos, int hp, int atkdmg, int atkrng,
 --              int atkspd, int percep, int atkcnt, int wall):

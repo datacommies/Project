@@ -3,7 +3,7 @@
 --
 -- DATE:        2013/03/12
 --
--- MAINTAINERS: Cody Rossiter
+-- MAINTAINERS: Cody Rossiter, Kevin Tangeman, Steve Lo
 --
 -- FUNCTIONS:   Attack
 --
