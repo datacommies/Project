@@ -863,7 +863,7 @@ void ServerGameLogic::createCreep(int team_no, Point location, int path_no, Unit
       atkspd = INIT_CREEP_ATKSPD;
       percep = INIT_CREEP_PERCEP * 5;
       atkcnt = INIT_CREEP_ATKCNT;
-      spd = INIT_CREEP_SPD;
+      spd = INIT_CREEP_SPD / 2;
     break;
     case CREEP_THREE: // Fast.
       hp = INIT_CREEP_HP * .75;
@@ -872,7 +872,7 @@ void ServerGameLogic::createCreep(int team_no, Point location, int path_no, Unit
       atkspd = INIT_CREEP_ATKSPD / 2;
       percep = INIT_CREEP_PERCEP * 10;
       atkcnt = INIT_CREEP_ATKCNT;
-      spd = INIT_CREEP_SPD;
+      spd = INIT_CREEP_SPD * 1.5;
     break;
   }
   
