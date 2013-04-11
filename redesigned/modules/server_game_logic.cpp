@@ -221,18 +221,19 @@ void ServerGameLogic::initializeCurrency()
     teams[team_i].currency = INIT_CURRENCY;
 }
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   initializePlayers(std::vector<player_matchmaking_t> players)
 --
--- DATE:        2013/03/22
+-- DATE:        2013/04/06
 --
 -- DESIGNER:   Jesse Wright
--- PROGRAMMER: 
+-- PROGRAMMER: Dennis Ho
 --
--- INTERFACE:   
+-- INTERFACE:   void initializePlayers(std::vector<player_matchmaking_t> players)
 --
--- RETURNS:     
+-- RETURNS:     void.
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Creates all the player objects from all the clients in the 
+-- matchmaking lobby.
 ------------------------------------------------------------------------------*/
 void ServerGameLogic::initializePlayers(std::vector<player_matchmaking_t> players)
 {
@@ -495,8 +496,8 @@ int ServerGameLogic::WhichTeam(int id) {
 --
 -- DATE:        2013/04/07
 --
--- DESIGNER:   Jesse Wright, 
--- PROGRAMMER: Jesse Wright,  
+-- DESIGNER:   Jesse Wright, Callum Styan
+-- PROGRAMMER: Jesse Wright,  Callum Styan, Darry Danzig
 --
 -- INTERFACE:   void updateCreate(CommandData& command)
 --
@@ -609,7 +610,7 @@ void ServerGameLogic::updateAttack(CommandData& command)
 -- DATE:        2013/04/07
 --
 -- DESIGNER:   
--- PROGRAMMER: Jesse Wright, David Czech
+-- PROGRAMMER: Jesse Wright
 --
 -- INTERFACE:   void updateMovePlayer(CommandData& command)
 --
@@ -1100,7 +1101,7 @@ void ServerGameLogic::createPlayer(int team_no, Point location, int client_id, i
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Dennis Ho
--- PROGRAMMER: Dennis Ho
+-- PROGRAMMER: Dennis Ho, Jesse Braham
 --
 -- INTERFACE:   void ServerGameLogic::respawnPlayer(Player* player, Point location)
 --
