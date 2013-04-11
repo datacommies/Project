@@ -357,7 +357,7 @@ Graphics::Graphics(ClientGameLogic& clientGameLogic)
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   
--- PROGRAMMER: 
+-- PROGRAMMER:  Jacob Miner
 --
 -- INTERFACE:   
 --
@@ -383,8 +383,8 @@ void Graphics::initMainMenuControls()
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Jacob Miner
+-- PROGRAMMER: Jacob Miner
 --
 -- INTERFACE:   
 --
@@ -892,7 +892,7 @@ void Graphics::joinButtonHandler()
 ------------------------------------------------------------------------------*/
 void Graphics::showJoinWindow()
 {
-sfgJoinWindow->Show(true);
+    sfgJoinWindow->Show(true);
 }
 /*------------------------------------------------------------------------------
 -- FUNCTION:   
@@ -918,8 +918,8 @@ void Graphics::hideJoinWindow()
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Jacob Miner
+-- PROGRAMMER: Jacob Miner
 --
 -- INTERFACE:   
 --
@@ -1042,7 +1042,7 @@ void Graphics::drawTeamCircle (sf::RenderWindow& window, int team, float x, floa
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   
--- PROGRAMMER: 
+-- PROGRAMMER: Jacob Miner
 --
 -- INTERFACE:   
 --
@@ -1135,7 +1135,7 @@ void Graphics::drawUnits(sf::RenderWindow& window)
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   
--- PROGRAMMER: 
+-- PROGRAMMER: Jacob Miner
 --
 -- INTERFACE:   
 --
@@ -1176,8 +1176,8 @@ void Graphics::drawCurrency(sf::RenderWindow& window)
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Jacob Miner
+-- PROGRAMMER: Jacob Miner
 --
 -- INTERFACE:   
 --
@@ -1206,8 +1206,8 @@ void Graphics::drawEndGameScreen(sf::RenderWindow& window)
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Jacob Miner
+-- PROGRAMMER: Jacob Miner
 --
 -- INTERFACE:   
 --
@@ -1231,7 +1231,7 @@ void Graphics::drawLoadingScreen()
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   
--- PROGRAMMER: 
+-- PROGRAMMER: Jacob Miner
 --
 -- INTERFACE:   
 --
