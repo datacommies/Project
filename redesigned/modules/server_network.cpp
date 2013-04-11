@@ -522,7 +522,7 @@ void * ServerNetwork::handle_client_lobby(void * ctx)
 
             //send the message to all the clients including the sender
             for (size_t i = 0; i < players_.size(); ++i) {
-                send(clients_[i], chat, sizeof(header_t) + sizeof(long) * head.size, 0);   
+                send(clients_[i], chat, sizeof(header_t) + head.size, 0);
             }
 
             delete buf;

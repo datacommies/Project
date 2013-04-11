@@ -245,9 +245,10 @@ void ClientNetwork::recvReply() {
 
 		} else if (head.type == MSG_CHAT) { //chat message is received during the lobby
             char * buf = new char [head.size];
-            memset(buf, 0, head.size);
 
-            recv_complete(connectsock, buf, sizeof(long) * head.size, 0);
+            recv_complete(connectsock, buf, head.size, 0);
+
+            buf[head.size] = '\0';
 
             cout << "asdf: " << buf << endl; //message will contain who the message was from
             

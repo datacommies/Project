@@ -176,7 +176,13 @@ void * init (void * in)
                 for (std::vector<string>::iterator it = g->clientGameLogic_.clientNetwork_.chatbuffer_.begin(); it != g->clientGameLogic_.clientNetwork_.chatbuffer_.end(); ++it)
                 {
                     g->sfgChatDisplayLabel->SetText(g->sfgChatDisplayLabel->GetText().toAnsiString() + *it);
+
+                    // Set scrollbar to lower bound.
+                    sfg::Adjustment::Ptr tempAdj = g->sfgChatDisplayWindow->GetVerticalAdjustment();
+                    tempAdj->SetValue(tempAdj->GetUpper());
+                    g->sfgChatDisplayWindow->SetVerticalAdjustment(tempAdj);
                 }
+
 
                 g->clientGameLogic_.clientNetwork_.chatbuffer_.clear();
             }
@@ -598,6 +604,7 @@ void Graphics::sendMessage()
     string message;
 
     message = clientGameLogic_.clientNetwork_._name + ": " + sfgChatSendEntry->GetText().toAnsiString() + "\n";
+
     // Add the message to what's currently there if it isn't empty.
     if(sfgChatSendEntry->GetText().toAnsiString() != "")
     {
