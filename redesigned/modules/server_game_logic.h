@@ -22,7 +22,7 @@
 #define INIT_CREEP_ATKSPD 20
 #define INIT_CREEP_PERCEP 30
 #define INIT_CREEP_ATKCNT 1
-#define INIT_CREEP_SPD 1
+#define INIT_CREEP_SPD 2
 #define INIT_CREEP_MOVESPEED 1
 #define CREEP_COST 100
 
@@ -69,7 +69,7 @@
 #include "../types.h"
 #include "../units/castle.h"
 #include "../units/basic_tower.h"
-
+#include "audio.h"
 #include "game_logic_map.h"
 
 enum Command { Create, MovePlayer, MoveUnit, Attack };
@@ -144,7 +144,7 @@ class ServerGameLogic
     void initializePaths();
     void initializePlayers(std::vector<player_matchmaking_t> players);
     
-    void createCreep(int team_no, Point location, int path_no = 0);
+    void createCreep(int team_no, Point location, int path_no = 0, UnitType unitType =  CREEP);
     void createTower(int team_no, Point location);
     void createPlayer(int team_no, Point location, int client_id, int role);
     void respawnPlayer(Player* player, Point location);
@@ -160,6 +160,7 @@ class ServerGameLogic
     void handleCastleDeath();
 
     void updateMaps();
+    Audio audio_;
 };
 
 #endif

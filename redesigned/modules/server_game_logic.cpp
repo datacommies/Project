@@ -521,14 +521,22 @@ void ServerGameLogic::updateCreate(CommandData& command)
   switch (command.type) {
     case CREEP:
       {  
-        // Check if 2 seconds has elapsed since the last creep creation for the team.
+        
+      }
+      case CREEP_ONE:
+      case CREEP_TWO:
+      case CREEP_THREE:
+      {
+          // Check if 1 seconds has elapsed since the last creep creation for the team.
         if(time(NULL) - lastCreepTime_[team_no] >= 1)
         {
-          createCreep(team_no, command.location, command.pathID);
+          createCreep(team_no, command.location, command.pathID, command.type);
           lastCreepTime_[team_no] = time(NULL);
         }
         break;
+
       }
+
     case CASTLE:
     case TOWER:
     case TOWER_ONE:
@@ -576,7 +584,6 @@ void ServerGameLogic::updateAttack(CommandData& command)
     fprintf(stderr, "playerID not found file: %s line %d\n", __FILE__, __LINE__);
     return;
   }
-
   // Attack!!
   updateMaps();
 }
@@ -684,7 +691,7 @@ for (unsigned int i = 0; i < teams[team].players.size(); ++i) {
 
     for (unsigned int j = 0; j < teams[otherteam].players.size(); ++j) {
       if (teams[otherteam].players[j]->tod == 0 && distance(teams[team].players[i]->position, teams[otherteam].players[j]->position) < 25) {
-        teams[otherteam].players[j]->health -= 1;
+        teams[otherteam].players[j]->health -= teams[team].players[i]->attackDamage;
         collided = true;
         break;
       }
@@ -692,7 +699,7 @@ for (unsigned int i = 0; i < teams[team].players.size(); ++i) {
 
     for (unsigned int j = 0; j < teams[otherteam].creeps.size(); ++j) {
       if (distance(teams[team].players[i]->position, teams[otherteam].creeps[j]->position) < 25) {
-        teams[otherteam].creeps[j]->health -= 1;
+        teams[otherteam].creeps[j]->health -= teams[team].players[i]->attackDamage;
         collided = true;
         break;
       }
@@ -700,7 +707,7 @@ for (unsigned int i = 0; i < teams[team].players.size(); ++i) {
 
     for (unsigned int j = 0; j < teams[otherteam].towers.size(); ++j) {
       if (distance(teams[team].players[i]->position, teams[otherteam].towers[j]->position) < 25) {
-        teams[otherteam].towers[j]->health -= 1;
+        teams[otherteam].towers[j]->health -= teams[team].players[i]->attackDamage;
         collided = true;
         break;
       }
@@ -758,6 +765,8 @@ void ServerGameLogic::update()
         break;
       case Attack:
         updateAttack(newCommand);
+         std::cout << "Attacking" << std::endl;
+        audio_.playSoundEffect("sounds/punch.wav");
         break;
       case MovePlayer:
         updateMovePlayer(newCommand);
@@ -835,10 +844,10 @@ void ServerGameLogic::setAlarm()
  * REVISIONS: Kevin - Only creates creep if there is enough currency.
 
  */
-void ServerGameLogic::createCreep(int team_no, Point location, int path_no)
+void ServerGameLogic::createCreep(int team_no, Point location, int path_no, UnitType unitType)
 {  
   int uid = next_unit_id_++;
-  
+
   int hp = INIT_CREEP_HP;
   int atkdmg = INIT_CREEP_ATKDMG;
   int atkrng = INIT_CREEP_ATKRNG * 4;
@@ -846,6 +855,39 @@ void ServerGameLogic::createCreep(int team_no, Point location, int path_no)
   int percep = INIT_CREEP_PERCEP * 10;
   int atkcnt = INIT_CREEP_ATKCNT;
   int spd = INIT_CREEP_SPD;
+  switch(unitType)
+  {
+
+    case CREEP_ONE: // regular
+      hp = INIT_CREEP_HP;
+      atkdmg = INIT_CREEP_ATKDMG;
+      atkrng = INIT_CREEP_ATKRNG * 4;
+      atkspd = INIT_CREEP_ATKSPD;
+      percep = INIT_CREEP_PERCEP * 10;
+      atkcnt = INIT_CREEP_ATKCNT;
+      spd = INIT_CREEP_SPD;
+    break;
+    case CREEP_TWO: // Tank (lots of health, but slower than fuck)
+      hp = INIT_CREEP_HP * 3;
+      atkdmg = INIT_CREEP_ATKDMG;
+      atkrng = INIT_CREEP_ATKRNG * 4;
+      atkspd = INIT_CREEP_ATKSPD;
+      percep = INIT_CREEP_PERCEP * 5;
+      atkcnt = INIT_CREEP_ATKCNT;
+      spd = INIT_CREEP_SPD / 2;
+    break;
+    case CREEP_THREE: // Fast.
+      hp = INIT_CREEP_HP * .75;
+      atkdmg = INIT_CREEP_ATKDMG;
+      atkrng = INIT_CREEP_ATKRNG * 4;
+      atkspd = INIT_CREEP_ATKSPD / 2;
+      percep = INIT_CREEP_PERCEP * 10;
+      atkcnt = INIT_CREEP_ATKCNT;
+      spd = INIT_CREEP_SPD * 1.5;
+    break;
+  }
+  
+
   Direction direct = Direction();
   Point *path= &teams[team_no].paths[path_no % PATH_COUNT][0];
   int movespeed = INIT_CREEP_MOVESPEED;
@@ -911,11 +953,9 @@ void ServerGameLogic::createTower(int team_no, Point location)
 //    Tower *tower = new Tower(uid, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
 //                           INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);
 //    Tower *tower = new Tower(uid, team_no, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
-//                           INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);  
+//                           INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);                           
     BasicTower *tower = new BasicTower(uid, team_no, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
                            INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);
-
-    std::cout << "asjhasdasdjhsgdh " <<  tower->health << std::endl;
         
     // Add tower to team
     teams[team_no].addUnit(tower);
@@ -941,9 +981,36 @@ void ServerGameLogic::createPlayer(int team_no, Point location, int client_id, i
 {
   int uid = next_unit_id_++;
 
+  //set up base player
   Player *player = new Player(uid, client_id, location, role);
   player->setSpeed(5);
   player->team = team_no;
+
+  std::cout << "role: " << role << std::endl;
+
+  switch (role){
+    case 1: //gordon freeman
+      player->health = 115;
+    break;
+
+    case 2: //the flash
+      player->setSpeed(10);
+      player->health = 150;
+      player->attackDamage = 8;
+    break;
+
+    case 3: //samus
+      player->setSpeed(6);
+      player->attackDamage = 9;
+    break;
+
+    case 4: //hulk
+      player->setSpeed(2);
+      player->health = 250;
+      player->attackDamage = 14;
+    break;
+  }
+
   teams[team_no].addUnit(player);
   std::cout << "adding player: " << player->clientID << " team: " << team_no << std::endl;
 }
@@ -1001,15 +1068,15 @@ void ServerGameLogic::handleDeaths()
       {
         if (j == 0)
             handleCastleDeath();
-        else{
+        else
             handleTowerDeath(teams[i].towers[j]);
-        }
       }
   }
   
   pthread_mutex_unlock( &unit_mutex );
 
-  updateMaps();}
+  updateMaps();
+}
 /* 
  *
  * PRE:     

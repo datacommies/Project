@@ -32,6 +32,7 @@ ClientGameLogic::ClientGameLogic(ClientNetwork& clientNetwork)
    clientNetwork_.gl = this;
    //unit_mutex = PTHREAD_MUTEX_INITIALIZER; // only allowed for declaration-initialization.
    pthread_mutex_init(&unit_mutex, NULL);
+   audio_.playMusic("sounds/bg.ogg");
 }
 
 /*------------------------------------------------------------------------------
@@ -49,7 +50,10 @@ ClientGameLogic::ClientGameLogic(ClientNetwork& clientNetwork)
 -- DESCRIPTION: This function sets the gameState_ variable to IN_GAME. 
 ------------------------------------------------------------------------------*/
 void ClientGameLogic::start () {
+   audio_.stopMusic();
+   audio_.playSoundEffect("sounds/start.wav");
    gameState_ = IN_GAME;
+   audio_.playMusic("sounds/bg.ogg");
 }
 
 /*------------------------------------------------------------------------------
@@ -122,6 +126,7 @@ void ClientGameLogic::win () {
 ------------------------------------------------------------------------------*/
 void ClientGameLogic::lose () {
    gameState_ = LOST_GAME;
+   audio_.playSoundEffect("sounds/lose.wav");
 }
 
 /*------------------------------------------------------------------------------
@@ -174,7 +179,7 @@ bool ClientGameLogic::createCreep(UnitType type, int laneID)
    location.x = 0;
    location.y = 0; // this doesn't do anything because the implementation sucks. Handled later.
    std::cout << "lane " << laneID << std::endl;
-   clientNetwork_.createUnit(this->playerId, CREEP, location, laneID);
+   clientNetwork_.createUnit(this->playerId, type, location, laneID);
    
    return true;
 }
@@ -203,6 +208,27 @@ bool ClientGameLogic::movePlayer(Direction direction)
    return true;
 }
 
+/*------------------------------------------------------------------------------
+-- FUNCTION:    attack
+--
+-- DATE:        2013/03/11
+--
+-- DESIGNER:    Dennis Ho
+-- PROGRAMMER:  Dennis Ho
+--
+-- INTERFACE:   bool ClientGameLogic::movePlayer(Direction direction)
+--
+-- RETURNS:     Boolean; True if the request was sent, False otherwise
+--
+-- DESCRIPTION: This function makes the current play attack in the specified
+--              direction.
+------------------------------------------------------------------------------*/
+bool ClientGameLogic::attack(Direction direction)
+{
+   // TODO: validation
+   clientNetwork_.attack(this->playerId, direction);
+   return true;
+}
 
 /*------------------------------------------------------------------------------
 -- FUNCTION:    exit
