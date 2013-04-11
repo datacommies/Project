@@ -241,9 +241,9 @@ bool ClientGameLogic::movePlayer(Direction direction)
 --
 -- DESCRIPTION: This function sets the gameState_ variable to MAIN_MENU. 
 ------------------------------------------------------------------------------*/ 
-void ClientGameLogic::exit()
+void ClientGameLogic::exitGame()
 {
-   gameState_ = MAIN_MENU;
+   exit(0);
 }
 
 /*------------------------------------------------------------------------------

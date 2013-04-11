@@ -37,7 +37,7 @@ public:
    bool createCreep(UnitType type, int laneID);
    bool movePlayer(Direction direction);
    bool attack(Direction direction);
-   void exit();
+   void exitGame();
    
    // 
    // required because theres no reference to clientNetwork.

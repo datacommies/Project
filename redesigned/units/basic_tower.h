@@ -1,18 +1,3 @@
-/*------------------------------------------------------------------------------
--- FILE:        basic_tower.h
---
--- DATE:        2013/03/12
---
--- MAINTAINERS: Cody Rossiter
---		Kevin Tangeman - 26/Mar/2013 - added team variable "side"
--- 			and default values in constructor
---
--- FUNCTIONS:   Attack
---
--- DESCRIPTION: File contains declaration for the basic_tower class.
---              BasicTower inherits from Tower.
---              BasicTower is the default tower. It targets a single unit.
-------------------------------------------------------------------------------*/
 #ifndef BASIC_TOWER_H
 #define BASIC_TOWER_H
 

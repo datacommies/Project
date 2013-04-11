@@ -1,14 +1,3 @@
-/*------------------------------------------------------------------------------
--- FILE:        castle.h
---
--- DATE:        2013/03/12
---
--- DESIGNER:    Kevin Tangeman
--- PROGRAMMER:  Kevin Tangeman, Steve Lo
---
--- DESCRIPTION: File contains declaration for the Castle class.
---              Castle inherits from Tower.
-------------------------------------------------------------------------------*/
 #ifndef CASTLE_H
 #define CASTLE_H
 
