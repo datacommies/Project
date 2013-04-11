@@ -520,8 +520,8 @@ void ServerGameLogic::updateCreate(CommandData& command)
     return;
   }
 
-  // If we aren't a builder (role 0) break and don't allow a build.
-  if(getPlayerRole(team_no, command.playerID) != 0)
+  // If we aren't a role 0 or alive don't allow a build
+  if(getPlayerRole(team_no, command.playerID) != 0 || !getPlayerIsAlive(team_no, command.playerID))
   {
     return;
   }
@@ -1257,6 +1257,34 @@ int ServerGameLogic::getPlayerRole(int teamNumber, int playerID)
 
   return -1;
 }
+
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
+bool ServerGameLogic::getPlayerIsAlive(int teamNumber, int playerID)
+{
+  for (std::vector<Player*>::iterator it = teams[teamNumber].players.begin(); it != teams[teamNumber].players.end(); ++it)
+  {
+    if((*it)->clientID == playerID)
+    {
+      return (*it)->tod == 0;
+    }
+  }
+
+  return -1;
+}
+
 /*------------------------------------------------------------------------------
 -- FUNCTION:   
 --
