@@ -94,7 +94,7 @@ Control::Control()
 ,_currentDirection(0)
 ,_clientGameLogicModule(NULL)
 ,_graphicsModule(NULL)
-,_currentLane(-1)
+,_currentLane(0)
 {
 	// Constructor
 	_towerPlacement.x = -1;

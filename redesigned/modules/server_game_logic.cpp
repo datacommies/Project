@@ -27,30 +27,6 @@ ServerGameLogic * gSGL;
   ServerGameLogic::ServerGameLogic()
 : gameState_(LOBBY), next_unit_id_(1)
 {
-  /*PATH p;
-  Point a;
-  a.x = 0;
-  a.y = 0;
-  p.push_back(a);
-  a.x = 210;
-  a.y = 210;
-  p.push_back(a);
-  a.x = 100;
-  a.y = 200;
-  p.push_back(a);
-  a.x = 200;
-  a.y = 100;
-  p.push_back(a);
-  teams[0].paths.push_back(p);
-  teams[1].paths.push_back(p);
-  a.x = 250;
-  a.y = 250;
-  PATH p2;
-  p2.push_back(a);
-  a.x = 200;
-  a.y = 200;
-  p2.push_back(a);
-  teams[0].paths.push_back(p2);*/
 
   pthread_mutex_init(&unit_mutex, NULL);
 
@@ -64,7 +40,7 @@ ServerGameLogic * gSGL;
   teams[1].paths.push_back(gameMap_->topTwo);
   teams[1].paths.push_back(gameMap_->midTwo);
   teams[1].paths.push_back(gameMap_->botTwo);
-  
+
   lastCreepTime_[0] = time(NULL);
   lastCreepTime_[1] = time(NULL);
 #if 0
@@ -505,7 +481,7 @@ void ServerGameLogic::updateCreate(CommandData& command)
   int team_no;
 
   //int x = command.location.x;
-  //nt y = command.location.y;
+  //int y = command.location.y;
   int x = 100;
   int y = 100;
 
@@ -905,7 +881,10 @@ void ServerGameLogic::createTower(int team_no, Point location)
       castleLoc = (*it)->getPos();  // castle location
     
   // get distance of proposed location from castle
-  dist = distance( castleLoc, location);
+  //dist = distance( castleLoc, location);
+    distX = abs(castleLoc.x - location.x);
+    distY = abs(castleLoc.y - location.y);
+    dist = distX + distY;
 
   // if( chosen distance from player's team's castle is <= maxTowerDist && 
   //       TOWER_COST <= team currency ) then carry on and create a tower

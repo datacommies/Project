@@ -41,7 +41,7 @@
 #define CREEP_KILL_BONUS 10
 #define TOWER_KILL_BONUS 50
 
-#define CREEP_COOLDOWN 2
+#define CREEP_COOLDOWN 20
 
 // This will come actually be read from the map
 #ifndef TESTCLASS
@@ -103,7 +103,7 @@ class ServerGameLogic
 
     // Functions
     void startGame();
-    void receiveCreateUnitCommand(int playerId, UnitType type, Point location, int pathId = 0);
+    void receiveCreateUnitCommand(int playerId, UnitType type, Point location, int pathId);
     void receiveMovePlayerCommand(int playerId, Direction direction);
     void receiveMoveUnitCommand(int unitId, Direction direction);
     void receiveAttackCommand(int playerId, Direction direction);

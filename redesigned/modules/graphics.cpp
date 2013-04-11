@@ -190,6 +190,18 @@ void * init (void * in)
         // Display test windows.
         sfgui.Display(window);
 
+        if (g->clientGameLogic_.getCurrentState() == LOBBY) {
+            for (size_t i = 0; i < 5; i++) {
+                g->lobby_player_sprites[i].setPosition(120, i * 55 + 310);          
+                g->window->draw(g->lobby_player_sprites[i]);
+            }
+
+            for (size_t i = 0; i < 5; i++) {
+                g->lobby_player_sprites[i].setPosition(650, i * 55 + 310);          
+                g->window->draw(g->lobby_player_sprites[i]);
+            }
+        }
+
         window.display();
     }
 
@@ -839,6 +851,10 @@ void Graphics::loadImages()
         ss << "images/m" << i+1 << ".png";
         player_textures[i].loadFromFile(ss.str().c_str());
         player_sprites[i].setTexture(player_textures[i]);
-    }
 
+        stringstream ss2;
+        ss2 << "images/l" << i+1 << ".png";
+        lobby_player_textures[i].loadFromFile(ss2.str().c_str());
+        lobby_player_sprites[i].setTexture(lobby_player_textures[i]);
+    }
 }
