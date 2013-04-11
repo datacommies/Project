@@ -423,7 +423,7 @@ void Graphics::initGameControls ()
     
     // Info Buttons
     Button infoButton(INFOBUTTON,sf::Vector2f(INFOBUTTONX,INFOBUTTONY), sf::Vector2f(25, 25), font, NULL);
-    infoButton.rect.setFillColor(sf::Color::Blue);
+    infoButton.rect.setFillColor(sf::Color::Transparent);
 
     //towerButton1.rect.setFillColor(sf::Color(255, 0, 0));
     towerButton1.rect.setFillColor(sf::Color::Transparent);
