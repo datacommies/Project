@@ -1098,23 +1098,21 @@ void Graphics::drawUnits(sf::RenderWindow& window)
         }
         else if (unit->type == TOWER)
         {
-            
-           /* if (unit->maxHealth == INIT_CREEP_HP)
-            {
-                tower_sprite1.setPosition(unit->position.x, unit->position.y);
-                window.draw(tower_sprite1);
-            } else if (unit->maxHealth == INIT_CREEP_HP * 3) {
-                tower_sprite2.setPosition(unit->position.x, unit->position.y);
-                window.draw(tower_sprite2);
-            } else if (unit->maxHealth == INIT_CREEP_HP * .75) {
-                tower_sprite3.setPosition(unit->position.x, unit->position.y);
-                window.draw(tower_sprite3);
-            }*/
-
             tower_sprite1.setPosition(unit->position.x, unit->position.y);
             window.draw(tower_sprite1);
-            
             drawHealthBar(window, unit->position.x, unit->position.y + tower_sprite1.getTextureRect().height, unit->health, unit->maxHealth);
+        }
+        else if (unit->type == TOWER_TWO)
+        {
+            tower_sprite2.setPosition(unit->position.x, unit->position.y);
+            window.draw(tower_sprite2);
+            drawHealthBar(window, unit->position.x, unit->position.y + tower_sprite2.getTextureRect().height, unit->health, unit->maxHealth);
+        }
+        else if (unit->type == TOWER_THREE)
+        {
+            tower_sprite3.setPosition(unit->position.x, unit->position.y);
+            window.draw(tower_sprite3);
+            drawHealthBar(window, unit->position.x, unit->position.y + tower_sprite3.getTextureRect().height, unit->health, unit->maxHealth);
         }
         else if (unit->type == PLAYER)
         {
