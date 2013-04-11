@@ -192,13 +192,13 @@ void * init (void * in)
 
         if (g->clientGameLogic_.getCurrentState() == LOBBY) {
             for (size_t i = 0; i < 5; i++) {
-                g->lobby_player_sprites[i].setPosition(120, i * 55 + 310);          
-                g->window->draw(g->lobby_player_sprites[i]);
+                g->player_sprites[i].setPosition(65, i * 55 + 310);          
+                g->window->draw(g->player_sprites[i]);
             }
 
             for (size_t i = 0; i < 5; i++) {
-                g->lobby_player_sprites[i].setPosition(650, i * 55 + 310);          
-                g->window->draw(g->lobby_player_sprites[i]);
+                g->player_sprites[i].setPosition(710, i * 55 + 310);          
+                g->window->draw(g->player_sprites[i]);
             }
         }
 
@@ -445,7 +445,7 @@ void Graphics::initLobbyWindow()
     sfgLobbyWindow = sfg::Window::Create(sfg::Window::BACKGROUND); // Make the window.
     sfgLobbyWindow->SetPosition(sf::Vector2f(100, 225)); // Change the window position.
     sfgLobbyWindow->SetRequisition(sf::Vector2f(600, 350));
-    
+
     // Create a parent box to hold all the subboxes.
     sfgLobbyBox = sfg::Box::Create(sfg::Box::HORIZONTAL);
 
@@ -851,10 +851,5 @@ void Graphics::loadImages()
         ss << "images/m" << i+1 << ".png";
         player_textures[i].loadFromFile(ss.str().c_str());
         player_sprites[i].setTexture(player_textures[i]);
-
-        stringstream ss2;
-        ss2 << "images/l" << i+1 << ".png";
-        lobby_player_textures[i].loadFromFile(ss2.str().c_str());
-        lobby_player_sprites[i].setTexture(lobby_player_textures[i]);
     }
 }
