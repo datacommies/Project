@@ -1417,15 +1417,15 @@ void Graphics::loadImages()
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Albert Liao
--- PROGRAMMER: Albert Liao, Jacob Miner
+-- PROGRAMMER: Albert Liao
 --
 -- INTERFACE:   void Graphics::showChat(bool show)
 --
 -- RETURNS:     none.
 --
--- DESCRIPTION: Loads all of the images that we use in the game into SFML sprites
---              so that they can be drawn on the screen. This includes things from
---              the creeps and towers that we draw to the HUD and map.
+-- DESCRIPTION: This function either displays or hides the chat window (both the
+--              message display and also the send window) based on the input
+--              parameter.
 ------------------------------------------------------------------------------*/
 void Graphics::showChat(bool show)
 {
@@ -1443,6 +1443,21 @@ void Graphics::showChat(bool show)
     }
 }
 
+/*------------------------------------------------------------------------------
+-- FUNCTION:   toggleInfoButton
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   Albert Liao
+-- PROGRAMMER: Albert Liao
+--
+-- INTERFACE:   void Graphics::toggleInfoButton()
+--
+-- RETURNS:     none.
+--
+-- DESCRIPTION: This function toggles the boolean that keeps track of whether
+--              we want to display the info button or not.
+------------------------------------------------------------------------------*/
 void Graphics::toggleInfoButton()
 {
     _infoButtonVisible ? _infoButtonVisible = false : _infoButtonVisible = true;
