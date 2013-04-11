@@ -80,7 +80,7 @@ struct CLIENT_UNIT // This struct applies only to the client side - server side 
    Point inter_position;// interpolated position - for smooth client-side movement.
    float inter_value;   // interpolated value between 
 
-   int health;
+   int health, maxHealth;
    int team;
    int role;
    UnitType type;
