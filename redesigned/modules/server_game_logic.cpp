@@ -835,11 +835,11 @@ void ServerGameLogic::setAlarm()
  * PRE:     Teams are initialized.
  * POST:    A creep has been created and added to the specified team. The team's currency has been
  *          decremented accordingly.
- * PROGRAMMER: Jesse Wright, Someone else.
+ * PROGRAMMER: Jesse Wright, Kevin Tangeman.
  * RETURNS:
  * NOTES:   
  *
- * REVISIONS: Kevin - Only creates creep if there is enough currency.
+ * REVISIONS: Kevin Tangeman - Only creates creep if there is enough currency.
 
  */
 void ServerGameLogic::createCreep(int team_no, Point location, int path_no, UnitType unitType)
@@ -912,7 +912,7 @@ void ServerGameLogic::createCreep(int team_no, Point location, int path_no, Unit
  * PRE:     Teams are initialized.
  * POST:    A tower has been created and added to the specified team. The team's currency has been
  *          decremented accordingly.
- * PROGRAMMER:
+ * PROGRAMMER: Kevin Tangeman
  * RETURNS:
  * NOTES:   
  *
