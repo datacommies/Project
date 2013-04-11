@@ -177,7 +177,6 @@ Endles
 Enormo
 Enrage
 Epic
-Erotic
 Escape
 Eterna
 Europe
@@ -220,7 +219,6 @@ Galact
 Generi
 Geriat
 German
-Ghetto
 Giant
 Glowin
 Go Go
@@ -237,7 +235,6 @@ Hardco
 Haunte
 Hazard
 Heavy
-Heavy 
 Metal
 Heinou
 Helico
@@ -249,12 +246,9 @@ Hideou
 High-S
 Speed
 Hillbi
-Hindu
 Hip-Ho
 Hippo
 Histor
-Hitler
-Nazi
 Ho-Hum
 Holy
 Horrif
@@ -270,16 +264,13 @@ Inbred
 Incomp
 Incred
 Indian
-Indian
 Inept
 Infini
 Ingeni
 Insane
 Intell
-Intell
 Intens
 Intera
-Intern
 Intern
 Inters
 Invisi
@@ -295,7 +286,6 @@ Jackie
 Jamaic
 Japane
 Jedi
-Jewish
 Johnny
 John R
 Kabuki
@@ -315,14 +305,6 @@ Lair o
 Latino
 Lazy
 Legacy
-Legend
-Legend
-Legend
-Legend
-Legend
-Legend
-Legend
-Legend
 Legend
 Leisur
 Lethal
@@ -352,15 +334,9 @@ Major
 Manic
 Mania
 Maniac
-Maniac
 Mania
 Mario'
 Mary K
-Master
-Master
-Master
-Master
-Master
 Master
 Maximu
 Mechan
@@ -386,7 +362,6 @@ Monste
 Monste
 Monty 
 Morbid
-Morbid
 Mr.
 MTV's
 Muppet
@@ -399,9 +374,7 @@ My Ver
 Myster
 of Mys
 Myster
-of Mys
 Mystic
-of Mys
 Mystic
 of Mys
 Mythic
@@ -418,11 +391,8 @@ Neurot
 New
 Night 
 Knight
-Night
 Nightm
 Nightt
-Knight
-Night
 Nightm
 Nihili
 Ninja
@@ -457,7 +427,6 @@ Primal
 Pro
 Profan
 Profes
-Pro
 Psyche
 Psycho
 Queen 
@@ -478,23 +447,12 @@ Renega
 Retard
 Retro
 Return
-Return
-Strike
-Strike
-Return
-Return
-Strike
 Strike
 Reveng
-Reveng
-- The 
-Reveng
-Reveng
-- The 
+- The
 Rise o
 Robot
 Roboti
-Robot
 Rock '
 Rocket
 Rockin
@@ -507,7 +465,6 @@ Rush
 Russia
 Samba 
 Samura
-Satan'
 Savage
 Save Y
 Scandi
@@ -517,10 +474,6 @@ Scream
 Search
 Secret
 Sensua
-Sex
-Sexy
-Sex
-Shadow
 Shadow
 Shady
 Shamef
@@ -539,8 +492,6 @@ Sonic'
 Soviet
 Space
 Specia
-Specia
-Specta
 Spectr
 Ghost
 Spirit
@@ -548,21 +499,14 @@ Spooky
 Spunky
 Star
 All-St
-Starri
 Stars
 Supers
 Star T
 All-St
-Star
 Starri
 Stars
-Supers
 Star W
-All-St
 Star
-Starri
-Stars
-Supers
 Stealt
 Stoic
 Strate
@@ -574,13 +518,9 @@ Subter
 Underg
 Underw
 Summer
-Super
-Super 
-Sex
 Supers
 Suprem
 Surpri
-Tactic
 Tactic
 Tastel
 Team
@@ -589,13 +529,10 @@ Teleki
 Terrib
 The
 The Ca
-The Ca
-The Ca
 The Gl
 The Gr
 The Ha
 The Hu
-The In
 The In
 The La
 The Mu
@@ -604,13 +541,10 @@ The Qu
 Quest
 The Se
 The Si
-The Si
-The Si
 Third-
 Throbb
 Tiger 
 Tiny
-Midget
 Tom Cl
 Tony H
 Topsy-
@@ -633,18 +567,7 @@ Underc
 Under 
 Underw
 Underg
-Underw
-Underg
-Under 
-Underw
-Underg
-Underw
-Underw
-Under 
-Underw
-Underg
-Underw
-Unforg
+Under
 Unholy
 Unplea
 Unreal
@@ -655,7 +578,6 @@ Vampir
 Vegeta
 Viking
 Violen
-Virtua
 Virtua
 Wacky
 Wander
@@ -671,28 +593,17 @@ Gone W
 Wonder
 Wooden
 World
-World 
-World 
-World 
-World
-World 
-World 
 Wrath 
 WWII
 Warfar
 Warrio
 Wars
 World
-World 
-World 
 - Tota
 Ye Old
 Yoshi'
 Zany
 Zombie
-Zombie
-----
-3D
 Acid
 Aerobi
 Afro
@@ -770,7 +681,6 @@ Bomb
 Bomber
 Bong
 Bongo
-Booty
 Bow Hu
 Hunt
 Hunter
@@ -859,7 +769,6 @@ Demon
 Dentis
 Desert
 in the
-Devil
 Dinosa
 Disco
 Dodgeb
@@ -915,7 +824,6 @@ Fun No
 Funk
 Furry
 Ghost
-Gimp
 Gnome
 Go-Kar
 Goblin
@@ -1034,7 +942,6 @@ Knight
 Nightm
 Ninja
 Nuclea
-Nudist
 Octopu
 Office
 Ostric
@@ -1075,7 +982,6 @@ Pokemo
 Police
 Polka
 Pony
-Porn
 Prince
 Prison
 Progra
@@ -1117,7 +1023,6 @@ Sandwi
 Scoote
 Scorch
 Sewer
-Sex
 Shadow
 Shark
 Shavin
@@ -1220,7 +1125,6 @@ Yoga
 Zambon
 Zombie
 Zombie
-----
 - 2nd 
 - 3rd 
 1942
@@ -1622,7 +1526,6 @@ World
 Wrangl
 X
 XP
-XXX
 X-trem
 Yoga
 Z
