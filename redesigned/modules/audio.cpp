@@ -35,14 +35,36 @@ Audio::Audio()
 ------------------------------------------------------------------------------*/
 int Audio::playMusic(const char* filename)
 {
-    //if (!buffer_.loadFromFile(filename))
     if (!music_.openFromFile(filename))
         return EXIT_FAILURE;
 
-    //sound_ = sf::Sound(buffer_);
-    //sound_.play();
     music_.play();
 
+
+    return EXIT_SUCCESS;
+}
+
+/*------------------------------------------------------------------------------
+-- FUNCTION:    playSoundEffect
+--
+-- DATE:        2013/03/11
+--
+-- DESIGNER:    Luke Tao, Steve Lo
+-- PROGRAMMER:  Aaron Lee
+--
+-- INTERFACE:   void Audio::playSoundEffect()
+--
+-- RETURNS:     int -- 1 if failed to open file
+--
+-- DESCRIPTION: load  short sound file then play it
+------------------------------------------------------------------------------*/
+int Audio::playSoundEffect(const char* filename)
+{
+    if (!buffer_.loadFromFile(filename))
+        return EXIT_FAILURE;
+
+    sound_ = sf::Sound(buffer_);
+    sound_.play();
 
     return EXIT_SUCCESS;
 }
