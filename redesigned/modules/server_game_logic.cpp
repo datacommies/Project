@@ -681,18 +681,20 @@ double distance(Point p, Point q)
   return sqrt( pow(q.x-p.x,2) + pow(q.y-p.y, 2));
 }
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:    updateMovement
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:    David Czech, Behnam Bastami
+-- PROGRAMMER:  Darry Danzig, Behnam Bastami, David Czech, Jesse Braham
 --
--- INTERFACE:   
+-- INTERFACE:   void ServerGameLogic::updateMovement (int team, int otherteam)
 --
--- RETURNS:     
+-- RETURNS:     void
 --
--- DESCRIPTION: 
+-- DESCRIPTION: This function handles player movment.  It validates positions
+--              (ensuring players don't leave the map), and performs collision
+--              detection.  Also deals with player deaths and player respawns.
 ------------------------------------------------------------------------------*/
 void ServerGameLogic::updateMovement (int team, int otherteam) {
 for (unsigned int i = 0; i < teams[team].players.size(); ++i) {
@@ -1154,18 +1156,20 @@ void ServerGameLogic::handleDeaths()
   updateMaps();
 }
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:    handlePlayerDeath
 --
--- DATE:        2013/03/22
+-- DATE:        2013/04/11
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:    David Czech, Jesse Braham
+-- PROGRAMMER:  David Czech, Jesse Braham
 --
--- INTERFACE:   
+-- INTERFACE:   void ServerGameLogic::handlePlayerDeath(Player *player)
 --
--- RETURNS:     
+-- RETURNS:     void
 --
--- DESCRIPTION: 
+-- DESCRIPTION: This function checks if the player is alive or dead.  If the
+--              Player is alive, the opposing team is given a bonus, and the
+--              player's time of death is set.
 ------------------------------------------------------------------------------*/
 void ServerGameLogic::handlePlayerDeath(Player *player)
 {
@@ -1247,8 +1251,8 @@ void ServerGameLogic::handleCastleDeath()
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   Jesse Wright, Dennis Ho
--- PROGRAMMER: Dennis Ho
+-- DESIGNER:   Albert Liao
+-- PROGRAMMER: Albert Liao
 --
 -- INTERFACE:   int getPlayerRole(int teamNumber, int playerID)
 --
@@ -1273,18 +1277,20 @@ int ServerGameLogic::getPlayerRole(int teamNumber, int playerID)
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:    getPlayerIsAlive
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:    Albert Liao, Jesse Braham
+-- PROGRAMMER:  Albert Liao, Jesse Braham
 --
--- INTERFACE:   
+-- INTERFACE:   bool ServerGameLogic::getPlayerIsAlive(int teamNumber, int playerID)
 --
--- RETURNS:     
+-- RETURNS:     Boolean; whether or not the player is alive.
 --
--- DESCRIPTION: 
+-- DESCRIPTION: This function returns the status of the player, whether he is
+--              alive or dead.  If the player's Time of Death (tod) is 0, the
+--              player is alive.  If it is not, the player is dead.
 ------------------------------------------------------------------------------*/
 bool ServerGameLogic::getPlayerIsAlive(int teamNumber, int playerID)
 {
