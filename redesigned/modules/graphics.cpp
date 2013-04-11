@@ -871,7 +871,7 @@ void Graphics::startGame()
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   exitLobby
 --
 -- DATE:        2013/03/22
 --
@@ -1028,18 +1028,19 @@ void Graphics::drawInfo(sf::RenderWindow& window)
     window.draw(infoSprite);
 }
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   drawHealthBar
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   David Czech
+-- PROGRAMMER: David Czech
 --
--- INTERFACE:   
+-- INTERFACE:   drawHealthBar(sf::RenderWindow& window, float x, float y, int health, int maxhealth)
 --
--- RETURNS:     
+-- RETURNS:     void
 --
--- DESCRIPTION: 
+-- DESCRIPTION: draw a 25px by 3px health bar with a red background and green foreground.
+--              green bar size is calculated with health over max_health.
 ------------------------------------------------------------------------------*/
 void Graphics::drawHealthBar(sf::RenderWindow& window, float x, float y, int health, int maxhealth)
 
@@ -1059,18 +1060,18 @@ void Graphics::drawHealthBar(sf::RenderWindow& window, float x, float y, int hea
     window.draw(healthbar);	
 }
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   drawTeamCircle
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   David Czech
+-- PROGRAMMER: David Czech
 --
--- INTERFACE:   
+-- INTERFACE:   drawTeamCircle (sf::RenderWindow& window, int team, float x, float y)
 --
--- RETURNS:     
+-- RETURNS:     void
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Draws a 25px cicrle indicating a unit's team (0 for red, 1 for blue).
 ------------------------------------------------------------------------------*/
 void Graphics::drawTeamCircle (sf::RenderWindow& window, int team, float x, float y) {
     sf::CircleShape cs(25/2);
