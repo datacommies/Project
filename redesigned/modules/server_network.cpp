@@ -60,7 +60,7 @@ ServerNetwork::ServerNetwork(ServerGameLogic& serverGameLogic)
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Ron Bellido, David Czech
--- PROGRAMMER: Ron Bellido
+-- PROGRAMMER: Ron Bellido, Aaron Lee
 --
 -- INTERFACE:   int ServerNetwork::initSock(int port)
 --                  port - the port to start the server
@@ -100,7 +100,7 @@ int ServerNetwork::initSock(int port)
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Ron Bellido, David Czech
--- PROGRAMMER: Ron Bellido
+-- PROGRAMMER: Ron Bellido, Aaron Lee
 --
 -- INTERFACE:   void initNetwork()
 --
@@ -352,7 +352,7 @@ void ServerNetwork::error (const char *msg)
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   David Czech, Ron Bellido
--- PROGRAMMER: David Czech, Ron Bellido
+-- PROGRAMMER: David Czech, Ron Bellido, Aaron Lee
 --
 -- INTERFACE:   void* handleInput(void* args)
 --
@@ -483,7 +483,7 @@ void* ServerNetwork::handleClientRequest(void* args)
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   David Czech, Behnam Bastami 
--- PROGRAMMER: David Czech, Behnam Bastami 
+-- PROGRAMMER: David Czech, Behnam Bastami, Aaron Lee 
 --
 -- INTERFACE:   void* handleClient(void* args)
 --

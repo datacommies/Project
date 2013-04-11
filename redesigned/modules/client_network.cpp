@@ -40,8 +40,8 @@ extern Graphics* globalGraphics;
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   Aaron Lee
--- PROGRAMMER: Aaron Lee, David Czech
+-- DESIGNER:   David Czech
+-- PROGRAMMER: Ronald Bellido, David Czech
 --
 -- INTERFACE:   ClientNetwork()
 --
@@ -65,8 +65,8 @@ ClientNetwork::ClientNetwork() {
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   Aaron Lee
--- PROGRAMMER: Aaron Lee
+-- DESIGNER:   Ronald Bellido
+-- PROGRAMMER: Ronald Bellido
 --
 -- INTERFACE:   ~ClientNetwork()
 --
@@ -157,7 +157,7 @@ bool ClientNetwork::connectToServer()
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   David Czech, Behnam Bastami, Aaron Lee
+-- DESIGNER:   David Czech, Behnam Bastami
 --
 -- PROGRAMMER: David Czech, Behnam Bastami, Ron Bellido, Luke Tao, Dennis Ho
 --
@@ -335,7 +335,7 @@ void ClientNetwork::recvReply() {
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   Behnam Bastami, Aaron Lee
+-- DESIGNER:   Behnam Bastami
 -- PROGRAMMER: Behnam Bastami
 --
 -- INTERFACE:   createUnit(int playerId, UnitType type, Point location, int path)
