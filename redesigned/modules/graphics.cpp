@@ -128,6 +128,8 @@ void * init (void * in)
                     Control::get()->AddNewCalledKey(sf::Keyboard::S);
                 else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
                     Control::get()->AddNewCalledKey(sf::Keyboard::D);
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return));
+                    g->sendMessage();
                 Control::get()->RunAllKeys();
             } else if ((event.type == sf::Event::KeyReleased) && (g->clientGameLogic_.gameState_ != LOBBY))
             {
