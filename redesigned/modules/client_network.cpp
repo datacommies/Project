@@ -11,18 +11,19 @@ player_matchmaking_t empty = {{0, 0}, "Empty", 0, 0, 0, false};
 extern Graphics* globalGraphics; 
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   ClientNetwork (constructor)
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Aaron Lee
 -- PROGRAMMER: Aaron Lee
 --
--- INTERFACE:   
+-- INTERFACE:   ClientNetwork()
 --
--- RETURNS:     
+-- RETURNS:     none
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Constructor for ClientNetwork object. Initializes the 
+--	blue team and the red team
 ------------------------------------------------------------------------------*/
 ClientNetwork::ClientNetwork() {
 	for (int i = 0; i < 5; ++i) {	
@@ -34,9 +35,20 @@ ClientNetwork::ClientNetwork() {
 
 }
 
-/* Destructor
- * Aaron Lee
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   ~ClientNetwork (destructor)
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   Aaron Lee
+-- PROGRAMMER: Aaron Lee
+--
+-- INTERFACE:   ~ClientNetwork()
+--
+-- RETURNS:     none
+--
+-- DESCRIPTION: Destructor for ClientNetwork object. Closes the connection socket
+------------------------------------------------------------------------------*/
 ClientNetwork::~ClientNetwork()
 {
 	shutdown(connectsock, SHUT_RDWR);
@@ -44,18 +56,19 @@ ClientNetwork::~ClientNetwork()
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   connectToServer
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   David Czech, Behnam Bastami
 -- PROGRAMMER: David Czech, Ron Bellido, Behnam Bastami
 --
--- INTERFACE:   
+-- INTERFACE:   bool connectToServer()
 --
--- RETURNS:     
+-- RETURNS:     true on success and false on failure
 --
--- DESCRIPTION: 
+-- DESCRIPTION: this function creates a connection socket that connects the client
+-- to the server
 ------------------------------------------------------------------------------*/
 bool ClientNetwork::connectToServer()
 {
@@ -114,18 +127,21 @@ bool ClientNetwork::connectToServer()
 	return true;
 }
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   recvReply
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   David Czech, Behnam Bastami, Aaron Lee
--- PROGRAMMER: David Czech, Behnam Bastami, Ron Bellido
 --
--- INTERFACE:   
+-- PROGRAMMER: David Czech, Behnam Bastami, Ron Bellido, Luke Tao, Dennis Ho
 --
--- RETURNS:     
+-- INTERFACE:   void recvReply()
 --
--- DESCRIPTION: 
+-- RETURNS: void     
+--
+-- DESCRIPTION: this function receives a reply from the server and performs different 
+-- operations based on the message type received, for example if it receives a resource update
+-- message, it will update the team's resources, etc...
 ------------------------------------------------------------------------------*/
 void ClientNetwork::recvReply() {
 	long n;
@@ -286,18 +302,22 @@ void ClientNetwork::recvReply() {
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   createUnit
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Behnam Bastami, Aaron Lee
 -- PROGRAMMER: Behnam Bastami
 --
--- INTERFACE:   
+-- INTERFACE:   createUnit(int playerId, UnitType type, Point location, int path)
+--					playerId - the ID of the player that's creating the unit
+--					type - the type of the unit to create
+--					location - the location where the unit will be spawned/created
+--					path - the path that this unit will follow (only for creep type units)
 --
--- RETURNS:     
+-- RETURNS:     false
 --
--- DESCRIPTION: 
+-- DESCRIPTION: this function sends a request for creating a unit
 ------------------------------------------------------------------------------*/
 bool ClientNetwork::createUnit(int playerId, UnitType type, Point location, int path)
 {
@@ -316,19 +336,25 @@ bool ClientNetwork::createUnit(int playerId, UnitType type, Point location, int 
 	send(connectsock, &request, sizeof(request_create_t), 0);
     return false;
 }
+
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   updatePlayerLobby
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   David Czech
 -- PROGRAMMER: David Czech, Ron Bellido
 --
--- INTERFACE:   
+-- INTERFACE:  bool updatePlayerLobby (int team, int role, const char* name, bool ready)
+--					team - the team this player will join
+--					role - the role this player will have
+--					name - name of the player
+--					ready - am I ready to play?
 --
--- RETURNS:     
+-- RETURNS:    true if succesful, otherwise false
 --
--- DESCRIPTION: 
+-- DESCRIPTION: this function will perform general lobby updates for the client
+-- ie: select role, switch team, ready state
 ------------------------------------------------------------------------------*/
 
 bool ClientNetwork::updatePlayerLobby (int team, int role, const char* name, bool ready) {
@@ -360,18 +386,20 @@ bool ClientNetwork::updatePlayerLobby (int team, int role, const char* name, boo
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   movePlayer
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Behnam Bastami, Dennis Ho
 -- PROGRAMMER: Behnam Bastami
 --
--- INTERFACE:   
+-- INTERFACE:  bool movePlayer(int playerId, Direction direction)
+--					playerId - the ID of the player that will move
+--					direction - the direction the player will move to
 --
--- RETURNS:     
+-- RETURNS:    false
 --
--- DESCRIPTION: 
+-- DESCRIPTION: this function sends a move request to the server
 ------------------------------------------------------------------------------*/
 bool ClientNetwork::movePlayer(int playerId, Direction direction)
 {
@@ -406,18 +434,20 @@ bool ClientNetwork::attack(int playerId, Direction direction)
 
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   player_update
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   David Czech
 -- PROGRAMMER: David Czech, Ron Bellido
 --
--- INTERFACE:   
+-- INTERFACE:   void player_update (player_matchmaking_t * p)
+--					p - the details of the new player to be updated
 --
--- RETURNS:     
+-- RETURNS:     void
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Updates every single client connected with the given player
+details
 ------------------------------------------------------------------------------*/
 void ClientNetwork::player_update (player_matchmaking_t * p) {
 	printf("Player: %d %s\t" "Team: %d\t"
@@ -444,19 +474,22 @@ void ClientNetwork::player_update (player_matchmaking_t * p) {
 	else 
 		waiting.push_back(*p);
 }
+
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   player_leave
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   David Czech
 -- PROGRAMMER: David Czech, Ron Bellido
 --
--- INTERFACE:   
+-- INTERFACE:   void player_leave (player_matchmaking_t * p)
+--					p - the details of the player that's about to leave the session
 --
--- RETURNS:     
+-- RETURNS:     void
 --
--- DESCRIPTION: 
+-- DESCRIPTION: This function will ensure that every client is updated that the given
+player left the current session
 ------------------------------------------------------------------------------*/
 void ClientNetwork::player_leave (player_matchmaking_t * p) {
 	printf("Player Left: %s\n", p->name);
@@ -473,54 +506,60 @@ void ClientNetwork::player_leave (player_matchmaking_t * p) {
 		}
 	}
 }
+
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   msg_mapname
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   David Czech
 -- PROGRAMMER: David Czech
 --
--- INTERFACE:   
+-- INTERFACE:   void ClientNetwork::msg_mapname (char * map) 
+--					map - the name of the map
 --
--- RETURNS:     
+-- RETURNS:     void
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Prints the name of the map
 ------------------------------------------------------------------------------*/
 void ClientNetwork::msg_mapname (char * map) {
 	printf("Got map name: %s\n", map);
 }
+
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   msg_chat
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   David Czech
 -- PROGRAMMER: David Czech
 --
--- INTERFACE:   
+-- INTERFACE:   void ClientNetwork::msg_chat (char * text)
+--					text - the chat message to print
 --
--- RETURNS:     
+-- RETURNS:     void
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Prints the chat message
 ------------------------------------------------------------------------------*/
 void ClientNetwork::msg_chat (char * text) {
 	printf("message: %s\n", text);
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   send_chatmsg
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Ron Bellido, Behnam Bastami
 -- PROGRAMMER: Ron Bellido
 --
--- INTERFACE:   
+-- INTERFACE:   void ClientNetwork::send_chatmsg(string msg)
+--					msg - the message to send
 --
--- RETURNS:     
+-- RETURNS:     void
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Creates a MSG_CHAT request to the server with the given
+--	message
 ------------------------------------------------------------------------------*/
 void ClientNetwork::send_chatmsg(string msg) {
 	chatmsg_t * chat = (chatmsg_t*) new char[sizeof(header_t) + msg.size()];
@@ -540,11 +579,16 @@ void ClientNetwork::send_chatmsg(string msg) {
 --
 -- PROGRAMMER: David Czech, Behnam Bastami
 --
--- INTERFACE:   
+-- INTERFACE:   int recv_complete (int sockfd, void *buf, size_t len, int flags) 
+--					sockfd - the socket to receive the payload from
+--					buf - the payload that will receive
+--					len - the size of the payload
+--					flags - the flag to pass to recv() function
 --
--- RETURNS:     
+-- RETURNS:     the number of the total bytes read
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Function to call that will completely receive a payload 
+--	(e.g. player_matchmaking_t, map_t, etc.)
 ------------------------------------------------------------------------------*/
 int ClientNetwork::recv_complete (int sockfd, void *buf, size_t len, int flags) {
     size_t bytesRead = 0;
