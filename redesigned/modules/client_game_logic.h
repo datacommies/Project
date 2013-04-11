@@ -40,6 +40,7 @@ public:
    // 
    // required because theres no reference to clientNetwork.
    void ready() {
+      waitingForStart = true;
       clientNetwork_.sendReady();
    }
 
