@@ -119,7 +119,7 @@ bool ClientNetwork::connectToServer()
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   David Czech, Behnam Bastami, Aaron Lee
--- PROGRAMMER: David Czech, Behnam Bastami, Ron Bellido
+-- PROGRAMMER: David Czech, Behnam Bastami, Ron Bellido, Luke Tao
 --
 -- INTERFACE:   
 --

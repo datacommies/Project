@@ -4,7 +4,7 @@
 -- DATE:        2013/03/11
 --
 -- MAINTAINERS: Callum Styan, David Czech, Dennis Ho, Albert Liao, 
---              Jesse Wright, Behnam Bastami
+--              Jesse Wright, Behnam Bastami, Luke Tao
 --
 -- FUNCTIONS:   ClientGameLogic constructor
 --              start
@@ -41,13 +41,14 @@ ClientGameLogic::ClientGameLogic(ClientNetwork& clientNetwork)
 -- DATE:        2013/03/11
 --
 -- DESIGNER:    David Czech
--- PROGRAMMER:  David Czech
+-- PROGRAMMER:  David Czech, Luke Tao
 --
 -- INTERFACE:   void ClientGameLogic::start ()
 --
 -- RETURNS:     void
 --
--- DESCRIPTION: This function sets the gameState_ variable to IN_GAME. 
+-- DESCRIPTION: This function sets the gameState_ variable to IN_GAME. Plays
+--              "start" sound effect when all the players start the game.
 ------------------------------------------------------------------------------*/
 void ClientGameLogic::start () {
    audio_.stopMusic();
@@ -116,13 +117,14 @@ void ClientGameLogic::menu () {
 -- DATE:        2013/03/11
 --
 -- DESIGNER:    Behnam Bastami
--- PROGRAMMER:  Behnam Bastami
+-- PROGRAMMER:  Behnam Bastami, Luke Tao
 --
 -- INTERFACE:   void ClientGameLogic::win ()
 --
 -- RETURNS:     void
 --
--- DESCRIPTION: This function sets the gameState_ variable to WON_GAME.
+-- DESCRIPTION: This function sets the gameState_ variable to WON_GAME. Plays
+--              the "win" sound effect if the team wins the game.
 ------------------------------------------------------------------------------*/
 void ClientGameLogic::win () {
    gameState_ = WON_GAME;
@@ -136,13 +138,14 @@ void ClientGameLogic::win () {
 -- DATE:        2013/03/11
 --
 -- DESIGNER:    Behnam Bastami
--- PROGRAMMER:  Behnam Bastami
+-- PROGRAMMER:  Behnam Bastami, Luke Tao
 --
 -- INTERFACE:   void ClientGameLogic::lose ()
 --
 -- RETURNS:     void
 --
--- DESCRIPTION: This function sets the gameState_ variable to LOST_GAME. 
+-- DESCRIPTION: This function sets the gameState_ variable to LOST_GAME. Plays
+--              the "loses" sound effect if the team loses the game.
 ------------------------------------------------------------------------------*/
 void ClientGameLogic::lose () {
    gameState_ = LOST_GAME;
