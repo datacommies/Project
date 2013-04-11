@@ -3,7 +3,7 @@
 --
 -- DATE:        2013/04/07
 --
--- MAINTAINERS: Callum Styan
+-- MAINTAINERS: Callum Styan, Darry Danzig
 --
 -- FUNCTIONS:   initPaths
 --              initCastlePositions
@@ -166,7 +166,7 @@ void GameMap::initCastlePositions(){
 --
 -- RETURNS:     void
 --
--- DESCRIPTION: Initializes the positions of the players for both teams.
+-- DESCRIPTION: Initializes the starting positions of the players for both teams.
 ------------------------------------------------------------------------------*/
 void GameMap::initPlayerPositions(){
     //*** team 1 player starting positions ***
@@ -241,8 +241,8 @@ void GameMap::initMap(){
 --
 -- DATE:        April 7, 2013
 --
--- DESIGNER:    Callum Styan
--- PROGRAMMER:  Callum Styan
+-- DESIGNER:    Darry Danzig
+-- PROGRAMMER:  Darry Danzig
 --
 -- INTERFACE:   void GameMap::_init()
 --
@@ -267,8 +267,8 @@ void GameMap::_init() {
 --
 -- DATE:        April 7, 2013
 --
--- DESIGNER:    Callum Styan
--- PROGRAMMER:  Callum Styan
+-- DESIGNER:    Darry Danzig
+-- PROGRAMMER:  Darry Danzig
 --
 -- INTERFACE:   GameMap::GameMap(int max_x, int max_y): max_x_(max_x), max_y_(max_y)
 --
@@ -296,8 +296,8 @@ int GameMap::max(int a, int b)
 --
 -- DATE:        April 7, 2013
 --
--- DESIGNER:    Callum Styan
--- PROGRAMMER:  Callum Styan
+-- DESIGNER:    Darry Danzig
+-- PROGRAMMER:  Darry Danzig
 --
 -- INTERFACE:   void GameMap::printGrid()
 --
@@ -327,8 +327,8 @@ void GameMap::printGrid() {
 --
 -- DATE:        April 7, 2013
 --
--- DESIGNER:    Callum Styan
--- PROGRAMMER:  Callum Styan
+-- DESIGNER:    Darry Danzig
+-- PROGRAMMER:  Darry Danzig
 --
 -- INTERFACE:   void GameMap::~GameMap()
 --
@@ -351,8 +351,8 @@ GameMap::~GameMap() {
 --
 -- DATE:        April 7, 2013
 --
--- DESIGNER:    Callum Styan
--- PROGRAMMER:  Callum Styan
+-- DESIGNER:    Darry Danzig
+-- PROGRAMMER:  Darry Danzig
 --
 -- INTERFACE:   bool GameMap::isValidPos(Point pos)
 --
@@ -372,8 +372,8 @@ bool GameMap::isValidPos(Point pos)
 --
 -- DATE:        April 7, 2013
 --
--- DESIGNER:    Callum Styan
--- PROGRAMMER:  Callum Styan
+-- DESIGNER:    Darry Danzig
+-- PROGRAMMER:  Darry Danzig
 --
 -- INTERFACE:   void GameMap::_helperBuild(Unit *unit, UnitType type,
 --                                          Point pos, int team_no)
@@ -406,8 +406,8 @@ void GameMap::_helperBuild(Unit *unit, UnitType type, Point pos, int team_no) {
 --
 -- DATE:        April 7, 2013
 --
--- DESIGNER:    Callum Styan
--- PROGRAMMER:  Callum Styan
+-- DESIGNER:    Darry Danzig
+-- PROGRAMMER:  Darry Danzig
 --
 -- INTERFACE:   void GameMap::build(Team teams[])
 --
@@ -444,8 +444,8 @@ void GameMap::build(Team teams[]) {
 --
 -- DATE:        April 7, 2013
 --
--- DESIGNER:    Callum Styan
--- PROGRAMMER:  Callum Styan
+-- DESIGNER:    Darry Danzig
+-- PROGRAMMER:  Darry Danzig
 --
 -- INTERFACE:   void GameMap::reset()
 --
@@ -467,8 +467,8 @@ void GameMap::reset() {
 --
 -- DATE:        April 7, 2013
 --
--- DESIGNER:    Callum Styan
--- PROGRAMMER:  Callum Styan
+-- DESIGNER:    Darry Danzig
+-- PROGRAMMER:  Darry Danzig
 --
 -- INTERFACE:   void GameMap::addUnit(Unit *unit, Point pos)
 --
@@ -492,8 +492,8 @@ void GameMap::addUnit(Unit *unit, Point pos)
 --
 -- DATE:        April 7, 2013
 --
--- DESIGNER:    Callum Styan
--- PROGRAMMER:  Callum Styan
+-- DESIGNER:    Darry Danzig
+-- PROGRAMMER:  Darry Danzig
 --
 -- INTERFACE:   void GameMap::removeUnit(Unit *unit)
 --
@@ -522,8 +522,8 @@ void GameMap::removeUnit(Unit *unit)
 --
 -- DATE:        April 7, 2013
 --
--- DESIGNER:    Callum Styan
--- PROGRAMMER:  Callum Styan
+-- DESIGNER:    Darry Danzig
+-- PROGRAMMER:  Darry Danzig
 --
 -- INTERFACE:   void GameMap::moveUnit(Unit *unit, Point new_pos)
 --
@@ -552,8 +552,8 @@ void GameMap::moveUnit(Unit *unit, Point new_pos)
 --
 -- DATE:        April 7, 2013
 --
--- DESIGNER:    Callum Styan
--- PROGRAMMER:  Callum Styan
+-- DESIGNER:    Darry Danzig
+-- PROGRAMMER:  Darry Danzig
 --
 -- INTERFACE:   void * GameMap::Malloc(size_t size)
 --
@@ -580,8 +580,8 @@ void * GameMap::Malloc(size_t size) {
 --
 -- DATE:        April 7, 2013
 --
--- DESIGNER:    Callum Styan
--- PROGRAMMER:  Callum Styan
+-- DESIGNER:    Darry Danzig
+-- PROGRAMMER:  Darry Danzig
 --
 -- INTERFACE:   Unit *GameMap::getUnitFromId(int id)
 --
@@ -612,8 +612,8 @@ Unit *GameMap::getUnitFromId(int id)
 --
 -- DATE:        April 7, 2013
 --
--- DESIGNER:    Callum Styan
--- PROGRAMMER:  Callum Styan
+-- DESIGNER:    Darry Danzig
+-- PROGRAMMER:  Darry Danzig
 --
 -- INTERFACE:   int GameMap::getTeamNo(int id) 
 --
@@ -638,8 +638,8 @@ int GameMap::getTeamNo(int id)
 --
 -- DATE:        April 7, 2013
 --
--- DESIGNER:    Callum Styan
--- PROGRAMMER:  Callum Styan
+-- DESIGNER:    Darry Danzig
+-- PROGRAMMER:  Darry Danzig
 --
 -- INTERFACE:   Unit *GameMap::getUnit(Point pos)
 --

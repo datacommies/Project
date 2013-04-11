@@ -26,6 +26,9 @@ public:
           int atkspd=0, int percep=0, int atkcnt=0, int wall=0);
     std::string serializeTower();
 
+    virtual void    Update(Team&a){
+        return Unit::Update(a);
+    };
     virtual UnitType getType() const { return TOWER; }
 	virtual size_t getSize() const { return Unit::getSize() + sizeof(tower_t); }
 };

@@ -160,13 +160,14 @@ void ServerNetwork::gameOver(int client_, const int winner)
 -- DESIGNER:   Behnam Bastami
 -- PROGRAMMER: Behnam Bastami, Dennis Ho
 --
+<<<<<<< HEAD
 -- INTERFACE:   bool sync(int client_, int team_)
 --                  client_ - the socket for the communication channel with this server
 -                   team_ - the team to sync 
 --
 -- RETURNS:     true
 --
--- DESCRIPTION: Function that syncs a team with the current game state
+-- DESCRIPTION: Synchronizes the current game state with the specified client
 ------------------------------------------------------------------------------*/
 bool ServerNetwork::sync(int client_, int team_)
 {

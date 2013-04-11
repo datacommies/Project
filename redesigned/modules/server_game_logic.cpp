@@ -8,8 +8,6 @@
 --
 -- FUNCTIONS:
 --              
---
--- DESCRIPTION: 
 ------------------------------------------------------------------------------*/
 
 #include "server_game_logic.h"
@@ -17,7 +15,8 @@
 #include "../units/castle.h"
 #include "../units/AiController.h"
 #include "../units/player.h"
-#include "../units/basic_tower.h"
+#include "../units/electro_tower.h"
+#include "../units/splash_tower.h"
 #include <stdio.h>
 #include <signal.h>
 #include <sys/time.h>
@@ -99,18 +98,18 @@ int ServerGameLogic::getWinner()
   return 2;
 }
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   initializeCastles
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Darry Danzig, Callum Styan
+-- PROGRAMMER: Darry Danzig, Callum Styan, Dennis Ho
 --
 -- INTERFACE:   
 --
--- RETURNS:     
+-- RETURNS:     void
 --
--- DESCRIPTION: 
+-- DESCRIPTION: creates each teams castle and it's predefined position
 ------------------------------------------------------------------------------*/
 void ServerGameLogic::initializeCastles() 
 {
@@ -136,18 +135,18 @@ void ServerGameLogic::initializeCastles()
 
 }
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   initializeCreeps
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Darry Danzig, Callum Styan
+-- PROGRAMMER: Darry Danzig, Callum Styan
 --
 -- INTERFACE:   
 --
--- RETURNS:     
+-- RETURNS:     void
 --
--- DESCRIPTION: 
+-- DESCRIPTION: initializes creeps to spawn at the start of the game
 ------------------------------------------------------------------------------*/
 void ServerGameLogic::initializeCreeps()
 {
@@ -169,18 +168,18 @@ void ServerGameLogic::initializeCreeps()
   }
 }
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   initializeTowers
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Darry Danzig, Callum Styan
+-- PROGRAMMER: Darry Danzig, Callum Styan
 --
 -- INTERFACE:   
 --
--- RETURNS:     
+-- RETURNS:     void
 --
--- DESCRIPTION: 
+-- DESCRIPTION: initializes towers to spawn at the start of the game
 ------------------------------------------------------------------------------*/
 void ServerGameLogic::initializeTowers()
 {
@@ -557,8 +556,10 @@ void ServerGameLogic::updateCreate(CommandData& command)
     case CASTLE:
     case TOWER:
     case TOWER_ONE:
+    case TOWER_TWO:
+    case TOWER_THREE:
       { 
-        createTower(team_no, command.location);        
+        createTower(team_no, command.location, command.type);  
         break;
       }
     default:
@@ -686,7 +687,7 @@ double distance(Point p, Point q)
 -- DATE:        2013/03/22
 --
 -- DESIGNER:    David Czech, Behnam Bastami
--- PROGRAMMER:  Darry Danzig, Behnam Bastami, David Czech, Jesse Braham
+-- PROGRAMMER:  Darry Danzig, Behnam Bastami, David Czech, Jesse Braham, Callum Styan
 --
 -- INTERFACE:   void ServerGameLogic::updateMovement (int team, int otherteam)
 --
@@ -803,9 +804,6 @@ void ServerGameLogic::update()
     CommandData newCommand = requestedCommands.front();
     requestedCommands.pop();
 
-    std::cout << "command type is: " << newCommand.cmd << std::endl;
-    std::cout << "create creep type is: " << Create << std::endl;
-
     switch (newCommand.cmd) {
       case Create:
         updateCreate(newCommand);
@@ -843,7 +841,9 @@ void ServerGameLogic::updateTimer(int i)
   signal(SIGALRM, updateTimer);
 
 #ifndef TESTCLASS
+  pthread_mutex_lock( &gSGL->unit_mutex );
   AiUpdate(gSGL->teams[0], gSGL->teams[1]);
+  pthread_mutex_unlock( &gSGL->unit_mutex );
 #endif
 
   gSGL->update();
@@ -893,7 +893,7 @@ void ServerGameLogic::setAlarm()
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Behnam Bastami, Dennis Ho, Jesse Wright
--- PROGRAMMER: Behnam Bastami, Dennis Ho, Jesse Wright, Kevin Tangeman
+-- PROGRAMMER: Behnam Bastami, Dennis Ho, Jesse Wright, Kevin Tangeman, Callum Styan
 --
 -- INTERFACE:   void createCreep(int team_no, Point location, int path_no, UnitType unitType)
 --
@@ -925,7 +925,7 @@ void ServerGameLogic::createCreep(int team_no, Point location, int path_no, Unit
       atkcnt = INIT_CREEP_ATKCNT;
       spd = INIT_CREEP_SPD;
     break;
-    case CREEP_TWO: // Tank (lots of health, but slower than fuck)
+    case CREEP_TWO: // Tank (lots of health, but moves slowly)
       hp = INIT_CREEP_HP * 3;
       atkdmg = INIT_CREEP_ATKDMG + 4;
       atkrng = INIT_CREEP_ATKRNG * 4;
@@ -942,6 +942,8 @@ void ServerGameLogic::createCreep(int team_no, Point location, int path_no, Unit
       percep = INIT_CREEP_PERCEP * 10;
       atkcnt = INIT_CREEP_ATKCNT;
       spd = INIT_CREEP_SPD * 1.5;
+    break;
+    default:
     break;
   }
   
@@ -968,20 +970,20 @@ void ServerGameLogic::createCreep(int team_no, Point location, int path_no, Unit
 
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   createTower
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Dennis Ho
 -- PROGRAMMER: Dennis Ho, Kevin Tangeman
 --
--- INTERFACE:   
+-- INTERFACE:   void ServerGameLogic::createTower(int team_no, Point location)
 --
 -- RETURNS:     
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Creates a tower
 ------------------------------------------------------------------------------*/
-void ServerGameLogic::createTower(int team_no, Point location)
+void ServerGameLogic::createTower(int team_no, Point location, UnitType ut)
 {
    Point castleLoc;   
   double distX, distY;
@@ -1005,8 +1007,22 @@ void ServerGameLogic::createTower(int team_no, Point location)
     int uid = next_unit_id_++;
 
     // create new tower                     
-    BasicTower *tower = new BasicTower(uid, team_no, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
+    Tower *tower;
+    
+    if (ut == TOWER_ONE)
+      tower = new BasicTower(uid, team_no, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
                            INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);
+    else if (ut == TOWER_TWO)
+      tower = new ElectroTower(uid, team_no, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG*2, 
+                           INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);
+    else if (ut == TOWER_THREE)
+      tower = new SplashTower(uid, team_no, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
+                           INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL, 10, 60);
+    else
+      tower = new BasicTower(uid, team_no, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
+                           INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);
+    //tower->team = team_no;
+
         
     // Add tower to team
     teams[team_no].addUnit(tower);
@@ -1021,18 +1037,18 @@ void ServerGameLogic::createTower(int team_no, Point location)
 
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   createPlayer
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   Dennis Ho
--- PROGRAMMER: Dennis Ho
+-- DESIGNER:   Dennis Ho, Albert Liao, Jesse Wright, Callum Styan, David Czech, Behnam Bastami, Jesse Braham
+-- PROGRAMMER: Dennis Ho, Albert Liao, Jesse Wright, Callum Styan, David Czech, Behnam Bastami, Jesse Braham
 --
--- INTERFACE:   
+-- INTERFACE:   void ServerGameLogic::createPlayer(int team_no, Point location, int client_id, int role)
 --
 -- RETURNS:     
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Creates a human controlled player
 ------------------------------------------------------------------------------*/
 void ServerGameLogic::createPlayer(int team_no, Point location, int client_id, int role)
 {
@@ -1046,7 +1062,7 @@ void ServerGameLogic::createPlayer(int team_no, Point location, int client_id, i
   std::cout << "role: " << role << std::endl;
 
   switch (role){
-    case 0:
+    case 0: //mario, builder
       player->attackDamage = 8;
     break;
 
@@ -1078,18 +1094,18 @@ void ServerGameLogic::createPlayer(int team_no, Point location, int client_id, i
   std::cout << "adding player: " << player->clientID << " team: " << team_no << std::endl;
 }
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   respawnPlayer
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Dennis Ho
 -- PROGRAMMER: Dennis Ho
 --
--- INTERFACE:   
+-- INTERFACE:   void ServerGameLogic::respawnPlayer(Player* player, Point location)
 --
 -- RETURNS:     
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Respawns a dead player (This only resets state - does not create a new object)
 ------------------------------------------------------------------------------*/
 void ServerGameLogic::respawnPlayer(Player* player, Point location)
 {
@@ -1098,36 +1114,36 @@ void ServerGameLogic::respawnPlayer(Player* player, Point location)
   player->pendingDelete = false;
 }
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   giveTeamBonus
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Dennis Ho
 -- PROGRAMMER: Dennis Ho
 --
--- INTERFACE:   
+-- INTERFACE:   void ServerGameLogic::giveTeamBonus(int team_no, int amount)
 --
 -- RETURNS:     
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Gives a currency bonus to the specified team (used for when you kill an enemy)
 ------------------------------------------------------------------------------*/
 void ServerGameLogic::giveTeamBonus(int team_no, int amount)
 {
   teams[team_no].currency += amount;
 }
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   handleDeaths
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Dennis Ho
 -- PROGRAMMER: Dennis Ho
 --
--- INTERFACE:   
+-- INTERFACE:   void ServerGameLogic::handleDeaths()
 --
 -- RETURNS:     
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Detect and handle all unit deaths
 ------------------------------------------------------------------------------*/
 void ServerGameLogic::handleDeaths()
 {
@@ -1160,13 +1176,8 @@ void ServerGameLogic::handleDeaths()
 --
 -- DATE:        2013/04/11
 --
-<<<<<<< HEAD
--- DESIGNER:   Dennis Ho
--- PROGRAMMER: Dennis Ho
-=======
--- DESIGNER:    David Czech, Jesse Braham
--- PROGRAMMER:  David Czech, Jesse Braham
->>>>>>> 62b6a45399d278d5314457882105006d84c5a1c2
+-- DESIGNER:    Dennis Ho, David Czech, Jesse Braham
+-- PROGRAMMER:  Dennis Ho, David Czech, Jesse Braham
 --
 -- INTERFACE:   void ServerGameLogic::handlePlayerDeath(Player *player)
 --
@@ -1188,18 +1199,18 @@ void ServerGameLogic::handlePlayerDeath(Player *player)
   }
 }
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   handleCreepDeath
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Dennis Ho
 -- PROGRAMMER: Dennis Ho
 --
--- INTERFACE:   
+-- INTERFACE:   void ServerGameLogic::handleCreepDeath(Creep *creep)
 --
 -- RETURNS:     
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Handles a creep death event
 ------------------------------------------------------------------------------*/
 void ServerGameLogic::handleCreepDeath(Creep *creep)
 {
@@ -1210,18 +1221,18 @@ void ServerGameLogic::handleCreepDeath(Creep *creep)
   giveTeamBonus(creep->team == 0 ? 1 : 0, CREEP_KILL_BONUS);
 }
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   handleTowerDeath
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Dennis Ho
 -- PROGRAMMER: Dennis Ho
 --
--- INTERFACE:   
+-- INTERFACE:   void ServerGameLogic::handleTowerDeath(Tower *tower)
 --
 -- RETURNS:     
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Handles a tower (non-castle) death event
 ------------------------------------------------------------------------------*/
 void ServerGameLogic::handleTowerDeath(Tower *tower)
 {
@@ -1232,18 +1243,18 @@ void ServerGameLogic::handleTowerDeath(Tower *tower)
   giveTeamBonus(tower->team == 0 ? 1 : 0, TOWER_KILL_BONUS);
 }
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   handleCastleDeath
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Dennis Ho   
 -- PROGRAMMER: Dennis Ho
 --
--- INTERFACE:   
+-- INTERFACE:   void ServerGameLogic::handleCastleDeath()
 --
 -- RETURNS:     
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Handles a castle death event
 ------------------------------------------------------------------------------*/
 void ServerGameLogic::handleCastleDeath()
 {
