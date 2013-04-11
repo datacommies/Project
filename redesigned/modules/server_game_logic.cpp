@@ -521,14 +521,22 @@ void ServerGameLogic::updateCreate(CommandData& command)
   switch (command.type) {
     case CREEP:
       {  
-        // Check if 2 seconds has elapsed since the last creep creation for the team.
-        if(time(NULL) - lastCreepTime_[team_no] >= 2)
+        
+      }
+      case CREEP_ONE:
+      case CREEP_TWO:
+      case CREEP_THREE:
+      {
+          // Check if 1 seconds has elapsed since the last creep creation for the team.
+        if(time(NULL) - lastCreepTime_[team_no] >= 1)
         {
-          createCreep(team_no, command.location, command.pathID);
+          createCreep(team_no, command.location, command.pathID, command.type);
           lastCreepTime_[team_no] = time(NULL);
         }
         break;
+
       }
+
     case CASTLE:
     case TOWER:
     case TOWER_ONE:
@@ -576,7 +584,6 @@ void ServerGameLogic::updateAttack(CommandData& command)
     fprintf(stderr, "playerID not found file: %s line %d\n", __FILE__, __LINE__);
     return;
   }
-
   // Attack!!
   updateMaps();
 }
@@ -655,6 +662,17 @@ for (unsigned int i = 0; i < teams[team].players.size(); ++i) {
     
     Point new_position = teams[team].players[i]->position;
 
+    // std::cout << "TEAM: " << team << " PLAYER : " <<  i  << "TOD: " << teams[team].players[i]->tod  << std::endl;
+    if (teams[team].players[i]->tod != 0 && time(NULL) >= teams[team].players[i]->tod + 3)
+    {
+        respawnPlayer(teams[team].players[i], teams[team].players[i]->team == 0 ? gameMap_->team0start[0] : gameMap_->team1start[0]);
+        teams[team].players[i]->tod = 0;
+        continue;
+    }
+    
+    if (teams[team].players[i]->tod != 0) { // death
+        continue;
+    }
 
     if (dir & UP)
        new_position.y-= teams[team].players[i]->moveSpeed;
@@ -672,8 +690,8 @@ for (unsigned int i = 0; i < teams[team].players.size(); ++i) {
 	    teams[team].players[i]->position = new_position;
 
     for (unsigned int j = 0; j < teams[otherteam].players.size(); ++j) {
-      if (distance(teams[team].players[i]->position, teams[otherteam].players[j]->position) < 25) {
-        teams[otherteam].players[j]->health -= 1;
+      if (teams[otherteam].players[j]->tod == 0 && distance(teams[team].players[i]->position, teams[otherteam].players[j]->position) < 25) {
+        teams[otherteam].players[j]->health -= teams[team].players[i]->attackDamage;
         collided = true;
         break;
       }
@@ -681,7 +699,7 @@ for (unsigned int i = 0; i < teams[team].players.size(); ++i) {
 
     for (unsigned int j = 0; j < teams[otherteam].creeps.size(); ++j) {
       if (distance(teams[team].players[i]->position, teams[otherteam].creeps[j]->position) < 25) {
-        teams[otherteam].creeps[j]->health -= 1;
+        teams[otherteam].creeps[j]->health -= teams[team].players[i]->attackDamage;
         collided = true;
         break;
       }
@@ -689,7 +707,7 @@ for (unsigned int i = 0; i < teams[team].players.size(); ++i) {
 
     for (unsigned int j = 0; j < teams[otherteam].towers.size(); ++j) {
       if (distance(teams[team].players[i]->position, teams[otherteam].towers[j]->position) < 25) {
-        teams[otherteam].towers[j]->health -= 1;
+        teams[otherteam].towers[j]->health -= teams[team].players[i]->attackDamage;
         collided = true;
         break;
       }
@@ -817,17 +835,17 @@ void ServerGameLogic::setAlarm()
  * PRE:     Teams are initialized.
  * POST:    A creep has been created and added to the specified team. The team's currency has been
  *          decremented accordingly.
- * PROGRAMMER:
+ * PROGRAMMER: Jesse Wright, Someone else.
  * RETURNS:
  * NOTES:   
  *
  * REVISIONS: Kevin - Only creates creep if there is enough currency.
 
  */
-void ServerGameLogic::createCreep(int team_no, Point location, int path_no)
+void ServerGameLogic::createCreep(int team_no, Point location, int path_no, UnitType unitType)
 {  
   int uid = next_unit_id_++;
-  
+
   int hp = INIT_CREEP_HP;
   int atkdmg = INIT_CREEP_ATKDMG;
   int atkrng = INIT_CREEP_ATKRNG * 4;
@@ -835,6 +853,39 @@ void ServerGameLogic::createCreep(int team_no, Point location, int path_no)
   int percep = INIT_CREEP_PERCEP * 10;
   int atkcnt = INIT_CREEP_ATKCNT;
   int spd = INIT_CREEP_SPD;
+  switch(unitType)
+  {
+
+    case CREEP_ONE: // regular
+      hp = INIT_CREEP_HP;
+      atkdmg = INIT_CREEP_ATKDMG;
+      atkrng = INIT_CREEP_ATKRNG * 4;
+      atkspd = INIT_CREEP_ATKSPD;
+      percep = INIT_CREEP_PERCEP * 10;
+      atkcnt = INIT_CREEP_ATKCNT;
+      spd = INIT_CREEP_SPD;
+    break;
+    case CREEP_TWO: // Tank (lots of health, but slower than fuck)
+      hp = INIT_CREEP_HP * 3;
+      atkdmg = INIT_CREEP_ATKDMG;
+      atkrng = INIT_CREEP_ATKRNG * 4;
+      atkspd = INIT_CREEP_ATKSPD;
+      percep = INIT_CREEP_PERCEP * 5;
+      atkcnt = INIT_CREEP_ATKCNT;
+      spd = INIT_CREEP_SPD / 2;
+    break;
+    case CREEP_THREE: // Fast.
+      hp = INIT_CREEP_HP * .75;
+      atkdmg = INIT_CREEP_ATKDMG;
+      atkrng = INIT_CREEP_ATKRNG * 4;
+      atkspd = INIT_CREEP_ATKSPD / 2;
+      percep = INIT_CREEP_PERCEP * 10;
+      atkcnt = INIT_CREEP_ATKCNT;
+      spd = INIT_CREEP_SPD * 1.5;
+    break;
+  }
+  
+
   Direction direct = Direction();
   Point *path= &teams[team_no].paths[path_no % PATH_COUNT][0];
   int movespeed = INIT_CREEP_MOVESPEED;
@@ -900,11 +951,9 @@ void ServerGameLogic::createTower(int team_no, Point location)
 //    Tower *tower = new Tower(uid, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
 //                           INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);
 //    Tower *tower = new Tower(uid, team_no, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
-//                           INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);  
+//                           INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);                           
     BasicTower *tower = new BasicTower(uid, team_no, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
                            INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);
-
-    std::cout << "asjhasdasdjhsgdh " <<  tower->health << std::endl;
         
     // Add tower to team
     teams[team_no].addUnit(tower);
@@ -930,9 +979,36 @@ void ServerGameLogic::createPlayer(int team_no, Point location, int client_id, i
 {
   int uid = next_unit_id_++;
 
+  //set up base player
   Player *player = new Player(uid, client_id, location, role);
   player->setSpeed(5);
   player->team = team_no;
+
+  std::cout << "role: " << role << std::endl;
+
+  switch (role){
+    case 1: //gordon freeman
+      player->health = 225;
+    break;
+
+    case 2: //the flash
+      player->setSpeed(8);
+      player->health = 150;
+      player->attackDamage = 6;
+    break;
+
+    case 3: //samus
+      player->setSpeed(6);
+      player->attackDamage = 11;
+    break;
+
+    case 4: //hulk
+      player->setSpeed(2);
+      player->health = 500;
+      player->attackDamage = 14;
+    break;
+  }
+  player->maxHealth = player->health;
   teams[team_no].addUnit(player);
   std::cout << "adding player: " << player->clientID << " team: " << team_no << std::endl;
 }
@@ -948,7 +1024,7 @@ void ServerGameLogic::createPlayer(int team_no, Point location, int client_id, i
 void ServerGameLogic::respawnPlayer(Player* player, Point location)
 {
   player->position = location;
-  player->health = 100;
+  player->health = player->maxHealth;
   player->pendingDelete = false;
 }
 /* 
@@ -990,15 +1066,15 @@ void ServerGameLogic::handleDeaths()
       {
         if (j == 0)
             handleCastleDeath();
-        else{
+        else
             handleTowerDeath(teams[i].towers[j]);
-        }
       }
   }
   
   pthread_mutex_unlock( &unit_mutex );
 
-  updateMaps();}
+  updateMaps();
+}
 /* 
  *
  * PRE:     
@@ -1010,11 +1086,14 @@ void ServerGameLogic::handleDeaths()
  */
 void ServerGameLogic::handlePlayerDeath(Player *player)
 {
-  // Respawn
-  respawnPlayer(player, player->team == 0 ? gameMap_->team0start[0] : gameMap_->team1start[0]);
 
   // Give other team some monies
-  giveTeamBonus(player->team == 0 ? 1 : 0, PLAYER_KILL_BONUS);  
+  if (player->tod == 0) {
+      giveTeamBonus(player->team == 0 ? 1 : 0, PLAYER_KILL_BONUS);
+      
+      // Set Respawn timestamp
+      player->tod = time(NULL);
+  }
 }
 /* 
  *

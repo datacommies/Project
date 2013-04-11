@@ -3,7 +3,7 @@
 --
 -- DATE:        2013/03/11
 --
--- MAINTAINERS: Aaron Lee, Luke Tao
+-- MAINTAINERS: Aaron Lee, Luke Tao, Steve Lo
 --
 -- FUNCTIONS:   Audio constructor
 --              playMusic
@@ -13,7 +13,7 @@
 -- DESCRIPTION: File contains implementation for the Audio class.
 ------------------------------------------------------------------------------*/
 #include "audio.h"
-
+#include <iostream>
 Audio::Audio()
 { 
 
@@ -24,22 +24,22 @@ Audio::Audio()
 --
 -- DATE:        2013/03/11
 --
--- DESIGNER:    Luke Tao
+-- DESIGNER:    Luke Tao, Steve Lo
 -- PROGRAMMER:  Aaron Lee
 --
 -- INTERFACE:   void Audio::playMusic()
 --
 -- RETURNS:     int -- 1 if failed to open file
 --
--- DESCRIPTION: load music file then play it
+-- DESCRIPTION: Begin playing the music file if it's loaded sucessfully
 ------------------------------------------------------------------------------*/
 int Audio::playMusic(const char* filename)
 {
-    if (!music_.openFromFile(filename))
-        return EXIT_FAILURE;
+    if (!music_.openFromFile(filename)) //if problem opening the file
+        return EXIT_FAILURE;    //return an error
 
+	music_.setVolume(20);
     music_.play();
-
 
     return EXIT_SUCCESS;
 }
@@ -56,16 +56,22 @@ int Audio::playMusic(const char* filename)
 --
 -- RETURNS:     int -- 1 if failed to open file
 --
--- DESCRIPTION: load  short sound file then play it
+-- DESCRIPTION: load and play the sound effect file
 ------------------------------------------------------------------------------*/
 int Audio::playSoundEffect(const char* filename)
 {
-    if (!buffer_.loadFromFile(filename))
+    sf::SoundBuffer Buffer;     //buffer holding the filename
+    if (!Buffer.loadFromFile(filename)) //try opening the audio file
         return EXIT_FAILURE;
-
-    sound_ = sf::Sound(buffer_);
-    sound_.play();
-
+    
+    sf::Sound Sound;
+    Sound.setBuffer(Buffer);
+    Sound.play();
+    
+    while(Sound.getStatus() == sf::Sound::Playing)
+    {
+        sf::sleep(sf::seconds(0.1f));
+    }
     return EXIT_SUCCESS;
 }
 
@@ -75,7 +81,7 @@ int Audio::playSoundEffect(const char* filename)
 --
 -- DATE:        2013/03/11
 --
--- DESIGNER:    Luke Tao
+-- DESIGNER:    Luke Tao, Steve Lo
 -- PROGRAMMER:  Aaron Lee
 --
 -- INTERFACE:   void Audio::stopMusic()
@@ -86,7 +92,7 @@ int Audio::playSoundEffect(const char* filename)
 ------------------------------------------------------------------------------*/
 void Audio::stopMusic()
 {
-    music_.stop();
+    music_.stop();  //stop the playback
 }
 
 
@@ -95,7 +101,7 @@ void Audio::stopMusic()
 --
 -- DATE:        2013/03/11
 --
--- DESIGNER:    Luke Tao
+-- DESIGNER:    Luke Tao, Steve Lo
 -- PROGRAMMER:  Aaron Lee
 --
 -- INTERFACE:   void Audio::pauseMusic()
@@ -106,5 +112,5 @@ void Audio::stopMusic()
 ------------------------------------------------------------------------------*/
 void Audio::pauseMusic()
 {
-    music_.pause();
+    music_.pause(); //pause the playback
 }

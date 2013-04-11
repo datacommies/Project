@@ -112,7 +112,7 @@ typedef struct {
     int id; //unit id
     UnitType unit_type;
     int posx, posy;
-    int health;
+    int health, maxHealth;
     int team;
     int attackDamage;//damage that the unit deals per hit
     int attackRange; //distance that the unit can successfully attack

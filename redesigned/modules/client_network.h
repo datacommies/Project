@@ -4,6 +4,7 @@
 #include <iostream>
 #include "../resource.h"
 #include "../types.h"
+#include "audio.h"
 
 
 #include <sys/types.h>
@@ -69,6 +70,7 @@ public:
 private:
 
    int connectsock;
+    Audio audio_;
 };
 
 #endif

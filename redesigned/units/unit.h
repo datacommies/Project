@@ -13,6 +13,7 @@ public:
     int team; //the team the unit is on 
     Point position; //the units team
     int health; //the current health amount
+    int maxHealth; // the maximum health
     int iElement; //units element, fire/water etc.
     int attackDamage;//damage that the unit deals per hit
     int attackRange; //distance that the unit can successfully attack
@@ -22,6 +23,7 @@ public:
     Unit *pTarget;
     float fRotate;
     bool pendingDelete;
+
     
     bool            isAlive() { return health > 0; } //incase creep get hits more than its remaining health
     virtual void    Attack(void);
@@ -42,7 +44,7 @@ public:
     Unit(int uid, Point pos, int hp, int atkdmg, int atkrng,
          int atkspd, int percep, int atkcnt);    
 
-    Unit(int uid, int side, Point pos, int hp=100, int atkdmg=0, int atkrng=0,
+    Unit(int uid, int side, Point pos, int hp=200, int atkdmg=10, int atkrng=0,
          int atkspd=0, int percep=0, int atkcnt=0);
     
     virtual ~Unit(){};
