@@ -25,6 +25,7 @@
 #define SELECTLOPATH 400
 #define SELECTMIDPATH 401
 #define SELECTHIPATH 402
+#define INFOBUTTON 500
 
 // Enums ----------------------------------------------------------------------
 // Bit positional values

@@ -281,6 +281,9 @@ Control::RunAllButtons()
 			case SELECTHIPATH:
 			    _currentLane = HIGHPATH;
 			break;
+			case INFOBUTTON:
+				_graphicsModule->toggleInfoButton();
+			break;
 			default:
 			break;
 				// Does nothing but gets rid of annoying warnings
