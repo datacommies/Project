@@ -336,17 +336,6 @@ bool ClientNetwork::movePlayer(int playerId, Direction direction)
 	return false;
 }
 
-/* Sends an attack request to the server.
- *
- * PRE:     Client is connected
- * POST:    Request has been sent to the server
- * RETURNS: true on success
- *          false on fail
- * NOTES:   No validation performed here. */
-bool ClientNetwork::attack(int playerId, Direction direction)
-{
-   return false;
-}
 
 /*
  * Sends a generic request to the server
