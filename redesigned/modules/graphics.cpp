@@ -163,16 +163,6 @@ void * init (void * in)
                 g->updateLobbyRoles();
             }
 
-            for (size_t i = 0; i < 5; i++) {
-                g->player_sprites[i].setPosition(60, i * 55 + 310);          
-                g->window->draw(g->player_sprites[i]);
-            }
-
-            for (size_t i = 0; i < 5; i++) {
-                g->player_sprites[i].setPosition(710, i * 55 + 310);          
-                g->window->draw(g->player_sprites[i]);
-            }
-
             // Update the names on the buttons.
             g->updateLobbyRoles();
         } else if (g->clientGameLogic_.getCurrentState() == IN_GAME || g->clientGameLogic_.getCurrentState() == WON_GAME || g->clientGameLogic_.getCurrentState() == LOST_GAME) {
@@ -199,6 +189,18 @@ void * init (void * in)
 
         // Display test windows.
         sfgui.Display(window);
+
+        if (g->clientGameLogic_.getCurrentState() == LOBBY) {
+            for (size_t i = 0; i < 5; i++) {
+                g->lobby_player_sprites[i].setPosition(120, i * 55 + 310);          
+                g->window->draw(g->lobby_player_sprites[i]);
+            }
+
+            for (size_t i = 0; i < 5; i++) {
+                g->lobby_player_sprites[i].setPosition(650, i * 55 + 310);          
+                g->window->draw(g->lobby_player_sprites[i]);
+            }
+        }
 
         window.display();
     }
@@ -850,9 +852,9 @@ void Graphics::loadImages()
         player_textures[i].loadFromFile(ss.str().c_str());
         player_sprites[i].setTexture(player_textures[i]);
 
-        ss << "images/l" << i+1 << ".png";
-        lobby_player_textures[i].loadFromFile(ss.str().c_str());
+        stringstream ss2;
+        ss2 << "images/l" << i+1 << ".png";
+        lobby_player_textures[i].loadFromFile(ss2.str().c_str());
         lobby_player_sprites[i].setTexture(lobby_player_textures[i]);
     }
-
 }
