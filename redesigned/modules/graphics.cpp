@@ -75,9 +75,19 @@ void * init (void * in)
             // Handle SFGUI events.
             g->sfgDesktop.HandleEvent(event);
             
-            if ((event.type == sf::Event::KeyPressed) && sf::Keyboard::isKeyPressed(sf::Keyboard::Return) && (g->clientGameLogic_.gameState_ == LOBBY))
-                g->sendMessage();
-
+            // If we're in lobby, send a message otherwise if we have the join window open, attempt a join.
+            if ((event.type == sf::Event::KeyPressed) && sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
+            {
+                if(g->clientGameLogic_.gameState_ == CONNECTING)
+                {
+                    g->joinButtonHandler();
+                }
+                else if (g->clientGameLogic_.gameState_ == LOBBY)
+                {
+                    g->sendMessage();
+                }
+            }
+                
             // If a mouse button was pressed, find out where we clicked.
             if (event.type == sf::Event::MouseButtonPressed){
                 sf::Vector2f mouse = window.mapPixelToCoords(sf::Mouse::getPosition(window));
@@ -94,6 +104,7 @@ void * init (void * in)
                             g->clientGameLogic_.UIElements.clear();
                             g->initJoinWindow();
                             g->showJoinWindow();
+                            g->clientGameLogic_.connecting();
                             break;
                         } else if (button->id == ID_TEST){
                             g->initGameControls();
@@ -1023,11 +1034,7 @@ void Graphics::loadImages()
     // Load the castle texture.
     castle_tex.loadFromFile("images/castle.png");
     castle_sprite.setTexture(castle_tex);
-
-    // Load the player texture.
-    player_tex.loadFromFile("images/player.png");
-    player_sprite.setTexture(player_tex);
-
+    
     // Load the tower texture.
     tower_tex1.loadFromFile("images/t1.png");
     tower_sprite1.setTexture(tower_tex1);
