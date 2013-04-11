@@ -27,6 +27,7 @@ public:
    GameState getCurrentState();
    
    void start ();
+   void connecting();
    void join ();
    void menu ();
    void win ();
@@ -48,11 +49,13 @@ public:
    bool waitingForStart;
    // Module References
    ClientNetwork& clientNetwork_;
-private:
-
+   
    // Fields
    GameState gameState_;
+private:
+
    Audio audio_;
+
 };
 
 #endif

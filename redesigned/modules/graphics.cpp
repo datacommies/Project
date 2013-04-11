@@ -13,6 +13,7 @@
 
 using namespace std;
 
+#define INIT_CREEP_HP 100
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 700
 #define BUTTON_SIZE  40
@@ -80,7 +81,20 @@ void * init (void * in)
             
             // Handle SFGUI events.
             g->sfgDesktop.HandleEvent(event);
-
+            
+            // If we're in lobby, send a message otherwise if we have the join window open, attempt a join.
+            if ((event.type == sf::Event::KeyPressed) && sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
+            {
+                if(g->clientGameLogic_.gameState_ == CONNECTING)
+                {
+                    g->joinButtonHandler();
+                }
+                else if (g->clientGameLogic_.gameState_ == LOBBY)
+                {
+                    g->sendMessage();
+                }
+            }
+                
             // If a mouse button was pressed, find out where we clicked.
             if (event.type == sf::Event::MouseButtonPressed){
                 sf::Vector2f mouse = window.mapPixelToCoords(sf::Mouse::getPosition(window));
@@ -97,6 +111,7 @@ void * init (void * in)
                             g->clientGameLogic_.UIElements.clear();
                             g->initJoinWindow();
                             g->showJoinWindow();
+                            g->clientGameLogic_.connecting();
                             break;
                         } else if (button->id == ID_TEST){
                             g->initGameControls();
@@ -125,7 +140,7 @@ void * init (void * in)
             else if (event.type == sf::Event::Closed){
                 window.close();
                 exit(0);
-            } else if (event.type == sf::Event::KeyPressed)
+            } else if ((event.type == sf::Event::KeyPressed) && (g->clientGameLogic_.gameState_ != LOBBY))
             {
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
                     Control::get()->AddNewCalledKey(sf::Keyboard::W);
@@ -136,7 +151,7 @@ void * init (void * in)
                 else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
                     Control::get()->AddNewCalledKey(sf::Keyboard::D);
                 Control::get()->RunAllKeys();
-            } else if (event.type == sf::Event::KeyReleased)
+            } else if ((event.type == sf::Event::KeyReleased) && (g->clientGameLogic_.gameState_ != LOBBY))
             {
                 Control::get()->RunAllKeys();
             }
@@ -146,11 +161,11 @@ void * init (void * in)
         g->sfgDesktop.Update( 0.f );
         
         window.clear();
-
+        GameState c_state = g->clientGameLogic_.getCurrentState();
         // Check to see which state the game is in and act accordingly.        
-        if (g->clientGameLogic_.getCurrentState() == MAIN_MENU) {
+        if (c_state == MAIN_MENU) {
             g->drawMainMenu(window);
-        } else if (g->clientGameLogic_.getCurrentState() == LOBBY) {
+        } else if (c_state == LOBBY) {
             // Check if connected and display lobby, or else show "connecting..." message.
             if (g->clientGameLogic_.clientNetwork_.connecting_status != "connected") {
                 g->unassignedPlayersList->SetText(g->clientGameLogic_.clientNetwork_.connecting_status);
@@ -166,6 +181,7 @@ void * init (void * in)
                 if(g->clientGameLogic_.waitingForStart)
                 {
                     g->sfgLobbyWindow->Show(false);
+                    g->sfgChatDisplayWindow->Show(false);
                     g->drawLoadingScreen();
                 }
                 else
@@ -173,11 +189,24 @@ void * init (void * in)
                     // Update the names on the buttons.
                     g->updateLobbyRoles();
                 }
+
+                // Update chat with the latest messages.
+                for (std::vector<string>::iterator it = g->clientGameLogic_.clientNetwork_.chatbuffer_.begin(); it != g->clientGameLogic_.clientNetwork_.chatbuffer_.end(); ++it)
+                {
+                    g->sfgChatDisplayLabel->SetText(g->sfgChatDisplayLabel->GetText().toAnsiString() + *it);
+
+                    // Set scrollbar to lower bound.
+                    sfg::Adjustment::Ptr tempAdj = g->sfgChatDisplayWindow->GetVerticalAdjustment();
+                    tempAdj->SetValue(tempAdj->GetUpper());
+                    g->sfgChatDisplayWindow->SetVerticalAdjustment(tempAdj);
+                }
+
+                g->clientGameLogic_.clientNetwork_.chatbuffer_.clear();
             }
 
             // Update the names on the buttons.
             g->updateLobbyRoles();
-        } else if (g->clientGameLogic_.getCurrentState() == IN_GAME || g->clientGameLogic_.getCurrentState() == WON_GAME || g->clientGameLogic_.getCurrentState() == LOST_GAME) {
+        } else if (c_state == IN_GAME || c_state == WON_GAME || c_state == LOST_GAME) {
             if (!controls_init) {
                 controls_init = true;
                 g->initGameControls();
@@ -188,7 +217,7 @@ void * init (void * in)
             g->drawHud(window);
             g->drawCurrency(window);
 
-            if (g->clientGameLogic_.getCurrentState() == WON_GAME || g->clientGameLogic_.getCurrentState() == LOST_GAME)
+            if (c_state == WON_GAME || c_state == LOST_GAME)
                 g->drawEndGameScreen(window);
         }
 
@@ -199,37 +228,37 @@ void * init (void * in)
                 b.draw(window);
         }
 
-        // Display test windows.
-        sfgui.Display(window);
 
-        if (g->clientGameLogic_.getCurrentState() == LOBBY) {
+        if (c_state == LOBBY) {
             sf::RectangleShape ready_box;
             ready_box.setSize(sf::Vector2f( 25, 25));
 
             for (size_t i = 0; i < 5; i++) {
                 ready_box.setFillColor(g->clientGameLogic_.clientNetwork_.team_l[i].ready ? sf::Color(  0, 255,  0) : sf::Color(  255, 0,  0));
-                ready_box.setPosition(65, i * 55 + 310);
+                ready_box.setPosition(65, i * 55 + 180);
                 window.draw(ready_box);
             }
 
             for (size_t i = 0; i < 5; i++) {
                 ready_box.setFillColor(g->clientGameLogic_.clientNetwork_.team_r[i].ready ? sf::Color(  0, 255,  0) : sf::Color(  255, 0,  0));
-                ready_box.setPosition(710, i * 55 + 310);
+                ready_box.setPosition(710, i * 55 + 180);
                 window.draw(ready_box);
             }
 
 
             for (size_t i = 0; i < 5; i++) {
-                g->player_sprites[i].setPosition(65, i * 55 + 310);
+                g->player_sprites[i].setPosition(65, i * 55 + 180);
                 g->window->draw(g->player_sprites[i]);
             }
 
             for (size_t i = 0; i < 5; i++) {
-                g->player_sprites[i].setPosition(710, i * 55 + 310);
+                g->player_sprites[i].setPosition(710, i * 55 + 180);
                 g->window->draw(g->player_sprites[i]);
             }
         }
 
+        window.resetGLStates();
+        sfgui.Display(window);
         window.display();
     }
 
@@ -304,6 +333,8 @@ Graphics::Graphics(ClientGameLogic& clientGameLogic)
 {
     // Set global graphics to point to this.
     globalGraphics = this;
+
+    chatShowing = false;
 
     // Load font for game.
     char * font_path;
@@ -544,7 +575,7 @@ void Graphics::initLobbyWindow()
 {
     // Create lobby window using SFGUI.
     sfgLobbyWindow = sfg::Window::Create(sfg::Window::BACKGROUND); // Make the window.
-    sfgLobbyWindow->SetPosition(sf::Vector2f(100, 225)); // Change the window position.
+    sfgLobbyWindow->SetPosition(sf::Vector2f(100, 100)); // Change the window position.
     sfgLobbyWindow->SetRequisition(sf::Vector2f(600, 350));
 
 
@@ -576,7 +607,7 @@ void Graphics::initLobbyWindow()
     }
 
     // Create the start game / exit buttons.
-    startGameButton = sfg::Button::Create("Start Game");
+    startGameButton = sfg::Button::Create("Ready");
     startGameButton->GetSignal( sfg::Widget::OnLeftClick ).Connect(&Graphics::startGame, this);
     exitLobbyButton = sfg::Button::Create("Exit Lobby");
     exitLobbyButton->GetSignal( sfg::Widget::OnLeftClick ).Connect(&Graphics::exitLobby, this);
@@ -600,6 +631,40 @@ void Graphics::initLobbyWindow()
 
     sfgDesktop.Add(sfgLobbyWindow);
 }
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
+void Graphics::initMessageDisplayWindow()
+{
+    // Set up the size and other settings of the message window.
+    sfgChatDisplayWindow = sfg::ScrolledWindow::Create(); // Make the scroll window
+    sfgChatDisplayWindow->SetPosition(sf::Vector2f(100, 450)); // Change the window position.
+    sfgChatDisplayWindow->SetRequisition( sf::Vector2f(600, 150) ); // Set the size
+    sfgChatDisplayWindow->SetScrollbarPolicy(sfg::ScrolledWindow::VERTICAL_AUTOMATIC); // Allow vertical scrollbars.
+    sfgChatDisplayWindow->SetPlacement( sfg::ScrolledWindow::TOP_LEFT ); // Set where content is placed. Puts scrollbars at right and bottom.
+    
+    // Test text.
+    sfgChatDisplayLabel = sfg::Label::Create();
+    sfgChatDisplayLabel->SetId("chat");
+    sfgDesktop.SetProperty("#chat", "FontSize", "12");
+
+    // Add the label containing the messages to the scrolling window.
+    sfgChatDisplayWindow->AddWithViewport(sfgChatDisplayLabel);
+
+    // Add the window to the displayed desktop.
+    sfgDesktop.Add(sfgChatDisplayWindow);
+}
 
 /*------------------------------------------------------------------------------
 -- FUNCTION:   
@@ -615,6 +680,69 @@ void Graphics::initLobbyWindow()
 --
 -- DESCRIPTION: 
 ------------------------------------------------------------------------------*/
+void Graphics::initMessageSendWindow()
+{
+    // Create the window that will hold the entrybox and button.
+    sfgChatSendWindow = sfg::Window::Create(sfg::Window::BACKGROUND); // Make the window.
+    sfgChatSendWindow->SetPosition(sf::Vector2f(100, 600)); // Change the window position.
+    sfgChatSendWindow->SetRequisition(sf::Vector2f(600, 50));
+
+    // Create the box that will sit inside the window and set things horizontally
+    sfgChatSendBox = sfg::Box::Create(sfg::Box::HORIZONTAL);
+
+    // Create the entry box which will store the user entered message.
+    sfgChatSendEntry = sfg::Entry::Create();
+    sfgChatSendEntry->SetRequisition(sf::Vector2f(300, 0)); // Set entry box size.
+    sfgChatSendEntry->SetId("chat");
+    sfgDesktop.SetProperty("#chat", "FontSize", "12");
+
+    // Create a button to send the message.
+    sfgChatSendButton = sfg::Button::Create("Send");
+    sfgChatSendButton->GetSignal( sfg::Widget::OnLeftClick ).Connect(&Graphics::sendMessage, this);
+
+    // Pack the box with the controls in order.
+    sfgChatSendBox->Pack(sfgChatSendEntry);
+    sfgChatSendBox->Pack(sfgChatSendButton);
+
+    // Put the box in the window.
+    sfgChatSendWindow->Add(sfgChatSendBox);
+
+    // Add the window to the displayed desktop.
+    sfgDesktop.Add(sfgChatSendWindow);
+
+    sfgChatDisplayLabel->SetText("");
+}
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/  
+void Graphics::sendMessage()
+{
+    string message;
+
+    message = clientGameLogic_.clientNetwork_._name + ": " + sfgChatSendEntry->GetText().toAnsiString() + "\n";
+
+    // Add the message to what's currently there if it isn't empty.
+    if(sfgChatSendEntry->GetText().toAnsiString() != "")
+    {
+        //sfgChatDisplayLabel->SetText(sfgChatDisplayLabel->GetText().toAnsiString());
+        cout << "in graphics, string is: " << message << endl;
+        clientGameLogic_.clientNetwork_.send_chatmsg(message);
+    }
+
+    // Clear the entry box for new entries.
+    sfgChatSendEntry->SetText("");
+}
 void Graphics::takeRole()
 {
     int role = ((long) this % 10) - 1;
@@ -685,6 +813,9 @@ void Graphics::startGame()
     cout << "start the game!" << endl;
     clientGameLogic_.ready();
     sfgLobbyWindow->Show(false);
+    sfgChatDisplayWindow->Show(false);
+    sfgChatSendWindow->Show(false);
+    chatShowing = false;
 }
 
 /*------------------------------------------------------------------------------
@@ -704,6 +835,8 @@ void Graphics::startGame()
 void Graphics::exitLobby()
 {
     sfgLobbyWindow->Show(false);
+    sfgChatDisplayWindow->Show(false);
+    sfgChatSendWindow->Show(false);
 
     // todo: actually exit the session and go back to main screen.
     clientGameLogic_.exit();
@@ -739,6 +872,8 @@ void Graphics::joinButtonHandler()
     clientGameLogic_.clientNetwork_.setConnectionInfo(name, server, atoi(port.c_str()));
     clientGameLogic_.join();
     initLobbyWindow();
+    initMessageDisplayWindow();
+    initMessageSendWindow();
 
     sfgJoinWindow->Show(false);
 }
@@ -832,8 +967,8 @@ void Graphics::drawMap(sf::RenderWindow& window)
 void Graphics::drawMainMenu(sf::RenderWindow& window)
 {
 
-    creep_tex.loadFromFile("images/dino.png");
-    creep_sprite.setTexture(creep_tex);
+    creep_tex1.loadFromFile("images/c1.png");
+    creep_sprite1.setTexture(creep_tex1);
 
     sf::Texture titlesc_bg; 
     titlesc_bg.loadFromFile("images/title.png");
@@ -944,15 +1079,40 @@ void Graphics::drawUnits(sf::RenderWindow& window)
             Point interpolated = unit->inter_position = Lerp(unit->past_position, unit->position, unit->inter_value);
             // All drawable unit elements use the same interpolated position.
             drawTeamCircle(window, unit->team, interpolated.x, interpolated.y);
-            creep_sprite.setPosition(interpolated.x, interpolated.y);
-            window.draw(creep_sprite);
+            
+            if (unit->maxHealth == INIT_CREEP_HP)
+            {
+                creep_sprite1.setPosition(interpolated.x, interpolated.y);
+                window.draw(creep_sprite1);
+            } else if (unit->maxHealth == INIT_CREEP_HP * 3) {
+                creep_sprite2.setPosition(interpolated.x, interpolated.y);
+                window.draw(creep_sprite2);
+            } else if (unit->maxHealth == INIT_CREEP_HP * .75) {
+                creep_sprite3.setPosition(interpolated.x, interpolated.y);
+                window.draw(creep_sprite3);
+            }
+            
             drawHealthBar(window, interpolated.x, interpolated.y+25, unit->health, unit->maxHealth);
         }
         else if (unit->type == TOWER)
         {
-            tower_sprite.setPosition(unit->position.x, unit->position.y);			
-            window.draw(tower_sprite);
-            drawHealthBar(window, unit->position.x, unit->position.y + tower_sprite.getTextureRect().height, unit->health, unit->maxHealth);
+            
+           /* if (unit->maxHealth == INIT_CREEP_HP)
+            {
+                tower_sprite1.setPosition(unit->position.x, unit->position.y);
+                window.draw(tower_sprite1);
+            } else if (unit->maxHealth == INIT_CREEP_HP * 3) {
+                tower_sprite2.setPosition(unit->position.x, unit->position.y);
+                window.draw(tower_sprite2);
+            } else if (unit->maxHealth == INIT_CREEP_HP * .75) {
+                tower_sprite3.setPosition(unit->position.x, unit->position.y);
+                window.draw(tower_sprite3);
+            }*/
+
+            tower_sprite1.setPosition(unit->position.x, unit->position.y);
+            window.draw(tower_sprite1);
+            
+            drawHealthBar(window, unit->position.x, unit->position.y + tower_sprite1.getTextureRect().height, unit->health, unit->maxHealth);
         }
         else if (unit->type == PLAYER)
         {
@@ -1067,20 +1227,29 @@ void Graphics::loadImages()
     map.setTexture(map_bg);
 
     // Load the creep texture.
-    creep_tex.loadFromFile("images/dino.png");
-    creep_sprite.setTexture(creep_tex);
+    creep_tex1.loadFromFile("images/c1.png");
+    creep_sprite1.setTexture(creep_tex1);
+
+    creep_tex2.loadFromFile("images/c2.png");
+    creep_sprite2.setTexture(creep_tex2);
+
+    creep_tex3.loadFromFile("images/c3.png");
+    creep_sprite3.setTexture(creep_tex3);
+     
      
     // Load the castle texture.
     castle_tex.loadFromFile("images/castle.png");
     castle_sprite.setTexture(castle_tex);
-
-    // Load the player texture.
-    player_tex.loadFromFile("images/player.png");
-    player_sprite.setTexture(player_tex);
-
+    
     // Load the tower texture.
-    tower_tex.loadFromFile("images/tower.png");
-    tower_sprite.setTexture(tower_tex);
+    tower_tex1.loadFromFile("images/t1.png");
+    tower_sprite1.setTexture(tower_tex1);
+
+    tower_tex2.loadFromFile("images/t2.png");
+    tower_sprite2.setTexture(tower_tex2);
+
+    tower_tex3.loadFromFile("images/t3.png");
+    tower_sprite3.setTexture(tower_tex3);
 
     for (int i = 0; i < 5; i++) {
         // Load the tower texture.
@@ -1088,5 +1257,21 @@ void Graphics::loadImages()
         ss << "images/m" << i+1 << ".png";
         player_textures[i].loadFromFile(ss.str().c_str());
         player_sprites[i].setTexture(player_textures[i]);
+    }
+}
+
+void Graphics::showChat(bool show)
+{
+    if(show)
+    {
+        sfgChatDisplayWindow->Show(true);
+        sfgChatSendWindow->Show(true);
+        chatShowing = true;
+    }
+    else
+    {
+        sfgChatDisplayWindow->Show(false);
+        sfgChatSendWindow->Show(false);
+        chatShowing = false;
     }
 }

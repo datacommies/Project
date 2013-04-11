@@ -219,8 +219,7 @@ void ClientNetwork::recvReply() {
 							if (gl->units[i].health <= 0)
 							{	
 							    audio_.playMusic("sounds/wilhelm.ogg");				
-								gl->units.erase(gl->units.begin() + i);			
-											
+								gl->units.erase(gl->units.begin() + i);
 						    }
 						}
 					}
@@ -254,20 +253,25 @@ void ClientNetwork::recvReply() {
 			char m[MAP_NAME_SIZE] = {0};
 			if ((n = recv_complete(connectsock, m, MAP_NAME_SIZE, 0)) > 0)
 				msg_mapname(m);
-		} else if (head.type == MSG_CHAT) {
-			char * m = (char *) malloc (head.size);
-			n = recv_complete(connectsock, m, head.size, 0);
-			m[n] = 0;
-			msg_chat(m);
-			free(m);
 		} else if (head.type == MSG_START) {
 			cout << "Game started!" << endl;
 			
 			// Ack the start.
 			header_t ack = {MSG_START, 0}; 
 			send(connectsock, &ack, sizeof(header_t), 0);
-
 			gl->start();
+
+		} else if (head.type == MSG_CHAT) { //chat message is received during the lobby
+            char * buf = new char [head.size];
+
+            recv_complete(connectsock, buf, head.size, 0);
+
+            buf[head.size] = '\0';
+
+            cout << "asdf: " << buf << endl; //message will contain who the message was from
+            
+            chatbuffer_.push_back(buf);
+            //delete buf;
 		}
 	}
 }
@@ -494,6 +498,7 @@ void ClientNetwork::player_leave (player_matchmaking_t * p) {
 void ClientNetwork::msg_mapname (char * map) {
 	printf("Got map name: %s\n", map);
 }
+<<<<<<< HEAD
 /*------------------------------------------------------------------------------
 -- FUNCTION:   
 --
@@ -511,6 +516,34 @@ void ClientNetwork::msg_mapname (char * map) {
 void ClientNetwork::msg_chat (char * text) {
 	printf("message: %s\n", text);
 }
+
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
+void ClientNetwork::send_chatmsg(string msg) {
+	chatmsg_t * chat = (chatmsg_t*) new char[sizeof(header_t) + msg.size()];
+	chat->head.type = MSG_CHAT;
+	chat->head.size = msg.size();
+	strncpy(chat->msgbuf, msg.c_str(), chat->head.size);
+
+	cout << "message size: " << chat->head.size << endl;
+	cout << "messagebufinsendchat: " << chat->msgbuf << endl;
+	cout << "endmessage" << endl;
+
+	send(connectsock, chat, sizeof(header_t) + msg.size(), 0);
+}
+
 /*------------------------------------------------------------------------------
 -- FUNCTION:   
 --
