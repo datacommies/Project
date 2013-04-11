@@ -228,28 +228,6 @@ bool ClientGameLogic::movePlayer(Direction direction)
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:    attack
---
--- DATE:        2013/03/11
---
--- DESIGNER:    Behnam Bastami, Dennis Ho
--- PROGRAMMER:  Dennis Ho
---
--- INTERFACE:   bool ClientGameLogic::movePlayer(Direction direction)
---
--- RETURNS:     Boolean; True if the request was sent, False otherwise
---
--- DESCRIPTION: This function makes the current play attack in the specified
---              direction.
-------------------------------------------------------------------------------*/
-bool ClientGameLogic::attack(Direction direction)
-{
-   // TODO: validation
-   clientNetwork_.attack(this->playerId, direction);
-   return true;
-}
-
-/*------------------------------------------------------------------------------
 -- FUNCTION:    exit
 --
 -- DATE:        2013/03/11

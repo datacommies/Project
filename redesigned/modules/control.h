@@ -88,11 +88,7 @@ private:
 	// Wrapper Functions
 	void CallExitGameEvent();
 	void CallEnterLobbyEvent();
-
 	void CallMoveEvent(Direction direction);
-
-	void CallAttackEvent(Direction direction);
-
 	void CallUnitTypeCreationEvent(UnitType ttype);
 	Audio audio_;
 };

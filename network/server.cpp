@@ -156,7 +156,7 @@ int main () {
     while (( client = accept(sock, (struct sockaddr *) &cli_addr, &clilen) ) > 0) {
         cout << endl << "new connection." << endl;
         pthread_t thread;
-        pthread_create (&thread, NULL, handle_client, (void*)client); // TODO: use struct as parameter
+        pthread_create (&thread, NULL, handle_client, (void*)client);
         threads.push_back(thread);
         clients.push_back(client);
     }

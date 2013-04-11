@@ -9,8 +9,8 @@
 
 // these are used for defining maxTowerDist in server_game_logic.cpp
 // maxTowerDist = (((MAPWIDTH + MAPHEIGHT) / 2) - INIT_TOWER_ATKRNG);
-#define MAPWIDTH  800 //TODO: change placeholder value
-#define MAPHEIGHT 600 //TODO: change placeholder value
+#define MAPWIDTH  800
+#define MAPHEIGHT 600
 
 // Button IDs
 #define ID_JOIN 100

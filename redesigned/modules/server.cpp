@@ -15,7 +15,7 @@
 #include "../units/AiController.h"
 
 Server::Server() 
-   : serverGameLogic_(), serverNetwork_(serverGameLogic_), ai_(serverGameLogic_)
+   : serverGameLogic_(), serverNetwork_(serverGameLogic_)
 {
    run();
 }

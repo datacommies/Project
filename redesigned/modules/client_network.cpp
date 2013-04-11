@@ -41,7 +41,7 @@ extern Graphics* globalGraphics;
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Aaron Lee
--- PROGRAMMER: Aaron Lee
+-- PROGRAMMER: Aaron Lee, David Czech
 --
 -- INTERFACE:   ClientNetwork()
 --
@@ -441,26 +441,6 @@ bool ClientNetwork::movePlayer(int playerId, Direction direction)
 
 	return false;
 }
-
-/*------------------------------------------------------------------------------
--- FUNCTION:   
---
--- DATE:        2013/03/22
---
--- DESIGNER:   
--- PROGRAMMER: 
---
--- INTERFACE:   
---
--- RETURNS:     
---
--- DESCRIPTION: 
-------------------------------------------------------------------------------*/
-bool ClientNetwork::attack(int playerId, Direction direction)
-{
-   return false;
-}
-
 
 /*------------------------------------------------------------------------------
 -- FUNCTION:   player_update

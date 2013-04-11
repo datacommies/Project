@@ -4,7 +4,6 @@
 #include "../resource.h"
 #include "server_game_logic.h"
 #include "server_network.h"
-#include "ai.h"
 
 class Server
 {
@@ -19,7 +18,6 @@ private:
    // Modules
    ServerGameLogic serverGameLogic_;
    ServerNetwork serverNetwork_;
-   Ai ai_;
 };
 
 #endif
