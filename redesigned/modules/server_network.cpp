@@ -100,11 +100,12 @@ void ServerNetwork::initNetwork()
     socklen_t clientLength_ = sizeof(sockaddr_in);
     struct sockaddr_in clientAddr_ = {0};
     int client = 0;
+    pthread_t thread;
     // Listen for new connections, or until server socket is closed.
-    while (( client = accept(sock_, (struct sockaddr *) &clientAddr_, &clientLength_) ) > 0) {
+    while (clients_.size() < 10 && ( client = accept(sock_, (struct sockaddr *) &clientAddr_, &clientLength_) ) > 0) {
 
         std::cout << std::endl << "new connection." << std::endl;
-        pthread_t thread;
+        
 
         // Setup context struct
         ClientCtx * ctx = new ClientCtx;
@@ -116,6 +117,8 @@ void ServerNetwork::initNetwork()
         threads_.push_back(thread);
         clients_.push_back(client);
     }
+    
+    pthread_join(thread, NULL);
 }
 /*------------------------------------------------------------------------------
 -- FUNCTION:   
@@ -142,18 +145,18 @@ void ServerNetwork::gameOver(int client_, const int winner)
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   sync
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Behnam Bastami
--- PROGRAMMER: Behnam Bastami
+-- PROGRAMMER: Behnam Bastami, Dennis Ho
 --
--- INTERFACE:   
+-- INTERFACE:   bool ServerNetwork::sync(int client_, int team_)
 --
 -- RETURNS:     
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Synchronizes the current game state with the specified client
 ------------------------------------------------------------------------------*/
 bool ServerNetwork::sync(int client_, int team_)
 {

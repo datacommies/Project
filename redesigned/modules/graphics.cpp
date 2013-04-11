@@ -40,7 +40,7 @@ Graphics* globalGraphics = NULL; // Used for the SFGUI button handlers in the lo
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   David Czech
--- PROGRAMMER: David Czech, Jake Miner, Jesse Wright
+-- PROGRAMMER: David Czech, Jake Miner, Jesse Wright, Dennis Ho
 --
 -- INTERFACE:   void * init (void * in) 
 --
@@ -595,8 +595,8 @@ void Graphics::initLobbyWindow()
     unassignedPlayersList->SetId("upl");
     sfgDesktop.SetProperty("#upl", "FontSize", "12");
 
-    teamOneLabel = sfg::Label::Create("Team One");
-    teamTwoLabel = sfg::Label::Create("Team Two");
+    teamOneLabel = sfg::Label::Create("Team Red");
+    teamTwoLabel = sfg::Label::Create("Team Blue");
 
     // Create the team selection buttons.
     for (int i = 0; i < 5; ++i)
@@ -1128,18 +1128,18 @@ void Graphics::drawUnits(sf::RenderWindow& window)
     pthread_mutex_unlock( &clientGameLogic_.unit_mutex );
 }
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   drawCurrency
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: Jacob Miner
+-- DESIGNER:   Jacob Miner, Dennis Ho
+-- PROGRAMMER: Jacob Miner, Dennis Ho
 --
--- INTERFACE:   
+-- INTERFACE:   void Graphics::drawCurrency(sf::RenderWindow& window)
 --
 -- RETURNS:     
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Draws the team's current currency balance on the window
 ------------------------------------------------------------------------------*/
 void Graphics::drawCurrency(sf::RenderWindow& window)
 {
@@ -1149,39 +1149,18 @@ void Graphics::drawCurrency(sf::RenderWindow& window)
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   drawEndGameScreen
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Jacob Miner, Dennis Ho
+-- PROGRAMMER: Jacob Miner, Dennis Ho
 --
--- INTERFACE:   
---
--- RETURNS:     
---
--- DESCRIPTION: 
-------------------------------------------------------------------------------*/
-/*void Graphics::draw(sf::RenderWindow& window)
-{
-    sf::Text currencyText(to_string(clientGameLogic_.currency), font, 20);
-    currencyText.setPosition(5, 675);
-    window.draw(currencyText);
-}*/
-
-/*------------------------------------------------------------------------------
--- FUNCTION:   
---
--- DATE:        2013/03/22
---
--- DESIGNER:   Jacob Miner
--- PROGRAMMER: Jacob Miner
---
--- INTERFACE:   
+-- INTERFACE:   void Graphics::drawEndGameScreen(sf::RenderWindow& window)
 --
 -- RETURNS:     
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Draws the win/lose screen when the game ends
 ------------------------------------------------------------------------------*/
 void Graphics::drawEndGameScreen(sf::RenderWindow& window)
 {

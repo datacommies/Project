@@ -31,7 +31,7 @@ Tower(uid, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, wall)
 --
 -- DATE: 2013/03/20
 --
--- PROGRAMMER: Aiko Rose
+-- PROGRAMMER: Aiko Rose, Nick Raposo, Chris Anon
 --
 -- INTERFACE: void Attack(void)
 --
