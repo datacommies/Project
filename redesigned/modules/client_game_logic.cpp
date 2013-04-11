@@ -32,6 +32,7 @@ ClientGameLogic::ClientGameLogic(ClientNetwork& clientNetwork)
    clientNetwork_.gl = this;
    //unit_mutex = PTHREAD_MUTEX_INITIALIZER; // only allowed for declaration-initialization.
    pthread_mutex_init(&unit_mutex, NULL);
+   audio_.playMusic("sounds/bg.ogg");
 }
 
 /*------------------------------------------------------------------------------
@@ -49,7 +50,10 @@ ClientGameLogic::ClientGameLogic(ClientNetwork& clientNetwork)
 -- DESCRIPTION: This function sets the gameState_ variable to IN_GAME. 
 ------------------------------------------------------------------------------*/
 void ClientGameLogic::start () {
+   audio_.stopMusic();
+   audio_.playSoundEffect("sounds/start.wav");
    gameState_ = IN_GAME;
+   audio_.playMusic("sounds/bg.ogg");
 }
 
 /*------------------------------------------------------------------------------
