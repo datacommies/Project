@@ -212,15 +212,15 @@ void Creep::Move( Point pt ) {
 --
 -- DATE:        2013/04/09
 --
--- DESIGNER:    Nick Raposo, Christopher Porter
--- PROGRAMMER:  Nick Raposo, Christopher Porter
+-- DESIGNER:    Nick Raposo, Callum Styan
+-- PROGRAMMER:  Nick Raposo
 --
 -- INTERFACE:   void nextPoint(void)
 --
 -- RETURNS:     void 
 --
 -- DESCRIPTION: If we are not at the end of the path we set the next point
---              to go to.
+--              to go to.  Needed to be updated so that
 ------------------------------------------------------------------------------*/
 void Creep::nextPoint( void )
 {
