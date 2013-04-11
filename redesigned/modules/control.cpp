@@ -303,6 +303,7 @@ Control::RunAllButtons()
 --
 -- PROGRAMMER: John Payment
 --             Jesse Wright
+--             David Czech
 --
 -- INTERFACE: void RunAllKeys()
 --

@@ -315,18 +315,18 @@ void * init (void * in)
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   find_font()
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   David Czech
+-- PROGRAMMER: David Czech
 --
--- INTERFACE:   
+-- INTERFACE:   bool find_font (char ** path) 
 --
--- RETURNS:     
+-- RETURNS:     whether or not a font path name was found
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Finds a font file path name and returns a pointer to it in path via value-result.
 ------------------------------------------------------------------------------*/
 bool find_font (char ** path) 
 {
@@ -340,18 +340,18 @@ bool find_font (char ** path)
     return (FcPatternGetString(match, FC_FILE, 0, (FcChar8**)path) == FcResultMatch);
 }
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   Lerp
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   David Czech
+-- PROGRAMMER: David Czech
 --
--- INTERFACE:   
+-- INTERFACE:   Point Lerp(Point start, Point end, float percent)
 --
--- RETURNS:     
+-- RETURNS:     Linear Interpolated Point
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Returns a new Point of the Linear Interpolates between Point start and end by percent amount.
 ------------------------------------------------------------------------------*/
 Point Lerp(Point start, Point end, float percent)
 {
@@ -364,18 +364,18 @@ Point Lerp(Point start, Point end, float percent)
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   Graphics Constructor
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   David Czech
+-- PROGRAMMER: David Czech
 --
--- INTERFACE:   
+-- INTERFACE:   Graphics(ClientGameLogic CGL)
 --
--- RETURNS:     
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Finds a font path and initializes an sf::Font for the Graphics class. 
+--          Create main graphics thread.
 ------------------------------------------------------------------------------*/
 Graphics::Graphics(ClientGameLogic& clientGameLogic)
    : window(NULL), clientGameLogic_(clientGameLogic)
@@ -400,18 +400,18 @@ Graphics::Graphics(ClientGameLogic& clientGameLogic)
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   Graphics::initMainMenuControls()
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   
 -- PROGRAMMER:  Jacob Miner
 --
--- INTERFACE:   
+-- INTERFACE:   void Graphics::initMainMenuControls()
 --
--- RETURNS:     
+-- RETURNS:     void
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Initializes main menu controls (Join, Quit)
 ------------------------------------------------------------------------------*/
 void Graphics::initMainMenuControls()
 {
@@ -427,18 +427,18 @@ void Graphics::initMainMenuControls()
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   initGameControls 
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Jacob Miner
 -- PROGRAMMER: Jacob Miner
 --
--- INTERFACE:   
+-- INTERFACE:   Graphics::initGameControls()
 --
--- RETURNS:     
+-- RETURNS:     void
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Init game controls while playing (Create buttons etc)
 ------------------------------------------------------------------------------*/
 void Graphics::initGameControls () 
 {
@@ -513,18 +513,18 @@ void Graphics::initDesktop()
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   getName
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Chris Porter
+-- PROGRAMMER: Chris Porter
 --
--- INTERFACE:   
+-- INTERFACE:   std::string getName( void ) 
 --
--- RETURNS:     
+-- RETURNS:     a string containing a single randomly generated name.
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Opens and read a random line from names.txt to find a random name
 ------------------------------------------------------------------------------*/
 std::string getName( void ) {
 
@@ -850,18 +850,18 @@ void Graphics::updateLobbyRoles()
     }
 }
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   startGame()
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   
 -- PROGRAMMER: 
 --
--- INTERFACE:   
+-- INTERFACE:   Graphics::startGame()
 --
--- RETURNS:     
+-- RETURNS:     void
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Start the game
 ------------------------------------------------------------------------------*/
 void Graphics::startGame()
 {

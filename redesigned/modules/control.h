@@ -34,10 +34,6 @@
 #include "audio.h"
 #include <vector>
 
-#define TERMINATE    10000
-
-
-
 class ClientGameLogic;
 
 class Control
