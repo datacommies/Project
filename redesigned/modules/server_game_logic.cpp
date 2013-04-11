@@ -1024,7 +1024,7 @@ void ServerGameLogic::createPlayer(int team_no, Point location, int client_id, i
 void ServerGameLogic::respawnPlayer(Player* player, Point location)
 {
   player->position = location;
-  player->health = 100;
+  player->health = player->maxHealth;
   player->pendingDelete = false;
 }
 /* 
