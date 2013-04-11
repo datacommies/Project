@@ -75,7 +75,7 @@ void * init (void * in)
             // Handle SFGUI events.
             g->sfgDesktop.HandleEvent(event);
             
-            if ((event.type == sf::Event::KeyPressed) && sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
+            if ((event.type == sf::Event::KeyPressed) && sf::Keyboard::isKeyPressed(sf::Keyboard::Return) && (g->clientGameLogic_.gameState_ == LOBBY))
                 g->sendMessage();
 
             // If a mouse button was pressed, find out where we clicked.
