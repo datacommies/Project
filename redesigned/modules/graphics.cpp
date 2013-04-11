@@ -907,22 +907,22 @@ void Graphics::drawUnits(sf::RenderWindow& window)
         }
         else if (unit->type == TOWER)
         {
-            tower_sprite.setPosition(unit->position.x, unit->position.y);	
+            
 
             if (unit->maxHealth == INIT_CREEP_HP)
             {
-                tower_sprite1.setPosition(interpolated.x, interpolated.y);
+                tower_sprite1.setPosition(unit->position.x, unit->position.y);
                 window.draw(tower_sprite1);
             } else if (unit->maxHealth == INIT_CREEP_HP * 3) {
-                tower_sprite2.setPosition(interpolated.x, interpolated.y);
+                tower_sprite2.setPosition(unit->position.x, unit->position.y);
                 window.draw(tower_sprite2);
             } else if (unit->maxHealth == INIT_CREEP_HP * .75) {
-                tower_sprite3.setPosition(interpolated.x, interpolated.y);
+                tower_sprite3.setPosition(unit->position.x, unit->position.y);
                 window.draw(tower_sprite3);
             }
 
-            window.draw(tower_sprite);
-            drawHealthBar(window, unit->position.x, unit->position.y + tower_sprite.getTextureRect().height, unit->health, unit->maxHealth);
+            
+            drawHealthBar(window, unit->position.x, unit->position.y + tower_sprite1.getTextureRect().height, unit->health, unit->maxHealth);
         }
         else if (unit->type == PLAYER)
         {
