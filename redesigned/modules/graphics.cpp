@@ -1128,18 +1128,18 @@ void Graphics::drawUnits(sf::RenderWindow& window)
     pthread_mutex_unlock( &clientGameLogic_.unit_mutex );
 }
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   drawCurrency
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Jacob Miner, Dennis Ho
 -- PROGRAMMER: Jacob Miner, Dennis Ho
 --
--- INTERFACE:   
+-- INTERFACE:   void Graphics::drawCurrency(sf::RenderWindow& window)
 --
 -- RETURNS:     
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Draws the team's current currency balance on the window
 ------------------------------------------------------------------------------*/
 void Graphics::drawCurrency(sf::RenderWindow& window)
 {
@@ -1149,39 +1149,18 @@ void Graphics::drawCurrency(sf::RenderWindow& window)
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
---
--- DATE:        2013/03/22
---
--- DESIGNER:   
--- PROGRAMMER: 
---
--- INTERFACE:   
---
--- RETURNS:     
---
--- DESCRIPTION: 
-------------------------------------------------------------------------------*/
-/*void Graphics::draw(sf::RenderWindow& window)
-{
-    sf::Text currencyText(to_string(clientGameLogic_.currency), font, 20);
-    currencyText.setPosition(5, 675);
-    window.draw(currencyText);
-}*/
-
-/*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   drawEndGameScreen
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Jacob Miner, Dennis Ho
 -- PROGRAMMER: Jacob Miner, Dennis Ho
 --
--- INTERFACE:   
+-- INTERFACE:   void Graphics::drawEndGameScreen(sf::RenderWindow& window)
 --
 -- RETURNS:     
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Draws the win/lose screen when the game ends
 ------------------------------------------------------------------------------*/
 void Graphics::drawEndGameScreen(sf::RenderWindow& window)
 {
