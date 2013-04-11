@@ -13,7 +13,7 @@
 
 using namespace std;
 
-#define INIT_CREEP_HP 100
+#define INIT_CREEP_HP 150
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 700
 #define BUTTON_SIZE  40
@@ -912,9 +912,12 @@ void Graphics::drawUnits(sf::RenderWindow& window)
             } else if (unit->maxHealth == INIT_CREEP_HP * 3) {
                 creep_sprite2.setPosition(interpolated.x, interpolated.y);
                 window.draw(creep_sprite2);
-            } else if (unit->maxHealth == INIT_CREEP_HP * .75) {
+            } else if (unit->maxHealth == (int)(INIT_CREEP_HP * .75)) {
                 creep_sprite3.setPosition(interpolated.x, interpolated.y);
                 window.draw(creep_sprite3);
+            } else {
+                creep_sprite1.setPosition(interpolated.x, interpolated.y);
+                window.draw(creep_sprite1);
             }
             
             drawHealthBar(window, interpolated.x, interpolated.y+25, unit->health, unit->maxHealth);
