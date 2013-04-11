@@ -119,7 +119,7 @@ void * init (void * in)
             else if (event.type == sf::Event::Closed){
                 window.close();
                 exit(0);
-            } else if (event.type == sf::Event::KeyPressed)
+            } else if ((event.type == sf::Event::KeyPressed) && (g->clientGameLogic_.gameState_ != LOBBY))
             {
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
                     Control::get()->AddNewCalledKey(sf::Keyboard::W);
@@ -129,8 +129,10 @@ void * init (void * in)
                     Control::get()->AddNewCalledKey(sf::Keyboard::S);
                 else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
                     Control::get()->AddNewCalledKey(sf::Keyboard::D);
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return));
+                    g->sendMessage();
                 Control::get()->RunAllKeys();
-            } else if (event.type == sf::Event::KeyReleased)
+            } else if ((event.type == sf::Event::KeyReleased) && (g->clientGameLogic_.gameState_ != LOBBY))
             {
                 Control::get()->RunAllKeys();
             }
@@ -160,6 +162,7 @@ void * init (void * in)
                 if(g->clientGameLogic_.waitingForStart)
                 {
                     g->sfgLobbyWindow->Show(false);
+                    g->sfgChatDisplayWindow->Show(false);
                     g->drawLoadingScreen();
                 }
                 else
@@ -167,6 +170,20 @@ void * init (void * in)
                     // Update the names on the buttons.
                     g->updateLobbyRoles();
                 }
+
+                // Update chat with the latest messages.
+                for (std::vector<string>::iterator it = g->clientGameLogic_.clientNetwork_.chatbuffer_.begin(); it != g->clientGameLogic_.clientNetwork_.chatbuffer_.end(); ++it)
+                {
+                    g->sfgChatDisplayLabel->SetText(g->sfgChatDisplayLabel->GetText().toAnsiString() + *it);
+
+                    // Set scrollbar to lower bound.
+                    sfg::Adjustment::Ptr tempAdj = g->sfgChatDisplayWindow->GetVerticalAdjustment();
+                    tempAdj->SetValue(tempAdj->GetUpper());
+                    g->sfgChatDisplayWindow->SetVerticalAdjustment(tempAdj);
+                }
+
+
+                g->clientGameLogic_.clientNetwork_.chatbuffer_.clear();
             }
 
             // Update the names on the buttons.
@@ -202,24 +219,24 @@ void * init (void * in)
 
             for (size_t i = 0; i < 5; i++) {
                 ready_box.setFillColor(g->clientGameLogic_.clientNetwork_.team_l[i].ready ? sf::Color(  0, 255,  0) : sf::Color(  255, 0,  0));
-                ready_box.setPosition(65, i * 55 + 310);
+                ready_box.setPosition(65, i * 55 + 180);
                 window.draw(ready_box);
             }
 
             for (size_t i = 0; i < 5; i++) {
                 ready_box.setFillColor(g->clientGameLogic_.clientNetwork_.team_r[i].ready ? sf::Color(  0, 255,  0) : sf::Color(  255, 0,  0));
-                ready_box.setPosition(710, i * 55 + 310);
+                ready_box.setPosition(710, i * 55 + 180);
                 window.draw(ready_box);
             }
 
 
             for (size_t i = 0; i < 5; i++) {
-                g->player_sprites[i].setPosition(65, i * 55 + 310);
+                g->player_sprites[i].setPosition(65, i * 55 + 180);
                 g->window->draw(g->player_sprites[i]);
             }
 
             for (size_t i = 0; i < 5; i++) {
-                g->player_sprites[i].setPosition(710, i * 55 + 310);
+                g->player_sprites[i].setPosition(710, i * 55 + 180);
                 g->window->draw(g->player_sprites[i]);
             }
         }
@@ -463,7 +480,7 @@ void Graphics::initLobbyWindow()
 {
     // Create lobby window using SFGUI.
     sfgLobbyWindow = sfg::Window::Create(sfg::Window::BACKGROUND); // Make the window.
-    sfgLobbyWindow->SetPosition(sf::Vector2f(100, 225)); // Change the window position.
+    sfgLobbyWindow->SetPosition(sf::Vector2f(100, 100)); // Change the window position.
     sfgLobbyWindow->SetRequisition(sf::Vector2f(600, 350));
 
 
@@ -495,7 +512,7 @@ void Graphics::initLobbyWindow()
     }
 
     // Create the start game / exit buttons.
-    startGameButton = sfg::Button::Create("Start Game");
+    startGameButton = sfg::Button::Create("Ready");
     startGameButton->GetSignal( sfg::Widget::OnLeftClick ).Connect(&Graphics::startGame, this);
     exitLobbyButton = sfg::Button::Create("Exit Lobby");
     exitLobbyButton->GetSignal( sfg::Widget::OnLeftClick ).Connect(&Graphics::exitLobby, this);
@@ -518,6 +535,99 @@ void Graphics::initLobbyWindow()
     sfgLobbyWindow->Add(sfgLobbyBox);
 
     sfgDesktop.Add(sfgLobbyWindow);
+}
+
+/* Initializes the chat window with the chat display.
+ *
+ * PRE:     
+ * POST:    sfgChatDisplayWindow will be initialized with the scrollbars and label containing chat text.
+ * RETURNS: 
+ * NOTES:    
+ */
+void Graphics::initMessageDisplayWindow()
+{
+    // Set up the size and other settings of the message window.
+    sfgChatDisplayWindow = sfg::ScrolledWindow::Create(); // Make the scroll window
+    sfgChatDisplayWindow->SetPosition(sf::Vector2f(100, 450)); // Change the window position.
+    sfgChatDisplayWindow->SetRequisition( sf::Vector2f(600, 150) ); // Set the size
+    sfgChatDisplayWindow->SetScrollbarPolicy(sfg::ScrolledWindow::VERTICAL_AUTOMATIC); // Allow vertical scrollbars.
+    sfgChatDisplayWindow->SetPlacement( sfg::ScrolledWindow::TOP_LEFT ); // Set where content is placed. Puts scrollbars at right and bottom.
+    
+    // Test text.
+    sfgChatDisplayLabel = sfg::Label::Create();
+    sfgChatDisplayLabel->SetId("chat");
+    sfgDesktop.SetProperty("#chat", "FontSize", "12");
+
+    // Add the label containing the messages to the scrolling window.
+    sfgChatDisplayWindow->AddWithViewport(sfgChatDisplayLabel);
+
+    // Add the window to the displayed desktop.
+    sfgDesktop.Add(sfgChatDisplayWindow);
+}
+
+/* Initializes the chat window with the sending mechanism
+ *
+ * PRE:     
+ * POST:    sfgChatSendWindow will be initialized with the entry box and send button
+ * RETURNS: 
+ * NOTES:    
+ */
+void Graphics::initMessageSendWindow()
+{
+    // Create the window that will hold the entrybox and button.
+    sfgChatSendWindow = sfg::Window::Create(sfg::Window::BACKGROUND); // Make the window.
+    sfgChatSendWindow->SetPosition(sf::Vector2f(100, 600)); // Change the window position.
+    sfgChatSendWindow->SetRequisition(sf::Vector2f(600, 50));
+
+    // Create the box that will sit inside the window and set things horizontally
+    sfgChatSendBox = sfg::Box::Create(sfg::Box::HORIZONTAL);
+
+    // Create the entry box which will store the user entered message.
+    sfgChatSendEntry = sfg::Entry::Create();
+    sfgChatSendEntry->SetRequisition(sf::Vector2f(300, 0)); // Set entry box size.
+    sfgChatSendEntry->SetId("chat");
+    sfgDesktop.SetProperty("#chat", "FontSize", "12");
+
+    // Create a button to send the message.
+    sfgChatSendButton = sfg::Button::Create("Send");
+    sfgChatSendButton->GetSignal( sfg::Widget::OnLeftClick ).Connect(&Graphics::sendMessage, this);
+
+    // Pack the box with the controls in order.
+    sfgChatSendBox->Pack(sfgChatSendEntry);
+    sfgChatSendBox->Pack(sfgChatSendButton);
+
+    // Put the box in the window.
+    sfgChatSendWindow->Add(sfgChatSendBox);
+
+    // Add the window to the displayed desktop.
+    sfgDesktop.Add(sfgChatSendWindow);
+
+    sfgChatDisplayLabel->SetText("");
+}
+
+/* Sends the message over the network.
+ *
+ * PRE:     
+ * POST:    message is sent over to the server
+ * RETURNS: 
+ * NOTES:    
+ */
+void Graphics::sendMessage()
+{
+    string message;
+
+    message = clientGameLogic_.clientNetwork_._name + ": " + sfgChatSendEntry->GetText().toAnsiString() + "\n";
+
+    // Add the message to what's currently there if it isn't empty.
+    if(sfgChatSendEntry->GetText().toAnsiString() != "")
+    {
+        //sfgChatDisplayLabel->SetText(sfgChatDisplayLabel->GetText().toAnsiString());
+        cout << "in graphics, string is: " << message << endl;
+        clientGameLogic_.clientNetwork_.send_chatmsg(message);
+    }
+
+    // Clear the entry box for new entries.
+    sfgChatSendEntry->SetText("");
 }
 
 /* Button handler for the lobby player select buttons
@@ -584,6 +694,8 @@ void Graphics::startGame()
     cout << "start the game!" << endl;
     clientGameLogic_.ready();
     sfgLobbyWindow->Show(false);
+    sfgChatDisplayWindow->Show(false);
+    sfgChatSendWindow->Show(false);
 }
 
 /* Closes the lobby SFGUI window and redraws the main menu.
@@ -596,6 +708,8 @@ void Graphics::startGame()
 void Graphics::exitLobby()
 {
     sfgLobbyWindow->Show(false);
+    sfgChatDisplayWindow->Show(false);
+    sfgChatSendWindow->Show(false);
 
     // todo: actually exit the session and go back to main screen.
     clientGameLogic_.exit();
@@ -625,6 +739,8 @@ void Graphics::joinButtonHandler()
     clientGameLogic_.clientNetwork_.setConnectionInfo(name, server, atoi(port.c_str()));
     clientGameLogic_.join();
     initLobbyWindow();
+    initMessageDisplayWindow();
+    initMessageSendWindow();
 
     sfgJoinWindow->Show(false);
 }

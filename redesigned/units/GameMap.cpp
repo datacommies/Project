@@ -187,8 +187,8 @@ void GameMap::initCastlePositions(){
 void GameMap::initPlayerPositions(){
     //*** team 1 player starting positions ***
     Point c;
-    c.x = 250;
-    c.y = 250;
+    c.x = 55;
+    c.y = 55;
 
     team0start[0] = c;
 
@@ -209,17 +209,17 @@ void GameMap::initPlayerPositions(){
     //*** end of team 1 starting positions ***
 
     //*** team 2 player starting positions ***
-    c.x = 490;
-    c.y = 490;
+    c.x = 545;
+    c.y = 545;
 
     team1start[0] = c;
 
-    c.x = 480;
-    c.y = 480;
+    c.x = 580;
+    c.y = 680;
 
     team1start[1] = c;
 
-    c.x = 480;
+    c.x = 580;
     c.y = 490;
 
     team1start[2] = c;

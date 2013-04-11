@@ -123,6 +123,15 @@ private:
    sfg::Label::Ptr unassignedPlayersLabel;
    sfg::Label::Ptr unassignedPlayersList;
    
+   sfg::ScrolledWindow::Ptr sfgChatDisplayWindow;
+   sfg::Label::Ptr sfgChatDisplayLabel;
+
+   sfg::Window::Ptr sfgChatSendWindow;
+   sfg::Box::Ptr sfgChatSendBox;
+   sfg::Entry::Ptr sfgChatSendEntry;
+   sfg::Button::Ptr sfgChatSendButton;
+
+
    sfg::Box::Ptr teamOneBox;
    sfg::Label::Ptr teamOneLabel;
    sfg::Button::Ptr leftPlayers[5];
@@ -153,6 +162,9 @@ private:
    void hideJoinWindow();
    void joinButtonHandler();
    void initLobbyWindow();
+   void initMessageDisplayWindow();
+   void initMessageSendWindow();
+   void sendMessage();
    void startGame();
    void exitLobby();
    void takeRole();
