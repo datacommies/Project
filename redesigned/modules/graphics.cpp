@@ -849,6 +849,10 @@ void Graphics::loadImages()
         ss << "images/m" << i+1 << ".png";
         player_textures[i].loadFromFile(ss.str().c_str());
         player_sprites[i].setTexture(player_textures[i]);
+
+        ss << "images/l" << i+1 << ".png";
+        lobby_player_textures[i].loadFromFile(ss.str().c_str());
+        lobby_player_sprites[i].setTexture(lobby_player_textures[i]);
     }
 
 }
