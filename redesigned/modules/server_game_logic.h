@@ -111,6 +111,7 @@ class ServerGameLogic
     int getWinner();
     void initializeTeams(std::vector<player_matchmaking_t> players);
     int getPlayerRole(int teamNumber, int playerID);
+    bool getPlayerIsAlive(int teamNumber, int playerID);
     void handleDeaths();
 
     Point FindCreepSpawnPoint(int team_no, int pathID);

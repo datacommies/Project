@@ -1,3 +1,16 @@
+/*------------------------------------------------------------------------------
+-- FILE:        server_network.cpp
+--
+-- DATE:        2013/03/11
+--
+-- MAINTAINERS: David Czech, Dennis Ho,
+--              Ron Bellido, Behnam Bastami
+--
+-- FUNCTIONS:
+--              
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 #include "server_network.h"
 
 using namespace std;
@@ -11,27 +24,37 @@ struct ClientCtx {
     int team;
 };
 
-/* Constructor
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- * NOTES:   Creates a thread and starts running the module */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   Ron Bellido
+-- PROGRAMMER: Ron Bellido
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 ServerNetwork::ServerNetwork(ServerGameLogic& serverGameLogic)
    : serverGameLogic_(serverGameLogic) {}
 
-// create nix socket
-// returns error code; arg: port number
-   /* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   Ron Bellido
+-- PROGRAMMER: Ron Bellido
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 int ServerNetwork::initSock(int port)
 {
     int ov = 1;
@@ -56,15 +79,20 @@ int ServerNetwork::initSock(int port)
     listen(sock_, MAX_CONNECTIONS);
     return sock_;
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   Ron Bellido
+-- PROGRAMMER: Ron Bellido
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ServerNetwork::initNetwork()
 {    
     pthread_create (&uiThread_, NULL, handleInput, this); // start server input handler.
@@ -89,15 +117,20 @@ void ServerNetwork::initNetwork()
         clients_.push_back(client);
     }
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   Behnam Bastami
+-- PROGRAMMER: Behnam Bastami
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ServerNetwork::gameOver(int client_, const int winner)
 {
     gameover_t go = {{}, 0};
@@ -108,14 +141,20 @@ void ServerNetwork::gameOver(int client_, const int winner)
     send(client_, (const char*)&go, sizeof(gameover_t), 0);
 }
 
-/* Sends current game state to a client_.
- *
- * PRE:     client_ is connected
- * POST:    client_ has received current game state.
- * PROGRAMMER:
- * RETURNS: true on success
- *          false on fail
- * NOTES:   Current implementation is to refresh ALL data on each update. */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   Behnam Bastami
+-- PROGRAMMER: Behnam Bastami
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 bool ServerNetwork::sync(int client_, int team_)
 {
     int winner = -1;
@@ -201,29 +240,40 @@ bool ServerNetwork::sync(int client_, int team_)
     return true;
 }
 
-// fatal error wrapper
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   Ron Bellido
+-- PROGRAMMER: Ron Bellido
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ServerNetwork::error (const char *msg)
 {
     perror(msg);
     exit(1);
 }
 
-/* Interactive CLI console
- *
- * PRE:     Server sockets started
- * POST:    
- * PROGRAMMER:
- * RETURNS: void*
- * NOTES:   Current implementation is to refresh ALL data on each update. */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   David Czech, Ron Bellido
+-- PROGRAMMER: David Czech, Ron Bellido
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void* ServerNetwork::handleInput(void* args)
 {
     ServerNetwork * thiz = (ServerNetwork*) args;
@@ -250,34 +300,30 @@ void* ServerNetwork::handleInput(void* args)
             std::cout << "rest: " << rest << std::endl;
             //create an iterator
             std::vector<int>::iterator it;
-            
-            //for (it = thiz->clients_.begin() ; it!= thiz->clients_.end() ; ++it){
-            //for (size_t i = 0; i < thiz->clients_.size(); ++i) {
-               // send_chat(thiz->clients_[i], rest);
-                //send_chat(*it, rest);
-            //}
         }
     }
     
     return NULL;
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   Ron Bellido, Behnam Bastami
+-- PROGRAMMER: Ron Bellido, Behnam Bastami
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void* ServerNetwork::handleClientRequest(void* args)
 {
     ClientCtx* ctx = (ClientCtx*)args;
     ServerNetwork* thiz = (ServerNetwork*) ctx->sn;
     int client_ = ctx->client;
-
-    //Player p;
-    //thiz->serverGameLogic_.teams[0].players.push_back(p);
 
     while (1) {
         header_t head;
@@ -305,7 +351,7 @@ void* ServerNetwork::handleClientRequest(void* args)
                 thiz->serverGameLogic_.receiveCreateUnitCommand(client_, rc.unit, loc, rc.path);
             break;
 
-            case MSG_REQUEST_PLAYER_MOVE:
+            case MSG_REQUEST_PLAYER_MOVE: {
                 request_player_move_t rpm;
                 rpm.head = head;
                 x = thiz->recv_complete(client_, ((char*) &rpm) + sizeof(header_t), sizeof(request_player_move_t) - sizeof(header_t), 0);
@@ -315,22 +361,48 @@ void* ServerNetwork::handleClientRequest(void* args)
 
                 Direction dir = rpm.direction;
                 thiz->serverGameLogic_.receiveMovePlayerCommand(client_, dir);
+            }
                 
+            break;
+            case MSG_CHAT: { //Received a chatmsg_t, now relay this chatmsg_t to all the clients
+                chatmsg_t * chat = (chatmsg_t*) new char[sizeof(header_t) + head.size];
+                char * buf = new char [head.size];
+                //memset(buf, 0, head.size);
+
+                thiz->recv_complete(client_, buf, head.size, 0);
+
+                //memset(chat.msg, 0, head.size);
+                chat->head.type = MSG_CHAT;
+                chat->head.size = head.size;
+                strncpy(chat->msgbuf, buf, chat->head.size);
+
+                //send the message to all the clients including the sender
+                for (size_t i = 0; i < thiz->players_.size(); ++i) {
+                    send(thiz->clients_[i], chat, sizeof(header_t) + head.size, 0);
+                }
+
+                delete buf;
+            }
             break;
        }
     }
 
     return NULL;
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   David Czech, Behnam Bastami 
+-- PROGRAMMER: David Czech, Behnam Bastami 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void* ServerNetwork::handleClient(void* args)
 {
     cout << "Handling client!" << endl;
@@ -356,33 +428,23 @@ void* ServerNetwork::handleClient(void* args)
  
     return NULL;
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
-void ServerNetwork::handleRequests()
-{
-    
-}
-    
-/* Receive len amount of byte completely (no partial recv) */
-// returns int bytes read
-// recv_complete
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
-int ServerNetwork::recv_complete(int sockfd, void *buf, size_t len, int flags) {
+
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   David Czech
+-- PROGRAMMER: David Czech, Behnam Bastami
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
+int ServerNetwork::recv_complete (int sockfd, void *buf, size_t len, int flags) {
+
     size_t bytesRead = 0;
     ssize_t result;
     
@@ -399,30 +461,38 @@ int ServerNetwork::recv_complete(int sockfd, void *buf, size_t len, int flags) {
     return bytesRead;
 }
 
-// Move me! //NO!
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 bool operator == (const player_matchmaking_t& a, const player_matchmaking_t& b) {
     return a.pid == b.pid;
 }
 
-//Lobby functions
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   Ron Bellido
+-- PROGRAMMER: Ron Bellido
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 bool ServerNetwork::update_all_clients(int message) {
     for (size_t i = 0; i < clients_.size(); i++) {
         for (size_t j = 0; j < players_.size(); j++) {
@@ -434,31 +504,40 @@ bool ServerNetwork::update_all_clients(int message) {
     return true;
 }
 
-// Basically runs another function without making it static (this one is static)
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   Ron Bellido
+-- PROGRAMMER: Ron Bellido
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void * ServerNetwork::handle_single_client_lobby(void* thing) {
     cout << "Handling client!" << endl;
     ClientCtx* ctx = (ClientCtx*)thing;
     ServerNetwork* thiz = (ServerNetwork*) ctx->sn;
     return thiz->handle_client_lobby(ctx);
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER: Ronald Bellido
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   Ron Bellido, David Czech
+-- PROGRAMMER: Ron Bellido, David Czech
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void * ServerNetwork::handle_client_lobby(void * ctx)
 {
     ClientCtx* ctax = (ClientCtx*)ctx;

@@ -66,6 +66,10 @@ public:
    sf::RenderWindow * window;
    pthread_t t;
    
+
+   sfg::ScrolledWindow::Ptr sfgChatDisplayWindow;
+   sfg::Window::Ptr sfgChatSendWindow;
+   
 private:
    // Module references
    ClientGameLogic& clientGameLogic_;
@@ -121,10 +125,8 @@ private:
    sfg::Label::Ptr unassignedPlayersLabel;
    sfg::Label::Ptr unassignedPlayersList;
    
-   sfg::ScrolledWindow::Ptr sfgChatDisplayWindow;
    sfg::Label::Ptr sfgChatDisplayLabel;
 
-   sfg::Window::Ptr sfgChatSendWindow;
    sfg::Box::Ptr sfgChatSendBox;
    sfg::Entry::Ptr sfgChatSendEntry;
    sfg::Button::Ptr sfgChatSendButton;

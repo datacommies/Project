@@ -2,18 +2,28 @@
 #include "client_network.h"
 #include "../units/creep.h"
 #include "client_game_logic.h"
+#include "graphics.h"
 
 using namespace std;
 
 player_matchmaking_t empty = {{0, 0}, "Empty", 0, 0, 0, false};
 
-/* Constructor
- *
- * PRE:
- * POST:
- * PROGRAMMER:
- * RETURNS:
- * NOTES:   Creates a thread and starts running the module */
+extern Graphics* globalGraphics; 
+
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   Aaron Lee
+-- PROGRAMMER: Aaron Lee
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 ClientNetwork::ClientNetwork() {
 	for (int i = 0; i < 5; ++i) {	
 		memcpy(team_r+i, &empty, sizeof(player_matchmaking_t));
@@ -25,7 +35,7 @@ ClientNetwork::ClientNetwork() {
 }
 
 /* Destructor
- *
+ * Aaron Lee
  */
 ClientNetwork::~ClientNetwork()
 {
@@ -33,19 +43,20 @@ ClientNetwork::~ClientNetwork()
 	close(connectsock);
 }
 
-/* Connects to a server with the connection parameters set before.
- *
- * PRE: setConnectionInfo() called with valid server, port, and name.
- * POST: client is connected to the server with the specified _server and port
- * ARGS: None
- *
- * PROGRAMMER:
- *
- * RETURNS: true if connected to the server succesfully, false otherwise.
- *
- * NOTES: Initializes the connection sockets, server details (structs), then
- * establishes a connection.
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   David Czech, Behnam Bastami
+-- PROGRAMMER: David Czech, Ron Bellido, Behnam Bastami
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 bool ClientNetwork::connectToServer()
 {
 	connecting_status = "Connecting...";
@@ -88,7 +99,6 @@ bool ClientNetwork::connectToServer()
 	std::cout << "Connected!" << std::endl;
 
 	player_matchmaking_t p = {{0, 0}, {0}, 0, 0, 0, false};
-	//TODO: get user's name from GUI. Hardcode for now.
 	strcpy(p.name, _name.c_str());
 	p.team = 2; // 2 is waiting/spectate team.
 	p.role = 0;
@@ -103,15 +113,20 @@ bool ClientNetwork::connectToServer()
 	recvReply();
 	return true;
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   David Czech, Behnam Bastami, Aaron Lee
+-- PROGRAMMER: David Czech, Behnam Bastami, Ron Bellido
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ClientNetwork::recvReply() {
 	long n;
 
@@ -204,10 +219,11 @@ void ClientNetwork::recvReply() {
 							updated = true;
 
 							if (gl->units[i].health <= 0)
-							{	
-							    audio_.playMusic("sounds/wilhelm.ogg");				
+							{
+								if(u.unit_type == CREEP)
+									audio_.playMusic("sounds/wilhelm.ogg");				
 								gl->units.erase(gl->units.begin() + i);
-						    }
+							}
 						}
 					}
 					if (!updated)
@@ -246,7 +262,13 @@ void ClientNetwork::recvReply() {
 			// Ack the start.
 			header_t ack = {MSG_START, 0}; 
 			send(connectsock, &ack, sizeof(header_t), 0);
+
+			// Remove the chat.
+            globalGraphics->sfgChatDisplayWindow->Show(false);
+            globalGraphics->sfgChatSendWindow->Show(false);
+			
 			gl->start();
+
 
 		} else if (head.type == MSG_CHAT) { //chat message is received during the lobby
             char * buf = new char [head.size];
@@ -263,15 +285,20 @@ void ClientNetwork::recvReply() {
 	}
 }
 
-/* Sends a create unit request to the server.
- *
- * PRE:     Client is connected
- * POST:    Request has been sent to server
- * PROGRAMMER:
- * RETURNS: true on success
- *          false on fail
- * NOTES:   No validation performed here. 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   Behnam Bastami, Aaron Lee
+-- PROGRAMMER: Behnam Bastami
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 bool ClientNetwork::createUnit(int playerId, UnitType type, Point location, int path)
 {
 	//TODO: Not using playtypeerID at all!
@@ -289,15 +316,20 @@ bool ClientNetwork::createUnit(int playerId, UnitType type, Point location, int 
 	send(connectsock, &request, sizeof(request_create_t), 0);
     return false;
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   David Czech
+-- PROGRAMMER: David Czech, Ron Bellido
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 
 bool ClientNetwork::updatePlayerLobby (int team, int role, const char* name, bool ready) {
 
@@ -327,13 +359,20 @@ bool ClientNetwork::updatePlayerLobby (int team, int role, const char* name, boo
 	return true;
 }
 
-/* Sends a move player request to the server.
- *
- * PRE:     Client is connected
- * POST:    Request has been sent to server
- * RETURNS: true on success
- *          false on fail
- * NOTES:   No validation performed here. */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   Behnam Bastami, Dennis Ho
+-- PROGRAMMER: Behnam Bastami
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 bool ClientNetwork::movePlayer(int playerId, Direction direction)
 {
 	request_player_move_t request;
@@ -346,39 +385,40 @@ bool ClientNetwork::movePlayer(int playerId, Direction direction)
 	return false;
 }
 
-/* Sends an attack request to the server.
- *
- * PRE:     Client is connected
- * POST:    Request has been sent to the server
- * RETURNS: true on success
- *          false on fail
- * NOTES:   No validation performed here. */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   
+-- PROGRAMMER: 
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 bool ClientNetwork::attack(int playerId, Direction direction)
 {
    return false;
 }
 
-/*
- * Sends a generic request to the server
- *
- * PRE: client is connected to the server
- * POST: msg is received in server side
- *
- * RETURNS: the amount of message sent
- */
-int ClientNetwork::sendRequest(int msg)
-{
-	return 1;
-}
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   David Czech
+-- PROGRAMMER: David Czech, Ron Bellido
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ClientNetwork::player_update (player_matchmaking_t * p) {
 	printf("Player: %d %s\t" "Team: %d\t"
 		"Role: %d\t" "Ready: %s\n",
@@ -404,15 +444,20 @@ void ClientNetwork::player_update (player_matchmaking_t * p) {
 	else 
 		waiting.push_back(*p);
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   David Czech
+-- PROGRAMMER: David Czech, Ron Bellido
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ClientNetwork::player_leave (player_matchmaking_t * p) {
 	printf("Player Left: %s\n", p->name);
 
@@ -428,63 +473,79 @@ void ClientNetwork::player_leave (player_matchmaking_t * p) {
 		}
 	}
 }
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   David Czech
+-- PROGRAMMER: David Czech
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ClientNetwork::msg_mapname (char * map) {
 	printf("Got map name: %s\n", map);
 }
-
-/* 
- *
- * PRE:     
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   David Czech
+-- PROGRAMMER: David Czech
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ClientNetwork::msg_chat (char * text) {
 	printf("message: %s\n", text);
 }
 
-/* 
- *
- * PRE: msg is null terminated
- * POST: message is sent to the server
- * PROGRAMMER: Ronald Bellido
- * RETURNS: void
- *          
- * NOTES: Sends a MSG_CHAT to the server, which will relay the message to all the clients including the sender.
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   Ron Bellido, Behnam Bastami
+-- PROGRAMMER: Ron Bellido
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 void ClientNetwork::send_chatmsg(string msg) {
 	chatmsg_t * chat = (chatmsg_t*) new char[sizeof(header_t) + msg.size()];
 	chat->head.type = MSG_CHAT;
 	chat->head.size = msg.size();
 	strncpy(chat->msgbuf, msg.c_str(), chat->head.size);
 
-	cout << "message size: " << chat->head.size << endl;
-	cout << "messagebufinsendchat: " << chat->msgbuf << endl;
-	cout << "endmessage" << endl;
-
 	send(connectsock, chat, sizeof(header_t) + msg.size(), 0);
 }
 
-/* 
- *
- * PRE:      
- * POST:    
- * PROGRAMMER:
- * RETURNS: 
- *          
- * NOTES: 
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   David Czech
+--
+-- PROGRAMMER: David Czech, Behnam Bastami
+--
+-- INTERFACE:   
+--
+-- RETURNS:     
+--
+-- DESCRIPTION: 
+------------------------------------------------------------------------------*/
 int ClientNetwork::recv_complete (int sockfd, void *buf, size_t len, int flags) {
     size_t bytesRead = 0;
     ssize_t result;

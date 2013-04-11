@@ -33,6 +33,7 @@
 --              and updating the GameMap. 
 ------------------------------------------------------------------------------*/
 #include "GameMap.h"
+#include <cmath>
 
 /*------------------------------------------------------------------------------
 -- FUNCTION:    initPaths
@@ -84,18 +85,10 @@ void GameMap::initPaths(){
 
 
   // left team, mid lane
-  a.x = 55;
-  a.y = 41;
-  midOne.push_back(a);
-  a.x = 155;
-  a.y = 100;
-  midOne.push_back(a);
-  a.x = 135;
-  a.y = 100; 
-  midOne.push_back(a);
-  a.x = -1;
-  a.y = -1;
-  midOne.push_back(a);
+  for (int x = 40; x <= 800; x+=2)
+    midOne.push_back(Point(x, round((double)x * MAP_Y/MAP_X)));
+  midOne.push_back(Point(-1,-1));  
+
   //*** end of team 1 paths ***
 
 
@@ -131,18 +124,9 @@ void GameMap::initPaths(){
   botTwo.push_back(b);
 
   //middle
-  b.x = 470;
-  b.y = 470;
-  midTwo.push_back(b);
-  b.x = 250;
-  b.y = 250;
-  midTwo.push_back(b);
-  b.x = 30;
-  b.y = 30;
-  midTwo.push_back(b);
-  b.x = -1;
-  b.y = -1;
-  midTwo.push_back(b);
+  for (int x = 795; x >= 0; x-=2)
+    midTwo.push_back(Point(x, round((double)x * MAP_Y/MAP_X)));
+  midTwo.push_back(Point(-1,-1));  
   //*** end of team 2 paths ***    
 }
 
@@ -307,48 +291,6 @@ int GameMap::max(int a, int b)
   return a > b ? a : b;
 }
 
-/*
- * This merges two maps together. eg, both = GameLogicMap(map1, map2);
- */
-/*
-  GameMap::GameMap(GameMap& map1, GameMap& map2)
-: max_x_(max(map1.max_x_, map2.max_x_)), max_y_(max(map1.max_y_, map2.max_y_))
-{
-  _init();
-  merge(map1, map2);
-}
-*/
-/*
-void GameMap::merge(GameMap& map1, GameMap& map2)
-{
-
-  reset ();
-  int x, y;
-
-  // Okay, yes, I know, in this game, both maps will be the same size....
-  int min_x = min(map1.max_x_, map2.max_x_);
-  int min_y = min(map1.max_y_, map2.max_y_);
-
-  // add units_s together ...
-  for(std::map<Unit*, Point>::const_iterator it = map1.units_.begin(), it_end = map1.units_.end(); it != it_end; ++it)
-    units_.insert(*it);
-  for(std::map<Unit*, Point>::const_iterator it = map2.units_.begin(), it_end = map2.units_.end(); it != it_end; ++it)
-    units_.insert(*it);
-
-  // add grid_s together
-  for (x=0; x<=min_x; x++)
-    for (y=0; y<=min_y; y++) {
-
-      if (map1.grid_[x][y] != 0 && map2.grid_[x][y] != 0) {
-        fprintf(stderr, "!!!Error..more than one object occuping the same space!!! %s line: %d\n", __FILE__, __LINE__);
-      }
-
-      grid_[x][y] = map1.grid_[x][y] != NULL ? map1.grid_[x][y] : map2.grid_[x][y];
-    }
-}
-*/
-
-
 /*------------------------------------------------------------------------------
 -- FUNCTION:    printGrid
 --
@@ -459,27 +401,6 @@ void GameMap::_helperBuild(Unit *unit, UnitType type, Point pos, int team_no) {
   // set team_no since in case it wasn't done already
   unit->team = team_no;
 }
-
-// This b_uilds everything based on the Team class
-/*
-void GameMap::build(Team &team) {
-
-  reset();
-
-  for (std::vector<Creep*>::iterator it = team.creeps.begin(); it != team.creeps.end(); ++it)
-    _helperBuild(*it, CREEP, (*it)->getPos());
-
-  for (std::vector<Tower*>::iterator it = team.towers.begin(); it != team.towers.end(); ++it) {
-    _helperBuild(*it, TOWER, (*it)->getPos());
-  }
-
-  for (std::vector<Player*>::iterator it = team.players.begin(); it != team.players.end(); ++it) {
-    _helperBuild(*it, PLAYER, (*it)->getPos());
-  }
-}
-*/
-
-
 /*------------------------------------------------------------------------------
 -- FUNCTION:    build
 --

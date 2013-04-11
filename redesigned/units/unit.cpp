@@ -43,7 +43,7 @@ Unit::Unit(int uid, Point pos, int hp, int atkdmg,
 --
 -- DATE:        March 26, 2013
 --
--- DESIGNER:    Callum Styan, Steve Lo, Kevin Tangeman
+-- DESIGNER:    Callum Styan, Steve Lo, Kevin Tangeman, Behnam Bastami
 -- PROGRAMMER:  Callum Styan, Steve Lo, Kevin Tangeman
 --
 -- INTERFACE:   Unit::Unit(int uid, int side, Point pos, int hp, int atkdmg,
@@ -293,8 +293,8 @@ void Unit::Rotate(Point pt) {
 --
 -- DATE:        2013/03/11
 --
--- DESIGNER:    Behnam Bastami, Aaron Lee
--- PROGRAMMER:  Behnam Bastami, Aaron Lee, David Czech
+-- DESIGNER:    Behnam Bastami, Aaron Lee, David Czech
+-- PROGRAMMER:  Behnam Bastami, Aaron Lee
 --
 -- INTERFACE:   Unit::serializeUnit()
 --
