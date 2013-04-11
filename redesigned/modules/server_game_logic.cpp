@@ -867,7 +867,7 @@ void ServerGameLogic::createCreep(int team_no, Point location, int path_no, Unit
     break;
     case CREEP_TWO: // Tank (lots of health, but slower than fuck)
       hp = INIT_CREEP_HP * 3;
-      atkdmg = INIT_CREEP_ATKDMG;
+      atkdmg = INIT_CREEP_ATKDMG + 4;
       atkrng = INIT_CREEP_ATKRNG * 4;
       atkspd = INIT_CREEP_ATKSPD;
       percep = INIT_CREEP_PERCEP * 5;
@@ -992,14 +992,15 @@ void ServerGameLogic::createPlayer(int team_no, Point location, int client_id, i
     break;
 
     case 1: //gordon freeman
-      player->health = 250;
-      player->attackDamage = 11;
+      player->health = 300;
+      player->attackDamage = 12;
+      player->setSpeed(6);
     break;
 
     case 2: //the flash
-      player->setSpeed(8);
+      player->setSpeed(9);
       player->health = 150;
-      player->attackDamage = 6;
+      player->attackDamage = 7;
     break;
 
     case 3: //samus
@@ -1010,7 +1011,7 @@ void ServerGameLogic::createPlayer(int team_no, Point location, int client_id, i
     case 4: //hulk
       player->setSpeed(3);
       player->health = 600;
-      player->attackDamage = 14;
+      player->attackDamage = 15;
     break;
   }
   player->maxHealth = player->health;
