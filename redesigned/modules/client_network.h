@@ -63,6 +63,9 @@ public:
    // Connection parameters
    std::string _name, _server; 
    int _port;
+
+   //chat parameters
+   std::vector<std::string> chatbuffer_;
 private:
 
    int connectsock;
