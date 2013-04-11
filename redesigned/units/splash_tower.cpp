@@ -26,6 +26,7 @@ SplashTower::SplashTower(int uid, Point pos, int hp, int atkdmg, int atkrng,
 				        ,splashDamage(spldmg), splashRange(splrng)
 {
     //validation
+    pendingDelete = false; // !!!
 }
 
 SplashTower::SplashTower(int uid, int side, Point pos, int hp, int atkdmg,
@@ -34,6 +35,7 @@ SplashTower::SplashTower(int uid, int side, Point pos, int hp, int atkdmg,
 {
     //any required validation
     printf("Inside unit constructor, x:%d y:%d\n", position.x, position.y);
+    pendingDelete = false; // !!!
 }
 
 /*------------------------------------------------------------------------------
