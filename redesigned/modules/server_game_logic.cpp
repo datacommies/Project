@@ -992,18 +992,18 @@ void ServerGameLogic::createPlayer(int team_no, Point location, int client_id, i
     break;
 
     case 1: //gordon freeman
-      player->health = 300;
+      player->health = 275;
       player->attackDamage = 12;
       player->setSpeed(6);
     break;
 
     case 2: //the flash
       player->setSpeed(9);
-      player->health = 150;
       player->attackDamage = 7;
     break;
 
     case 3: //samus
+      player->health = 215;
       player->setSpeed(6);
       player->attackDamage = 9;
     break;
