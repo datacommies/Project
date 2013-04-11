@@ -28,6 +28,7 @@
 ClientGameLogic::ClientGameLogic(ClientNetwork& clientNetwork)
    : clientNetwork_(clientNetwork), gameState_(MAIN_MENU)
 {
+   waitingForStart = false;
    clientNetwork_.gl = this;
    //unit_mutex = PTHREAD_MUTEX_INITIALIZER; // only allowed for declaration-initialization.
    pthread_mutex_init(&unit_mutex, NULL);
