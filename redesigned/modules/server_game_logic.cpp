@@ -522,7 +522,7 @@ void ServerGameLogic::updateCreate(CommandData& command)
     case CREEP:
       {  
         // Check if 2 seconds has elapsed since the last creep creation for the team.
-        if(time(NULL) - lastCreepTime_[team_no] >= 2)
+        if(time(NULL) - lastCreepTime_[team_no] >= 1)
         {
           createCreep(team_no, command.location, command.pathID);
           lastCreepTime_[team_no] = time(NULL);
@@ -655,6 +655,17 @@ for (unsigned int i = 0; i < teams[team].players.size(); ++i) {
     
     Point new_position = teams[team].players[i]->position;
 
+    std::cout << "TEAM: " << team << " PLAYER : " <<  i  << "TOD: " << teams[team].players[i]->tod  << std::endl;
+    if (teams[team].players[i]->tod != 0 && time(NULL) >= teams[team].players[i]->tod + 3)
+    {
+        respawnPlayer(teams[team].players[i], teams[team].players[i]->team == 0 ? gameMap_->team0start[0] : gameMap_->team1start[0]);
+        teams[team].players[i]->tod = 0;
+        return;
+    }
+    
+    if (teams[team].players[i]->tod != 0) { // death
+        return;
+    }
 
     if (dir & UP)
        new_position.y-= teams[team].players[i]->moveSpeed;
@@ -672,7 +683,7 @@ for (unsigned int i = 0; i < teams[team].players.size(); ++i) {
 	    teams[team].players[i]->position = new_position;
 
     for (unsigned int j = 0; j < teams[otherteam].players.size(); ++j) {
-      if (distance(teams[team].players[i]->position, teams[otherteam].players[j]->position) < 25) {
+      if (teams[otherteam].players[j]->tod == 0 && distance(teams[team].players[i]->position, teams[otherteam].players[j]->position) < 25) {
         teams[otherteam].players[j]->health -= 1;
         collided = true;
         break;
@@ -1010,11 +1021,14 @@ void ServerGameLogic::handleDeaths()
  */
 void ServerGameLogic::handlePlayerDeath(Player *player)
 {
-  // Respawn
-  respawnPlayer(player, player->team == 0 ? gameMap_->team0start[0] : gameMap_->team1start[0]);
 
   // Give other team some monies
-  giveTeamBonus(player->team == 0 ? 1 : 0, PLAYER_KILL_BONUS);  
+  if (player->tod == 0) {
+      giveTeamBonus(player->team == 0 ? 1 : 0, PLAYER_KILL_BONUS);
+      
+      // Set Respawn timestamp
+      player->tod = time(NULL);
+  }
 }
 /* 
  *
