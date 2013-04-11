@@ -667,11 +667,11 @@ for (unsigned int i = 0; i < teams[team].players.size(); ++i) {
     {
         respawnPlayer(teams[team].players[i], teams[team].players[i]->team == 0 ? gameMap_->team0start[0] : gameMap_->team1start[0]);
         teams[team].players[i]->tod = 0;
-        return;
+        continue;
     }
     
     if (teams[team].players[i]->tod != 0) { // death
-        return;
+        continue;
     }
 
     if (dir & UP)
@@ -988,23 +988,23 @@ void ServerGameLogic::createPlayer(int team_no, Point location, int client_id, i
 
   switch (role){
     case 1: //gordon freeman
-      player->health = 115;
+      player->health = 225;
     break;
 
     case 2: //the flash
-      player->setSpeed(10);
+      player->setSpeed(8);
       player->health = 150;
-      player->attackDamage = 8;
+      player->attackDamage = 6;
     break;
 
     case 3: //samus
       player->setSpeed(6);
-      player->attackDamage = 9;
+      player->attackDamage = 11;
     break;
 
     case 4: //hulk
       player->setSpeed(2);
-      player->health = 250;
+      player->health = 500;
       player->attackDamage = 14;
     break;
   }
@@ -1024,7 +1024,7 @@ void ServerGameLogic::createPlayer(int team_no, Point location, int client_id, i
 void ServerGameLogic::respawnPlayer(Player* player, Point location)
 {
   player->position = location;
-  player->health = 100;
+  player->health = player->maxHealth;
   player->pendingDelete = false;
 }
 /* 
