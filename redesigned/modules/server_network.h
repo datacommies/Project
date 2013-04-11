@@ -32,6 +32,9 @@ public:
     void * handle_client_lobby(void *);
 
     void gameOver(int client_, const int winner);
+    void syncFirstTeam(int);
+    void syncSecondTeam(int);
+    void syncTeamCurrency(int, int);
 
 
 private:
