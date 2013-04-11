@@ -3,8 +3,8 @@
 --
 -- DATE:        2013/03/11
 --
--- MAINTAINERS: Callum Styan, David Czech, Dennis Ho,
---              Jesse Wright, Behnam Bastami
+-- MAINTAINERS: David Czech, Dennis Ho,
+--              Ron Bellido, Behnam Bastami
 --
 -- FUNCTIONS:
 --              
@@ -29,8 +29,8 @@ struct ClientCtx {
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Ron Bellido
+-- PROGRAMMER: Ron Bellido
 --
 -- INTERFACE:   
 --
@@ -46,8 +46,8 @@ ServerNetwork::ServerNetwork(ServerGameLogic& serverGameLogic)
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Ron Bellido
+-- PROGRAMMER: Ron Bellido
 --
 -- INTERFACE:   
 --
@@ -84,8 +84,8 @@ int ServerNetwork::initSock(int port)
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Ron Bellido
+-- PROGRAMMER: Ron Bellido
 --
 -- INTERFACE:   
 --
@@ -122,8 +122,8 @@ void ServerNetwork::initNetwork()
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Behnam Bastami
+-- PROGRAMMER: Behnam Bastami
 --
 -- INTERFACE:   
 --
@@ -146,8 +146,8 @@ void ServerNetwork::gameOver(int client_, const int winner)
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Behnam Bastami
+-- PROGRAMMER: Behnam Bastami
 --
 -- INTERFACE:   
 --
@@ -245,8 +245,8 @@ bool ServerNetwork::sync(int client_, int team_)
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Ron Bellido
+-- PROGRAMMER: Ron Bellido
 --
 -- INTERFACE:   
 --
@@ -265,8 +265,8 @@ void ServerNetwork::error (const char *msg)
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   David Czech, Ron Bellido
+-- PROGRAMMER: David Czech, Ron Bellido
 --
 -- INTERFACE:   
 --
@@ -310,8 +310,8 @@ void* ServerNetwork::handleInput(void* args)
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Ron Bellido, Behnam Bastami
+-- PROGRAMMER: Ron Bellido, Behnam Bastami
 --
 -- INTERFACE:   
 --
@@ -394,8 +394,8 @@ void* ServerNetwork::handleClientRequest(void* args)
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   David Czech, Behnam Bastami 
+-- PROGRAMMER: David Czech, Behnam Bastami 
 --
 -- INTERFACE:   
 --
@@ -428,31 +428,14 @@ void* ServerNetwork::handleClient(void* args)
  
     return NULL;
 }
+
 /*------------------------------------------------------------------------------
 -- FUNCTION:   
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
---
--- INTERFACE:   
---
--- RETURNS:     
---
--- DESCRIPTION: 
-------------------------------------------------------------------------------*/
-void ServerNetwork::handleRequests()
-{
-    
-}
-/*------------------------------------------------------------------------------
--- FUNCTION:   
---
--- DATE:        2013/03/22
---
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   David Czech
+-- PROGRAMMER: David Czech, Behnam Bastami
 --
 -- INTERFACE:   
 --
@@ -501,8 +484,8 @@ bool operator == (const player_matchmaking_t& a, const player_matchmaking_t& b) 
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Ron Bellido
+-- PROGRAMMER: Ron Bellido
 --
 -- INTERFACE:   
 --
@@ -526,8 +509,8 @@ bool ServerNetwork::update_all_clients(int message) {
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Ron Bellido
+-- PROGRAMMER: Ron Bellido
 --
 -- INTERFACE:   
 --
@@ -546,8 +529,8 @@ void * ServerNetwork::handle_single_client_lobby(void* thing) {
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Ron Bellido, David Czech
+-- PROGRAMMER: Ron Bellido, David Czech
 --
 -- INTERFACE:   
 --

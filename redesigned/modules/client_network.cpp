@@ -15,8 +15,8 @@ extern Graphics* globalGraphics;
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Aaron Lee
+-- PROGRAMMER: Aaron Lee
 --
 -- INTERFACE:   
 --
@@ -35,7 +35,7 @@ ClientNetwork::ClientNetwork() {
 }
 
 /* Destructor
- *
+ * Aaron Lee
  */
 ClientNetwork::~ClientNetwork()
 {
@@ -48,8 +48,8 @@ ClientNetwork::~ClientNetwork()
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   David Czech, Behnam Bastami
+-- PROGRAMMER: David Czech, Ron Bellido, Behnam Bastami
 --
 -- INTERFACE:   
 --
@@ -99,7 +99,6 @@ bool ClientNetwork::connectToServer()
 	std::cout << "Connected!" << std::endl;
 
 	player_matchmaking_t p = {{0, 0}, {0}, 0, 0, 0, false};
-	//TODO: get user's name from GUI. Hardcode for now.
 	strcpy(p.name, _name.c_str());
 	p.team = 2; // 2 is waiting/spectate team.
 	p.role = 0;
@@ -119,8 +118,8 @@ bool ClientNetwork::connectToServer()
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   David Czech, Behnam Bastami, Aaron Lee
+-- PROGRAMMER: David Czech, Behnam Bastami, Ron Bellido
 --
 -- INTERFACE:   
 --
@@ -291,8 +290,8 @@ void ClientNetwork::recvReply() {
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Behnam Bastami, Aaron Lee
+-- PROGRAMMER: Behnam Bastami
 --
 -- INTERFACE:   
 --
@@ -322,8 +321,8 @@ bool ClientNetwork::createUnit(int playerId, UnitType type, Point location, int 
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   David Czech
+-- PROGRAMMER: David Czech, Ron Bellido
 --
 -- INTERFACE:   
 --
@@ -365,8 +364,8 @@ bool ClientNetwork::updatePlayerLobby (int team, int role, const char* name, boo
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Behnam Bastami, Dennis Ho
+-- PROGRAMMER: Behnam Bastami
 --
 -- INTERFACE:   
 --
@@ -405,31 +404,14 @@ bool ClientNetwork::attack(int playerId, Direction direction)
    return false;
 }
 
+
 /*------------------------------------------------------------------------------
 -- FUNCTION:   
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
---
--- INTERFACE:   
---
--- RETURNS:     
---
--- DESCRIPTION: 
-------------------------------------------------------------------------------*/
-int ClientNetwork::sendRequest(int msg)
-{
-	return 1;
-}
-/*------------------------------------------------------------------------------
--- FUNCTION:   
---
--- DATE:        2013/03/22
---
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   David Czech
+-- PROGRAMMER: David Czech, Ron Bellido
 --
 -- INTERFACE:   
 --
@@ -467,8 +449,8 @@ void ClientNetwork::player_update (player_matchmaking_t * p) {
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   David Czech
+-- PROGRAMMER: David Czech, Ron Bellido
 --
 -- INTERFACE:   
 --
@@ -496,8 +478,8 @@ void ClientNetwork::player_leave (player_matchmaking_t * p) {
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   David Czech
+-- PROGRAMMER: David Czech
 --
 -- INTERFACE:   
 --
@@ -513,8 +495,8 @@ void ClientNetwork::msg_mapname (char * map) {
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   David Czech
+-- PROGRAMMER: David Czech
 --
 -- INTERFACE:   
 --
@@ -531,8 +513,8 @@ void ClientNetwork::msg_chat (char * text) {
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Ron Bellido, Behnam Bastami
+-- PROGRAMMER: Ron Bellido
 --
 -- INTERFACE:   
 --
@@ -546,10 +528,6 @@ void ClientNetwork::send_chatmsg(string msg) {
 	chat->head.size = msg.size();
 	strncpy(chat->msgbuf, msg.c_str(), chat->head.size);
 
-	cout << "message size: " << chat->head.size << endl;
-	cout << "messagebufinsendchat: " << chat->msgbuf << endl;
-	cout << "endmessage" << endl;
-
 	send(connectsock, chat, sizeof(header_t) + msg.size(), 0);
 }
 
@@ -558,8 +536,9 @@ void ClientNetwork::send_chatmsg(string msg) {
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   David Czech
+--
+-- PROGRAMMER: David Czech, Behnam Bastami
 --
 -- INTERFACE:   
 --

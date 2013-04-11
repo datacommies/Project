@@ -76,8 +76,8 @@ ServerGameLogic::~ServerGameLogic()
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   David Czech, Behnam Bastami 
+-- PROGRAMMER: David Czech, Behnam Bastami
 --
 -- INTERFACE:   
 --
@@ -206,8 +206,8 @@ void ServerGameLogic::initializeTowers()
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Behnam Bastami
+-- PROGRAMMER: Behnam Bastami
 --
 -- INTERFACE:   
 --
@@ -383,8 +383,8 @@ Point ServerGameLogic::FindCreepSpawnPoint(int team_no, int pathID)
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Dennis Ho, Behnam Bastami, 
+-- PROGRAMMER: Dennis Ho
 --
 -- INTERFACE:   
 --
@@ -408,8 +408,8 @@ void ServerGameLogic::receiveMovePlayerCommand(int playerId, Direction direction
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Dennis Ho, Behnam Bastami, 
+-- PROGRAMMER: Dennis Ho
 --
 -- INTERFACE:   
 --
@@ -433,8 +433,8 @@ void ServerGameLogic::receiveMoveUnitCommand(int unitId, Direction direction)
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Dennis Ho, Behnam Bastami
+-- PROGRAMMER: Dennis Ho
 --
 -- INTERFACE:   
 --
@@ -457,8 +457,8 @@ void ServerGameLogic::receiveAttackCommand(int playerId, Direction direction)
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Albert Liao, Darry Danzig
+-- PROGRAMMER: Albert Liao, Darry Danzig
 --
 -- INTERFACE:   
 --
@@ -470,7 +470,6 @@ int ServerGameLogic::WhichTeam(int id) {
 
   updateMaps();
 
-  //USE THIS UNTIL YOUR MAP STUFF WORKS
   for (std::vector<Player*>::iterator it = teams[0].players.begin(); it != teams[0].players.end(); ++it)
   {
     if((*it)->clientID == id)
@@ -879,8 +878,8 @@ void ServerGameLogic::setAlarm()
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Behnam Bastami, Dennis Ho
+-- PROGRAMMER: Behnam Bastami, Dennis Ho
 --
 -- INTERFACE:   
 --
@@ -958,8 +957,8 @@ void ServerGameLogic::createCreep(int team_no, Point location, int path_no, Unit
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Dennis Ho
+-- PROGRAMMER: Dennis Ho
 --
 -- INTERFACE:   
 --
@@ -974,7 +973,6 @@ void ServerGameLogic::createTower(int team_no, Point location)
   int maxTowerDist, dist;
   
   // calculate maxDist tower can be created from the castle 
-  //    based on (((MAPWIDTH + MAPHEIGHT) / 2) - initial tower attack range)
   maxTowerDist = (((MAPWIDTH + MAPHEIGHT) / 2) - INIT_TOWER_ATKRNG);
   
   // get location of team's castle                 
