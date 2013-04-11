@@ -411,6 +411,29 @@ Control::CallMoveEvent(Direction direction)
 	_clientGameLogicModule->movePlayer(direction);
 }
 
+/*-------------------------------------------------------------------------------------------------------------------- 
+-- FUNCTION: CallAttackEvent
+--
+-- DATE: 2013/03/11
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: John Payment
+--
+-- PROGRAMMER: John Payment
+--
+-- INTERFACE: void CallAttackLeftEvent(Direction direction)
+--            Direction direction - The direction that you want to attack in.
+--
+-- RETURNS: void
+--
+-- NOTES: Calls the event for attacking when in player mode.
+----------------------------------------------------------------------------------------------------------------------*/
+void 
+Control::CallAttackEvent(Direction direction)
+{
+	_clientGameLogicModule->attack(direction);
+}
 
 /*-------------------------------------------------------------------------------------------------------------------- 
 -- FUNCTION: CallUnitTypeCreationEvent

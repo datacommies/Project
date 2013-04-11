@@ -69,7 +69,7 @@
 #include "../types.h"
 #include "../units/castle.h"
 #include "../units/basic_tower.h"
-
+#include "audio.h"
 #include "game_logic_map.h"
 
 enum Command { Create, MovePlayer, MoveUnit, Attack };
@@ -160,6 +160,7 @@ class ServerGameLogic
     void handleCastleDeath();
 
     void updateMaps();
+    Audio audio_;
 };
 
 #endif

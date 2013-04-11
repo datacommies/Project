@@ -584,7 +584,6 @@ void ServerGameLogic::updateAttack(CommandData& command)
     fprintf(stderr, "playerID not found file: %s line %d\n", __FILE__, __LINE__);
     return;
   }
-
   // Attack!!
   updateMaps();
 }
@@ -755,6 +754,8 @@ void ServerGameLogic::update()
         break;
       case Attack:
         updateAttack(newCommand);
+         std::cout << "Attacking" << std::endl;
+        audio_.playSoundEffect("sounds/punch.wav");
         break;
       case MovePlayer:
         updateMovePlayer(newCommand);

@@ -201,8 +201,12 @@ void ClientNetwork::recvReply() {
 							gl->units[i] = c;
 							updated = true;
 
-							if (gl->units[i].health <= 0)					
-								gl->units.erase(gl->units.begin() + i);						
+							if (gl->units[i].health <= 0)
+							{	
+							    				
+								gl->units.erase(gl->units.begin() + i);			
+								//audio_.playSoundEffect("sounds/wilhelm.wav");			
+						    }
 						}
 					}
 					if (!updated)
@@ -336,6 +340,17 @@ bool ClientNetwork::movePlayer(int playerId, Direction direction)
 	return false;
 }
 
+/* Sends an attack request to the server.
+ *
+ * PRE:     Client is connected
+ * POST:    Request has been sent to the server
+ * RETURNS: true on success
+ *          false on fail
+ * NOTES:   No validation performed here. */
+bool ClientNetwork::attack(int playerId, Direction direction)
+{
+   return false;
+}
 
 /*
  * Sends a generic request to the server
