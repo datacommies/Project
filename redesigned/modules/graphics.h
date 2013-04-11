@@ -133,6 +133,7 @@ private:
    void drawHealthBar(sf::RenderWindow& window, float x, float y, int health);
    void drawCurrency(sf::RenderWindow& window);
    void drawEndGameScreen(sf::RenderWindow& window);
+   void drawLoadingScreen();
 
    // SFGUI Functions
    void initDesktop();

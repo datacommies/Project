@@ -6,6 +6,7 @@
 #include "client_network.h"
 #include "graphics.h"
 #include "control.h"
+#include "audio.h"
 
 class Client
 {
@@ -22,6 +23,7 @@ private:
    ClientGameLogic clientGameLogic_;
    Graphics graphics_;
    Control* control_;
+   Audio audio_;
 };
 
 #endif

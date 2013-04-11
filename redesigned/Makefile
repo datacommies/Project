@@ -1,7 +1,8 @@
 CFLAGS = -Wall -g
 LIBS = -lsfml-window -lsfml-graphics -lsfml-audio -lsfml-system -lfontconfig -lsfgui -lX11
 MODULES = build/modules/ai.o \
-          build/modules/client_game_logic.o \
+	  build/modules/audio.o \
+	  build/modules/client_game_logic.o \
           build/modules/control.o \
           build/modules/server.o \
           build/modules/server_network.o \
