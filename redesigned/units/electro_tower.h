@@ -1,3 +1,17 @@
+/*------------------------------------------------------------------------------
+-- FILE: electro_tower.h
+--
+-- DATE: 2013/03/11
+--
+-- MAINTAINERS: Nick Raposo
+--              Aiko Rose
+-- FUNCTIONS: Attack
+-- Update
+--
+-- DESCRIPTION: This inherits from Tower class. Attack() and Update() are overridden.
+------------------------------------------------------------------------------*/
+
+
 #ifndef ELECTRO_TOWER_H
 #define ELECTRO_TOWER_H
 
