@@ -87,10 +87,7 @@ private:
 
    sf::Texture player_textures[5];   
    sf::Sprite player_sprites[5];
-
-   sf::Texture lobby_player_textures[5];
-   sf::Sprite lobby_player_sprites[5];
-
+   
    // SFGUI stuff
    sfg::Desktop sfgDesktop; // The desktop is the top level object that all other SFGUI elements display on.
    
