@@ -18,8 +18,9 @@ public:
     
     virtual void Attack(Team * team);
     void Update(Team&);
-	
-private:  
+    virtual UnitType getType() const { return TOWER_THREE; }
+
+private:
 };
 
 #endif

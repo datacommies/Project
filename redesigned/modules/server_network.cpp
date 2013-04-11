@@ -9,7 +9,7 @@
 -- FUNCTIONS:
 --              
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Implementation of the server-side interface
 ------------------------------------------------------------------------------*/
 #include "server_network.h"
 
@@ -25,35 +25,37 @@ struct ClientCtx {
 };
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   ServerNetwork
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Ron Bellido
 -- PROGRAMMER: Ron Bellido
 --
--- INTERFACE:   
+-- INTERFACE:   ServerNetwork(ServerGameLogic& serverGameLogic)
+--                 serverGameLogic - an instance of a ServerGameLogic object
 --
--- RETURNS:     
+-- RETURNS:     None
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Constructor for ServerNetwork object
 ------------------------------------------------------------------------------*/
 ServerNetwork::ServerNetwork(ServerGameLogic& serverGameLogic)
    : serverGameLogic_(serverGameLogic) {}
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   initSock
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Ron Bellido
 -- PROGRAMMER: Ron Bellido
 --
--- INTERFACE:   
+-- INTERFACE:   int ServerNetwork::initSock(int port)
+--                  port - the port to start the server
 --
--- RETURNS:     
+-- RETURNS:     The socket created
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Initializes the listening socket and returns that socket for later use
 ------------------------------------------------------------------------------*/
 int ServerNetwork::initSock(int port)
 {
@@ -79,19 +81,22 @@ int ServerNetwork::initSock(int port)
     listen(sock_, MAX_CONNECTIONS);
     return sock_;
 }
+
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   initNetwork
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Ron Bellido
 -- PROGRAMMER: Ron Bellido
 --
--- INTERFACE:   
+-- INTERFACE:   void initNetwork()
 --
--- RETURNS:     
+-- RETURNS:     void
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Initiates the server to accept new clients. Accepted clients are
+added to the clients list (list to track all the connected clients). Rejects
+new clients if there's currently more than 10 players in the session.
 ------------------------------------------------------------------------------*/
 void ServerNetwork::initNetwork()
 {    
@@ -120,19 +125,22 @@ void ServerNetwork::initNetwork()
     
     pthread_join(thread, NULL);
 }
+
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   gameOver
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Behnam Bastami
 -- PROGRAMMER: Behnam Bastami
 --
--- INTERFACE:   
+-- INTERFACE:   void gameOver(int client_, const int winner)
+--                  client_ - the socket for the communication channel with this server
+--                  winner - the winning team (team 0 or team 1)
 --
--- RETURNS:     
+-- RETURNS:     void
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Handle the teardown for a game over. 
 ------------------------------------------------------------------------------*/
 void ServerNetwork::gameOver(int client_, const int winner)
 {
@@ -152,9 +160,12 @@ void ServerNetwork::gameOver(int client_, const int winner)
 -- DESIGNER:   Behnam Bastami
 -- PROGRAMMER: Behnam Bastami, Dennis Ho
 --
--- INTERFACE:   bool ServerNetwork::sync(int client_, int team_)
+<<<<<<< HEAD
+-- INTERFACE:   bool sync(int client_, int team_)
+--                  client_ - the socket for the communication channel with this server
+-                   team_ - the team to sync 
 --
--- RETURNS:     
+-- RETURNS:     true
 --
 -- DESCRIPTION: Synchronizes the current game state with the specified client
 ------------------------------------------------------------------------------*/
@@ -244,18 +255,19 @@ bool ServerNetwork::sync(int client_, int team_)
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   error
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Ron Bellido
 -- PROGRAMMER: Ron Bellido
 --
--- INTERFACE:   
+-- INTERFACE:   void error (const char *msg)
+--                  msg - error message to display
 --
--- RETURNS:     
+-- RETURNS:     void
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Displays an error message and terminates the server
 ------------------------------------------------------------------------------*/
 void ServerNetwork::error (const char *msg)
 {
@@ -264,7 +276,7 @@ void ServerNetwork::error (const char *msg)
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   handleInput
 --
 -- DATE:        2013/03/22
 --
