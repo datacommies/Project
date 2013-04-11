@@ -9,7 +9,7 @@
 -- FUNCTIONS:
 --              
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Implementation of the server-side interface
 ------------------------------------------------------------------------------*/
 #include "server_network.h"
 
