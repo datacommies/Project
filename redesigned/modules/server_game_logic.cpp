@@ -765,8 +765,6 @@ void ServerGameLogic::update()
         break;
       case Attack:
         updateAttack(newCommand);
-         std::cout << "Attacking" << std::endl;
-        audio_.playSoundEffect("sounds/punch.wav");
         break;
       case MovePlayer:
         updateMovePlayer(newCommand);
