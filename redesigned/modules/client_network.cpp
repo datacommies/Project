@@ -217,11 +217,11 @@ void ClientNetwork::recvReply() {
 							updated = true;
 
 							if (gl->units[i].health <= 0)
-							{	
-							    if(u.unit_type == CREEP)
-							        audio_.playMusic("sounds/wilhelm.ogg");				
+							{
+			                    if(u.unit_type == CREEP)
+                                    audio_.playMusic("sounds/wilhelm.ogg");				
 								gl->units.erase(gl->units.begin() + i);
-						    }
+                            }
 						    
 						}
 					}
