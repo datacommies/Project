@@ -32,7 +32,7 @@ using namespace std;
 //old constructor - Callum
 Unit::Unit(int uid, Point pos, int hp, int atkdmg,
            int atkrng, int atkspd, int percep, int atkcnt):
-           id(uid), position(pos), health(hp), attackDamage(atkdmg), attackRange(atkrng),
+           id(uid), position(pos), health(hp), maxHealth(hp), attackDamage(atkdmg), attackRange(atkrng),
            attackSpeed(atkspd), perception(percep), attackCount(atkcnt), pTarget(NULL), pendingDelete(false)
 {
     //any required validation
@@ -57,7 +57,7 @@ Unit::Unit(int uid, Point pos, int hp, int atkdmg,
 ------------------------------------------------------------------------------*/
 Unit::Unit(int uid, int side, Point pos, int hp, int atkdmg,
            int atkrng, int atkspd, int percep, int atkcnt):
-           id(uid), team(side), position(pos), health(hp), attackDamage(atkdmg), attackRange(atkrng),
+           id(uid), team(side), position(pos), health(hp), maxHealth(hp), attackDamage(atkdmg), attackRange(atkrng),
            attackSpeed(atkspd), perception(percep), attackCount(atkcnt), pTarget(NULL)
 {
     //any required validation
@@ -315,6 +315,7 @@ string Unit::serializeUnit()
     u.posx = position.x;
     u.posy = position.y;
     u.health = health;
+    u.maxHealth = maxHealth;
     u.attackDamage = attackDamage;
     u.attackRange = attackRange;
     u.attackSpeed = attackSpeed;

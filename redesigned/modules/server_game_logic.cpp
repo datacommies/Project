@@ -799,8 +799,6 @@ void ServerGameLogic::update()
         break;
       case Attack:
         updateAttack(newCommand);
-         std::cout << "Attacking" << std::endl;
-        audio_.playSoundEffect("sounds/punch.wav");
         break;
       case MovePlayer:
         updateMovePlayer(newCommand);
@@ -1056,7 +1054,7 @@ void ServerGameLogic::createPlayer(int team_no, Point location, int client_id, i
       player->attackDamage = 14;
     break;
   }
-
+  player->maxHealth = player->health;
   teams[team_no].addUnit(player);
   std::cout << "adding player: " << player->clientID << " team: " << team_no << std::endl;
 }
