@@ -163,16 +163,6 @@ void * init (void * in)
                 g->updateLobbyRoles();
             }
 
-            for (size_t i = 0; i < 5; i++) {
-                g->player_sprites[i].setPosition(60, i * 55 + 310);          
-                g->window->draw(g->player_sprites[i]);
-            }
-
-            for (size_t i = 0; i < 5; i++) {
-                g->player_sprites[i].setPosition(710, i * 55 + 310);          
-                g->window->draw(g->player_sprites[i]);
-            }
-
             // Update the names on the buttons.
             g->updateLobbyRoles();
         } else if (g->clientGameLogic_.getCurrentState() == IN_GAME || g->clientGameLogic_.getCurrentState() == WON_GAME || g->clientGameLogic_.getCurrentState() == LOST_GAME) {
@@ -199,6 +189,18 @@ void * init (void * in)
 
         // Display test windows.
         sfgui.Display(window);
+
+        if (g->clientGameLogic_.getCurrentState() == LOBBY) {
+            for (size_t i = 0; i < 5; i++) {
+                g->player_sprites[i].setPosition(65, i * 55 + 310);          
+                g->window->draw(g->player_sprites[i]);
+            }
+
+            for (size_t i = 0; i < 5; i++) {
+                g->player_sprites[i].setPosition(710, i * 55 + 310);          
+                g->window->draw(g->player_sprites[i]);
+            }
+        }
 
         window.display();
     }
@@ -443,7 +445,7 @@ void Graphics::initLobbyWindow()
     sfgLobbyWindow = sfg::Window::Create(sfg::Window::BACKGROUND); // Make the window.
     sfgLobbyWindow->SetPosition(sf::Vector2f(100, 225)); // Change the window position.
     sfgLobbyWindow->SetRequisition(sf::Vector2f(600, 350));
-    
+
     // Create a parent box to hold all the subboxes.
     sfgLobbyBox = sfg::Box::Create(sfg::Box::HORIZONTAL);
 
@@ -850,5 +852,4 @@ void Graphics::loadImages()
         player_textures[i].loadFromFile(ss.str().c_str());
         player_sprites[i].setTexture(player_textures[i]);
     }
-
 }

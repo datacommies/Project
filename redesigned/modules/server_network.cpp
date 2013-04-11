@@ -302,7 +302,7 @@ void* ServerNetwork::handleClientRequest(void* args)
                 //Point loc;
                 loc.x = rc.posx;
                 loc.y = rc.posy;
-                thiz->serverGameLogic_.receiveCreateUnitCommand(client_, rc.unit, loc);
+                thiz->serverGameLogic_.receiveCreateUnitCommand(client_, rc.unit, loc, rc.path);
             break;
 
             case MSG_REQUEST_PLAYER_MOVE:
