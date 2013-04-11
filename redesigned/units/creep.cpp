@@ -236,8 +236,8 @@ void Creep::nextPoint( void )
 --
 -- DATE:        2013/03/11
 --
--- DESIGNER:    Behnam Bastami, Aaron Lee
--- PROGRAMMER:  Behnam Bastami, Aaron Lee, David Czech
+-- DESIGNER:    Behnam Bastami, Aaron Lee, David Czech
+-- PROGRAMMER:  Behnam Bastami, Aaron Lee
 --
 -- INTERFACE:   Unit::serializeUnit()
 --

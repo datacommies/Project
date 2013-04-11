@@ -35,16 +35,16 @@ inline string to_string(int num)
 Graphics* globalGraphics = NULL; // Used for the SFGUI button handlers in the lobby.
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   init
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   David Czech
+-- PROGRAMMER: David Czech, Jake Miner, Jesse Wright
 --
--- INTERFACE:   
+-- INTERFACE:   void * init (void * in) 
 --
--- RETURNS:     
+-- RETURNS:     void * - 
 --
 -- DESCRIPTION: 
 ------------------------------------------------------------------------------*/
@@ -357,7 +357,7 @@ Graphics::Graphics(ClientGameLogic& clientGameLogic)
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   
--- PROGRAMMER: 
+-- PROGRAMMER:  Jacob Miner
 --
 -- INTERFACE:   
 --
@@ -383,8 +383,8 @@ void Graphics::initMainMenuControls()
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Jacob Miner
+-- PROGRAMMER: Jacob Miner
 --
 -- INTERFACE:   
 --
@@ -892,7 +892,7 @@ void Graphics::joinButtonHandler()
 ------------------------------------------------------------------------------*/
 void Graphics::showJoinWindow()
 {
-sfgJoinWindow->Show(true);
+    sfgJoinWindow->Show(true);
 }
 /*------------------------------------------------------------------------------
 -- FUNCTION:   
@@ -918,8 +918,8 @@ void Graphics::hideJoinWindow()
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Jacob Miner
+-- PROGRAMMER: Jacob Miner
 --
 -- INTERFACE:   
 --
@@ -1042,7 +1042,7 @@ void Graphics::drawTeamCircle (sf::RenderWindow& window, int team, float x, floa
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   
--- PROGRAMMER: 
+-- PROGRAMMER: Jacob Miner
 --
 -- INTERFACE:   
 --
@@ -1098,23 +1098,21 @@ void Graphics::drawUnits(sf::RenderWindow& window)
         }
         else if (unit->type == TOWER)
         {
-            
-           /* if (unit->maxHealth == INIT_CREEP_HP)
-            {
-                tower_sprite1.setPosition(unit->position.x, unit->position.y);
-                window.draw(tower_sprite1);
-            } else if (unit->maxHealth == INIT_CREEP_HP * 3) {
-                tower_sprite2.setPosition(unit->position.x, unit->position.y);
-                window.draw(tower_sprite2);
-            } else if (unit->maxHealth == INIT_CREEP_HP * .75) {
-                tower_sprite3.setPosition(unit->position.x, unit->position.y);
-                window.draw(tower_sprite3);
-            }*/
-
             tower_sprite1.setPosition(unit->position.x, unit->position.y);
             window.draw(tower_sprite1);
-            
             drawHealthBar(window, unit->position.x, unit->position.y + tower_sprite1.getTextureRect().height, unit->health, unit->maxHealth);
+        }
+        else if (unit->type == TOWER_TWO)
+        {
+            tower_sprite2.setPosition(unit->position.x, unit->position.y);
+            window.draw(tower_sprite2);
+            drawHealthBar(window, unit->position.x, unit->position.y + tower_sprite2.getTextureRect().height, unit->health, unit->maxHealth);
+        }
+        else if (unit->type == TOWER_THREE)
+        {
+            tower_sprite3.setPosition(unit->position.x, unit->position.y);
+            window.draw(tower_sprite3);
+            drawHealthBar(window, unit->position.x, unit->position.y + tower_sprite3.getTextureRect().height, unit->health, unit->maxHealth);
         }
         else if (unit->type == PLAYER)
         {
@@ -1135,7 +1133,7 @@ void Graphics::drawUnits(sf::RenderWindow& window)
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   
--- PROGRAMMER: 
+-- PROGRAMMER: Jacob Miner
 --
 -- INTERFACE:   
 --
@@ -1176,8 +1174,8 @@ void Graphics::drawCurrency(sf::RenderWindow& window)
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Jacob Miner
+-- PROGRAMMER: Jacob Miner
 --
 -- INTERFACE:   
 --
@@ -1206,8 +1204,8 @@ void Graphics::drawEndGameScreen(sf::RenderWindow& window)
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Jacob Miner
+-- PROGRAMMER: Jacob Miner
 --
 -- INTERFACE:   
 --
@@ -1231,7 +1229,7 @@ void Graphics::drawLoadingScreen()
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   
--- PROGRAMMER: 
+-- PROGRAMMER: Jacob Miner
 --
 -- INTERFACE:   
 --

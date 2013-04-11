@@ -50,7 +50,6 @@ private:
     
     static void* handleClient(void*);
     static void* handleClientRequest(void* args);
-    void handleRequests();
 };
 
 

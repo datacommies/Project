@@ -122,7 +122,7 @@ void ClientGameLogic::menu () {
 --
 -- RETURNS:     void
 --
--- DESCRIPTION: This function sets the gameState_ variable to WON_GAME. 
+-- DESCRIPTION: This function sets the gameState_ variable to WON_GAME.
 ------------------------------------------------------------------------------*/
 void ClientGameLogic::win () {
    gameState_ = WON_GAME;
@@ -229,7 +229,7 @@ bool ClientGameLogic::movePlayer(Direction direction)
 --
 -- DATE:        2013/03/11
 --
--- DESIGNER:    Dennis Ho
+-- DESIGNER:    Behnam Bastami, Dennis Ho
 -- PROGRAMMER:  Dennis Ho
 --
 -- INTERFACE:   bool ClientGameLogic::movePlayer(Direction direction)
