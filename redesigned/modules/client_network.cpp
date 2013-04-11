@@ -205,7 +205,7 @@ void ClientNetwork::recvReply() {
 							{	
 							    				
 								gl->units.erase(gl->units.begin() + i);			
-								audio_.playSoundEffect("sounds/wilhelm.wav");			
+								//audio_.playSoundEffect("sounds/wilhelm.wav");			
 						    }
 						}
 					}
