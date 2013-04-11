@@ -148,10 +148,6 @@ void * init (void * in)
             if (g->clientGameLogic_.clientNetwork_.connecting_status != "connected") {
                 g->unassignedPlayersList->SetText(g->clientGameLogic_.clientNetwork_.connecting_status);
             } else {
-                for (int i=0; i < 5; i++){
-                    //cout << g->clientGameLogic_.clientNetwork_.team_l[i].name << endl;
-                    //cout << g->clientGameLogic_.clientNetwork_.team_r[i].name << endl;
-                }
                 string unassigned;
                 for (size_t i = 0; i < g->clientGameLogic_.clientNetwork_.waiting.size(); ++i)
                 {
@@ -200,13 +196,29 @@ void * init (void * in)
         sfgui.Display(window);
 
         if (g->clientGameLogic_.getCurrentState() == LOBBY) {
+            sf::RectangleShape ready_box;
+            ready_box.setSize(sf::Vector2f( 25, 25));
+
             for (size_t i = 0; i < 5; i++) {
-                g->player_sprites[i].setPosition(65, i * 55 + 310);          
+                ready_box.setFillColor(g->clientGameLogic_.clientNetwork_.team_l[i].ready ? sf::Color(  0, 255,  0) : sf::Color(  255, 0,  0));
+                ready_box.setPosition(65, i * 55 + 310);
+                window.draw(ready_box);
+            }
+
+            for (size_t i = 0; i < 5; i++) {
+                ready_box.setFillColor(g->clientGameLogic_.clientNetwork_.team_r[i].ready ? sf::Color(  0, 255,  0) : sf::Color(  255, 0,  0));
+                ready_box.setPosition(710, i * 55 + 310);
+                window.draw(ready_box);
+            }
+
+
+            for (size_t i = 0; i < 5; i++) {
+                g->player_sprites[i].setPosition(65, i * 55 + 310);
                 g->window->draw(g->player_sprites[i]);
             }
 
             for (size_t i = 0; i < 5; i++) {
-                g->player_sprites[i].setPosition(710, i * 55 + 310);          
+                g->player_sprites[i].setPosition(710, i * 55 + 310);
                 g->window->draw(g->player_sprites[i]);
             }
         }
