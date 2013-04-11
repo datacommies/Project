@@ -69,14 +69,14 @@ void GameMap::initPaths(){
   topOne.push_back(a);
 
   // left team, bottom lanes
-  a.x = 25;
+  a.x = 15;
   a.y = 55;
   botOne.push_back(a);
-  a.x = 25;
-  a.y = 700;
+  a.x = 15;
+  a.y = 555;
   botOne.push_back(a);
-  a.x = 455;
-  a.y = 700;
+  a.x = 745;
+  a.y = 555;
   botOne.push_back(a);
   a.x = -1;
   a.y = -1;
@@ -85,13 +85,13 @@ void GameMap::initPaths(){
 
   // left team, mid lane
   a.x = 55;
-  a.y = 55;
+  a.y = 41;
   midOne.push_back(a);
-  a.x = 250;
-  a.y = 350;
+  a.x = 155;
+  a.y = 100;
   midOne.push_back(a);
-  a.x = 455;
-  a.y = 645; 
+  a.x = 135;
+  a.y = 100; 
   midOne.push_back(a);
   a.x = -1;
   a.y = -1;
@@ -103,28 +103,28 @@ void GameMap::initPaths(){
   Point b;
 
   //top
-  b.x = 500;
-  b.y = 470;
+  b.x = 765;
+  b.y = 565;
   topTwo.push_back(b);
-  b.x = 500;
-  b.y = 0;
+  b.x = 765;
+  b.y = 15;
   topTwo.push_back(b);
-  b.x = 30;
-  b.y = 0;
+  b.x = 55;
+  b.y = 15;
   topTwo.push_back(b);
   b.x = -1;
   b.y = -1;
   topTwo.push_back(b);
 
   //bottom
-  b.x = 470;
-  b.y = 500;
+  b.x = 745;
+  b.y = 560;
   botTwo.push_back(b);
-  b.x = 0;
-  b.y = 500;
+  b.x = 15;
+  b.y = 560;
   botTwo.push_back(b);
-  b.x = 0;
-  b.y = 30;
+  b.x = 15;
+  b.y = 55;
   botTwo.push_back(b);
   b.x = -1;
   b.y = -1;

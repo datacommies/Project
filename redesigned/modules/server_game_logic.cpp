@@ -37,6 +37,10 @@ ServerGameLogic * gSGL;
   teams[0].paths.push_back(gameMap_->midOne);
   teams[0].paths.push_back(gameMap_->botOne);
 
+  /*teams[1].paths.push_back(gameMap_->topOne);
+  teams[1].paths.push_back(gameMap_->midOne);
+  teams[1].paths.push_back(gameMap_->botOne);*/
+
   teams[1].paths.push_back(gameMap_->topTwo);
   teams[1].paths.push_back(gameMap_->midTwo);
   teams[1].paths.push_back(gameMap_->botTwo);
