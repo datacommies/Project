@@ -987,8 +987,13 @@ void ServerGameLogic::createPlayer(int team_no, Point location, int client_id, i
   std::cout << "role: " << role << std::endl;
 
   switch (role){
+    case 0:
+      player->attackDamage = 8;
+    break;
+
     case 1: //gordon freeman
-      player->health = 225;
+      player->health = 250;
+      player->attackDamage = 11;
     break;
 
     case 2: //the flash
@@ -999,12 +1004,12 @@ void ServerGameLogic::createPlayer(int team_no, Point location, int client_id, i
 
     case 3: //samus
       player->setSpeed(6);
-      player->attackDamage = 11;
+      player->attackDamage = 9;
     break;
 
     case 4: //hulk
-      player->setSpeed(2);
-      player->health = 500;
+      player->setSpeed(3);
+      player->health = 600;
       player->attackDamage = 14;
     break;
   }

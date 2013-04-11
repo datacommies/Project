@@ -13,6 +13,7 @@
 
 using namespace std;
 
+#define INIT_CREEP_HP 100
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 700
 #define BUTTON_SIZE  40
@@ -803,8 +804,8 @@ void Graphics::drawMap(sf::RenderWindow& window)
 void Graphics::drawMainMenu(sf::RenderWindow& window)
 {
 
-    creep_tex.loadFromFile("images/dino.png");
-    creep_sprite.setTexture(creep_tex);
+    creep_tex1.loadFromFile("images/c1.png");
+    creep_sprite1.setTexture(creep_tex1);
 
     sf::Texture titlesc_bg; 
     titlesc_bg.loadFromFile("images/title.png");
@@ -892,15 +893,40 @@ void Graphics::drawUnits(sf::RenderWindow& window)
             Point interpolated = unit->inter_position = Lerp(unit->past_position, unit->position, unit->inter_value);
             // All drawable unit elements use the same interpolated position.
             drawTeamCircle(window, unit->team, interpolated.x, interpolated.y);
-            creep_sprite.setPosition(interpolated.x, interpolated.y);
-            window.draw(creep_sprite);
+            
+            if (unit->maxHealth == INIT_CREEP_HP)
+            {
+                creep_sprite1.setPosition(interpolated.x, interpolated.y);
+                window.draw(creep_sprite1);
+            } else if (unit->maxHealth == INIT_CREEP_HP * 3) {
+                creep_sprite2.setPosition(interpolated.x, interpolated.y);
+                window.draw(creep_sprite2);
+            } else if (unit->maxHealth == INIT_CREEP_HP * .75) {
+                creep_sprite3.setPosition(interpolated.x, interpolated.y);
+                window.draw(creep_sprite3);
+            }
+            
             drawHealthBar(window, interpolated.x, interpolated.y+25, unit->health, unit->maxHealth);
         }
         else if (unit->type == TOWER)
         {
-            tower_sprite.setPosition(unit->position.x, unit->position.y);			
-            window.draw(tower_sprite);
-            drawHealthBar(window, unit->position.x, unit->position.y + tower_sprite.getTextureRect().height, unit->health, unit->maxHealth);
+            
+           /* if (unit->maxHealth == INIT_CREEP_HP)
+            {
+                tower_sprite1.setPosition(unit->position.x, unit->position.y);
+                window.draw(tower_sprite1);
+            } else if (unit->maxHealth == INIT_CREEP_HP * 3) {
+                tower_sprite2.setPosition(unit->position.x, unit->position.y);
+                window.draw(tower_sprite2);
+            } else if (unit->maxHealth == INIT_CREEP_HP * .75) {
+                tower_sprite3.setPosition(unit->position.x, unit->position.y);
+                window.draw(tower_sprite3);
+            }*/
+
+            tower_sprite1.setPosition(unit->position.x, unit->position.y);
+            window.draw(tower_sprite1);
+            
+            drawHealthBar(window, unit->position.x, unit->position.y + tower_sprite1.getTextureRect().height, unit->health, unit->maxHealth);
         }
         else if (unit->type == PLAYER)
         {
@@ -984,8 +1010,15 @@ void Graphics::loadImages()
     map.setTexture(map_bg);
 
     // Load the creep texture.
-    creep_tex.loadFromFile("images/dino.png");
-    creep_sprite.setTexture(creep_tex);
+    creep_tex1.loadFromFile("images/c1.png");
+    creep_sprite1.setTexture(creep_tex1);
+
+    creep_tex2.loadFromFile("images/c2.png");
+    creep_sprite2.setTexture(creep_tex2);
+
+    creep_tex3.loadFromFile("images/c3.png");
+    creep_sprite3.setTexture(creep_tex3);
+     
      
     // Load the castle texture.
     castle_tex.loadFromFile("images/castle.png");
@@ -996,8 +1029,14 @@ void Graphics::loadImages()
     player_sprite.setTexture(player_tex);
 
     // Load the tower texture.
-    tower_tex.loadFromFile("images/tower.png");
-    tower_sprite.setTexture(tower_tex);
+    tower_tex1.loadFromFile("images/t1.png");
+    tower_sprite1.setTexture(tower_tex1);
+
+    tower_tex2.loadFromFile("images/t2.png");
+    tower_sprite2.setTexture(tower_tex2);
+
+    tower_tex3.loadFromFile("images/t3.png");
+    tower_sprite3.setTexture(tower_tex3);
 
     for (int i = 0; i < 5; i++) {
         // Load the tower texture.

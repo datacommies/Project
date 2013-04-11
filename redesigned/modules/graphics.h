@@ -76,14 +76,25 @@ private:
    sf::Texture hud_bg;
    sf::Sprite  map;
    sf::Sprite hud;
-   sf::Texture creep_tex;
-   sf::Sprite creep_sprite;
+
+   sf::Texture creep_tex1;
+   sf::Sprite creep_sprite1;
+   sf::Texture creep_tex2;
+   sf::Sprite creep_sprite2;
+   sf::Texture creep_tex3;
+   sf::Sprite creep_sprite3;
+
    sf::Texture castle_tex;
    sf::Sprite castle_sprite;
    sf::Texture player_tex;
    sf::Sprite player_sprite;
-   sf::Texture tower_tex;
-   sf::Sprite tower_sprite;
+   
+   sf::Texture tower_tex1;
+   sf::Sprite tower_sprite1;
+   sf::Texture tower_tex3;
+   sf::Sprite tower_sprite3;
+   sf::Texture tower_tex2;
+   sf::Sprite tower_sprite2;
 
    sf::Texture player_textures[5];   
    sf::Sprite player_sprites[5];
