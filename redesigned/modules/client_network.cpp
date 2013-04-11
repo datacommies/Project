@@ -18,11 +18,12 @@ extern Graphics* globalGraphics;
 -- DESIGNER:   Aaron Lee
 -- PROGRAMMER: Aaron Lee
 --
--- INTERFACE:   
+-- INTERFACE:   ClientNetwork()
 --
--- RETURNS:     
+-- RETURNS:     none
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Constructor for ClientNetwork object. Initializes the 
+--	blue team and the red team
 ------------------------------------------------------------------------------*/
 ClientNetwork::ClientNetwork() {
 	for (int i = 0; i < 5; ++i) {	
@@ -34,9 +35,20 @@ ClientNetwork::ClientNetwork() {
 
 }
 
-/* Destructor
- * Aaron Lee
- */
+/*------------------------------------------------------------------------------
+-- FUNCTION:   
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   Aaron Lee
+-- PROGRAMMER: Aaron Lee
+--
+-- INTERFACE:   ~ClientNetwork()
+--
+-- RETURNS:     none
+--
+-- DESCRIPTION: Destructor for ClientNetwork object. Closes the connection socket
+------------------------------------------------------------------------------*/
 ClientNetwork::~ClientNetwork()
 {
 	shutdown(connectsock, SHUT_RDWR);
@@ -51,11 +63,12 @@ ClientNetwork::~ClientNetwork()
 -- DESIGNER:   David Czech, Behnam Bastami
 -- PROGRAMMER: David Czech, Ron Bellido, Behnam Bastami
 --
--- INTERFACE:   
+-- INTERFACE:   bool connectToServer()
 --
--- RETURNS:     
+-- RETURNS:     true on success and false on failure
 --
--- DESCRIPTION: 
+-- DESCRIPTION: this function creates a connection socket that connects the client
+-- to the server
 ------------------------------------------------------------------------------*/
 bool ClientNetwork::connectToServer()
 {
@@ -121,11 +134,13 @@ bool ClientNetwork::connectToServer()
 -- DESIGNER:   David Czech, Behnam Bastami, Aaron Lee
 -- PROGRAMMER: David Czech, Behnam Bastami, Ron Bellido
 --
--- INTERFACE:   
+-- INTERFACE:   void recvReply()
 --
--- RETURNS:     
+-- RETURNS: void     
 --
--- DESCRIPTION: 
+-- DESCRIPTION: this function receives a reply from the server and performs different 
+-- operations based on the message type received, for example if it receives a resource update
+-- message, it will update the team's resources, etc...
 ------------------------------------------------------------------------------*/
 void ClientNetwork::recvReply() {
 	long n;
@@ -293,11 +308,15 @@ void ClientNetwork::recvReply() {
 -- DESIGNER:   Behnam Bastami, Aaron Lee
 -- PROGRAMMER: Behnam Bastami
 --
--- INTERFACE:   
+-- INTERFACE:   createUnit(int playerId, UnitType type, Point location, int path)
+--					playerId - the ID of the player that's creating the unit
+--					type - the type of the unit to create
+--					location - the location where the unit will be spawned/created
+--					path - the path that this unit will follow (only for creep type units)
 --
--- RETURNS:     
+-- RETURNS:     false
 --
--- DESCRIPTION: 
+-- DESCRIPTION: this function sends a request for creating a unit
 ------------------------------------------------------------------------------*/
 bool ClientNetwork::createUnit(int playerId, UnitType type, Point location, int path)
 {
@@ -316,6 +335,7 @@ bool ClientNetwork::createUnit(int playerId, UnitType type, Point location, int 
 	send(connectsock, &request, sizeof(request_create_t), 0);
     return false;
 }
+
 /*------------------------------------------------------------------------------
 -- FUNCTION:   
 --
@@ -324,11 +344,16 @@ bool ClientNetwork::createUnit(int playerId, UnitType type, Point location, int 
 -- DESIGNER:   David Czech
 -- PROGRAMMER: David Czech, Ron Bellido
 --
--- INTERFACE:   
+-- INTERFACE:  bool updatePlayerLobby (int team, int role, const char* name, bool ready)
+--					team - the team this player will join
+--					role - the role this player will have
+--					name - name of the player
+--					ready - am I ready to play?
 --
--- RETURNS:     
+-- RETURNS:    true if succesful, otherwise false
 --
--- DESCRIPTION: 
+-- DESCRIPTION: this function will perform general lobby updates for the client
+-- ie: select role, switch team, ready state
 ------------------------------------------------------------------------------*/
 
 bool ClientNetwork::updatePlayerLobby (int team, int role, const char* name, bool ready) {
@@ -367,11 +392,13 @@ bool ClientNetwork::updatePlayerLobby (int team, int role, const char* name, boo
 -- DESIGNER:   Behnam Bastami, Dennis Ho
 -- PROGRAMMER: Behnam Bastami
 --
--- INTERFACE:   
+-- INTERFACE:  bool ClientNetwork::movePlayer(int playerId, Direction direction)
+--					playerId - the ID of the player that will move
+--					direction - the direction the player will move to
 --
--- RETURNS:     
+-- RETURNS:    false
 --
--- DESCRIPTION: 
+-- DESCRIPTION: this function sends a move request to the server
 ------------------------------------------------------------------------------*/
 bool ClientNetwork::movePlayer(int playerId, Direction direction)
 {
@@ -413,11 +440,13 @@ bool ClientNetwork::attack(int playerId, Direction direction)
 -- DESIGNER:   David Czech
 -- PROGRAMMER: David Czech, Ron Bellido
 --
--- INTERFACE:   
+-- INTERFACE:   void player_update (player_matchmaking_t * p)
+--					p - the details of the new player to be updated
 --
--- RETURNS:     
+-- RETURNS:     void
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Updates every single client connected with the given player
+details
 ------------------------------------------------------------------------------*/
 void ClientNetwork::player_update (player_matchmaking_t * p) {
 	printf("Player: %d %s\t" "Team: %d\t"
@@ -444,6 +473,7 @@ void ClientNetwork::player_update (player_matchmaking_t * p) {
 	else 
 		waiting.push_back(*p);
 }
+
 /*------------------------------------------------------------------------------
 -- FUNCTION:   
 --
