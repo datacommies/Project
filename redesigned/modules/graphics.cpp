@@ -595,8 +595,8 @@ void Graphics::initLobbyWindow()
     unassignedPlayersList->SetId("upl");
     sfgDesktop.SetProperty("#upl", "FontSize", "12");
 
-    teamOneLabel = sfg::Label::Create("Team One");
-    teamTwoLabel = sfg::Label::Create("Team Two");
+    teamOneLabel = sfg::Label::Create("Team Red");
+    teamTwoLabel = sfg::Label::Create("Team Blue");
 
     // Create the team selection buttons.
     for (int i = 0; i < 5; ++i)
