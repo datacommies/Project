@@ -303,7 +303,6 @@ Control::RunAllButtons()
 --
 -- PROGRAMMER: John Payment
 --             Jesse Wright
---             David Czech
 --
 -- INTERFACE: void RunAllKeys()
 --
@@ -503,7 +502,7 @@ Control::GetTowerPlacement()
 --
 -- REVISIONS: (Date and Description)
 --
--- DESIGNER: Jesse Wright, David Czech
+-- DESIGNER: Jesse Wright
 --
 -- PROGRAMMER: Jesse Wright
 --
