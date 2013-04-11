@@ -3,7 +3,7 @@
 --
 -- DATE:        March 11, 2013
 --
--- MAINTAINERS: Callum Styan, Chris Porter, Nick Raposo
+-- MAINTAINERS: Callum Styan, Chris Porter, Nick Raposo, Kevin Tangeman, Steve Lo
 --
 -- FUNCTIONS:   Creep
 --              getTargetDirection
@@ -39,7 +39,7 @@ Creep::Creep(int uid, Point pos, int hp, int atkdmg, int atkrng,
 -- DATE:        March 26, 2013
 --
 -- DESIGNER:    Callum Styan
--- PROGRAMMER:  Callum Styan
+-- PROGRAMMER:  Callum Styan, Kevin Tangeman, Steve Lo
 --
 -- INTERFACE:   Creep(int uid, int side, Point pos, Point* path, int hp = 100,
 --                  int atkdmg = 10, int atkrng = 10,
