@@ -24,6 +24,7 @@ BasicTower::BasicTower(int uid, Point pos, int hp, int atkdmg, int atkrng,
             Tower(uid, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, wall)
 {
     //validation
+    pendingDelete = false; // !!!
 }
 
 BasicTower::BasicTower(int uid, int side, Point pos, int hp, int atkdmg, int atkrng,
@@ -31,6 +32,7 @@ BasicTower::BasicTower(int uid, int side, Point pos, int hp, int atkdmg, int atk
             Tower(uid, side, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, wall)
 {
     //validation
+    pendingDelete = false; // !!!
 }
 
 /*------------------------------------------------------------------------------

@@ -900,9 +900,11 @@ void ServerGameLogic::createTower(int team_no, Point location)
 //    Tower *tower = new Tower(uid, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
 //                           INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);
 //    Tower *tower = new Tower(uid, team_no, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
-//                           INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);                           
+//                           INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);  
     BasicTower *tower = new BasicTower(uid, team_no, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
                            INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);
+
+    std::cout << "asjhasdasdjhsgdh " <<  tower->health << std::endl;
         
     // Add tower to team
     teams[team_no].addUnit(tower);
@@ -988,15 +990,15 @@ void ServerGameLogic::handleDeaths()
       {
         if (j == 0)
             handleCastleDeath();
-        else
+        else{
             handleTowerDeath(teams[i].towers[j]);
+        }
       }
   }
   
   pthread_mutex_unlock( &unit_mutex );
 
-  updateMaps();
-}
+  updateMaps();}
 /* 
  *
  * PRE:     
