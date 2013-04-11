@@ -51,6 +51,7 @@ ServerNetwork::ServerNetwork(ServerGameLogic& serverGameLogic)
 -- PROGRAMMER: Ron Bellido
 --
 -- INTERFACE:   int ServerNetwork::initSock(int port)
+--                  port - the port to start the server
 --
 -- RETURNS:     The socket created
 --
@@ -82,7 +83,7 @@ int ServerNetwork::initSock(int port)
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   initNetwork
 --
 -- DATE:        2013/03/22
 --
@@ -93,7 +94,9 @@ int ServerNetwork::initSock(int port)
 --
 -- RETURNS:     void
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Initiates the server to accept new clients. Accepted clients are
+added to the clients list (list to track all the connected clients). Rejects
+new clients if there's currently more than 10 players in the session.
 ------------------------------------------------------------------------------*/
 void ServerNetwork::initNetwork()
 {    
@@ -122,19 +125,22 @@ void ServerNetwork::initNetwork()
     
     pthread_join(thread, NULL);
 }
+
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   gameOver
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Behnam Bastami
 -- PROGRAMMER: Behnam Bastami
 --
--- INTERFACE:   
+-- INTERFACE:   void gameOver(int client_, const int winner)
+--                  client_ - the socket for the communication channel with this server
+--                  winner - the winning team (team 0 or team 1)
 --
--- RETURNS:     
+-- RETURNS:     void
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Handle the teardown for a game over. 
 ------------------------------------------------------------------------------*/
 void ServerNetwork::gameOver(int client_, const int winner)
 {
@@ -147,18 +153,20 @@ void ServerNetwork::gameOver(int client_, const int winner)
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   sync
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Behnam Bastami
 -- PROGRAMMER: Behnam Bastami, Dennis Ho
 --
--- INTERFACE:   
+-- INTERFACE:   bool sync(int client_, int team_)
+--                  client_ - the socket for the communication channel with this server
+-                   team_ - the team to 
 --
--- RETURNS:     
+-- RETURNS:     true
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Function that syncs all the clients with the current game state
 ------------------------------------------------------------------------------*/
 bool ServerNetwork::sync(int client_, int team_)
 {
