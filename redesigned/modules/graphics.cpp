@@ -783,39 +783,64 @@ void Graphics::initMessageSendWindow()
     // Add the window to the displayed desktop.
     sfgDesktop.Add(sfgChatSendWindow);
 
+    // Start with no text in the send message entry box.
     sfgChatDisplayLabel->SetText("");
 }
+
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   sendMessage
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Albert Liao
+-- PROGRAMMER: Albert Liao
 --
--- INTERFACE:   
+-- INTERFACE:   void Graphics::sendMessage()
 --
--- RETURNS:     
+-- RETURNS:     none.
 --
--- DESCRIPTION: 
+-- DESCRIPTION: This is the button handler for the send button in the sfgChatSendWindow.
+--              This button calls the send_chatmsg() function with the string that it
+--              captures from the entry box. The message will then be sent to the server
+--              and relayed back to all of the clients.
 ------------------------------------------------------------------------------*/  
 void Graphics::sendMessage()
 {
+    // The message that we'll be sending over to the server.
     string message;
 
+    // Fill the message with the name of the client appended with the user's input.
     message = clientGameLogic_.clientNetwork_._name + ": " + sfgChatSendEntry->GetText().toAnsiString() + "\n";
 
-    // Add the message to what's currently there if it isn't empty.
+    // Only send to the server if the user actually typed text in the input box.
     if(sfgChatSendEntry->GetText().toAnsiString() != "")
     {
-        //sfgChatDisplayLabel->SetText(sfgChatDisplayLabel->GetText().toAnsiString());
-        cout << "in graphics, string is: " << message << endl;
+        // Send the message to the server.
         clientGameLogic_.clientNetwork_.send_chatmsg(message);
     }
 
-    // Clear the entry box for new entries.
+    // Clear the entry box for new entries from the user.
     sfgChatSendEntry->SetText("");
 }
+
+/*------------------------------------------------------------------------------
+-- FUNCTION:   takeRole
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   Albert Liao, Jake Miner
+-- PROGRAMMER: Albert Liao, Jake Miner
+--
+-- INTERFACE:   void Graphics::takeRole()
+--
+-- RETURNS:     none.
+--
+-- DESCRIPTION: This is the button handler for when a user clicks on a role button in
+--              the lobby. This function needs to assign both the role and team
+--              locally, as well as send it over the network to the server using
+--              updatePlayerLobby so that all the clients are aware of what roles
+--              everyone is currently in. Roles are able to be changed after selection.
+------------------------------------------------------------------------------*/  
 void Graphics::takeRole()
 {
     int role = ((long) this % 10) - 1;
@@ -830,24 +855,28 @@ void Graphics::takeRole()
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   updateLobbyRole
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Albert Liao 
+-- PROGRAMMER: Albert Liao
 --
--- INTERFACE:   
+-- INTERFACE:  void Graphics::updateLobbyRoles()
 --
--- RETURNS:     
+-- RETURNS:     none.
 --
--- DESCRIPTION: 
+-- DESCRIPTION: This function goes through each of the names in the left and right
+--              teams and applies the name label to the lobby button corresponding 
+--              to that role. This way, when a user selects a role, all clients will
+--              be notified of it by the change in name of the role button.
 ------------------------------------------------------------------------------*/
 void Graphics::updateLobbyRoles()
 {
     // Loop through the teams and update the buttons.
     for(int i = 0; i < 5; i++)
     {
+        // Go through left team. If the name isn't empty, there's a player in this role.
         if(strcmp(clientGameLogic_.clientNetwork_.team_l[i].name, ""))
         {
             leftPlayers[i]->SetLabel(clientGameLogic_.clientNetwork_.team_l[i].name);
@@ -856,7 +885,7 @@ void Graphics::updateLobbyRoles()
         {
             leftPlayers[i]->SetLabel("Open Slot");
         }
-
+        // Go through right team. If the name isn't empty, there's a player in this role.
         if(strcmp(clientGameLogic_.clientNetwork_.team_r[i].name, ""))
         {
             rightPlayers[i]->SetLabel(clientGameLogic_.clientNetwork_.team_r[i].name);
@@ -867,24 +896,28 @@ void Graphics::updateLobbyRoles()
         }
     }
 }
+
 /*------------------------------------------------------------------------------
 -- FUNCTION:   startGame()
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Albert liao
+-- PROGRAMMER: Albert Liao
 --
 -- INTERFACE:   Graphics::startGame()
 --
 -- RETURNS:     void
 --
--- DESCRIPTION: Start the game
+-- DESCRIPTION: Eventually sends a message to the server notifying it of this
+--              client's team and role and also telling it that it is ready to
+--              start the game.
 ------------------------------------------------------------------------------*/
 void Graphics::startGame()
 {
-    cout << "start the game!" << endl;
+    // Set the ready state in client game logic.
     clientGameLogic_.ready();
+    // Hide the lobby window, we should go to the waiting screen next.
     sfgLobbyWindow->Show(false);
 }
 
@@ -893,14 +926,15 @@ void Graphics::startGame()
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Albert Liao
+-- PROGRAMMER: Albert Liao
 --
--- INTERFACE:   
+-- INTERFACE:   void Graphics::exitLobby()
 --
--- RETURNS:     
+-- RETURNS:     none.
 --
--- DESCRIPTION: 
+-- DESCRIPTION: This is the handler to the exit button in the lobby screen. This
+--              function simply closes all o the SFGUI windows and exits the game.
 ------------------------------------------------------------------------------*/
 void Graphics::exitLobby()
 {
@@ -908,76 +942,86 @@ void Graphics::exitLobby()
     sfgChatDisplayWindow->Show(false);
     sfgChatSendWindow->Show(false);
 
+    this->initMainMenuControls();
+
     // Quit the client.
     clientGameLogic_.exitGame();
-
-    this->initMainMenuControls();
 }
+
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   joinButtonHandler
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Albert Liao
+-- PROGRAMMER: Albert Liao
 --
--- INTERFACE:   
+-- INTERFACE:   void Graphics::joinButtonHandler()
 --
--- RETURNS:     
+-- RETURNS:     none.
 --
--- DESCRIPTION: 
+-- DESCRIPTION: This is the button handler for the join button from the join window.
+--              When the user hits this button, his/her username, server and port are
+--              bound to the client and used throughout the rest of the game. Joining
+--              also moves you to the lobby screen next.
 ------------------------------------------------------------------------------*/
 void Graphics::joinButtonHandler()
 {
-    string name, server, port; 
+    // The strings we'll be using to store user input.
+    string name, server, port;
     
+    // Get all of the user input.
     name = sfgNameEntryBox->GetText().toAnsiString();
     server = sfgServerEntryBox->GetText().toAnsiString();
     port = sfgPortEntryBox->GetText().toAnsiString();
-    
-    cout << "Name:"   << name << endl;
-    cout << "Server:" << server << endl;
-    cout << "Port:"   << port << endl;
 
+    // Set the username, server and port in the network settings.
     clientGameLogic_.clientNetwork_.setConnectionInfo(name, server, atoi(port.c_str()));
+    
+    // Change the gamestate to the lobby state.
     clientGameLogic_.join();
+
+    // Initialize the lobby window, chat display and also the chat input window.
     initLobbyWindow();
     initMessageDisplayWindow();
     initMessageSendWindow();
 
+    // Hide the join window.
     sfgJoinWindow->Show(false);
 }
+
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   showJoinWindow
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Albert Liao
+-- PROGRAMMER: Albert Liao
 --
--- INTERFACE:   
+-- INTERFACE:   void Graphics::showJoinWindow()
 --
--- RETURNS:     
+-- RETURNS:     none.
 --
--- DESCRIPTION: 
+-- DESCRIPTION: This is a function wrapper that displays the join window.
 ------------------------------------------------------------------------------*/
 void Graphics::showJoinWindow()
 {
     sfgJoinWindow->Show(true);
 }
+
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   hideJoinWindow
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Albert Liao
+-- PROGRAMMER: Albert Liao
 --
--- INTERFACE:   
+-- INTERFACE:   void Graphics::hideJoinWindow()
 --
--- RETURNS:     
+-- RETURNS:     none.
 --
--- DESCRIPTION: 
+-- DESCRIPTION: This is a function wrapper that hides the join window.
 ------------------------------------------------------------------------------*/
 void Graphics::hideJoinWindow()
 {
@@ -985,6 +1029,47 @@ void Graphics::hideJoinWindow()
     this->initMainMenuControls();
     clientGameLogic_.menu();
 }
+
+/*------------------------------------------------------------------------------
+-- FUNCTION:   drawHud
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   Jacob Miner, Albert Liao
+-- PROGRAMMER: Jacob Miner, Albert Liao
+--
+-- INTERFACE:   void Graphics::drawHud(sf::RenderWindow& window)
+--
+-- RETURNS:     none.
+--
+-- DESCRIPTION: This function adds the hud image to SFML so that it can be drawn on
+--              the next refresh.
+------------------------------------------------------------------------------*/
+void Graphics::drawHud(sf::RenderWindow& window)
+{
+    window.draw(hud);
+}
+
+/*------------------------------------------------------------------------------
+-- FUNCTION:   drawMap
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   Jacob Miner, Albert Liao
+-- PROGRAMMER: Jacob Miner, Albert Liao
+--
+-- INTERFACE:   void Graphics::drawMap(sf::RenderWindow& window)
+--
+-- RETURNS:     none.
+--
+-- DESCRIPTION: This function adds the map image to SFML so that it can be drawn on
+--              the next refresh.
+------------------------------------------------------------------------------*/
+void Graphics::drawMap(sf::RenderWindow& window)
+{
+    window.draw(map);
+}
+
 /*------------------------------------------------------------------------------
 -- FUNCTION:   
 --
@@ -999,52 +1084,32 @@ void Graphics::hideJoinWindow()
 --
 -- DESCRIPTION: 
 ------------------------------------------------------------------------------*/
-void Graphics::drawHud(sf::RenderWindow& window)
-{
-    window.draw(hud);
-}
-/*------------------------------------------------------------------------------
--- FUNCTION:   
---
--- DATE:        2013/03/22
---
--- DESIGNER:   
--- PROGRAMMER: 
---
--- INTERFACE:   
---
--- RETURNS:     
---
--- DESCRIPTION: 
-------------------------------------------------------------------------------*/
-void Graphics::drawMap(sf::RenderWindow& window)
-{
-    window.draw(map);
-}
-/*------------------------------------------------------------------------------
--- FUNCTION:   
---
--- DATE:        2013/03/22
---
--- DESIGNER:   
--- PROGRAMMER: 
---
--- INTERFACE:   
---
--- RETURNS:     
---
--- DESCRIPTION: 
-------------------------------------------------------------------------------*/
 void Graphics::drawMainMenu(sf::RenderWindow& window)
 {
     window.draw(titlesc);
     window.draw(title);
 }
 
+/*------------------------------------------------------------------------------
+-- FUNCTION:   drawInfo
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   Albert Liao
+-- PROGRAMMER: Albert Liao
+--
+-- INTERFACE:   void Graphics::drawInfo(sf::RenderWindow& window)
+--
+-- RETURNS:     none.
+--
+-- DESCRIPTION: This function adds the creep/tower info to SFML so that it can 
+--              be drawn on the next refresh.
+------------------------------------------------------------------------------*/
 void Graphics::drawInfo(sf::RenderWindow& window)
 {
     window.draw(infoSprite);
 }
+
 /*------------------------------------------------------------------------------
 -- FUNCTION:   drawHealthBar
 --
@@ -1077,6 +1142,7 @@ void Graphics::drawHealthBar(sf::RenderWindow& window, float x, float y, int hea
     window.draw(health_bg);
     window.draw(healthbar);	
 }
+
 /*------------------------------------------------------------------------------
 -- FUNCTION:   drawTeamCircle
 --
@@ -1099,19 +1165,22 @@ void Graphics::drawTeamCircle (sf::RenderWindow& window, int team, float x, floa
     cs.setOutlineThickness(2.0f);
     window.draw(cs);
 }
+
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   drawUnits
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: Jacob Miner
+-- DESIGNER:   David Czech, Jacob Miner 
+-- PROGRAMMER: David Czech, Jacob Miner
 --
--- INTERFACE:   
+-- INTERFACE:   void Graphics::drawUnits(sf::RenderWindow& window)
 --
--- RETURNS:     
+-- RETURNS:     none.
 --
--- DESCRIPTION: 
+-- DESCRIPTION: This function loops through all of the units currently in the game
+--              and draws them one by one based on their type. This happends every
+--              time that the screen is refreshed in the graphics thread.
 ------------------------------------------------------------------------------*/
 void Graphics::drawUnits(sf::RenderWindow& window)
 {
@@ -1190,6 +1259,7 @@ void Graphics::drawUnits(sf::RenderWindow& window)
     }
     pthread_mutex_unlock( &clientGameLogic_.unit_mutex );
 }
+
 /*------------------------------------------------------------------------------
 -- FUNCTION:   drawCurrency
 --
@@ -1242,18 +1312,19 @@ void Graphics::drawEndGameScreen(sf::RenderWindow& window)
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   drawLoadingScreen
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Jacob Miner
--- PROGRAMMER: Jacob Miner
+-- PROGRAMMER: Jacob Miner, Albert Liao
 --
--- INTERFACE:   
+-- INTERFACE:   void Graphics::drawLoadingScreen()
 --
--- RETURNS:     
+-- RETURNS:     none.
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Draws a "waiting for other players" image on the screen when we're
+--              in a ready state and waiting for all other players to be ready.
 ------------------------------------------------------------------------------*/
 void Graphics::drawLoadingScreen()
 {
@@ -1265,19 +1336,22 @@ void Graphics::drawLoadingScreen()
 
     window->draw(loadingScreen);
 }
+
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   loadImages
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: Jacob Miner
+-- DESIGNER:   Albert Liao
+-- PROGRAMMER: Albert Liao, Jacob Miner
 --
--- INTERFACE:   
+-- INTERFACE:   void Graphics::loadImages()
 --
--- RETURNS:     
+-- RETURNS:     none.
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Loads all of the images that we use in the game into SFML sprites
+--              so that they can be drawn on the screen. This includes things from
+--              the creeps and towers that we draw to the HUD and map.
 ------------------------------------------------------------------------------*/
 void Graphics::loadImages()
 {
@@ -1299,8 +1373,7 @@ void Graphics::loadImages()
 
     creep_tex3.loadFromFile("images/c3.png");
     creep_sprite3.setTexture(creep_tex3);
-     
-     
+    
     // Load the castle texture.
     castle_tex.loadFromFile("images/castle.png");
     castle_sprite.setTexture(castle_tex);
@@ -1315,13 +1388,16 @@ void Graphics::loadImages()
     tower_tex3.loadFromFile("images/t3.png");
     tower_sprite3.setTexture(tower_tex3);
 
+    // Load the info screen image.
     infoImage.loadFromFile("images/infos.png");
     infoSprite.setTexture(infoImage);
     infoSprite.setPosition(150, 50);
 
+    // Load the title background.
     titlesc_bg.loadFromFile("images/title.png");
     titlesc.setTexture(titlesc_bg);
 
+    // Load the title text.
     title = sf::Text("Jurassic Mistake", font, 71);
     title.setPosition(sf::Vector2f(50, 0));
     title.setColor(sf::Color(255, 0, 0));
@@ -1335,6 +1411,22 @@ void Graphics::loadImages()
     }
 }
 
+/*------------------------------------------------------------------------------
+-- FUNCTION:   showChat
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   Albert Liao
+-- PROGRAMMER: Albert Liao, Jacob Miner
+--
+-- INTERFACE:   void Graphics::showChat(bool show)
+--
+-- RETURNS:     none.
+--
+-- DESCRIPTION: Loads all of the images that we use in the game into SFML sprites
+--              so that they can be drawn on the screen. This includes things from
+--              the creeps and towers that we draw to the HUD and map.
+------------------------------------------------------------------------------*/
 void Graphics::showChat(bool show)
 {
     if(show)
