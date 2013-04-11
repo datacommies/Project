@@ -30,6 +30,9 @@ public:
 				creeps.push_back((Creep*)unit);
 				break;
 			case TOWER:
+			case TOWER_ONE:
+			case TOWER_TWO:        // added to remove warnings
+			case TOWER_THREE:
 				towers.push_back((Tower*)unit);
 				break;
 			case PLAYER:
@@ -38,9 +41,6 @@ public:
 			case CREEP_ONE:
 			case CREEP_TWO:
 			case CREEP_THREE:
-			case TOWER_ONE:
-			case TOWER_TWO:        // added to remove warnings
-			case TOWER_THREE:
 			case CASTLE:
 			case PROJECTILE:
 				break;
@@ -61,6 +61,9 @@ public:
 					creeps.erase(find(creeps.begin(), creeps.end(), (Creep*)unit));
 					break;
 				case TOWER:
+				case TOWER_ONE:
+				case TOWER_TWO:        // added to remove warnings
+				case TOWER_THREE:
 					towers.erase(find(towers.begin(), towers.end(), (Tower*)unit));
 					break;
 				case PLAYER:
@@ -69,9 +72,6 @@ public:
 				case CREEP_ONE:
 				case CREEP_TWO:
 				case CREEP_THREE:
-				case TOWER_ONE:
-				case TOWER_TWO:        // added to remove warnings
-				case TOWER_THREE:
 				case CASTLE:
 				case PROJECTILE:
 					break;

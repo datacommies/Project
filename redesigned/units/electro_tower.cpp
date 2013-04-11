@@ -23,6 +23,7 @@ ElectroTower::ElectroTower(int uid, Point pos, int hp, int atkdmg, int atkrng,
             Tower(uid, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, wall)
 {
     //validation
+    pendingDelete = false; // !!!
 }
 
 ElectroTower::ElectroTower(int uid, int side, Point pos, int hp, int atkdmg,
@@ -30,7 +31,7 @@ ElectroTower::ElectroTower(int uid, int side, Point pos, int hp, int atkdmg,
            Tower(uid, side, pos, hp, atkdmg, atkrng, atkspd, percep, atkcnt, wall)
 {
     //any required validation
-    printf("Inside unit constructor, x:%d y:%d\n", position.x, position.y);
+    pendingDelete = false;
 }
 
 
@@ -56,7 +57,7 @@ void ElectroTower::Attack(Team* team)
    if( attackCount++ < attackSpeed )
         return;
     int tempDamage = attackDamage * 3;
-    Unit* temp[4];
+    Unit* temp[4] = {pTarget, pTarget, pTarget, pTarget};
     Unit* tempTarget;
 
     attackCount = 0;
@@ -83,7 +84,7 @@ void ElectroTower::Attack(Team* team)
                 }
                 else
                 {
-                    tempTarget = (Unit*)&team->creeps[i];
+                    tempTarget = team->creeps[i];
                     temp[j] = tempTarget;
                     tempTarget->health -= attackDamage;
                     tempDamage /= 2;
@@ -112,19 +113,3 @@ void ElectroTower::Attack(Team* team)
 --              If there is no current target, search for a new target.  If we
 --              found a new target, and they are in range, attack them.
 ------------------------------------------------------------------------------*/
-void ElectroTower::Update(Team& team) {
-
-    /* If we have a Target, check their status. */
-    if( pTarget != NULL )
-        CheckTarget();
-
-    /* Search for Target. */
-    if( pTarget == NULL )
-        FindTarget(&team);
-
-    /* If we found a new Target, and they are in range.. */
-    if( pTarget != NULL ) {
-        Attack(&team);
-        Rotate( pTarget->getPos() );
-    }
-}

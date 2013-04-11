@@ -159,6 +159,9 @@ void ClientNetwork::recvReply() {
 			switch (u.unit_type) {
 				//FALL THROUGH
 				case TOWER:
+				case TOWER_ONE:
+				case TOWER_TWO:
+				case TOWER_THREE:
 				case CASTLE: {
 					tower_t t = {0};
 					CLIENT_UNIT c = {0};

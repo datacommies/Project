@@ -17,7 +17,8 @@
 #include "../units/castle.h"
 #include "../units/AiController.h"
 #include "../units/player.h"
-#include "../units/basic_tower.h"
+#include "../units/electro_tower.h"
+#include "../units/splash_tower.h"
 #include <stdio.h>
 #include <signal.h>
 #include <sys/time.h>
@@ -557,8 +558,10 @@ void ServerGameLogic::updateCreate(CommandData& command)
     case CASTLE:
     case TOWER:
     case TOWER_ONE:
+    case TOWER_TWO:
+    case TOWER_THREE:
       { 
-        createTower(team_no, command.location);        
+        createTower(team_no, command.location, command.type);  
         break;
       }
     default:
@@ -841,7 +844,9 @@ void ServerGameLogic::updateTimer(int i)
   signal(SIGALRM, updateTimer);
 
 #ifndef TESTCLASS
+  pthread_mutex_lock( &gSGL->unit_mutex );
   AiUpdate(gSGL->teams[0], gSGL->teams[1]);
+  pthread_mutex_unlock( &gSGL->unit_mutex );
 #endif
 
   gSGL->update();
@@ -946,6 +951,8 @@ void ServerGameLogic::createCreep(int team_no, Point location, int path_no, Unit
       atkcnt = INIT_CREEP_ATKCNT;
       spd = INIT_CREEP_SPD * 1.5;
     break;
+    default:
+    break;
   }
   
 
@@ -984,7 +991,7 @@ void ServerGameLogic::createCreep(int team_no, Point location, int path_no, Unit
 --
 -- DESCRIPTION: 
 ------------------------------------------------------------------------------*/
-void ServerGameLogic::createTower(int team_no, Point location)
+void ServerGameLogic::createTower(int team_no, Point location, UnitType ut)
 {
    Point castleLoc;   
   double distX, distY;
@@ -1008,8 +1015,22 @@ void ServerGameLogic::createTower(int team_no, Point location)
     int uid = next_unit_id_++;
 
     // create new tower                     
-    BasicTower *tower = new BasicTower(uid, team_no, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
+    Tower *tower;
+    
+    if (ut == TOWER_ONE)
+      tower = new BasicTower(uid, team_no, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
                            INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);
+    else if (ut == TOWER_TWO)
+      tower = new ElectroTower(uid, team_no, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG*2, 
+                           INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);
+    else if (ut == TOWER_THREE)
+      tower = new SplashTower(uid, team_no, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
+                           INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL, 10, 60);
+    else
+      tower = new BasicTower(uid, team_no, location, INIT_TOWER_HP, INIT_TOWER_ATKDMG, INIT_TOWER_ATKRNG, 
+                           INIT_TOWER_ATKSPD, INIT_TOWER_PERCEP, INIT_TOWER_ATKCNT, INIT_TOWER_WALL);
+    //tower->team = team_no;
+
         
     // Add tower to team
     teams[team_no].addUnit(tower);
