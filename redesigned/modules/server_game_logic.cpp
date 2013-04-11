@@ -99,18 +99,18 @@ int ServerGameLogic::getWinner()
   return 2;
 }
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   initializeCastles
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Darry Danzig, Callum Styan
+-- PROGRAMMER: Darry Danzig, Callum Styan, Dennis Ho
 --
 -- INTERFACE:   
 --
--- RETURNS:     
+-- RETURNS:     void
 --
--- DESCRIPTION: 
+-- DESCRIPTION: creates each teams castle and it's predefined position
 ------------------------------------------------------------------------------*/
 void ServerGameLogic::initializeCastles() 
 {
@@ -136,18 +136,18 @@ void ServerGameLogic::initializeCastles()
 
 }
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   initializeCreeps
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Darry Danzig, Callum Styan
+-- PROGRAMMER: Darry Danzig, Callum Styan
 --
 -- INTERFACE:   
 --
--- RETURNS:     
+-- RETURNS:     void
 --
--- DESCRIPTION: 
+-- DESCRIPTION: initializes creeps to spawn at the start of the game
 ------------------------------------------------------------------------------*/
 void ServerGameLogic::initializeCreeps()
 {
@@ -169,18 +169,18 @@ void ServerGameLogic::initializeCreeps()
   }
 }
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   initializeTowers
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Darry Danzig, Callum Styan
+-- PROGRAMMER: Darry Danzig, Callum Styan
 --
 -- INTERFACE:   
 --
--- RETURNS:     
+-- RETURNS:     void
 --
--- DESCRIPTION: 
+-- DESCRIPTION: initializes towers to spawn at the start of the game
 ------------------------------------------------------------------------------*/
 void ServerGameLogic::initializeTowers()
 {
@@ -686,7 +686,7 @@ double distance(Point p, Point q)
 -- DATE:        2013/03/22
 --
 -- DESIGNER:    David Czech, Behnam Bastami
--- PROGRAMMER:  Darry Danzig, Behnam Bastami, David Czech, Jesse Braham
+-- PROGRAMMER:  Darry Danzig, Behnam Bastami, David Czech, Jesse Braham, Callum Styan
 --
 -- INTERFACE:   void ServerGameLogic::updateMovement (int team, int otherteam)
 --
@@ -803,9 +803,6 @@ void ServerGameLogic::update()
     CommandData newCommand = requestedCommands.front();
     requestedCommands.pop();
 
-    std::cout << "command type is: " << newCommand.cmd << std::endl;
-    std::cout << "create creep type is: " << Create << std::endl;
-
     switch (newCommand.cmd) {
       case Create:
         updateCreate(newCommand);
@@ -893,7 +890,7 @@ void ServerGameLogic::setAlarm()
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Behnam Bastami, Dennis Ho, Jesse Wright
--- PROGRAMMER: Behnam Bastami, Dennis Ho, Jesse Wright, Kevin Tangeman
+-- PROGRAMMER: Behnam Bastami, Dennis Ho, Jesse Wright, Kevin Tangeman, Callum Styan
 --
 -- INTERFACE:   void createCreep(int team_no, Point location, int path_no, UnitType unitType)
 --
@@ -925,7 +922,7 @@ void ServerGameLogic::createCreep(int team_no, Point location, int path_no, Unit
       atkcnt = INIT_CREEP_ATKCNT;
       spd = INIT_CREEP_SPD;
     break;
-    case CREEP_TWO: // Tank (lots of health, but slower than fuck)
+    case CREEP_TWO: // Tank (lots of health, but moves slowly)
       hp = INIT_CREEP_HP * 3;
       atkdmg = INIT_CREEP_ATKDMG + 4;
       atkrng = INIT_CREEP_ATKRNG * 4;
@@ -1025,8 +1022,13 @@ void ServerGameLogic::createTower(int team_no, Point location)
 --
 -- DATE:        2013/03/22
 --
+<<<<<<< HEAD
+-- DESIGNER: Albert Liao, David Czech   
+-- PROGRAMMER: Albert Liao, David Czech, Jesse Wright, Callum Styan
+=======
 -- DESIGNER:   Dennis Ho
 -- PROGRAMMER: Dennis Ho
+>>>>>>> 9e8a8b5cdc514b32429be3b73de20ff41e7c03ae
 --
 -- INTERFACE:   
 --
@@ -1046,7 +1048,7 @@ void ServerGameLogic::createPlayer(int team_no, Point location, int client_id, i
   std::cout << "role: " << role << std::endl;
 
   switch (role){
-    case 0:
+    case 0: //mario, builder
       player->attackDamage = 8;
     break;
 
@@ -1160,13 +1162,9 @@ void ServerGameLogic::handleDeaths()
 --
 -- DATE:        2013/04/11
 --
-<<<<<<< HEAD
--- DESIGNER:   Dennis Ho
--- PROGRAMMER: Dennis Ho
-=======
--- DESIGNER:    David Czech, Jesse Braham
--- PROGRAMMER:  David Czech, Jesse Braham
->>>>>>> 62b6a45399d278d5314457882105006d84c5a1c2
+-- DESIGNER:   Dennis Ho, David Czech, Jesse Braham
+-- 
+-- PROGRAMMER: Dennis Ho, David Czech, Jesse Braham
 --
 -- INTERFACE:   void ServerGameLogic::handlePlayerDeath(Player *player)
 --
