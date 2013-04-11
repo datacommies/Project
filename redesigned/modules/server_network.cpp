@@ -162,11 +162,11 @@ void ServerNetwork::gameOver(int client_, const int winner)
 --
 -- INTERFACE:   bool sync(int client_, int team_)
 --                  client_ - the socket for the communication channel with this server
--                   team_ - the team to 
+-                   team_ - the team to sync 
 --
 -- RETURNS:     true
 --
--- DESCRIPTION: Function that syncs all the clients with the current game state
+-- DESCRIPTION: Function that syncs a team with the current game state
 ------------------------------------------------------------------------------*/
 bool ServerNetwork::sync(int client_, int team_)
 {
@@ -254,18 +254,19 @@ bool ServerNetwork::sync(int client_, int team_)
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   error
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Ron Bellido
 -- PROGRAMMER: Ron Bellido
 --
--- INTERFACE:   
+-- INTERFACE:   void error (const char *msg)
+--                  msg - error message to display
 --
--- RETURNS:     
+-- RETURNS:     void
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Displays an error message and terminates the server
 ------------------------------------------------------------------------------*/
 void ServerNetwork::error (const char *msg)
 {
@@ -274,7 +275,7 @@ void ServerNetwork::error (const char *msg)
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   handleInput
 --
 -- DATE:        2013/03/22
 --
