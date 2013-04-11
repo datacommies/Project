@@ -163,6 +163,7 @@ void * init (void * in)
                 if(g->clientGameLogic_.waitingForStart)
                 {
                     g->sfgLobbyWindow->Show(false);
+                    g->sfgChatDisplayWindow->Show(false);
                     g->drawLoadingScreen();
                 }
                 else
@@ -454,7 +455,7 @@ void Graphics::initLobbyWindow()
 {
     // Create lobby window using SFGUI.
     sfgLobbyWindow = sfg::Window::Create(sfg::Window::BACKGROUND); // Make the window.
-    sfgLobbyWindow->SetPosition(sf::Vector2f(100, 225)); // Change the window position.
+    sfgLobbyWindow->SetPosition(sf::Vector2f(100, 100)); // Change the window position.
     sfgLobbyWindow->SetRequisition(sf::Vector2f(600, 350));
 
 
@@ -509,6 +510,39 @@ void Graphics::initLobbyWindow()
     sfgLobbyWindow->Add(sfgLobbyBox);
 
     sfgDesktop.Add(sfgLobbyWindow);
+}
+
+/* Initializes the chat window with the entry box, send button and chat display.
+ *
+ * PRE:     
+ * POST:    sfgChatWindow will be initialized with all the lobby components on it
+ * RETURNS: 
+ * NOTES:    
+ */
+void Graphics::initChatWindow()
+{
+    /*
+   sfg::ScrolledWindow::Ptr sfgChatDisplayWindow;
+   sfg::Label::Ptr sfgChatDisplayLabel;
+   
+   sfg::Window::Ptr sfgChatSendWindow;
+   sfg::Box::Ptr sfgChatSendBox;
+   sfg::Entry::Ptr sfgChatSendEntry;
+   sfg::Button::Ptr sfgChatSendButton;
+*/
+    sfgChatDisplayWindow = sfg::ScrolledWindow::Create(); // Make the scroll window
+    sfgChatDisplayWindow->SetPosition(sf::Vector2f(100, 450)); // Change the window position.
+    sfgChatDisplayWindow->SetRequisition( sf::Vector2f(600, 150) ); // Set the size
+    sfgChatDisplayWindow->SetScrollbarPolicy( sfg::ScrolledWindow::HORIZONTAL_AUTOMATIC | sfg::ScrolledWindow::VERTICAL_AUTOMATIC); // Allow horizontal and vertical scrollbars.
+    sfgChatDisplayWindow->SetPlacement( sfg::ScrolledWindow::TOP_LEFT ); // Set where content is placed. Puts scrollbars at right and bottom.
+    
+    // Test text.
+    sfgChatDisplayLabel = sfg::Label::Create("NeedsVector\nGordon\nG-Man\nD0g\nNeedsVector\nGordon\nG-Man\nD0g\nNeedsVector\nGordon\nG-Man\nD0g\nNeedsVector\nGordon\nG-Man\nD0g\n");
+    //sfgChatDisplayWindow->AddWithViewport( m_scrolled_window_box );
+
+    sfgChatDisplayWindow->AddWithViewport(sfgChatDisplayLabel);
+
+    sfgDesktop.Add(sfgChatDisplayWindow);
 }
 
 /* Button handler for the lobby player select buttons
@@ -574,6 +608,7 @@ void Graphics::startGame()
     cout << "start the game!" << endl;
     clientGameLogic_.ready();
     sfgLobbyWindow->Show(false);
+    sfgChatDisplayWindow->Show(false);
 }
 
 /* Closes the lobby SFGUI window and redraws the main menu.
@@ -586,6 +621,7 @@ void Graphics::startGame()
 void Graphics::exitLobby()
 {
     sfgLobbyWindow->Show(false);
+    sfgChatDisplayWindow->Show(false);
 
     // todo: actually exit the session and go back to main screen.
     clientGameLogic_.exit();
@@ -615,6 +651,7 @@ void Graphics::joinButtonHandler()
     clientGameLogic_.clientNetwork_.setConnectionInfo(name, server, atoi(port.c_str()));
     clientGameLogic_.join();
     initLobbyWindow();
+    initChatWindow();
 
     sfgJoinWindow->Show(false);
 }
