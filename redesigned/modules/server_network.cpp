@@ -6,8 +6,20 @@
 -- MAINTAINERS: David Czech, Dennis Ho,
 --              Ron Bellido, Behnam Bastami
 --
--- FUNCTIONS:
---              
+-- FUNCTIONS:   ServerNetwork
+--              initSock
+--              initNetwork
+--              gameOver
+--              sync
+--              error
+--              handleInput
+--              handleClientRequest
+--              handleClient
+--              recv_complete
+--              operator==
+--              update_all_clients
+--              handle_single_client_lobby
+--              handle_client_lobby
 --
 -- DESCRIPTION: Implementation of the server-side interface
 ------------------------------------------------------------------------------*/
@@ -406,7 +418,7 @@ void* ServerNetwork::handleClientRequest(void* args)
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   void* handleClient(void* args)
+-- FUNCTION:   handleClient
 --
 -- DATE:        2013/03/22
 --
@@ -509,11 +521,12 @@ bool operator == (const player_matchmaking_t& a, const player_matchmaking_t& b) 
 -- DESIGNER:   Ron Bellido
 -- PROGRAMMER: Ron Bellido
 --
--- INTERFACE:   
+-- INTERFACE:   bool update_all_clients(int message)
+--                  message - the type of the message
 --
--- RETURNS:     
+-- RETURNS:     true if succesful, false otherwise
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Generic update that will broadcast updates to all the clients
 ------------------------------------------------------------------------------*/
 bool ServerNetwork::update_all_clients(int message) {
     for (size_t i = 0; i < clients_.size(); i++) {
@@ -527,18 +540,18 @@ bool ServerNetwork::update_all_clients(int message) {
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   handle_single_client_lobby
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Ron Bellido
 -- PROGRAMMER: Ron Bellido
 --
--- INTERFACE:   
+-- INTERFACE:   void * handle_single_client_lobby(void* thing) 
 --
--- RETURNS:     
+-- RETURNS:     void *
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Trampolines the handle_client_lobby() function.
 ------------------------------------------------------------------------------*/
 void * ServerNetwork::handle_single_client_lobby(void* thing) {
     cout << "Handling client!" << endl;
@@ -546,19 +559,20 @@ void * ServerNetwork::handle_single_client_lobby(void* thing) {
     ServerNetwork* thiz = (ServerNetwork*) ctx->sn;
     return thiz->handle_client_lobby(ctx);
 }
+
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   handle_client_lobby
 --
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Ron Bellido, David Czech
 -- PROGRAMMER: Ron Bellido, David Czech
 --
--- INTERFACE:   
+-- INTERFACE:   void * handle_client_lobby(void * ctx)
 --
--- RETURNS:     
+-- RETURNS:     void *
 --
--- DESCRIPTION: 
+-- DESCRIPTION: Handles any client requests while in the lobby. Started in a thread.
 ------------------------------------------------------------------------------*/
 void * ServerNetwork::handle_client_lobby(void * ctx)
 {
