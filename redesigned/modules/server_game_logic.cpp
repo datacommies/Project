@@ -33,18 +33,19 @@
 ServerGameLogic * gSGL;
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   ServerGameLogic()
 --
 -- DATE:        2013/03/22
 --
--- DESIGNER:   
--- PROGRAMMER: 
+-- DESIGNER:   Callum Styan
+-- PROGRAMMER: Callum Styan, Dennis Ho
 --
 -- INTERFACE:   
 --
 -- RETURNS:     
 --
--- DESCRIPTION: 
+-- DESCRIPTION: ServerGameLogic constructor.  Initializes the game map and creep
+-- paths, as well as the time for creation of creeps.
 ------------------------------------------------------------------------------*/
   ServerGameLogic::ServerGameLogic()
 : gameState_(LOBBY), next_unit_id_(1)

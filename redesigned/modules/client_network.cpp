@@ -600,7 +600,7 @@ void ClientNetwork::send_chatmsg(string msg) {
 }
 
 /*------------------------------------------------------------------------------
--- FUNCTION:   
+-- FUNCTION:   recv_complete
 --
 -- DATE:        2013/03/22
 --
