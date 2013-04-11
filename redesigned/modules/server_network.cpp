@@ -165,6 +165,127 @@ void ServerNetwork::gameOver(int client_, const int winner)
 }
 
 /*------------------------------------------------------------------------------
+-- FUNCTION:   syncFirstTeam
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   Behnam Bastami
+-- PROGRAMMER: Behnam Bastami
+--
+-- INTERFACE:   void ServerNetwork::syncFirstTeam(int client_)
+--                  client_ - the socket for the communication channel with this server
+--
+-- RETURNS:     void
+--
+-- DESCRIPTION: Synchronize the towers, creeps, and players on the first team
+------------------------------------------------------------------------------*/
+void ServerNetwork::syncFirstTeam(int client_)
+{
+    for (size_t i = 0; i < serverGameLogic_.teams[0].towers.size(); ++i)
+    {
+        string sc = serverGameLogic_.teams[0].towers[i]->serializeTower();
+        send(client_, sc.data(), sc.size(), 0);
+
+        if (!serverGameLogic_.teams[0].towers[i]->isAlive())
+            serverGameLogic_.teams[0].towers[i]->pendingDelete = true;
+    }
+
+    for (size_t i = 0; i < serverGameLogic_.teams[0].creeps.size(); ++i)
+    {
+        serverGameLogic_.teams[0].creeps[i]->team = 0;
+        string sc = serverGameLogic_.teams[0].creeps[i]->serializeCreep();
+        send(client_, sc.data(), sc.size(), 0);            
+
+        if (!serverGameLogic_.teams[0].creeps[i]->isAlive())
+            serverGameLogic_.teams[0].creeps[i]->pendingDelete = true;
+    }
+
+    for (size_t i = 0; i < serverGameLogic_.teams[0].players.size(); ++i)
+    {
+        string sc = serverGameLogic_.teams[0].players[i]->serializeMobileUnit();
+        send(client_, sc.data(), sc.size(), 0);
+   
+
+        if (!serverGameLogic_.teams[0].players[i]->isAlive())
+            serverGameLogic_.teams[0].players[i]->pendingDelete = true;
+    }
+
+}
+
+/*------------------------------------------------------------------------------
+-- FUNCTION:   syncSecondTeam
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   Behnam Bastami
+-- PROGRAMMER: Behnam Bastami
+--
+-- INTERFACE:   void ServerNetwork::syncSecondTeam(int client_)
+--                  client_ - the socket for the communication channel with this server
+--
+-- RETURNS:     void
+--
+-- DESCRIPTION: Synchronize the towers, creeps, and players on the second team
+------------------------------------------------------------------------------*/
+void ServerNetwork::syncSecondTeam(int client_)
+{
+    for (size_t i = 0; i < serverGameLogic_.teams[1].towers.size(); ++i)
+    {
+        string sc = serverGameLogic_.teams[1].towers[i]->serializeTower();
+        send(client_, sc.data(), sc.size(), 0);
+
+        if (!serverGameLogic_.teams[1].towers[i]->isAlive())
+            serverGameLogic_.teams[1].towers[i]->pendingDelete = true;
+    }
+
+    for (size_t i = 0; i < serverGameLogic_.teams[1].creeps.size(); ++i)
+    {
+        serverGameLogic_.teams[1].creeps[i]->team = 1;
+        string sc = serverGameLogic_.teams[1].creeps[i]->serializeCreep();
+        send(client_, sc.data(), sc.size(), 0);
+
+        if (!serverGameLogic_.teams[1].creeps[i]->isAlive())
+            serverGameLogic_.teams[1].creeps[i]->pendingDelete = true;
+    }
+
+    for (size_t i = 0; i < serverGameLogic_.teams[1].players.size(); ++i)
+    {
+        string sc = serverGameLogic_.teams[1].players[i]->serializeMobileUnit();
+        send(client_, sc.data(), sc.size(), 0);
+
+
+        if (!serverGameLogic_.teams[1].players[i]->isAlive())
+            serverGameLogic_.teams[1].players[i]->pendingDelete = true;
+    }
+}
+
+/*------------------------------------------------------------------------------
+-- FUNCTION:   syncTeamCurrency
+--
+-- DATE:        2013/03/22
+--
+-- DESIGNER:   Behnam Bastami
+-- PROGRAMMER: Behnam Bastami
+--
+-- INTERFACE:   void ServerNetwork::syncTeamCurrency(int client_, int team_)
+--                  client_ - the socket for the communication channel with this server
+--                  team_ - the team that the client belongs to
+--
+-- RETURNS:     void
+--
+-- DESCRIPTION: synchronize the team's currency
+------------------------------------------------------------------------------*/
+void ServerNetwork::syncTeamCurrency(int client_, int team_)
+{
+    currency_t cu = {{}, 0};
+    cu.head.type = MSG_RESOURCE_UPDATE;
+    cu.teamCurrency = serverGameLogic_.teams[team_].currency;
+    cu.head.size = sizeof(currency_t);
+    send(client_, (const char*)&cu, sizeof(currency_t), 0);
+
+}
+
+/*------------------------------------------------------------------------------
 -- FUNCTION:   sync
 --
 -- DATE:        2013/03/22
@@ -194,73 +315,12 @@ bool ServerNetwork::sync(int client_, int team_)
             gameOver(client_, winner == team_ ? WON_GAME : LOST_GAME);
         }
     }else{
-        //wrap into syncFirstTeam()
-        for (size_t i = 0; i < serverGameLogic_.teams[0].towers.size(); ++i)
-        {
-            string sc = serverGameLogic_.teams[0].towers[i]->serializeTower();
-            send(client_, sc.data(), sc.size(), 0);
-
-            if (!serverGameLogic_.teams[0].towers[i]->isAlive())
-                serverGameLogic_.teams[0].towers[i]->pendingDelete = true;
-        }
-
-        for (size_t i = 0; i < serverGameLogic_.teams[0].creeps.size(); ++i)
-        {
-            serverGameLogic_.teams[0].creeps[i]->team = 0;
-            string sc = serverGameLogic_.teams[0].creeps[i]->serializeCreep();
-            send(client_, sc.data(), sc.size(), 0);            
-
-            if (!serverGameLogic_.teams[0].creeps[i]->isAlive())
-                serverGameLogic_.teams[0].creeps[i]->pendingDelete = true;
-        }
-
-        for (size_t i = 0; i < serverGameLogic_.teams[0].players.size(); ++i)
-        {
-            string sc = serverGameLogic_.teams[0].players[i]->serializeMobileUnit();
-            send(client_, sc.data(), sc.size(), 0);
-       
-
-            if (!serverGameLogic_.teams[0].players[i]->isAlive())
-                serverGameLogic_.teams[0].players[i]->pendingDelete = true;
-        }
-
-        //wrap into syncSecondTeam()
-         for (size_t i = 0; i < serverGameLogic_.teams[1].towers.size(); ++i)
-        {
-            string sc = serverGameLogic_.teams[1].towers[i]->serializeTower();
-            send(client_, sc.data(), sc.size(), 0);
-
-            if (!serverGameLogic_.teams[1].towers[i]->isAlive())
-                serverGameLogic_.teams[1].towers[i]->pendingDelete = true;
-        }
-
-        for (size_t i = 0; i < serverGameLogic_.teams[1].creeps.size(); ++i)
-        {
-            serverGameLogic_.teams[1].creeps[i]->team = 1;
-            string sc = serverGameLogic_.teams[1].creeps[i]->serializeCreep();
-            send(client_, sc.data(), sc.size(), 0);
-
-            if (!serverGameLogic_.teams[1].creeps[i]->isAlive())
-                serverGameLogic_.teams[1].creeps[i]->pendingDelete = true;
-        }
-        
-        for (size_t i = 0; i < serverGameLogic_.teams[1].players.size(); ++i)
-        {
-            string sc = serverGameLogic_.teams[1].players[i]->serializeMobileUnit();
-            send(client_, sc.data(), sc.size(), 0);
-
-
-            if (!serverGameLogic_.teams[1].players[i]->isAlive())
-                serverGameLogic_.teams[1].players[i]->pendingDelete = true;
-        }
-        
-
+        ///synchronize first team
+        syncFirstTeam(client_);
+        //synchronize second team
+        syncSecondTeam(client_);
         // Update currency
-        currency_t cu = {{}, 0};
-        cu.head.type = MSG_RESOURCE_UPDATE;
-        cu.teamCurrency = serverGameLogic_.teams[team_].currency;
-        cu.head.size = sizeof(currency_t);
-        send(client_, (const char*)&cu, sizeof(currency_t), 0);
+        syncTeamCurrency(client_, team_);
     }
     return true;
 }
