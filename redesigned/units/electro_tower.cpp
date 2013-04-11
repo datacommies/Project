@@ -3,7 +3,7 @@
 --
 -- DATE:        2013/03/11
 --
--- MAINTAINERS: Nick Raposo
+-- MAINTAINERS: Nick Raposo, Kevin Tangeman, Steve Lo
 --
 -- FUNCTIONS:   Attack
 --              Update          
