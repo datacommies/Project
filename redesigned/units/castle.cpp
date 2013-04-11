@@ -4,7 +4,7 @@
 -- DATE:        2013/03/26
 --
 -- MAINTAINERS: Callum Styan, Nick Raposo, Cody Rossiter, Behnam Bastami, 
---              Chris Porter, Kevin Tangeman
+--              Chris Porter, Kevin Tangeman, Steve Lo
 --
 -- FUNCTIONS:   Unit constructor
 --              inRange
