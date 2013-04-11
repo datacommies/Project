@@ -152,7 +152,7 @@ void ServerNetwork::gameOver(int client_, const int winner)
 -- DATE:        2013/03/22
 --
 -- DESIGNER:   Behnam Bastami
--- PROGRAMMER: Behnam Bastami
+-- PROGRAMMER: Behnam Bastami, Dennis Ho
 --
 -- INTERFACE:   
 --
