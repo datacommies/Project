@@ -35,7 +35,7 @@
 #define INIT_TOWER_WALL 2 
 #define TOWER_COST 100
 
-#define PATH_COUNT 1
+#define PATH_COUNT 3
 
 #define PLAYER_KILL_BONUS 100
 #define CREEP_KILL_BONUS 10
