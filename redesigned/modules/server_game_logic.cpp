@@ -1343,22 +1343,6 @@ void ServerGameLogic::updateMaps() {
 
 }
 
-
-/*------------------------------------------------------------------------------
--- FUNCTION:   
---
--- DATE:        2013/03/22
---
--- DESIGNER:  Darry Danzig
--- PROGRAMMER: Darry Danzig
---
--- INTERFACE:   
---
--- RETURNS:     
---
--- DESCRIPTION: 
-------------------------------------------------------------------------------*/
-void ServerGameLogic::updateMaps() {
 // To test this class use  g++ -DTESTCLASS -g -Wall server_game_logic.cpp ../build/units/*.o
 #ifdef TESTCLASS
 int main() {
