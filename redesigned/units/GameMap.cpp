@@ -209,8 +209,8 @@ void GameMap::initPlayerPositions(){
     //*** end of team 1 starting positions ***
 
     //*** team 2 player starting positions ***
-    c.x = 545;
-    c.y = 545;
+    c.x = 725;
+    c.y = 525;
 
     team1start[0] = c;
 
