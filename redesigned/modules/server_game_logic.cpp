@@ -241,23 +241,7 @@ void ServerGameLogic::initializePlayers(std::vector<player_matchmaking_t> player
     createPlayer(it->team, it->team == 0 ? gameMap_->team0start[0] : gameMap_->team1start[0], it->pid, it->role);
   }
 }
-/*------------------------------------------------------------------------------
--- FUNCTION:   
---
--- DATE:        2013/03/22
---
--- DESIGNER:   
--- PROGRAMMER: 
---
--- INTERFACE:   
---
--- RETURNS:     
---
--- DESCRIPTION: 
-------------------------------------------------------------------------------*/
-void ServerGameLogic::initializePaths()
-{  
-}
+
 /*------------------------------------------------------------------------------
 -- FUNCTION:   
 --
@@ -274,7 +258,6 @@ void ServerGameLogic::initializePaths()
 ------------------------------------------------------------------------------*/
 void ServerGameLogic::initializeTeams(std::vector<player_matchmaking_t> players)
 {
-  initializePaths(); // Must be done before initializing creeps
   initializeCastles();
   initializeCreeps();
   initializeTowers();
