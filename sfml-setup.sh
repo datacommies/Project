@@ -7,9 +7,9 @@ echo "  [1] Debian (or Ubuntu, Mint, etc.)"
 
 read -p "Choice [0,1]: " distro
 case $distro in
-    0) yum install -y cmake mesa-libGL-devel libXrandr-devel freetype-devel glew-devel libjpeg-devel openal-soft-devel libsndfile-devel fontconfig-devel
+    0) yum install -y wget git cmake mesa-libGL-devel libXrandr-devel freetype-devel glew-devel libjpeg-devel openal-soft-devel libsndfile-devel fontconfig-devel gcc-c++
         ;;
-    1) apt-get install -y cmake libpthread-stubs0-dev libgl1-mesa-dev libx11-dev libxrandr-dev libfreetype6-dev libglew1.5-dev libjpeg8-dev libsndfile1-dev libopenal-dev
+    1) apt-get install -y cmake libpthread-stubs0-dev libgl1-mesa-dev libx11-dev libxrandr-dev libfreetype6-dev libglew1.5-dev libjpeg8-dev libsndfile1-dev libopenal-dev libfontconfig1-dev
         ;;
     *) echo Invalid Input;
         exit 1
@@ -25,5 +25,11 @@ make install -j 4
 cd ../
 mv LaurentGomila-SFML-* sfml
 
-echo "Installation Complete!"
+cp /usr/local/share/SFML/cmake/Modules/FindSFML.cmake /usr/share/cmake/Modules/
 
+git clone git://boxbox.org/SFGUI.git
+cd SFGUI
+cmake .
+make install -j 4
+
+echo "Installation Complete!"

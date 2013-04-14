@@ -3,3 +3,10 @@
 
 # Object files
 *.o
+
+# Gedit temp files
+*~
+
+# Output binaries
+client
+server

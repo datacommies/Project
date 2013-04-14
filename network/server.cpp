@@ -5,7 +5,7 @@
 #include <signal.h>
 #include <unistd.h>
 #include <pthread.h>
-#include <sys/types.h> 
+#include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 
@@ -15,6 +15,18 @@ using namespace std;
 
 vector<int> clients;       // client sockets
 vector <player_matchmaking_t> players;
+
+// Updates all clients in server
+bool update_all_clients(int message) {
+    for (size_t i = 0; i < clients.size(); i++) {
+        for (size_t j = 0; j < players.size(); j++) {
+            players[j].head.type = message;
+            if (send(clients[i], &players[j], sizeof(player_matchmaking_t), 0) == -1)
+                return false;
+        }
+    }
+    return true;
+}
 
 void * handle_client(void* thing) {
     int client = (long)thing;
@@ -35,6 +47,7 @@ void * handle_client(void* thing) {
 
         send(client, &players[i], sizeof(player_matchmaking_t), 0);
     }
+    //update_all_clients(MSG_PLAYER_UPDATE);
 
     player.head.type = MSG_PLAYER_UPDATE;
     // Inform all other clients that this player has arrived.
@@ -143,7 +156,7 @@ int main () {
     while (( client = accept(sock, (struct sockaddr *) &cli_addr, &clilen) ) > 0) {
         cout << endl << "new connection." << endl;
         pthread_t thread;
-        pthread_create (&thread, NULL, handle_client, (void*)client); // TODO: use struct as parameter
+        pthread_create (&thread, NULL, handle_client, (void*)client);
         threads.push_back(thread);
         clients.push_back(client);
     }
